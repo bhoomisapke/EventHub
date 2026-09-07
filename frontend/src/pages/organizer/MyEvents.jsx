@@ -37,19 +37,28 @@ function MyEvents() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/events/${id}`,
+        `http://localhost:8000/api/events/${id}/`,
         {
           method: "DELETE",
         }
       );
 
-      const data = await response.json();
-
+      // Django returns 204 No Content after successful DELETE
       if (!response.ok) {
-        alert(data.message || "Failed to delete event.");
+        let errorMessage = "Failed to delete event.";
+
+        try {
+          const data = await response.json();
+          errorMessage = data.message || errorMessage;
+        } catch {
+          // No JSON response from backend
+        }
+
+        alert(errorMessage);
         return;
       }
 
+      // Remove deleted event from the screen
       setEvents((previousEvents) =>
         previousEvents.filter((event) => event.id !== id)
       );
@@ -94,7 +103,10 @@ function MyEvents() {
         ) : (
           <div className="my-events-grid">
             {events.map((event) => (
-              <article className="my-event-card" key={event.id}>
+              <article
+                className="my-event-card"
+                key={event.id}
+              >
 
                 <div className="my-event-image">
                   {event.image ? (
