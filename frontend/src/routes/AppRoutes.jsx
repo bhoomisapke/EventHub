@@ -2,27 +2,28 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import App from "../App.jsx";
-// import EventDetails from "../pages/public/EventDetails.jsx";
 
 import StudentLayout from "../layouts/StudentLayout.jsx";
 import Dashboard from "../pages/student/Dashboard.jsx";
 import MyRegistrations from "../pages/student/MyRegistrations.jsx";
 import MyTickets from "../pages/student/MyTickets.jsx";
 import Profile from "../pages/student/Profile.jsx";
-// Layout
-import PublicLayout from '../layouts/PublicLayout';
-import OrganizerEventDetails from "../pages/organizer/OrganizerEventDetails";
+
+// Layouts
+import PublicLayout from "../layouts/PublicLayout.jsx";
+
 // Public Pages
-import Home from '../pages/public/Home';
-import Categories from '../pages/public/Categories';
-import EventDetails from '../pages/public/EventDetails';
+import Home from "../pages/public/Home.jsx";
+import Categories from "../pages/public/Categories.jsx";
+import EventDetails from "../pages/public/EventDetails.jsx";
 
 // Organizer Pages
-import OrganizerDashboard from '../pages/organizer/Dashboard';
-import CreateEvent from '../pages/organizer/CreateEvent';
-import MyEvents from '../pages/organizer/MyEvents';
-import EditEvent from '../pages/organizer/EditEvent';
-import Participants from '../pages/organizer/Participants';
+import OrganizerDashboard from "../pages/organizer/Dashboard.jsx";
+import OrganizerEventDetails from "../pages/organizer/OrganizerEventDetails.jsx";
+import CreateEvent from "../pages/organizer/CreateEvent.jsx";
+import MyEvents from "../pages/organizer/MyEvents.jsx";
+import EditEvent from "../pages/organizer/EditEvent.jsx";
+import Participants from "../pages/organizer/Participants.jsx";
 
 const AppRoutes = () => {
   return (
@@ -31,22 +32,8 @@ const AppRoutes = () => {
       {/* LANDING PAGE */}
       <Route path="/" element={<App />} />
 
-      {/* EVENT DETAILS */}
-      <Route path="/event/:id" element={<EventDetails />} />
-
-      {/* STUDENT */}
-      <Route path="/student" element={<StudentLayout />}>
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="registrations" element={<MyRegistrations />} />
-        <Route path="tickets" element={<MyTickets />} />
-        <Route path="profile" element={<Profile />} />
-      </Route>
-
-      {/* =========================
-          PUBLIC PAGES
-      ========================== */}
+      {/* PUBLIC PAGES */}
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<Home />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/event/:id" element={<EventDetails />} />
 
@@ -60,26 +47,33 @@ const AppRoutes = () => {
           path="/about"
           element={<div className="pt-28 p-8 text-white">About Page</div>}
         />
-       <Route
-          path="/organizer/events/:id"
-          element={<OrganizerEventDetails />}
-       />
-        
+
         <Route
           path="/contact"
           element={<div className="pt-28 p-8 text-white">Contact Page</div>}
         />
       </Route>
 
+      {/* STUDENT PAGES */}
+      <Route path="/student" element={<StudentLayout />}>
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="registrations" element={<MyRegistrations />} />
+        <Route path="tickets" element={<MyTickets />} />
+        <Route path="profile" element={<Profile />} />
+      </Route>
 
-      {/* =========================
-          ORGANIZER PAGES
-      ========================== */}
+      {/* ORGANIZER PAGES */}
 
       {/* Organizer Dashboard */}
       <Route
         path="/organizer/dashboard"
         element={<OrganizerDashboard />}
+      />
+
+      {/* Organizer Event Details */}
+      <Route
+        path="/organizer/events/:id"
+        element={<OrganizerEventDetails />}
       />
 
       {/* Create Event */}
@@ -93,7 +87,7 @@ const AppRoutes = () => {
         path="/organizer/events"
         element={<MyEvents />}
       />
-      <Route path="/organizer/participants" element={<Participants />} />
+
       {/* Edit Event */}
       <Route
         path="/organizer/events/:id/edit"
@@ -101,6 +95,11 @@ const AppRoutes = () => {
       />
 
       {/* Participants */}
+      <Route
+        path="/organizer/participants"
+        element={<Participants />}
+      />
+
       <Route
         path="/organizer/events/:id/participants"
         element={<Participants />}

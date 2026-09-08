@@ -132,7 +132,7 @@ function CreateEvent() {
     <div className="organizer-page">
       <div className="organizer-header">
         <div>
-          <h1>CREATE EVENT</h1>
+          <h1 style={{ color: "#101a4a" }}>CREATE EVENT</h1>
 
           <p className="page-subtitle">
             Create a new event and share it with students.

@@ -9786,3 +9786,398 @@ th {
     padding: 20px;
   }
 }
+.my-events-header h1 {
+  color: #6c4df6;
+}
+
+.my-events-back-arrow {
+  color: #6c4df6;
+}
+
+.my-events-back-arrow:hover {
+  color: #4f35d6;
+}
+/* =========================================================
+   MY EVENTS - PROFESSIONAL ORGANIZER PAGE
+   ========================================================= */
+
+.my-events-page {
+  min-height: 100vh;
+  background: #f8f8fc;
+  color: #101a4a;
+  padding: 40px 0 70px;
+}
+
+.my-events-container {
+  width: min(1200px, calc(100% - 80px));
+  margin: 0 auto;
+}
+
+/* ---------- TOP HEADER ---------- */
+
+.my-events-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 34px;
+}
+
+.my-events-header > div {
+  position: relative;
+}
+
+.my-events-header h1 {
+  margin: 0;
+  color: #101a4a;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+.my-events-header p {
+  margin: 8px 0 0;
+  color: #73778c;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* ---------- BACK ARROW ---------- */
+
+.my-events-back-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 20px;
+  border: 1px solid #e3e4ef;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #101a4a;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1;
+  box-shadow: 0 4px 12px rgba(16, 26, 74, 0.06);
+  transition: all 0.25s ease;
+}
+
+.my-events-back-arrow:hover {
+  color: #ffffff;
+  background: #6c4df6;
+  border-color: #6c4df6;
+  transform: translateX(-3px);
+  box-shadow: 0 8px 18px rgba(108, 77, 246, 0.22);
+}
+
+/* ---------- EVENTS GRID ---------- */
+
+.my-events-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px;
+}
+
+/* ---------- EVENT CARD ---------- */
+
+.my-event-card {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e8e9f1;
+  border-radius: 18px;
+  box-shadow: 0 8px 28px rgba(16, 26, 74, 0.07);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.my-event-card:hover {
+  transform: translateY(-5px);
+  border-color: #ddd8ff;
+  box-shadow: 0 16px 38px rgba(16, 26, 74, 0.12);
+}
+
+/* ---------- EVENT IMAGE ---------- */
+
+.my-event-image {
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: #f0eff8;
+}
+
+.my-event-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.my-event-card:hover .my-event-image img {
+  transform: scale(1.04);
+}
+
+.my-event-no-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888ca0;
+  background: linear-gradient(135deg, #f1efff, #f8f8fc);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ---------- CARD CONTENT ---------- */
+
+.my-event-content {
+  padding: 24px;
+}
+
+.my-event-category {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  margin-bottom: 12px;
+  border-radius: 20px;
+  background: #f0edff;
+  color: #6c4df6;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.my-event-content h2 {
+  margin: 0 0 20px;
+  color: #101a4a;
+  font-size: 23px;
+  font-weight: 750;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+}
+
+/* ---------- EVENT INFORMATION ---------- */
+
+.my-event-info {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 11px;
+  padding: 16px 0;
+  border-top: 1px solid #eeeeF4;
+  border-bottom: 1px solid #eeeeF4;
+}
+
+.my-event-info > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.my-event-info span {
+  width: 25px;
+  flex-shrink: 0;
+  color: #6c4df6;
+  font-size: 16px;
+  text-align: center;
+}
+
+.my-event-info strong {
+  overflow: hidden;
+  color: #555a70;
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- REGISTRATIONS ---------- */
+
+.my-event-registration {
+  padding: 18px 0 20px;
+}
+
+.my-event-registration > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.my-event-registration span {
+  color: #777b8e;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.my-event-registration strong {
+  color: #101a4a;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ---------- PROGRESS BAR ---------- */
+
+.registration-progress {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #ececf3;
+}
+
+.registration-progress span {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #6c4df6, #a855f7);
+  transition: width 0.35s ease;
+}
+
+/* ---------- ACTION BUTTONS ---------- */
+
+.my-event-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.edit-event-button,
+.participants-event-button,
+.delete-event-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 9px 13px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Edit */
+
+.edit-event-button {
+  color: #ffffff;
+  background: #6c4df6;
+  border: 1px solid #6c4df6;
+}
+
+.edit-event-button:hover {
+  background: #5940d9;
+  border-color: #5940d9;
+  transform: translateY(-1px);
+}
+
+/* Participants */
+
+.participants-event-button {
+  color: #6c4df6;
+  background: #f2efff;
+  border: 1px solid #e2ddff;
+}
+
+.participants-event-button:hover {
+  color: #ffffff;
+  background: #6c4df6;
+  border-color: #6c4df6;
+}
+
+/* Delete */
+
+.delete-event-button {
+  color: #d84b5b;
+  background: #fff3f4;
+  border: 1px solid #ffdfe2;
+}
+
+.delete-event-button:hover {
+  color: #ffffff;
+  background: #d84b5b;
+  border-color: #d84b5b;
+}
+
+/* ---------- EMPTY STATE ---------- */
+
+.my-events-empty {
+  padding: 70px 30px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e8e9f1;
+  border-radius: 18px;
+  box-shadow: 0 8px 28px rgba(16, 26, 74, 0.05);
+}
+
+.my-events-empty h2 {
+  margin: 0 0 8px;
+  color: #101a4a;
+  font-size: 23px;
+  font-weight: 750;
+}
+
+.my-events-empty p {
+  margin: 0;
+  color: #777b8e;
+  font-size: 14px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 900px) {
+  .my-events-container {
+    width: min(100% - 40px, 700px);
+  }
+
+  .my-events-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .my-events-page {
+    padding: 25px 0 50px;
+  }
+
+  .my-events-container {
+    width: calc(100% - 28px);
+  }
+
+  .my-events-header h1 {
+    font-size: 30px;
+  }
+
+  .my-events-header p {
+    font-size: 13px;
+  }
+
+  .my-event-image {
+    height: 190px;
+  }
+
+  .my-event-content {
+    padding: 20px;
+  }
+
+  .my-event-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-event-button,
+  .participants-event-button,
+  .delete-event-button {
+    width: 100%;
+  }
+}
+/* CREATE EVENT heading color */
+.create-event-page .create-event-header h1 {
+  color: #6c4df6 !important;
+}

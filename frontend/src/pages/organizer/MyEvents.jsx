@@ -43,7 +43,6 @@ function MyEvents() {
         }
       );
 
-      // Django returns 204 No Content after successful DELETE
       if (!response.ok) {
         let errorMessage = "Failed to delete event.";
 
@@ -58,7 +57,6 @@ function MyEvents() {
         return;
       }
 
-      // Remove deleted event from the screen
       setEvents((previousEvents) =>
         previousEvents.filter((event) => event.id !== id)
       );
@@ -74,31 +72,30 @@ function MyEvents() {
     <div className="my-events-page">
       <div className="my-events-container">
 
+        {/* BACK ARROW */}
+        <Link
+          to="/organizer/dashboard"
+          className="my-events-back-arrow"
+          aria-label="Back to Dashboard"
+        >
+          ←
+        </Link>
+
+        {/* PAGE HEADER */}
         <div className="my-events-header">
           <div>
             <h1>My Events</h1>
             <p>Manage the events you have created.</p>
           </div>
-
-          <Link
-            to="/organizer/create-event"
-            className="create-event-button"
-          >
-            + Create Event
-          </Link>
         </div>
 
+        {/* EVENTS */}
         {events.length === 0 ? (
           <div className="my-events-empty">
             <h2>No events created yet</h2>
-            <p>Create your first event to see it here.</p>
-
-            <Link
-              to="/organizer/create-event"
-              className="create-event-button"
-            >
-              Create Event
-            </Link>
+            <p>
+              You don't have any events created at the moment.
+            </p>
           </div>
         ) : (
           <div className="my-events-grid">
@@ -107,7 +104,7 @@ function MyEvents() {
                 className="my-event-card"
                 key={event.id}
               >
-
+                {/* IMAGE */}
                 <div className="my-event-image">
                   {event.image ? (
                     <img
@@ -121,6 +118,7 @@ function MyEvents() {
                   )}
                 </div>
 
+                {/* CONTENT */}
                 <div className="my-event-content">
 
                   <div className="my-event-category">
@@ -129,7 +127,9 @@ function MyEvents() {
 
                   <h2>{event.title}</h2>
 
+                  {/* EVENT INFO */}
                   <div className="my-event-info">
+
                     <div>
                       <span>📅</span>
                       <strong>{event.date}</strong>
@@ -148,11 +148,14 @@ function MyEvents() {
                         {event.venue || "Not specified"}
                       </strong>
                     </div>
+
                   </div>
 
+                  {/* REGISTRATION */}
                   <div className="my-event-registration">
                     <div>
                       <span>Registrations</span>
+
                       <strong>
                         {event.participants || 0}
                         {event.capacity
@@ -177,6 +180,7 @@ function MyEvents() {
                     )}
                   </div>
 
+                  {/* ACTIONS */}
                   <div className="my-event-actions">
 
                     <Link

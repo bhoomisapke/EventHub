@@ -51,9 +51,7 @@ function OrganizerEventDetails() {
         <div className="event-not-found">
           <h2>Event Not Found</h2>
 
-          <Link to="/organizer/dashboard">
-            ← Back to Dashboard
-          </Link>
+          
         </div>
       </div>
     );
@@ -143,7 +141,7 @@ function OrganizerEventDetails() {
           to="/organizer/dashboard"
           className="event-back-button"
         >
-          ← Back to Dashboard
+          ← 
         </Link>
 
 
@@ -438,21 +436,7 @@ function OrganizerEventDetails() {
         </section>
 
 
-        {/* =========================
-            GO TO HOME
-        ========================== */}
-
-        <div className="event-home-section">
-
-          <Link
-            to="/"
-            className="event-home-button"
-          >
-            ← Go to Home
-          </Link>
-
-        </div>
-
+        
       </main>
 
     </div>

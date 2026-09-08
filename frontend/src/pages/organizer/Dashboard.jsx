@@ -56,7 +56,7 @@ function Dashboard() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -602,18 +602,7 @@ function Dashboard() {
         </section>
 
 
-        {/* ================= GO TO HOME ================= */}
-
-        <div className="organizer-bottom-home">
-
-          <Link
-            to="/"
-            className="organizer-home-button"
-          >
-            ← Go to Home
-          </Link>
-
-        </div>
+      
 
       </main>
 
