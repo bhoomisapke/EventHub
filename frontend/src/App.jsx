@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import "./index.css";
 
+import AppRoutes from "./routes/AppRoutes";
 import ScrollProgress from "./components/ScrollProgress";
 import SmoothScroll from "./components/SmoothScroll";
 import PageTransition from "./components/PageTransition";
@@ -180,12 +182,18 @@ const features = [
    ============================================================ */
 
 function App() {
+  const location = useLocation();
+
   const [activeDashboard, setActiveDashboard] = useState("student");
   const [menuOpen, setMenuOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [feedbackSent, setFeedbackSent] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState("");
 
+
+   
+
+  // Your friend's existing website continues below...
   /* ==========================================================
      SCROLL REVEAL + 3D SECTION STORY
      ========================================================== */
@@ -291,7 +299,9 @@ function App() {
     setRating(0);
     setSelectedEvent("");
   };
-
+  if (location.pathname.startsWith("/organizer")) {
+    return <AppRoutes />;
+  }
   /* ==========================================================
      RENDER
      ========================================================== */

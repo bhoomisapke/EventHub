@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "registrations",
     "tickets",
+    # "accounts",
+    "events",
 ]
 
 MIDDLEWARE = [
