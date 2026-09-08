@@ -1,0 +1,420 @@
+/* =========================================================
+   EVENTHUB STUDENT LAYOUT
+   ========================================================= */
+
+.student-layout {
+  min-height: 100vh;
+  background: #f8f7fc;
+}
+
+
+/* ================= TOP NAVBAR ================= */
+
+.student-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  height: 78px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 42px;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  border-bottom: 1px solid #e9e5ef;
+
+  backdrop-filter: blur(18px);
+}
+
+
+/* ================= BRAND ================= */
+
+.student-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  min-width: 190px;
+
+  color: #11163d;
+  text-decoration: none;
+}
+
+.student-brand-symbol {
+  width: 37px;
+  height: 37px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  color: white;
+
+  background: linear-gradient(
+    135deg,
+    #7c35df,
+    #d62ca9
+  );
+
+  font-size: 17px;
+
+  box-shadow:
+    0 7px 18px rgba(122, 52, 220, 0.2);
+}
+
+.student-brand strong {
+  display: block;
+
+  font-size: 18px;
+  font-weight: 850;
+  letter-spacing: -0.5px;
+}
+
+.student-brand strong span {
+  background: linear-gradient(
+    90deg,
+    #7c35df,
+    #d62ca9
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.student-brand small {
+  display: block;
+
+  margin-top: 1px;
+
+  color: #9294a5;
+
+  font-size: 7px;
+  font-weight: 800;
+
+  letter-spacing: 1.3px;
+}
+
+
+/* ================= NAVIGATION ================= */
+
+.student-nav {
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+
+  flex: 1;
+
+  margin-left: 30px;
+}
+
+.student-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 10px 12px;
+
+  border-radius: 10px;
+
+  color: #70748b;
+
+  text-decoration: none;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  transition: all 0.2s ease;
+}
+
+.student-nav-link:hover {
+  color: #6935d1;
+  background: #f4efff;
+}
+
+.student-nav-link.active {
+  color: #6935d1;
+
+  background: #eee8ff;
+}
+
+.student-nav-link.active svg {
+  color: #d02aaa;
+}
+
+
+/* ================= RIGHT SIDE ================= */
+
+.student-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-profile {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 6px 9px;
+
+  border-radius: 12px;
+
+  text-decoration: none;
+
+  transition: 0.2s ease;
+}
+
+.student-profile:hover {
+  background: #f5f2fa;
+}
+
+.student-avatar {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: #6935d1;
+
+  background: linear-gradient(
+    135deg,
+    #eee7ff,
+    #fde5f5
+  );
+
+  border: 1px solid #e5ddf4;
+}
+
+.student-profile-text strong,
+.student-profile-text small {
+  display: block;
+}
+
+.student-profile-text strong {
+  color: #171b42;
+
+  font-size: 10px;
+}
+
+.student-profile-text small {
+  margin-top: 2px;
+
+  color: #999baa;
+
+  font-size: 8px;
+}
+
+.student-logout {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e7e3ed;
+
+  border-radius: 10px;
+
+  background: white;
+
+  color: #777b90;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.student-logout:hover {
+  color: #d12ca8;
+
+  border-color: #edc9e2;
+
+  background: #fff5fb;
+}
+
+
+/* ================= MAIN ================= */
+
+.student-main {
+  min-height: calc(100vh - 78px);
+}
+
+
+/* ================= MOBILE ================= */
+
+.student-menu-button {
+  display: none;
+
+  width: 35px;
+  height: 35px;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e5e1eb;
+  border-radius: 10px;
+
+  background: white;
+
+  color: #252a50;
+
+  cursor: pointer;
+}
+
+
+/* ================= MOBILE MENU ================= */
+
+.student-mobile-menu {
+  display: none;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1100px) {
+
+  .student-navbar {
+    padding: 0 25px;
+  }
+
+  .student-brand {
+    min-width: 170px;
+  }
+
+  .student-nav-link {
+    padding: 9px;
+
+    font-size: 10px;
+  }
+
+  .student-nav-link span {
+    display: none;
+  }
+
+  .student-nav-link {
+    justify-content: center;
+  }
+
+}
+
+
+@media (max-width: 750px) {
+
+  .student-navbar {
+    height: 70px;
+
+    padding: 0 18px;
+  }
+
+  .student-nav {
+    display: none;
+  }
+
+  .student-profile-text {
+    display: none;
+  }
+
+  .student-logout {
+    display: none;
+  }
+
+  .student-menu-button {
+    display: flex;
+  }
+
+  .student-main {
+    min-height: calc(100vh - 70px);
+  }
+
+  .student-mobile-menu {
+    position: fixed;
+
+    top: 70px;
+    left: 0;
+    right: 0;
+
+    z-index: 999;
+
+    display: flex;
+
+    flex-direction: column;
+
+    padding: 12px;
+
+    border-bottom: 1px solid #e7e3ed;
+
+    background: rgba(255, 255, 255, 0.98);
+
+    box-shadow:
+      0 15px 30px rgba(30, 20, 60, 0.08);
+  }
+
+  .student-mobile-link,
+  .student-mobile-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: #555a72;
+
+    text-align: left;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+  }
+
+  .student-mobile-link.active,
+  .student-mobile-link:hover {
+    color: #6935d1;
+    background: #f1ebff;
+  }
+
+  .student-mobile-logout {
+    margin-top: 5px;
+
+    color: #d12ca8;
+  }
+
+}
+
+
+@media (max-width: 450px) {
+
+  .student-brand strong {
+    font-size: 16px;
+  }
+
+  .student-brand small {
+    font-size: 6px;
+  }
+
+  .student-brand-symbol {
+    width: 34px;
+    height: 34px;
+  }
+
+}

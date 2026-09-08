@@ -103,21 +103,7 @@ const dashboardData = {
       "Manage Registrations",
       "Event Analytics",
     ],
-  },
-
-  admin: {
-    icon: "🛡️",
-    title: "Admin Experience",
-    heading: "Control. Monitor. Improve.",
-    text:
-      "Manage events, users and platform activity through one organized administration experience.",
-    subtitle: "Control & Improve",
-    features: [
-      "Event Management",
-      "User Management",
-      "Platform Insights",
-    ],
-  },
+  }
 };
 
 /* ============================================================
@@ -737,7 +723,7 @@ function App() {
             <div className="section-intro center reveal">
 
               <span className="blue-label">
-                02 / THREE POWERFUL EXPERIENCES
+                02 / TWO POWERFUL EXPERIENCES
               </span>
 
               <h2>

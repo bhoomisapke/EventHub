@@ -1,28 +1,33 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 
-// Layout
-import PublicLayout from '../layouts/PublicLayout';
+import App from "../App.jsx";
+import EventDetails from "../pages/public/EventDetails.jsx";
 
-// Public Pages
-import Home from '../pages/public/Home';
-import Categories from '../pages/public/Categories';
-import EventDetails from '../pages/public/EventDetails';
+import StudentLayout from "../layouts/StudentLayout.jsx";
+import Dashboard from "../pages/student/Dashboard.jsx";
+import MyRegistrations from "../pages/student/MyRegistrations.jsx";
+import MyTickets from "../pages/student/MyTickets.jsx";
+import Profile from "../pages/student/Profile.jsx";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Public Pages wrapped with shared Navbar & Footer */}
-      <Route element={<PublicLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/event/:id" element={<EventDetails />} />
-        
-        {/* Placeholders for upcoming pages */}
-        <Route path="/events" element={<div className="pt-28 p-8 text-white">Events Page</div>} />
-        <Route path="/about" element={<div className="pt-28 p-8 text-white">About Page</div>} />
-        <Route path="/contact" element={<div className="pt-28 p-8 text-white">Contact Page</div>} />
+
+      {/* LANDING PAGE */}
+      <Route path="/" element={<App />} />
+
+      {/* EVENT DETAILS */}
+      <Route path="/event/:id" element={<EventDetails />} />
+
+      {/* STUDENT */}
+      <Route path="/student" element={<StudentLayout />}>
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="registrations" element={<MyRegistrations />} />
+        <Route path="tickets" element={<MyTickets />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
+
     </Routes>
   );
 };
