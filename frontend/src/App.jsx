@@ -1,8 +1,9 @@
+
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { UserRound, LogOut } from "lucide-react";
 import "./index.css";
 
-import AppRoutes from "./routes/AppRoutes";
 import ScrollProgress from "./components/ScrollProgress";
 import SmoothScroll from "./components/SmoothScroll";
 import PageTransition from "./components/PageTransition";
@@ -105,7 +106,8 @@ const dashboardData = {
       "Manage Registrations",
       "Event Analytics",
     ],
-  }
+  },
+
 };
 
 /* ============================================================
@@ -182,18 +184,24 @@ const features = [
    ============================================================ */
 
 function App() {
-  const location = useLocation();
+  const navigate = useNavigate();
 
-  const [activeDashboard, setActiveDashboard] = useState("student");
+  const [activeDashboard, setActiveDashboard] =
+    useState("student");
+
   const [menuOpen, setMenuOpen] = useState(false);
+
   const [rating, setRating] = useState(0);
-  const [feedbackSent, setFeedbackSent] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState("");
 
+  const [feedbackSent, setFeedbackSent] =
+    useState(false);
 
-   
+  const [selectedEvent, setSelectedEvent] =
+    useState("");
 
-  // Your friend's existing website continues below...
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState(null);
+
   /* ==========================================================
      SCROLL REVEAL + 3D SECTION STORY
      ========================================================== */
@@ -219,10 +227,6 @@ function App() {
       revealObserver.observe(element);
     });
 
-    /* --------------------------------------------------------
-       MAJOR SECTIONS
-    -------------------------------------------------------- */
-
     const sections = document.querySelectorAll(
       ".eventhub > section"
     );
@@ -230,10 +234,6 @@ function App() {
     sections.forEach((section) => {
       section.classList.add("scroll-story");
     });
-
-    /* --------------------------------------------------------
-       3D ROLL OBSERVER
-    -------------------------------------------------------- */
 
     const storyObserver = new IntersectionObserver(
       (entries) => {
@@ -266,6 +266,74 @@ function App() {
   }, []);
 
   /* ==========================================================
+     AUTHENTICATION STATE
+     ========================================================== */
+
+  useEffect(() => {
+    const token =
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token");
+
+    const storedUser =
+      localStorage.getItem("user") ||
+      sessionStorage.getItem("user");
+
+    if (token && storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        setIsLoggedIn(true);
+        setLoggedInUser(user);
+      } catch (error) {
+        console.error("Unable to read saved user:", error);
+        setIsLoggedIn(false);
+        setLoggedInUser(null);
+      }
+    } else {
+      setIsLoggedIn(false);
+      setLoggedInUser(null);
+    }
+  }, []);
+
+  const handleProfile = () => {
+    if (loggedInUser?.role === "student") {
+      navigate("/student/profile");
+    } else if (loggedInUser?.role === "organizer") {
+      navigate("/organizer/profile");
+    } else {
+      navigate("/auth");
+    }
+    closeMenu();
+  };
+
+  const handleLogout = async () => {
+    const token =
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token");
+
+    try {
+      if (token) {
+        await fetch("http://127.0.0.1:8000/api/auth/logout/", {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("user");
+      setIsLoggedIn(false);
+      setLoggedInUser(null);
+      closeMenu();
+      navigate("/");
+    }
+  };
+
+  /* ==========================================================
      MOBILE MENU
      ========================================================== */
 
@@ -277,7 +345,8 @@ function App() {
      ACTIVE DASHBOARD
      ========================================================== */
 
-  const dashboard = dashboardData[activeDashboard];
+  const dashboard =
+    dashboardData[activeDashboard];
 
   /* ==========================================================
      FEEDBACK
@@ -287,7 +356,9 @@ function App() {
     event.preventDefault();
 
     if (!rating || !selectedEvent) {
-      alert("Please select an event and rating.");
+      alert(
+        "Please select an event and rating."
+      );
       return;
     }
 
@@ -299,9 +370,7 @@ function App() {
     setRating(0);
     setSelectedEvent("");
   };
-  if (location.pathname.startsWith("/organizer")) {
-    return <AppRoutes />;
-  }
+
   /* ==========================================================
      RENDER
      ========================================================== */
@@ -335,13 +404,17 @@ function App() {
                   Event<span>Hub</span>
                 </strong>
 
-                <small>COLLEGE EVENTS</small>
+                <small>
+                  COLLEGE EVENTS
+                </small>
               </div>
             </a>
 
             <button
               className="mobile-menu"
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={() =>
+                setMenuOpen(!menuOpen)
+              }
               aria-label="Toggle navigation menu"
               aria-expanded={menuOpen}
             >
@@ -355,11 +428,17 @@ function App() {
                   : "nav-menu"
               }
             >
-              <a href="#home" onClick={closeMenu}>
+              <a
+                href="#home"
+                onClick={closeMenu}
+              >
                 Home
               </a>
 
-              <a href="#events" onClick={closeMenu}>
+              <a
+                href="#events"
+                onClick={closeMenu}
+              >
                 Events
               </a>
 
@@ -370,7 +449,10 @@ function App() {
                 Categories
               </a>
 
-              <a href="#about" onClick={closeMenu}>
+              <a
+                href="#about"
+                onClick={closeMenu}
+              >
                 About
               </a>
 
@@ -384,13 +466,37 @@ function App() {
 
             <div className="nav-buttons">
 
-              <button className="login-button">
-                Student Login
-              </button>
+              {isLoggedIn ? (
+                <>
+                  <button type="button" onClick={handleProfile} aria-label="Profile" title="Profile" className="login-button" style={{ minWidth: 42, width: 42, height: 42, padding: 0, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                    <UserRound size={19} strokeWidth={2} />
+                  </button>
 
-              <button className="register-button">
-                Register
-              </button>
+                  <button type="button" onClick={handleLogout} aria-label="Logout" title="Logout" className="register-button" style={{ minWidth: 42, width: 42, height: 42, padding: 0, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                    <LogOut size={19} strokeWidth={2} />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="login-button"
+                    onClick={() =>
+                      navigate("/auth")
+                    }
+                  >
+                    Student Login
+                  </button>
+
+                  <button
+                    className="register-button"
+                    onClick={() =>
+                      navigate("/auth")
+                    }
+                  >
+                    Register
+                  </button>
+                </>
+              )}
 
             </div>
 
@@ -411,14 +517,12 @@ function App() {
 
               <div className="hero-tag">
                 <span className="pulse"></span>
-
                 THE FUTURE OF COLLEGE EVENTS
               </div>
 
               <h1>
                 Where Ideas
                 <br />
-
                 <span>
                   Become Experience.
                 </span>
@@ -510,14 +614,14 @@ function App() {
 
                 </div>
 
-                {/* FEATURE CARD 1 */}
-
                 <div className="character-feature feature-register">
 
                   <span>📅</span>
 
                   <div>
-                    <strong>Register</strong>
+                    <strong>
+                      Register
+                    </strong>
 
                     <small>
                       Join events instantly
@@ -525,8 +629,6 @@ function App() {
                   </div>
 
                 </div>
-
-                {/* FEATURE CARD 2 */}
 
                 <div className="character-feature feature-events">
 
@@ -544,8 +646,6 @@ function App() {
 
                 </div>
 
-                {/* FEATURE CARD 3 */}
-
                 <div className="character-feature feature-category">
 
                   <span>⚡</span>
@@ -561,8 +661,6 @@ function App() {
                   </div>
 
                 </div>
-
-                {/* FEATURE CARD 4 */}
 
                 <div className="character-feature feature-registration">
 
@@ -580,12 +678,8 @@ function App() {
 
                 </div>
 
-                {/* CHARACTER ORBITS */}
-
                 <div className="character-orbit orbit-one"></div>
                 <div className="character-orbit orbit-two"></div>
-
-                {/* CHARACTER PARTICLES */}
 
                 <span className="tech-particle particle-one"></span>
                 <span className="tech-particle particle-two"></span>
@@ -629,7 +723,6 @@ function App() {
               <h2>
                 One platform.
                 <br />
-
                 <span>
                   Every opportunity.
                 </span>
@@ -739,7 +832,6 @@ function App() {
               <h2>
                 Built for every
                 <br />
-
                 <span>
                   side of campus.
                 </span>
@@ -751,6 +843,7 @@ function App() {
 
               {Object.keys(dashboardData).map(
                 (type) => (
+
                   <button
                     key={type}
                     className={
@@ -780,6 +873,7 @@ function App() {
                     </div>
 
                   </button>
+
                 )
               )}
 
@@ -805,6 +899,7 @@ function App() {
 
                   {dashboard.features.map(
                     (feature, index) => (
+
                       <div key={feature}>
 
                         <span>
@@ -814,13 +909,54 @@ function App() {
                         {feature}
 
                       </div>
+
                     )
                   )}
 
                 </div>
 
-                <button className="dashboard-button">
-                  Explore Dashboard →
+                <button
+                  className="dashboard-button"
+                  onClick={() => {
+                    const token =
+                      localStorage.getItem("token") ||
+                      sessionStorage.getItem("token");
+
+                    const storedUser =
+                      localStorage.getItem("user") ||
+                      sessionStorage.getItem("user");
+
+                    // Not logged in → open the login/register page first.
+                    if (!token || !storedUser) {
+                      navigate("/auth");
+                      return;
+                    }
+
+                    try {
+                      const user = JSON.parse(storedUser);
+
+                      if (activeDashboard === "student") {
+                        if (user.role === "student") {
+                          navigate("/student/dashboard");
+                        } else {
+                          navigate("/auth?role=student&reason=wrong-role");
+                        }
+                      } else if (activeDashboard === "organizer") {
+                        if (user.role === "organizer") {
+                          navigate("/organizer/dashboard");
+                        } else {
+                          navigate("/auth?role=organizer&reason=wrong-role");
+                        }
+                      }
+                    } catch (error) {
+                      console.error("Unable to read logged-in user:", error);
+                      navigate("/auth");
+                    }
+                  }}
+                >
+                  {activeDashboard === "student"
+                    ? "Student Dashboard →"
+                    : "Organizer Dashboard →"}
                 </button>
 
               </div>
@@ -921,7 +1057,6 @@ function App() {
                 <h2>
                   Upcoming
                   <br />
-
                   <span>
                     events.
                   </span>
@@ -929,10 +1064,30 @@ function App() {
 
               </div>
 
-              <p>
-                Discover your next challenge,
-                workshop or opportunity.
-              </p>
+              <div className="events-header-right">
+
+                <p>
+                  Discover your next challenge,
+                  workshop or opportunity.
+                </p>
+
+                <button
+                  className="view-all-events-btn"
+                  onClick={() =>
+                    navigate("/events")
+                  }
+                  aria-label="View all events"
+                >
+                  <span>
+                    View All Events
+                  </span>
+
+                  <span className="view-all-arrow">
+                    →
+                  </span>
+                </button>
+
+              </div>
 
             </div>
 
@@ -1025,7 +1180,6 @@ function App() {
               <h2>
                 The future of
                 <br />
-
                 <span>
                   campus events.
                 </span>
@@ -1131,7 +1285,6 @@ function App() {
               <h2>
                 Find your
                 <br />
-
                 <span>
                   next challenge.
                 </span>
@@ -1225,7 +1378,6 @@ function App() {
               <h2>
                 Everything you need
                 <br />
-
                 <span>
                   in one place.
                 </span>
@@ -1284,7 +1436,6 @@ function App() {
               <h2>
                 Discover.
                 <br />
-
                 <span>
                   Experience.
                 </span>
@@ -1385,7 +1536,6 @@ function App() {
                 <h2>
                   Your experience
                   <br />
-
                   <span>
                     matters.
                   </span>
@@ -1537,7 +1687,9 @@ function App() {
                       experiences even better.
                     </p>
 
-                    <button onClick={resetFeedback}>
+                    <button
+                      onClick={resetFeedback}
+                    >
                       Give another feedback
                     </button>
 
@@ -1568,7 +1720,6 @@ function App() {
               <h2>
                 Don't just attend.
                 <br />
-
                 <strong>
                   Experience it.
                 </strong>
@@ -1723,3 +1874,4 @@ function App() {
 }
 
 export default App;
+

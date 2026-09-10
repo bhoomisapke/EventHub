@@ -3145,11 +3145,6 @@ a {
 .feature-list > div > span {
   width: 23px;
   height: 23px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   flex-shrink: 0;
 
   border-radius: 7px;
@@ -6675,6 +6670,146 @@ button:hover,
 table {
   width: 100%;
   border-collapse: collapse;
+}
+/* ============================================================
+   UPCOMING EVENTS — VIEW ALL EVENTS
+   ============================================================ */
+
+.events-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 18px;
+}
+
+.events-header-right p {
+  max-width: 310px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+  text-align: right;
+}
+
+.view-all-events-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+
+  padding: 11px 15px 11px 17px;
+
+  border: 1px solid rgba(139, 92, 246, 0.32);
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--dark-text);
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 24px rgba(109, 40, 217, 0.08);
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.view-all-events-btn:hover {
+  transform: translateX(5px);
+
+  border-color: var(--purple);
+
+  background: var(--white);
+
+  box-shadow:
+    0 12px 30px rgba(109, 40, 217, 0.15),
+    0 0 22px rgba(139, 92, 246, 0.10);
+}
+
+.view-all-events-btn:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+
+.view-all-arrow {
+  width: 29px;
+  height: 29px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple),
+      var(--purple-dark)
+    );
+
+  color: var(--white);
+
+  font-size: 16px;
+  line-height: 1;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.view-all-events-btn:hover .view-all-arrow {
+  transform: translateX(4px);
+
+  box-shadow:
+    0 0 18px rgba(139, 92, 246, 0.28);
+}
+
+
+/* ============================================================
+   VIEW ALL EVENTS — RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 750px) {
+
+  .events-header {
+    align-items: flex-start;
+  }
+
+  .events-header-right {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .events-header-right p {
+    text-align: left;
+  }
+
+  .view-all-events-btn {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .view-all-events-btn {
+    width: auto;
+    padding: 10px 13px 10px 15px;
+  }
+
+  .view-all-arrow {
+    width: 27px;
+    height: 27px;
+    font-size: 15px;
+  }
 }
 
 th,

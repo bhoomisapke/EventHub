@@ -2,18 +2,19 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import App from "../App.jsx";
+import Auth from "../pages/auth/Auth.jsx";
 
+// Layouts
 import StudentLayout from "../layouts/StudentLayout.jsx";
+import PublicLayout from "../layouts/PublicLayout.jsx";
+
+// Student Pages
 import Dashboard from "../pages/student/Dashboard.jsx";
 import MyRegistrations from "../pages/student/MyRegistrations.jsx";
 import MyTickets from "../pages/student/MyTickets.jsx";
 import Profile from "../pages/student/Profile.jsx";
 
-// Layouts
-import PublicLayout from "../layouts/PublicLayout.jsx";
-
 // Public Pages
-import Home from "../pages/public/Home.jsx";
 import Categories from "../pages/public/Categories.jsx";
 import EventDetails from "../pages/public/EventDetails.jsx";
 
@@ -29,40 +30,92 @@ const AppRoutes = () => {
   return (
     <Routes>
 
-      {/* LANDING PAGE */}
+      {/* =====================================================
+          LANDING PAGE
+          ===================================================== */}
       <Route path="/" element={<App />} />
 
-      {/* PUBLIC PAGES */}
-      <Route element={<PublicLayout />}>
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/event/:id" element={<EventDetails />} />
+      {/* =====================================================
+          AUTHENTICATION
+          ===================================================== */}
+      <Route path="/auth" element={<Auth />} />
 
-        {/* Placeholders for upcoming pages */}
+      {/* =====================================================
+          PUBLIC PAGES
+          ===================================================== */}
+      <Route element={<PublicLayout />}>
+        <Route
+          path="/categories"
+          element={<Categories />}
+        />
+
+        <Route
+          path="/event/:id"
+          element={<EventDetails />}
+        />
+
+        {/* Events Page */}
         <Route
           path="/events"
-          element={<div className="pt-28 p-8 text-white">Events Page</div>}
+          element={
+            <div className="pt-28 p-8 text-white">
+              Events Page
+            </div>
+          }
         />
 
+        {/* About Page */}
         <Route
           path="/about"
-          element={<div className="pt-28 p-8 text-white">About Page</div>}
+          element={
+            <div className="pt-28 p-8 text-white">
+              About Page
+            </div>
+          }
+        />
+
+        {/* Contact Page */}
+        <Route
+          path="/contact"
+          element={
+            <div className="pt-28 p-8 text-white">
+              Contact Page
+            </div>
+          }
+        />
+      </Route>
+
+      {/* =====================================================
+          STUDENT PAGES
+          ===================================================== */}
+      <Route
+        path="/student"
+        element={<StudentLayout />}
+      >
+        <Route
+          path="dashboard"
+          element={<Dashboard />}
         />
 
         <Route
-          path="/contact"
-          element={<div className="pt-28 p-8 text-white">Contact Page</div>}
+          path="registrations"
+          element={<MyRegistrations />}
+        />
+
+        <Route
+          path="tickets"
+          element={<MyTickets />}
+        />
+
+        <Route
+          path="profile"
+          element={<Profile />}
         />
       </Route>
 
-      {/* STUDENT PAGES */}
-      <Route path="/student" element={<StudentLayout />}>
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="registrations" element={<MyRegistrations />} />
-        <Route path="tickets" element={<MyTickets />} />
-        <Route path="profile" element={<Profile />} />
-      </Route>
-
-      {/* ORGANIZER PAGES */}
+      {/* =====================================================
+          ORGANIZER PAGES
+          ===================================================== */}
 
       {/* Organizer Dashboard */}
       <Route
@@ -100,9 +153,53 @@ const AppRoutes = () => {
         element={<Participants />}
       />
 
+      {/* Event Participants */}
       <Route
         path="/organizer/events/:id/participants"
         element={<Participants />}
+      />
+
+      {/* =====================================================
+          ADMIN DASHBOARD
+          ===================================================== */}
+      <Route
+        path="/admin/dashboard"
+        element={
+          <div
+            style={{
+              minHeight: "100vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+              gap: "10px",
+            }}
+          >
+            <h1>Admin Dashboard</h1>
+          </div>
+        }
+      />
+
+      {/* =====================================================
+          404 - PAGE NOT FOUND
+          ===================================================== */}
+      <Route
+        path="*"
+        element={
+          <div
+            style={{
+              minHeight: "100vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+              gap: "10px",
+            }}
+          >
+            <h1>404</h1>
+            <p>Page not found.</p>
+          </div>
+        }
       />
 
     </Routes>

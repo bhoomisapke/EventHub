@@ -928,3 +928,563 @@
   }
 
 }
+
+
+/* =========================================================
+   EVENTHUB STUDENT DASHBOARD
+   FINAL HOMEPAGE-MATCHING DESIGN LAYER
+   ========================================================= */
+
+/* Shared page atmosphere */
+.student-page {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 88% 8%,
+      rgba(139, 92, 246, 0.07),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 8% 55%,
+      rgba(236, 72, 153, 0.045),
+      transparent 22%
+    ),
+    #F7F3EE;
+}
+
+/* Keep the decorative atmosphere behind the UI */
+.student-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image:
+    linear-gradient(rgba(139, 92, 246, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.035) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(to bottom, black, transparent 88%);
+}
+
+.student-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* =========================================================
+   HERO — SAME VISUAL LANGUAGE AS EVENTHUB HOMEPAGE
+   ========================================================= */
+
+.student-hero {
+  box-shadow:
+    0 24px 70px rgba(16, 21, 44, 0.06),
+    0 0 60px rgba(139, 92, 246, 0.045);
+}
+
+.student-hero::before {
+  content: "";
+  position: absolute;
+  width: 460px;
+  height: 460px;
+  right: 12%;
+  top: -170px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(139, 92, 246, 0.10),
+    rgba(236, 72, 153, 0.035) 42%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.student-badge {
+  border: 1px solid rgba(139, 92, 246, 0.16);
+  box-shadow: 0 8px 24px rgba(109, 40, 217, 0.05);
+}
+
+.student-hero h1 span {
+  background: linear-gradient(
+    90deg,
+    #E11D48 0%,
+    #EC4899 35%,
+    #8B5CF6 72%,
+    #6D28D9 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.student-hero-content > p {
+  max-width: 600px;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.primary-student-button {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    #8B5CF6 0%,
+    #6D28D9 55%,
+    #EC4899 125%
+  );
+  box-shadow:
+    0 12px 30px rgba(109, 40, 217, 0.20),
+    0 0 24px rgba(139, 92, 246, 0.08);
+}
+
+.primary-student-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-110%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18),
+    transparent
+  );
+  transition: transform 0.55s ease;
+}
+
+.primary-student-button:hover::after {
+  transform: translateX(110%);
+}
+
+.primary-student-button:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 16px 38px rgba(109, 40, 217, 0.27),
+    0 0 28px rgba(139, 92, 246, 0.12);
+}
+
+.secondary-student-button:hover {
+  box-shadow: 0 10px 26px rgba(16, 21, 44, 0.07);
+}
+
+
+/* =========================================================
+   HERO VISUAL — FLOATING / 3D DEPTH
+   ========================================================= */
+
+.student-preview-card {
+  box-shadow:
+    0 30px 70px rgba(16, 21, 44, 0.12),
+    0 0 42px rgba(139, 92, 246, 0.08);
+  animation: dashboardPreviewFloat 6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.floating-card {
+  box-shadow:
+    0 15px 35px rgba(16, 21, 44, 0.10),
+    0 0 25px rgba(139, 92, 246, 0.05);
+}
+
+.floating-card-one {
+  animation: dashboardFloatOne 5.5s ease-in-out infinite;
+}
+
+.floating-card-two {
+  animation: dashboardFloatTwo 5.9s ease-in-out infinite;
+}
+
+.glow-one {
+  animation: dashboardGlowOne 6s ease-in-out infinite;
+}
+
+.glow-two {
+  animation: dashboardGlowTwo 7s ease-in-out infinite;
+}
+
+@keyframes dashboardPreviewFloat {
+  0%, 100% {
+    transform: rotate(-3deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-2deg) translateY(-8px);
+  }
+}
+
+@keyframes dashboardFloatOne {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes dashboardFloatTwo {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+@keyframes dashboardGlowOne {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes dashboardGlowTwo {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
+
+/* =========================================================
+   STAT CARDS
+   ========================================================= */
+
+.student-stat-card {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.student-stat-card::after {
+  content: "";
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  right: -55px;
+  top: -55px;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.055);
+  pointer-events: none;
+}
+
+.student-stat-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(139, 92, 246, 0.24);
+  box-shadow:
+    0 18px 40px rgba(16, 21, 44, 0.08),
+    0 0 25px rgba(139, 92, 246, 0.055);
+}
+
+
+/* =========================================================
+   SECTION HEADERS
+   ========================================================= */
+
+.section-small-label {
+  color: #6D28D9;
+}
+
+.view-all-link {
+  padding: 9px 13px;
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.view-all-link:hover {
+  transform: translateX(4px);
+  color: #EC4899;
+  border-color: rgba(236, 72, 153, 0.25);
+  box-shadow: 0 8px 22px rgba(109, 40, 217, 0.07);
+}
+
+
+/* =========================================================
+   EVENT CARDS
+   ========================================================= */
+
+.student-event-card {
+  position: relative;
+  box-shadow:
+    0 8px 25px rgba(16, 21, 44, 0.04),
+    0 0 0 rgba(139, 92, 246, 0);
+}
+
+.student-event-card:hover {
+  transform: translateY(-8px) scale(1.008);
+  border-color: rgba(139, 92, 246, 0.32);
+  box-shadow:
+    0 20px 42px rgba(16, 21, 44, 0.10),
+    0 0 26px rgba(139, 92, 246, 0.065);
+}
+
+.event-tag {
+  box-shadow: 0 7px 18px rgba(16, 21, 44, 0.07);
+}
+
+.student-event-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(16, 21, 44, 0.10),
+    transparent 42%
+  );
+}
+
+.student-event-footer a {
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
+}
+
+.student-event-footer a:hover {
+  transform: translateX(4px);
+}
+
+
+/* =========================================================
+   REGISTRATION LIST
+   ========================================================= */
+
+.registrations-card {
+  box-shadow:
+    0 8px 25px rgba(16, 21, 44, 0.04),
+    0 0 0 rgba(139, 92, 246, 0);
+}
+
+.registration-row {
+  transition:
+    background 0.25s ease,
+    padding-left 0.25s ease;
+}
+
+.registration-row:hover {
+  background: rgba(139, 92, 246, 0.025);
+  padding-left: 27px;
+}
+
+.dashboard-registration-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #ECFDF3;
+  color: #15803D;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.registration-row > a {
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
+}
+
+.registration-row > a:hover {
+  transform: translateX(4px);
+}
+
+
+/* =========================================================
+   CTA — DARK CONTRAST SECTION
+   ========================================================= */
+
+.student-cta {
+  box-shadow:
+    0 25px 60px rgba(16, 21, 44, 0.12),
+    0 0 35px rgba(139, 92, 246, 0.07);
+}
+
+.student-cta::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  right: -90px;
+  top: -130px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(236, 72, 153, 0.22),
+    transparent 68%
+  );
+  pointer-events: none;
+}
+
+.student-cta > a {
+  box-shadow: 0 12px 28px rgba(225, 29, 72, 0.18);
+}
+
+.student-cta > a:hover {
+  box-shadow: 0 16px 34px rgba(190, 18, 60, 0.25);
+}
+
+
+/* =========================================================
+   SCROLL REVEAL
+   ========================================================= */
+
+.student-hero,
+.student-stats,
+.student-section,
+.student-cta {
+  animation: dashboardSectionReveal 0.75s ease both;
+}
+
+.student-stats {
+  animation-delay: 0.08s;
+}
+
+.student-section:nth-of-type(2) {
+  animation-delay: 0.14s;
+}
+
+.student-section:nth-of-type(3) {
+  animation-delay: 0.20s;
+}
+
+.student-cta {
+  animation-delay: 0.26s;
+}
+
+@keyframes dashboardSectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.primary-student-button:focus-visible,
+.secondary-student-button:focus-visible,
+.view-all-link:focus-visible,
+.student-event-footer a:focus-visible,
+.registration-row > a:focus-visible,
+.student-cta > a:focus-visible {
+  outline: 2px solid #EC4899;
+  outline-offset: 3px;
+}
+
+
+/* =========================================================
+   RESPONSIVE REFINEMENT
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .student-page {
+    padding: 28px;
+  }
+
+  .student-preview-card {
+    width: min(410px, 82%);
+  }
+}
+
+@media (max-width: 800px) {
+  .student-page {
+    padding: 22px;
+  }
+
+  .student-hero {
+    border-radius: 26px;
+  }
+
+  .student-preview-card {
+    animation-duration: 7s;
+  }
+
+  .student-section-header {
+    gap: 14px;
+  }
+
+  .view-all-link {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .student-page {
+    padding: 14px;
+  }
+
+  .student-hero {
+    border-radius: 22px;
+  }
+
+  .student-preview-card {
+    width: 315px;
+  }
+
+  .floating-card {
+    transform: scale(0.92);
+  }
+
+  .floating-card-one {
+    right: -8px;
+  }
+
+  .floating-card-two {
+    left: -8px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .student-preview-card,
+  .floating-card-one,
+  .floating-card-two,
+  .glow-one,
+  .glow-two {
+    animation: none !important;
+  }
+
+  .student-hero,
+  .student-stats,
+  .student-section,
+  .student-cta {
+    animation: none !important;
+  }
+
+  .student-event-card,
+  .student-stat-card,
+  .view-all-link,
+  .primary-student-button,
+  .secondary-student-button,
+  .registration-row {
+    transition: none !important;
+  }
+}

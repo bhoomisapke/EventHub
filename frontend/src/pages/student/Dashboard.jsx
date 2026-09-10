@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import {
@@ -13,11 +14,6 @@ import {
 
 import "./Dashboard.css";
 
-/*
-  Temporary mock data.
-  Later this will come from:
-  GET /api/registrations/my/
-*/
 const myUpcomingRegistrations = [
   {
     id: 1,
@@ -130,7 +126,6 @@ const Dashboard = () => {
 
         </div>
 
-
         {/* ================= HERO VISUAL ================= */}
         <div className="student-hero-visual">
 
@@ -183,7 +178,6 @@ const Dashboard = () => {
 
           </div>
 
-
           <div className="floating-card floating-card-one">
 
             <div className="floating-icon">
@@ -196,7 +190,6 @@ const Dashboard = () => {
             </div>
 
           </div>
-
 
           <div className="floating-card floating-card-two">
 
@@ -215,7 +208,6 @@ const Dashboard = () => {
 
       </section>
 
-
       {/* ================= STATS ================= */}
       <section className="student-stats">
 
@@ -233,7 +225,6 @@ const Dashboard = () => {
 
         </div>
 
-
         <div className="student-stat-card">
 
           <div className="stat-circle pink-stat">
@@ -247,7 +238,6 @@ const Dashboard = () => {
           </div>
 
         </div>
-
 
         <div className="student-stat-card">
 
@@ -264,7 +254,6 @@ const Dashboard = () => {
         </div>
 
       </section>
-
 
       {/* ================= MY UPCOMING REGISTRATIONS ================= */}
       <section className="student-section">
@@ -295,7 +284,6 @@ const Dashboard = () => {
 
         </div>
 
-
         <div className="student-events-grid">
 
           {myUpcomingRegistrations.map((event) => (
@@ -317,7 +305,6 @@ const Dashboard = () => {
                 </span>
 
               </div>
-
 
               <div className="student-event-body">
 
@@ -342,7 +329,6 @@ const Dashboard = () => {
 
                 </div>
 
-
                 <div className="student-event-footer">
 
                   <span className="dashboard-registration-status">
@@ -366,7 +352,6 @@ const Dashboard = () => {
         </div>
 
       </section>
-
 
       {/* ================= RECENT REGISTRATIONS ================= */}
       <section className="student-section">
@@ -397,7 +382,6 @@ const Dashboard = () => {
 
         </div>
 
-
         <div className="registrations-card">
 
           <div className="registration-row">
@@ -422,7 +406,6 @@ const Dashboard = () => {
 
           </div>
 
-
           <div className="registration-row">
 
             <div className="registration-icon pink-registration">
@@ -444,7 +427,6 @@ const Dashboard = () => {
             </Link>
 
           </div>
-
 
           <div className="registration-row">
 
@@ -471,7 +453,6 @@ const Dashboard = () => {
         </div>
 
       </section>
-
 
       {/* ================= BOTTOM CTA ================= */}
       <section className="student-cta">
@@ -500,3 +481,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

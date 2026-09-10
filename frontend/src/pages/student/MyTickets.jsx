@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {
   CalendarDays,
@@ -55,7 +56,6 @@ const MyTickets = () => {
     <div className="tickets-page">
 
       {/* PAGE HEADER */}
-
       <div className="tickets-header">
 
         <div>
@@ -72,34 +72,35 @@ const MyTickets = () => {
         </div>
 
         <div className="ticket-total">
+
           <div className="ticket-total-icon">
             <Ticket size={18} />
           </div>
 
           <div>
             <span>TOTAL TICKETS</span>
+
             <strong>
               {String(tickets.length).padStart(2, "0")}
             </strong>
           </div>
+
         </div>
 
       </div>
 
-
       {/* TICKET LIST */}
-
       <section className="registered-section">
 
         <div className="section-heading">
 
           <div>
             <span>REGISTERED EVENTS</span>
+
             <h2>Your Event Tickets</h2>
           </div>
 
         </div>
-
 
         <div className="ticket-list">
 
@@ -111,7 +112,6 @@ const MyTickets = () => {
             >
 
               {/* IMAGE */}
-
               <div className="list-image">
 
                 <img
@@ -125,9 +125,7 @@ const MyTickets = () => {
 
               </div>
 
-
               {/* DETAILS */}
-
               <div className="list-content">
 
                 <h3>{ticket.title}</h3>
@@ -153,9 +151,7 @@ const MyTickets = () => {
 
               </div>
 
-
               {/* ACTION */}
-
               <div className="list-action">
 
                 <span className="confirmed">
@@ -180,9 +176,7 @@ const MyTickets = () => {
 
       </section>
 
-
       {/* VERTICAL TICKET */}
-
       {selectedTicket && (
 
         <div className="ticket-modal">
@@ -191,7 +185,6 @@ const MyTickets = () => {
             className="ticket-backdrop"
             onClick={() => setSelectedTicket(null)}
           />
-
 
           <div className="ticket-modal-container">
 
@@ -203,20 +196,22 @@ const MyTickets = () => {
               <X size={18} />
             </button>
 
-
             <div className="event-ticket">
 
-              {/* ================= TOP ================= */}
-
+              {/* TOP */}
               <div className="ticket-top">
 
                 <div className="ticket-logo">
-                  <div className="logo-symbol">✦</div>
+
+                  <div className="logo-symbol">
+                    ✦
+                  </div>
 
                   <div>
                     <strong>EventHub</strong>
                     <small>COLLEGE EVENTS</small>
                   </div>
+
                 </div>
 
                 <div className="admit">
@@ -226,9 +221,7 @@ const MyTickets = () => {
 
               </div>
 
-
-              {/* ================= EVENT IMAGE ================= */}
-
+              {/* EVENT IMAGE */}
               <div className="ticket-cover">
 
                 <img
@@ -254,9 +247,7 @@ const MyTickets = () => {
 
               </div>
 
-
-              {/* ================= TICKET BODY ================= */}
-
+              {/* TICKET BODY */}
               <div className="ticket-body">
 
                 <div className="ticket-event-heading">
@@ -269,9 +260,7 @@ const MyTickets = () => {
 
                 </div>
 
-
                 {/* DATE + TIME */}
-
                 <div className="ticket-detail-row">
 
                   <div className="ticket-detail">
@@ -282,13 +271,13 @@ const MyTickets = () => {
 
                     <div>
                       <span>DATE</span>
+
                       <strong>
                         {selectedTicket.shortDate}
                       </strong>
                     </div>
 
                   </div>
-
 
                   <div className="ticket-detail">
 
@@ -298,6 +287,7 @@ const MyTickets = () => {
 
                     <div>
                       <span>TIME</span>
+
                       <strong>
                         {selectedTicket.time}
                       </strong>
@@ -307,9 +297,7 @@ const MyTickets = () => {
 
                 </div>
 
-
                 {/* VENUE */}
-
                 <div className="ticket-venue">
 
                   <div className="detail-icon">
@@ -318,6 +306,7 @@ const MyTickets = () => {
 
                   <div>
                     <span>VENUE</span>
+
                     <strong>
                       {selectedTicket.location}
                     </strong>
@@ -325,25 +314,22 @@ const MyTickets = () => {
 
                 </div>
 
-
                 {/* DIVIDER */}
-
                 <div className="ticket-divider">
                   <span />
                   <span />
                 </div>
 
-
                 {/* QR + REGISTRATION */}
-
                 <div className="ticket-verification">
 
                   <div className="qr-area">
 
                     <div className="qr-code">
-
-                      <QrCode size={88} strokeWidth={1.4} />
-
+                      <QrCode
+                        size={88}
+                        strokeWidth={1.4}
+                      />
                     </div>
 
                     <span>
@@ -351,7 +337,6 @@ const MyTickets = () => {
                     </span>
 
                   </div>
-
 
                   <div className="registration">
 
@@ -372,9 +357,7 @@ const MyTickets = () => {
 
                 </div>
 
-
-                {/* ================= STUDENT ================= */}
-
+                {/* STUDENT */}
                 <div className="student-ticket-info">
 
                   <div className="student-ticket-avatar">
@@ -383,7 +366,9 @@ const MyTickets = () => {
 
                   <div className="student-ticket-name">
 
-                    <span>REGISTERED STUDENT</span>
+                    <span>
+                      REGISTERED STUDENT
+                    </span>
 
                     <strong>
                       Student
@@ -400,9 +385,7 @@ const MyTickets = () => {
 
               </div>
 
-
-              {/* ================= FOOTER ================= */}
-
+              {/* FOOTER */}
               <div className="ticket-footer">
 
                 <span>
@@ -428,3 +411,4 @@ const MyTickets = () => {
 };
 
 export default MyTickets;
+
