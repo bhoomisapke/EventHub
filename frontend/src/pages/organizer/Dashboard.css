@@ -1,0 +1,2584 @@
+/* ============================================================
+   EVENTHUB ORGANIZER DASHBOARD
+   FINAL THEME
+   Based on EventHub main website visual system
+   Deep Navy + Black + Purple + Crimson + Pink + Cream
+   ============================================================ */
+
+
+/* ============================================================
+   1. EVENTHUB COLOR SYSTEM
+   ============================================================ */
+
+.organizer-dashboard-page {
+  --black: #070914;
+  --black-soft: #0A0D1A;
+
+  --navy: #0B1230;
+  --deep-blue: #111A46;
+  --blue: #2563EB;
+  --blue-light: #3B82F6;
+
+  --purple-dark: #6D28D9;
+  --purple: #8B5CF6;
+
+  --red: #E11D48;
+  --red-dark: #BE123C;
+
+  --pink: #EC4899;
+  --pink-light: #F472B6;
+
+  --cream: #FFF8ED;
+  --white: #FFFFFF;
+
+  --page-bg: #F7F3EE;
+  --page-bg-2: #EEEAF4;
+
+  --dark-text: #10152C;
+  --muted: #5B6478;
+
+  --light-text: #F8FAFC;
+  --light-muted: #CBD5E1;
+
+  --border-light: #DDD8E1;
+  --border-dark: #29335F;
+
+  --purple-glow: rgba(139, 92, 246, 0.35);
+  --pink-glow: rgba(236, 72, 153, 0.35);
+  --red-glow: rgba(225, 29, 72, 0.35);
+}
+
+
+/* ============================================================
+   2. DASHBOARD PAGE
+   ============================================================ */
+
+.organizer-dashboard-page {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  background:
+    radial-gradient(
+      circle at 8% 8%,
+      rgba(236, 72, 153, 0.07),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 92% 18%,
+      rgba(109, 40, 217, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      rgba(37, 99, 235, 0.06),
+      transparent 35%
+    ),
+    var(--page-bg);
+
+  color: var(--dark-text);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+
+/* ============================================================
+   3. MAIN CONTENT
+   ============================================================ */
+
+.organizer-dashboard-main {
+  width: min(1250px, calc(100% - 80px));
+  margin: 30px auto 70px;
+}
+
+
+/* ============================================================
+   4. HERO
+   ============================================================ */
+
+.clean-organizer-hero {
+  min-height: 360px;
+
+  border-radius: 25px;
+
+  padding: 45px 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  position: relative;
+
+  background:
+    radial-gradient(
+      circle at 90% 40%,
+      rgba(238, 171, 255, 0.30),
+      transparent 38%
+    ),
+    linear-gradient(
+      120deg,
+      #f5f5ff,
+      #ffffff 55%,
+      #fbf1ff
+    );
+
+  border: 1px solid #eeeafa;
+
+  box-shadow:
+    0 18px 50px rgba(42, 45, 100, 0.06);
+}
+
+
+/* subtle EventHub grid inside hero */
+
+.clean-organizer-hero::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  opacity: 0.45;
+
+  background-image:
+    linear-gradient(
+      rgba(37, 99, 235, 0.045) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(109, 40, 217, 0.045) 1px,
+      transparent 1px
+    );
+
+  background-size: 45px 45px;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      black,
+      transparent 90%
+    );
+}
+
+
+/* ============================================================
+   5. HERO CONTENT
+   ============================================================ */
+
+.clean-hero-content {
+  position: relative;
+
+  z-index: 3;
+
+  padding-left: 3px;
+
+  max-width: 650px;
+}
+
+.clean-hero-label {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 7px 15px;
+
+  border-radius: 20px;
+
+  background: #eeeaff;
+
+  color: #6543d5;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+.clean-hero-label > span {
+  width: 7px;
+  height: 7px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #9b4cff,
+      #ee5db7
+    );
+
+  box-shadow:
+    0 0 12px rgba(236, 72, 153, 0.45);
+
+  animation:
+    organizerPulse 2s ease-in-out infinite;
+}
+
+@keyframes organizerPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.3);
+    opacity: 0.65;
+  }
+}
+
+
+/* ============================================================
+   6. HERO HEADING
+   ============================================================ */
+
+.clean-hero-content h1 {
+  margin: 18px 0 12px;
+
+  color: #101b49;
+
+  font-size: 45px;
+
+  line-height: 1.08;
+
+  letter-spacing: -1.8px;
+
+  font-weight: 800;
+}
+
+.clean-hero-content h1 span {
+  display: inline-block;
+
+  background:
+    linear-gradient(
+      90deg,
+      #6646e8,
+      #f04fae
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+
+  filter:
+    drop-shadow(
+      0 0 18px rgba(139, 92, 246, 0.13)
+    );
+}
+
+.clean-hero-content > p {
+  margin: 0;
+
+  color: #7181ad;
+
+  line-height: 1.6;
+
+  font-size: 15px;
+}
+
+
+/* ============================================================
+   7. HERO BUTTONS
+   ============================================================ */
+
+.clean-hero-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 27px;
+}
+
+.dashboard-primary-button,
+.dashboard-glass-button {
+  position: relative;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  min-height: 48px;
+
+  padding: 0 20px;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+
+  font-weight: 750;
+
+  text-decoration: none;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease,
+    background 0.28s ease;
+}
+
+.dashboard-primary-button {
+  color: var(--cream);
+
+  border: 1px solid var(--navy);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--navy),
+      var(--deep-blue)
+    );
+
+  box-shadow:
+    0 9px 25px rgba(11, 18, 48, 0.20);
+}
+
+.dashboard-primary-button::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -130%;
+
+  width: 80%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 248, 237, 0.20),
+      transparent
+    );
+
+  transform: skewX(-22deg);
+
+  transition: left 0.7s ease;
+}
+
+.dashboard-primary-button:hover::before {
+  left: 150%;
+}
+
+.dashboard-primary-button:hover {
+  transform: translateY(-3px);
+
+  border-color: var(--purple);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--deep-blue),
+      var(--purple-dark)
+    );
+
+  box-shadow:
+    0 0 20px rgba(109, 40, 217, 0.35),
+    0 0 42px rgba(236, 72, 153, 0.12);
+}
+
+.dashboard-glass-button {
+  color: var(--navy);
+
+  background: rgba(255, 248, 237, 0.72);
+
+  border: 1px solid #cec8d0;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dashboard-glass-button:hover {
+  transform: translateY(-3px);
+
+  color: var(--purple-dark);
+
+  border-color: var(--purple);
+
+  background: var(--white);
+
+  box-shadow:
+    0 0 20px rgba(139, 92, 246, 0.16);
+}
+
+
+/* ============================================================
+   8. HERO FEATURES
+   ============================================================ */
+
+.clean-hero-features {
+  margin-top: 27px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 35px;
+}
+
+.clean-feature {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.clean-feature + .clean-feature {
+  padding-left: 32px;
+
+  border-left: 1px solid #dddff0;
+}
+
+.clean-feature-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #e9e8ff;
+
+  color: #4430ca;
+
+  display: grid;
+
+  place-items: center;
+
+  font-size: 19px;
+}
+
+.clean-feature-icon.pink {
+  background: #ffe5f5;
+
+  color: #db4b9f;
+}
+
+.clean-feature strong {
+  display: block;
+
+  color: #15204e;
+
+  font-size: 14px;
+}
+
+.clean-feature small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #8090b7;
+
+  font-size: 12px;
+}
+
+
+/* ============================================================
+   9. HERO VISUAL
+   ============================================================ */
+
+.clean-hero-visual {
+  width: 510px;
+  height: 310px;
+
+  flex-shrink: 0;
+
+  position: relative;
+
+  overflow: visible;
+}
+
+.hero-visual-glow {
+  position: absolute;
+
+  width: 280px;
+  height: 220px;
+
+  right: 50px;
+  top: 45px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(139, 92, 246, 0.22),
+      rgba(236, 72, 153, 0.12),
+      transparent 70%
+    );
+
+  filter: blur(22px);
+
+  animation:
+    organizerGlow 5s ease-in-out infinite;
+}
+
+@keyframes organizerGlow {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+.hero-grid-pattern {
+  position: absolute;
+
+  inset: 20px 0 0 40px;
+
+  opacity: 0.3;
+
+  background-image:
+    radial-gradient(
+      rgba(109, 40, 217, 0.35) 1px,
+      transparent 1px
+    );
+
+  background-size: 18px 18px;
+
+  mask-image:
+    radial-gradient(
+      circle at center,
+      black,
+      transparent 70%
+    );
+}
+
+
+/* ============================================================
+   10. HERO DECORATIVE SHAPES
+   ============================================================ */
+
+.hero-gradient-square {
+  width: 255px;
+  height: 255px;
+
+  position: absolute;
+
+  right: 65px;
+  top: 22px;
+
+  border-radius: 25px;
+
+  transform: rotate(8deg);
+
+  background:
+    linear-gradient(
+      135deg,
+      #f7a1d4,
+      #8d73ec
+    );
+
+  opacity: 0.75;
+
+  animation:
+    organizerSquareFloat 6s ease-in-out infinite;
+}
+
+@keyframes organizerSquareFloat {
+  0%,
+  100% {
+    transform: rotate(8deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(10deg) translateY(-7px);
+  }
+}
+
+.hero-gradient-circle {
+  width: 130px;
+  height: 70px;
+
+  position: absolute;
+
+  left: 10px;
+  bottom: 25px;
+
+  border-radius: 50%;
+
+  background: #f8b3de;
+
+  opacity: 0.45;
+
+  filter: blur(1px);
+
+  animation:
+    organizerCircleFloat 5s ease-in-out infinite;
+}
+
+@keyframes organizerCircleFloat {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(7px, -8px);
+  }
+}
+
+
+/* ============================================================
+   11. HERO DASHBOARD CARD
+   ============================================================ */
+
+.clean-hero-card {
+  width: 285px;
+  height: 215px;
+
+  position: absolute;
+
+  z-index: 2;
+
+  right: 110px;
+  top: 45px;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.90);
+
+  border: 1px solid rgba(255, 255, 255, 0.8);
+
+  box-shadow:
+    0 20px 45px rgba(49, 42, 111, 0.15);
+
+  transform: rotate(-5deg);
+
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.clean-hero-card:hover {
+  transform:
+    rotate(-3deg)
+    translateY(-5px);
+
+  box-shadow:
+    0 25px 55px rgba(49, 42, 111, 0.19);
+}
+
+.clean-card-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  color: #2834a0;
+
+  font-size: 12px;
+
+  letter-spacing: 1px;
+}
+
+.clean-card-header div {
+  display: flex;
+
+  align-items: center;
+}
+
+.clean-card-header span {
+  color: #8a91b5;
+
+  font-size: 9px;
+
+  letter-spacing: 0.5px;
+}
+
+.clean-card-header i {
+  display: inline-block;
+
+  width: 7px;
+  height: 7px;
+
+  margin-right: 5px;
+
+  border-radius: 50%;
+
+  background: #7953df;
+
+  box-shadow:
+    0 0 10px rgba(121, 83, 223, 0.35);
+}
+
+.clean-card-center {
+  text-align: center;
+
+  margin-top: 28px;
+}
+
+.clean-card-center small {
+  display: block;
+
+  color: #8791bd;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+.clean-card-center strong {
+  display: block;
+
+  margin-top: 6px;
+
+  font-size: 32px;
+
+  color: #121d4e;
+}
+
+.clean-card-center span {
+  color: #7e8ab1;
+
+  font-size: 11px;
+}
+
+.clean-card-footer {
+  position: absolute;
+
+  bottom: 15px;
+
+  left: 20px;
+  right: 20px;
+
+  padding-top: 12px;
+
+  border-top: 1px solid #e4e5f1;
+
+  display: flex;
+
+  justify-content: space-around;
+
+  color: #7180ad;
+
+  font-size: 8px;
+
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   12. FLOATING HERO CARDS
+   ============================================================ */
+
+.clean-floating-card {
+  position: absolute;
+
+  z-index: 4;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px 18px 12px 12px;
+
+  border-radius: 14px;
+
+  background: white;
+
+  box-shadow:
+    0 12px 30px rgba(43, 39, 96, 0.13);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.clean-floating-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 18px 35px rgba(43, 39, 96, 0.18);
+}
+
+.floating-create {
+  right: 0;
+  top: 105px;
+
+  animation:
+    floatingCreate 4.5s ease-in-out infinite;
+}
+
+.floating-users {
+  right: 0;
+  bottom: 25px;
+
+  animation:
+    floatingUsers 5s ease-in-out infinite;
+}
+
+@keyframes floatingCreate {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes floatingUsers {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.floating-round-icon {
+  width: 35px;
+  height: 35px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  display: grid;
+
+  place-items: center;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7761e9,
+      #9c63ef
+    );
+}
+
+.floating-round-icon.pink {
+  background:
+    linear-gradient(
+      135deg,
+      #ee6bb9,
+      #b65fe4
+    );
+}
+
+.clean-floating-card strong {
+  display: block;
+
+  color: #18214c;
+
+  font-size: 12px;
+}
+
+.clean-floating-card small {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #8a94b5;
+
+  font-size: 9px;
+}
+
+
+/* ============================================================
+   13. HERO ORBITS
+   ============================================================ */
+
+.hero-mini-orbit {
+  position: absolute;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  border: 1px solid rgba(139, 92, 246, 0.20);
+
+  animation:
+    organizerOrbit 12s linear infinite;
+}
+
+.orbit-one {
+  width: 300px;
+  height: 150px;
+
+  right: 25px;
+  top: 65px;
+
+  transform:
+    rotateX(62deg)
+    rotateZ(-12deg);
+}
+
+.orbit-two {
+  width: 250px;
+  height: 125px;
+
+  right: 48px;
+  top: 77px;
+
+  border-style: dashed;
+
+  border-color:
+    rgba(236, 72, 153, 0.18);
+
+  animation-duration: 16s;
+
+  animation-direction: reverse;
+}
+
+@keyframes organizerOrbit {
+  from {
+    transform:
+      rotateX(62deg)
+      rotateZ(0deg);
+  }
+
+  to {
+    transform:
+      rotateX(62deg)
+      rotateZ(360deg);
+  }
+}
+
+
+/* ============================================================
+   14. STATISTICS
+   ============================================================ */
+
+.clean-statistics {
+  margin-top: 26px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 20px;
+}
+
+.clean-stat-card {
+  background: white;
+
+  border: 1px solid #ececf5;
+
+  border-radius: 18px;
+
+  padding: 20px 22px;
+
+  box-shadow:
+    0 8px 25px rgba(42, 45, 100, 0.05);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.clean-stat-card:hover {
+  transform: translateY(-4px);
+
+  border-color: #dcd8f3;
+
+  box-shadow:
+    0 15px 35px rgba(42, 45, 100, 0.09);
+}
+
+.clean-stat-icon {
+  width: 35px;
+  height: 35px;
+
+  border-radius: 10px;
+
+  background: #eeeaff;
+
+  color: #6544da;
+
+  display: grid;
+
+  place-items: center;
+
+  margin-bottom: 12px;
+}
+
+.clean-stat-icon.pink {
+  background: #ffe7f5;
+
+  color: #df4e9f;
+}
+
+.clean-stat-icon.purple {
+  background: #eee9ff;
+
+  color: #7953df;
+}
+
+.clean-stat-card > span {
+  display: block;
+
+  color: #6f7ea7;
+
+  font-size: 13px;
+}
+
+.clean-stat-card strong {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #101b49;
+
+  font-size: 29px;
+
+  line-height: 1.1;
+}
+
+.clean-stat-card small {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #9aa3bd;
+
+  font-size: 11px;
+}
+
+
+/* ============================================================
+   15. EVENTS SECTION
+   ============================================================ */
+
+.clean-events-section {
+  margin-top: 45px;
+}
+
+.clean-events-heading {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 22px;
+}
+
+.clean-events-heading h2 {
+  margin: 0;
+
+  color: #101b49;
+
+  font-size: 29px;
+
+  letter-spacing: -0.7px;
+}
+
+.clean-events-heading p {
+  margin: 6px 0 0;
+
+  color: #8290b5;
+
+  font-size: 14px;
+}
+
+.clean-view-all {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 11px 17px;
+
+  border-radius: 16px;
+
+  background: #f0efff;
+
+  color: #4431b8;
+
+  text-decoration: none;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.clean-view-all:hover {
+  transform: translateY(-2px);
+
+  background: #e9e6ff;
+
+  box-shadow:
+    0 8px 20px rgba(109, 40, 217, 0.10);
+}
+
+.clean-view-all span {
+  display: grid;
+
+  place-items: center;
+
+  transition:
+    transform 0.25s ease;
+}
+
+.clean-view-all:hover span {
+  transform: translateX(4px);
+}
+
+
+/* ============================================================
+   16. EVENT GRID
+   ============================================================ */
+
+.eventhub-dashboard-events-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 22px;
+}
+
+
+/* ============================================================
+   17. EVENT CARD
+   EXACT MAIN EVENTHUB DARK CARD LANGUAGE
+   ============================================================ */
+
+.eventhub-dashboard-event-card {
+  overflow: hidden;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--navy),
+      var(--deep-blue)
+    );
+
+  border: 1px solid var(--border-dark);
+
+  box-shadow:
+    0 12px 35px rgba(7, 9, 20, 0.12);
+
+  transition:
+    transform 0.32s ease,
+    border-color 0.32s ease,
+    box-shadow 0.32s ease;
+}
+
+.eventhub-dashboard-event-card:hover {
+  transform: translateY(-8px);
+
+  border-color: var(--purple);
+
+  box-shadow:
+    0 22px 50px rgba(7, 9, 20, 0.22),
+    0 0 28px rgba(139, 92, 246, 0.18);
+}
+
+
+/* ============================================================
+   18. EVENT IMAGE
+   ============================================================ */
+
+.eventhub-dashboard-event-image {
+  position: relative;
+
+  height: 220px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--navy),
+      var(--black)
+    );
+}
+
+.eventhub-dashboard-event-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition:
+    transform 0.6s ease,
+    filter 0.6s ease;
+}
+
+.eventhub-dashboard-event-card:hover
+.eventhub-dashboard-event-image img {
+  transform: scale(1.06);
+
+  filter:
+    saturate(1.08)
+    contrast(1.03);
+}
+
+
+/* ============================================================
+   19. EVENT IMAGE PLACEHOLDER
+   ============================================================ */
+
+.eventhub-event-image-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: rgba(255, 248, 237, 0.55);
+
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      rgba(236, 72, 153, 0.22),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 75% 70%,
+      rgba(139, 92, 246, 0.25),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #111a46,
+      #070914
+    );
+}
+
+.eventhub-event-image-placeholder span {
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+  color: rgba(255, 248, 237, 0.55);
+}
+
+
+/* ============================================================
+   20. IMAGE OVERLAY
+   ============================================================ */
+
+.eventhub-event-image-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to bottom,
+      transparent 25%,
+      rgba(7, 9, 20, 0.90) 100%
+    );
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   21. CATEGORY
+   ============================================================ */
+
+.eventhub-event-category {
+  position: absolute;
+
+  top: 14px;
+  left: 14px;
+
+  padding: 7px 9px;
+
+  border-radius: 6px;
+
+  background:
+    rgba(7, 9, 20, 0.78);
+
+  border:
+    1px solid rgba(236, 72, 153, 0.35);
+
+  color: var(--cream);
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.3px;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+
+/* ============================================================
+   22. EVENT NUMBER
+   ============================================================ */
+
+.eventhub-event-number {
+  position: absolute;
+
+  top: 15px;
+  right: 15px;
+
+  color:
+    rgba(255, 248, 237, 0.60);
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+
+/* ============================================================
+   23. EVENT DATE
+   ============================================================ */
+
+.eventhub-event-date {
+  position: absolute;
+
+  left: 15px;
+  bottom: 14px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  gap: 6px;
+}
+
+.eventhub-event-date strong {
+  color: var(--cream);
+
+  font-size: 28px;
+
+  line-height: 1;
+}
+
+.eventhub-event-date span {
+  color: var(--pink-light);
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.2px;
+}
+
+
+/* ============================================================
+   24. STATUS
+   ============================================================ */
+
+.eventhub-event-status {
+  position: absolute;
+
+  right: 14px;
+  bottom: 14px;
+
+  padding: 6px 8px;
+
+  border-radius: 7px;
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.status-upcoming {
+  color: #ddd6fe;
+
+  background:
+    rgba(109, 40, 217, 0.28);
+
+  border:
+    1px solid rgba(139, 92, 246, 0.35);
+}
+
+.status-ongoing {
+  color: #fbcfe8;
+
+  background:
+    rgba(236, 72, 153, 0.25);
+
+  border:
+    1px solid rgba(236, 72, 153, 0.40);
+}
+
+.status-completed {
+  color: #cbd5e1;
+
+  background:
+    rgba(100, 116, 139, 0.25);
+
+  border:
+    1px solid rgba(148, 163, 184, 0.30);
+}
+
+.status-cancelled {
+  color: #fecdd3;
+
+  background:
+    rgba(225, 29, 72, 0.25);
+
+  border:
+    1px solid rgba(225, 29, 72, 0.40);
+}
+
+
+/* ============================================================
+   25. EVENT INFORMATION
+   ============================================================ */
+
+.eventhub-dashboard-event-info {
+  padding: 20px;
+}
+
+.eventhub-dashboard-event-info h3 {
+  margin: 0;
+
+  color: var(--cream);
+
+  font-size: 19px;
+
+  line-height: 1.15;
+
+  letter-spacing: -0.5px;
+}
+
+
+/* ============================================================
+   26. EVENT DETAILS
+   ============================================================ */
+
+.eventhub-event-details {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-top: 14px;
+
+  color: #aab4c8;
+
+  font-size: 9px;
+}
+
+.eventhub-event-details span {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+}
+
+
+/* ============================================================
+   27. DEADLINE
+   ============================================================ */
+
+.eventhub-event-deadline {
+  margin-top: 17px;
+
+  min-height: 36px;
+
+  padding: 0 11px;
+
+  border-radius: 8px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  background:
+    rgba(255, 248, 237, 0.045);
+
+  border:
+    1px solid rgba(139, 92, 246, 0.18);
+
+  color: #aab4c8;
+
+  font-size: 9px;
+}
+
+.eventhub-event-deadline svg {
+  flex-shrink: 0;
+
+  color: var(--pink-light);
+}
+
+.eventhub-event-deadline strong {
+  margin-left: auto;
+
+  color: #d8def0;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   28. REGISTRATION
+   ============================================================ */
+
+.eventhub-registration {
+  margin-top: 19px;
+}
+
+.eventhub-registration-heading {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  color: #aab4c8;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.eventhub-registration-heading strong {
+  color: var(--cream);
+
+  font-size: 10px;
+}
+
+.eventhub-progress-row {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  margin-top: 8px;
+}
+
+.eventhub-progress {
+  flex: 1;
+
+  height: 7px;
+
+  border-radius: 20px;
+
+  background: rgba(255, 248, 237, 0.10);
+
+  overflow: hidden;
+}
+
+.eventhub-progress span {
+  display: block;
+
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #854ee9,
+      #e754bd
+    );
+
+  transition:
+    width 0.6s ease;
+}
+
+.eventhub-progress-row b {
+  width: 32px;
+
+  color: #aab4c8;
+
+  font-size: 9px;
+
+  text-align: right;
+}
+
+
+/* ============================================================
+   29. EVENT ACTIONS
+   ============================================================ */
+
+.eventhub-dashboard-event-actions {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 8px;
+
+  margin-top: 20px;
+}
+
+.eventhub-view-event {
+  grid-column: 1 / -1;
+
+  width: 100%;
+
+  padding: 11px 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 8px;
+
+  border-radius: 8px;
+
+  background:
+    rgba(255, 248, 237, 0.05);
+
+  border:
+    1px solid rgba(139, 92, 246, 0.28);
+
+  color: var(--cream);
+
+  font-size: 10px;
+
+  font-weight: 750;
+
+  text-decoration: none;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.eventhub-view-event svg:last-child {
+  color: var(--pink-light);
+
+  transition:
+    transform 0.25s ease;
+}
+
+.eventhub-view-event:hover {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(225, 29, 72, 0.30),
+      rgba(109, 40, 217, 0.34)
+    );
+
+  border-color: var(--pink);
+
+  box-shadow:
+    0 0 20px rgba(236, 72, 153, 0.18);
+
+  transform: translateY(-2px);
+}
+
+.eventhub-view-event:hover svg:last-child {
+  transform: translateX(4px);
+}
+
+.eventhub-edit-event,
+.eventhub-participants-event {
+  min-height: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  border-radius: 8px;
+
+  text-decoration: none;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.eventhub-edit-event {
+  color: #d9d5ff;
+
+  background:
+    rgba(139, 92, 246, 0.10);
+
+  border:
+    1px solid rgba(139, 92, 246, 0.25);
+}
+
+.eventhub-edit-event:hover {
+  transform: translateY(-2px);
+
+  background:
+    rgba(139, 92, 246, 0.20);
+
+  border-color:
+    rgba(139, 92, 246, 0.50);
+
+  box-shadow:
+    0 0 18px rgba(139, 92, 246, 0.12);
+}
+
+.eventhub-participants-event {
+  color: #fbcfe8;
+
+  background:
+    rgba(236, 72, 153, 0.08);
+
+  border:
+    1px solid rgba(236, 72, 153, 0.20);
+}
+
+.eventhub-participants-event:hover {
+  transform: translateY(-2px);
+
+  background:
+    rgba(236, 72, 153, 0.16);
+
+  border-color:
+    rgba(236, 72, 153, 0.42);
+
+  box-shadow:
+    0 0 18px rgba(236, 72, 153, 0.12);
+}
+
+
+/* ============================================================
+   30. EMPTY / LOADING STATE
+   ============================================================ */
+
+.dashboard-state-card {
+  min-height: 260px;
+
+  padding: 40px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  border-radius: 18px;
+
+  background: white;
+
+  border: 1px solid #ececf5;
+
+  box-shadow:
+    0 10px 28px rgba(34, 41, 93, 0.07);
+}
+
+.dashboard-state-card h3 {
+  margin: 15px 0 7px;
+
+  color: #101b49;
+
+  font-size: 19px;
+}
+
+.dashboard-state-card p {
+  max-width: 480px;
+
+  margin: 0 0 20px;
+
+  color: #8290b5;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+.dashboard-state-icon {
+  width: 52px;
+  height: 52px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 16px;
+
+  color: #6544da;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eeeaff,
+      #fce5f1
+    );
+}
+
+.dashboard-error-card .dashboard-state-icon {
+  color: var(--red);
+
+  background:
+    #fff0f4;
+}
+
+.dashboard-spinner {
+  width: 38px;
+  height: 38px;
+
+  border-radius: 50%;
+
+  border:
+    3px solid #e7e3ff;
+
+  border-top-color:
+    var(--purple);
+
+  animation:
+    dashboardSpin 0.8s linear infinite;
+}
+
+@keyframes dashboardSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* ============================================================
+   31. LOWER DASHBOARD GRID
+   ============================================================ */
+
+.organizer-dashboard-lower-grid {
+  margin-top: 32px;
+
+  display: grid;
+
+  grid-template-columns:
+    1.15fr 0.85fr;
+
+  gap: 20px;
+}
+
+
+/* ============================================================
+   32. DASHBOARD PANEL
+   ============================================================ */
+
+.dashboard-panel {
+  padding: 24px;
+
+  border-radius: 18px;
+
+  background: white;
+
+  border: 1px solid #ececf5;
+
+  box-shadow:
+    0 8px 25px rgba(42, 45, 100, 0.05);
+}
+
+.dashboard-panel-heading {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+
+  color: #6c63ff;
+}
+
+.dashboard-panel-heading h2 {
+  margin: 4px 0 0;
+
+  color: #101b49;
+
+  font-size: 22px;
+
+  letter-spacing: -0.5px;
+}
+
+.dashboard-section-label {
+  color: #8a7acb;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.6px;
+}
+
+
+/* ============================================================
+   33. QUICK ACTIONS
+   ============================================================ */
+
+.quick-actions-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 12px;
+}
+
+.quick-action-card {
+  min-height: 92px;
+
+  padding: 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  border-radius: 14px;
+
+  text-decoration: none;
+
+  background:
+    linear-gradient(
+      145deg,
+      #faf9ff,
+      #f6f2ff
+    );
+
+  border: 1px solid #e8e5f5;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.quick-action-card:hover {
+  transform: translateY(-4px);
+
+  border-color: #d5cdf7;
+
+  box-shadow:
+    0 12px 28px rgba(70, 55, 140, 0.10);
+}
+
+.quick-action-card > svg {
+  margin-left: auto;
+
+  color: #9a90bb;
+
+  flex-shrink: 0;
+
+  transition:
+    transform 0.25s ease;
+}
+
+.quick-action-card:hover > svg {
+  transform: translateX(4px);
+
+  color: var(--purple);
+}
+
+.quick-action-card strong {
+  display: block;
+
+  color: #1a2450;
+
+  font-size: 12px;
+}
+
+.quick-action-card small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #8a94b5;
+
+  font-size: 9px;
+}
+
+.quick-action-icon {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 11px;
+}
+
+.quick-action-icon.pink {
+  color: #d94b9f;
+
+  background: #ffe7f5;
+}
+
+.quick-action-icon.purple {
+  color: #6847d9;
+
+  background: #eeeaff;
+}
+
+.quick-action-icon.blue {
+  color: #3973c9;
+
+  background: #e9f0ff;
+}
+
+
+/* ============================================================
+   34. RECENT ACTIVITY
+   ============================================================ */
+
+.recent-activity-list {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.recent-activity-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid #efedf4;
+}
+
+.recent-activity-item:last-child {
+  border-bottom: 0;
+
+  padding-bottom: 0;
+}
+
+.activity-dot {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 10px;
+
+  color: #6847d9;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eeeaff,
+      #fce5f1
+    );
+}
+
+.recent-activity-item strong {
+  display: block;
+
+  max-width: 260px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #1a2450;
+
+  font-size: 11px;
+}
+
+.recent-activity-item p {
+  margin: 4px 0 0;
+
+  color: #8a94b5;
+
+  font-size: 9px;
+}
+
+.recent-activity-item p span {
+  color: #6b4ad8;
+
+  font-weight: 700;
+}
+
+.dashboard-empty-mini {
+  min-height: 100px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  color: #8a94b5;
+
+  font-size: 11px;
+}
+
+
+/* ============================================================
+   35. DEADLINES
+   ============================================================ */
+
+.deadlines-panel {
+  margin-top: 20px;
+}
+
+.dashboard-empty-wide {
+  min-height: 80px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  color: #8a94b5;
+
+  font-size: 11px;
+}
+
+.deadline-list {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 12px;
+}
+
+.deadline-item {
+  min-height: 76px;
+
+  padding: 13px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  border-radius: 13px;
+
+  text-decoration: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff0fb,
+      #faf1ff
+    );
+
+  border: 1px solid #f0e5f7;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.deadline-item:hover {
+  transform: translateY(-3px);
+
+  border-color: #dfd0f1;
+
+  box-shadow:
+    0 10px 25px rgba(108, 78, 170, 0.10);
+}
+
+.deadline-item > svg {
+  margin-left: auto;
+
+  color: #9c86c7;
+
+  flex-shrink: 0;
+}
+
+.deadline-icon {
+  width: 35px;
+  height: 35px;
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 10px;
+
+  color: #d94b9f;
+
+  background: #ffe5f5;
+}
+
+.deadline-content {
+  min-width: 0;
+}
+
+.deadline-content strong {
+  display: block;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #1b2450;
+
+  font-size: 11px;
+}
+
+.deadline-content span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #8a94b5;
+
+  font-size: 9px;
+}
+
+
+/* ============================================================
+   36. FOOTER SPACE
+   ============================================================ */
+
+.organizer-dashboard-footer-space {
+  height: 20px;
+}
+
+
+/* ============================================================
+   37. RESPONSIVE — 1050px
+   ============================================================ */
+
+@media (max-width: 1050px) {
+  .organizer-dashboard-main {
+    width: min(92%, 900px);
+  }
+
+  .clean-organizer-hero {
+    padding: 35px;
+  }
+
+  .clean-hero-visual {
+    width: 410px;
+
+    transform: scale(0.85);
+
+    transform-origin: right center;
+  }
+
+  .eventhub-dashboard-events-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .organizer-dashboard-lower-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .deadline-list {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+}
+
+
+/* ============================================================
+   38. RESPONSIVE — 800px
+   ============================================================ */
+
+@media (max-width: 800px) {
+  .clean-organizer-hero {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    min-height: auto;
+  }
+
+  .clean-hero-content {
+    width: 100%;
+
+    max-width: none;
+  }
+
+  .clean-hero-visual {
+    width: 100%;
+
+    margin-top: 20px;
+
+    transform: scale(0.8);
+
+    transform-origin: left center;
+  }
+
+  .clean-statistics {
+    grid-template-columns: 1fr;
+  }
+
+  .eventhub-dashboard-events-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .deadline-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ============================================================
+   39. RESPONSIVE — 650px
+   ============================================================ */
+
+@media (max-width: 650px) {
+  .organizer-dashboard-main {
+    width: calc(100% - 30px);
+
+    margin-top: 18px;
+  }
+
+  .clean-organizer-hero {
+    padding: 28px 22px;
+
+    border-radius: 22px;
+  }
+
+  .clean-hero-content h1 {
+    font-size: 34px;
+
+    letter-spacing: -1.3px;
+  }
+
+  .clean-hero-content > p {
+    font-size: 14px;
+  }
+
+  .clean-hero-content > p br {
+    display: none;
+  }
+
+  .clean-hero-actions {
+    flex-wrap: wrap;
+  }
+
+  .clean-hero-features {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 18px;
+  }
+
+  .clean-feature + .clean-feature {
+    padding-left: 0;
+
+    border-left: 0;
+  }
+
+  .clean-hero-visual {
+    height: 270px;
+
+    transform: scale(0.65);
+
+    transform-origin: left center;
+  }
+
+  .clean-events-heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .clean-view-all {
+    align-self: flex-start;
+  }
+
+  .dashboard-panel {
+    padding: 20px;
+  }
+}
+
+
+/* ============================================================
+   40. RESPONSIVE — 480px
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .organizer-dashboard-main {
+    width: calc(100% - 20px);
+
+    margin-top: 12px;
+  }
+
+  .clean-organizer-hero {
+    padding: 24px 18px;
+  }
+
+  .clean-hero-content h1 {
+    font-size: 31px;
+  }
+
+  .clean-hero-actions {
+    width: 100%;
+
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .dashboard-primary-button,
+  .dashboard-glass-button {
+    width: 100%;
+  }
+
+  .clean-hero-visual {
+    height: 240px;
+
+    transform: scale(0.57);
+  }
+
+  .clean-stat-card {
+    padding: 18px;
+  }
+
+  .clean-stat-card strong {
+    font-size: 27px;
+  }
+
+  .eventhub-dashboard-event-image {
+    height: 205px;
+  }
+
+  .eventhub-dashboard-event-info {
+    padding: 18px;
+  }
+
+  .eventhub-dashboard-event-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .eventhub-view-event {
+    grid-column: auto;
+  }
+
+  .eventhub-edit-event,
+  .eventhub-participants-event {
+    min-height: 40px;
+  }
+
+  .dashboard-panel-heading h2 {
+    font-size: 20px;
+  }
+}
+
+
+/* ============================================================
+   41. REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .organizer-dashboard-page *,
+  .organizer-dashboard-page *::before,
+  .organizer-dashboard-page *::after {
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+  }
+
+  .organizer-dashboard-page {
+    scroll-behavior: auto;
+  }
+}

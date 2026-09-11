@@ -1,14 +1,14 @@
-"""
-Django settings for config project.
-"""
-
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Security
+# ---------------------------------------------------------
+# SECURITY
+# ---------------------------------------------------------
+
 SECRET_KEY = 'django-insecure-c+ho5wg$h&b4q-f3swny6g9k&s(y1==q*a4!n1oys__=@4&(o$'
 
 DEBUG = True
@@ -19,7 +19,9 @@ ALLOWED_HOSTS = [
 ]
 
 
-# Application definition
+# ---------------------------------------------------------
+# APPLICATIONS
+# ---------------------------------------------------------
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -36,10 +38,13 @@ INSTALLED_APPS = [
     "registrations",
     "tickets",
     "events",
-
     "accounts",
 ]
 
+
+# ---------------------------------------------------------
+# MIDDLEWARE
+# ---------------------------------------------------------
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,8 +60,16 @@ MIDDLEWARE = [
 ]
 
 
+# ---------------------------------------------------------
+# URLS
+# ---------------------------------------------------------
+
 ROOT_URLCONF = 'config.urls'
 
+
+# ---------------------------------------------------------
+# TEMPLATES
+# ---------------------------------------------------------
 
 TEMPLATES = [
     {
@@ -77,7 +90,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-# Database
+# ---------------------------------------------------------
+# DATABASE
+# ---------------------------------------------------------
 
 DATABASES = {
     'default': {
@@ -87,7 +102,9 @@ DATABASES = {
 }
 
 
-# Password validation
+# ---------------------------------------------------------
+# PASSWORD VALIDATION
+# ---------------------------------------------------------
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -105,7 +122,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+# ---------------------------------------------------------
+# INTERNATIONALIZATION
+# ---------------------------------------------------------
 
 LANGUAGE_CODE = 'en-us'
 
@@ -116,12 +135,27 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files
+# ---------------------------------------------------------
+# STATIC FILES
+# ---------------------------------------------------------
 
 STATIC_URL = 'static/'
 
 
-# Email
+# ---------------------------------------------------------
+# MEDIA FILES
+# ---------------------------------------------------------
+# Uploaded event images will be stored in:
+# backend/media/events/
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# ---------------------------------------------------------
+# EMAIL
+# ---------------------------------------------------------
 
 MAILERS = {
     'default': {
@@ -130,11 +164,18 @@ MAILERS = {
 }
 
 
+# ---------------------------------------------------------
 # CORS
+# ---------------------------------------------------------
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
+
+
+# ---------------------------------------------------------
+# CUSTOM USER MODEL
+# ---------------------------------------------------------
 
 AUTH_USER_MODEL = 'accounts.User'

@@ -7,6 +7,7 @@ import Auth from "../pages/auth/Auth.jsx";
 // Layouts
 import StudentLayout from "../layouts/StudentLayout.jsx";
 import PublicLayout from "../layouts/PublicLayout.jsx";
+import OrganizerLayout from "../layouts/OrganizerLayout.jsx";
 
 // Student Pages
 import Dashboard from "../pages/student/Dashboard.jsx";
@@ -44,6 +45,7 @@ const AppRoutes = () => {
           PUBLIC PAGES
           ===================================================== */}
       <Route element={<PublicLayout />}>
+
         <Route
           path="/categories"
           element={<Categories />}
@@ -83,6 +85,7 @@ const AppRoutes = () => {
             </div>
           }
         />
+
       </Route>
 
       {/* =====================================================
@@ -92,6 +95,7 @@ const AppRoutes = () => {
         path="/student"
         element={<StudentLayout />}
       >
+
         <Route
           path="dashboard"
           element={<Dashboard />}
@@ -111,53 +115,61 @@ const AppRoutes = () => {
           path="profile"
           element={<Profile />}
         />
+
       </Route>
 
       {/* =====================================================
           ORGANIZER PAGES
           ===================================================== */}
 
-      {/* Organizer Dashboard */}
       <Route
-        path="/organizer/dashboard"
-        element={<OrganizerDashboard />}
-      />
+        path="/organizer"
+        element={<OrganizerLayout />}
+      >
 
-      {/* Organizer Event Details */}
-      <Route
-        path="/organizer/events/:id"
-        element={<OrganizerEventDetails />}
-      />
+        {/* Organizer Dashboard */}
+        <Route
+          path="dashboard"
+          element={<OrganizerDashboard />}
+        />
 
-      {/* Create Event */}
-      <Route
-        path="/organizer/create-event"
-        element={<CreateEvent />}
-      />
+        {/* Organizer Event Details */}
+        <Route
+          path="events/:id"
+          element={<OrganizerEventDetails />}
+        />
 
-      {/* My Events */}
-      <Route
-        path="/organizer/events"
-        element={<MyEvents />}
-      />
+        {/* Create Event */}
+        <Route
+          path="create-event"
+          element={<CreateEvent />}
+        />
 
-      {/* Edit Event */}
-      <Route
-        path="/organizer/events/:id/edit"
-        element={<EditEvent />}
-      />
+        {/* My Events */}
+        <Route
+          path="events"
+          element={<MyEvents />}
+        />
 
-      {/* Participants */}
-      <Route
-        path="/organizer/participants"
-        element={<Participants />}
-      />
+        {/* Edit Event */}
+        <Route
+          path="events/:id/edit"
+          element={<EditEvent />}
+        />
 
-      {/* Event Participants */}
-      <Route
-        path="/organizer/events/:id/participants"
-        element={<Participants />}
-      />
+        {/* Participants */}
+        <Route
+          path="participants"
+          element={<Participants />}
+        />
+
+        {/* Event Participants */}
+        <Route
+          path="events/:id/participants"
+          element={<Participants />}
+        />
+
+      </Route>
 
       {/* =====================================================
           ADMIN DASHBOARD

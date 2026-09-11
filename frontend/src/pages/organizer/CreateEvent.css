@@ -1,0 +1,610 @@
+/* =========================================================
+   CREATE EVENT PAGE
+   EVENTHUB - CREAM + NAVY + PINK + PURPLE
+   ========================================================= */
+
+.create-event-page {
+  min-height: 100vh;
+
+  padding: 45px 60px 70px;
+
+  background:
+    radial-gradient(
+      circle at 90% 5%,
+      rgba(236, 72, 153, 0.09),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 5% 50%,
+      rgba(139, 92, 246, 0.06),
+      transparent 25%
+    ),
+    #f7f3ee;
+
+  color: #10152c;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.create-event-page .organizer-header {
+  max-width: 1050px;
+
+  margin: 0 auto 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.create-event-page .organizer-header h1 {
+  margin: 0;
+
+  color: #10152c !important;
+
+  font-size: 32px;
+  font-weight: 850;
+
+  letter-spacing: -0.8px;
+}
+
+
+.create-event-page .page-subtitle {
+  margin-top: 7px;
+
+  color: #68728a;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   MAIN FORM
+   ========================================================= */
+
+.create-event-page .event-form {
+  max-width: 1050px;
+
+  margin: 0 auto;
+
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+
+/* =========================================================
+   FORM SECTIONS
+   ========================================================= */
+
+.create-event-page .form-section {
+  background: #ffffff;
+
+  border: 1px solid #e7e0e4;
+
+  border-radius: 18px;
+
+  padding: 27px 30px;
+
+  box-shadow:
+    0 10px 30px rgba(16, 21, 44, 0.045);
+}
+
+
+.create-event-page .form-section h2 {
+  margin: 0 0 22px;
+
+  color: #10152c;
+
+  font-size: 17px;
+  font-weight: 800;
+
+  position: relative;
+
+  padding-left: 14px;
+}
+
+
+.create-event-page .form-section h2::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 3px;
+
+  width: 4px;
+  height: 18px;
+
+  border-radius: 10px;
+
+  background: linear-gradient(
+    180deg,
+    #ec4899,
+    #8b5cf6
+  );
+}
+
+
+/* =========================================================
+   IMAGE UPLOAD
+   ========================================================= */
+
+.create-event-page .image-upload {
+  width: 100%;
+
+  min-height: 250px;
+
+  display: block;
+
+  cursor: pointer;
+
+  border: 2px dashed #e4d7e1;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fffafd,
+      #faf7ff
+    );
+
+  overflow: hidden;
+
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.create-event-page .image-upload:hover {
+  border-color: #ec4899;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff7fb,
+      #faf5ff
+    );
+
+  transform: translateY(-2px);
+}
+
+
+/* Upload placeholder */
+
+.create-event-page .upload-placeholder {
+  min-height: 250px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+
+.create-event-page .upload-icon {
+  width: 62px;
+  height: 62px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 14px;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fce7f3,
+      #ede9fe
+    );
+
+  font-size: 27px;
+
+  box-shadow:
+    0 8px 20px rgba(236, 72, 153, 0.10);
+}
+
+
+.create-event-page .upload-placeholder strong {
+  color: #20263a;
+
+  font-size: 15px;
+
+  font-weight: 800;
+}
+
+
+.create-event-page .upload-placeholder small {
+  margin-top: 6px;
+
+  color: #8b94a7;
+
+  font-size: 11px;
+}
+
+
+/* Image preview */
+
+.create-event-page .image-preview-container {
+  position: relative;
+
+  width: 100%;
+  height: 300px;
+
+  overflow: hidden;
+}
+
+
+.create-event-page .event-image-preview {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+
+.create-event-page .image-preview-container::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(10, 13, 26, 0.55),
+      transparent 45%
+    );
+
+  pointer-events: none;
+}
+
+
+.create-event-page .change-image {
+  position: absolute;
+
+  left: 50%;
+  bottom: 18px;
+
+  transform: translateX(-50%);
+
+  z-index: 2;
+
+  padding: 9px 17px;
+
+  border-radius: 9px;
+
+  background: rgba(255,255,255,0.95);
+
+  color: #be185d;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  box-shadow:
+    0 6px 18px rgba(0,0,0,0.12);
+}
+
+
+/* =========================================================
+   FORM GROUPS
+   ========================================================= */
+
+.create-event-page .form-group {
+  margin-bottom: 19px;
+}
+
+
+.create-event-page .form-group:last-child {
+  margin-bottom: 0;
+}
+
+
+.create-event-page .form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #20263a;
+
+  font-size: 12px;
+
+  font-weight: 750;
+}
+
+
+.create-event-page .form-group label span {
+  color: #ec4899;
+}
+
+
+/* =========================================================
+   INPUTS / SELECT / TEXTAREA
+   ========================================================= */
+
+.create-event-page .form-group input,
+.create-event-page .form-group select,
+.create-event-page .form-group textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dfe2e8;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #20263a;
+
+  padding: 12px 13px;
+
+  outline: none;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+
+.create-event-page .form-group input:hover,
+.create-event-page .form-group select:hover,
+.create-event-page .form-group textarea:hover {
+  border-color: #d3c9d5;
+}
+
+
+.create-event-page .form-group input:focus,
+.create-event-page .form-group select:focus,
+.create-event-page .form-group textarea:focus {
+  border-color: #ec4899;
+
+  background: #fffafd;
+
+  box-shadow:
+    0 0 0 3px rgba(236, 72, 153, 0.09);
+}
+
+
+.create-event-page .form-group input::placeholder,
+.create-event-page .form-group textarea::placeholder {
+  color: #a0a7b5;
+}
+
+
+.create-event-page .form-group textarea {
+  min-height: 125px;
+
+  resize: vertical;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   TWO COLUMN ROWS
+   ========================================================= */
+
+.create-event-page .form-row {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 20px;
+}
+
+
+/* =========================================================
+   HELP TEXT
+   ========================================================= */
+
+.create-event-page .form-help {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #8b94a7;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   FORM ACTIONS
+   ========================================================= */
+
+.create-event-page .form-actions {
+  max-width: 1050px;
+
+  padding: 5px 0 0;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+/* Cancel */
+
+.create-event-page .cancel-btn {
+  min-width: 105px;
+
+  padding: 12px 20px;
+
+  border: 1px solid #ddd7df;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  color: #4f5870;
+
+  font-size: 12px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+
+.create-event-page .cancel-btn:hover {
+  border-color: #ec4899;
+
+  color: #be185d;
+
+  background: #fff8fc;
+}
+
+
+/* Save Event */
+
+.create-event-page .primary-btn {
+  min-width: 125px;
+
+  padding: 12px 22px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #ec4899
+    );
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 9px 22px rgba(236, 72, 153, 0.20);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.create-event-page .primary-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 13px 27px rgba(236, 72, 153, 0.27);
+}
+
+
+.create-event-page .primary-btn:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   CUSTOM FEE INPUT
+   ========================================================= */
+
+.create-event-page
+.form-group
+input[name="customFee"] {
+  margin-top: 12px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .create-event-page {
+    padding: 35px 25px 55px;
+  }
+
+  .create-event-page .organizer-header,
+  .create-event-page .event-form {
+    max-width: 100%;
+  }
+}
+
+
+@media (max-width: 650px) {
+
+  .create-event-page {
+    padding: 25px 15px 45px;
+  }
+
+  .create-event-page .organizer-header h1 {
+    font-size: 25px;
+  }
+
+  .create-event-page .page-subtitle {
+    font-size: 12px;
+  }
+
+  .create-event-page .form-section {
+    padding: 20px 17px;
+
+    border-radius: 14px;
+  }
+
+  .create-event-page .form-row {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+  .create-event-page .image-upload,
+  .create-event-page .upload-placeholder {
+    min-height: 210px;
+  }
+
+  .create-event-page .image-preview-container {
+    height: 230px;
+  }
+
+  .create-event-page .form-actions {
+    justify-content: stretch;
+
+    flex-direction: column-reverse;
+  }
+
+  .create-event-page .cancel-btn,
+  .create-event-page .primary-btn {
+    width: 100%;
+  }
+}

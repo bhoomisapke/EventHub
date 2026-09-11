@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./CreateEvent.css";
 
 function CreateEvent() {
   const navigate = useNavigate();
@@ -16,10 +17,11 @@ function CreateEvent() {
     customFee: "",
     registrationDeadline: "",
     description: "",
-    image: "",
+    image: null,
   });
 
   const [imagePreview, setImagePreview] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,18 +37,21 @@ function CreateEvent() {
 
     if (!file) return;
 
-    const reader = new FileReader();
+    // Make sure the selected file is actually an image
+    if (!file.type.startsWith("image/")) {
+      alert("Please select a valid image file.");
+      return;
+    }
 
-    reader.onloadend = () => {
-      setEvent((previous) => ({
-        ...previous,
-        image: reader.result,
-      }));
+    // Store the actual File object
+    setEvent((previous) => ({
+      ...previous,
+      image: file,
+    }));
 
-      setImagePreview(reader.result);
-    };
-
-    reader.readAsDataURL(file);
+    // Create preview for the form
+    const previewUrl = URL.createObjectURL(file);
+    setImagePreview(previewUrl);
   };
 
   const handleSubmit = async (e) => {
@@ -81,40 +86,74 @@ function CreateEvent() {
     }
 
     try {
+      setIsSubmitting(true);
+
+      /*
+       * IMPORTANT:
+       * Use FormData because we are uploading an actual image file.
+       */
+      const formData = new FormData();
+
+      formData.append("title", event.title);
+      formData.append("category", event.category);
+      formData.append("date", event.date);
+      formData.append("time", event.time);
+      formData.append("venue", event.venue);
+      formData.append("organizerName", event.organizerName);
+      formData.append("capacity", event.capacity);
+
+      const fee =
+        event.registrationFee === "Free"
+          ? "0"
+          : event.registrationFee === "Custom"
+            ? event.customFee
+            : event.registrationFee;
+
+      formData.append("registrationFee", fee);
+
+      if (event.registrationDeadline) {
+        formData.append(
+          "registrationDeadline",
+          event.registrationDeadline
+        );
+      }
+
+      formData.append("description", event.description);
+
+      // Only append image when the organizer selected one
+      if (event.image) {
+        formData.append("image", event.image);
+      }
+
       const response = await fetch(
         "http://localhost:8000/api/events/",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: event.title,
-            category: event.category,
-            date: event.date,
-            time: event.time,
-            venue: event.venue,
-            organizerName: event.organizerName,
-            capacity: event.capacity,
 
-            registrationFee:
-              event.registrationFee === "Custom"
-                ? event.customFee
-                : event.registrationFee,
-
-            registrationDeadline: event.registrationDeadline,
-            description: event.description,
-            image: event.image,
-          }),
+          /*
+           * DO NOT set Content-Type manually here.
+           * The browser automatically adds:
+           * multipart/form-data; boundary=...
+           */
+          body: formData,
         }
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Failed to create event.");
+        console.error("Create event response:", data);
+
+        alert(
+          data?.detail ||
+            data?.message ||
+            "Failed to create event."
+        );
+
         return;
       }
+
+      console.log("Created event:", data);
 
       alert("Event created successfully!");
 
@@ -125,11 +164,13 @@ function CreateEvent() {
       alert(
         "Unable to connect to the backend. Make sure the backend server is running."
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="organizer-page">
+    <div className="organizer-page create-event-page">
       <div className="organizer-header">
         <div>
           <h1 style={{ color: "#101a4a" }}>CREATE EVENT</h1>
@@ -140,8 +181,10 @@ function CreateEvent() {
         </div>
       </div>
 
-      <form className="event-form" onSubmit={handleSubmit}>
-
+      <form
+        className="event-form"
+        onSubmit={handleSubmit}
+      >
         {/* EVENT IMAGE */}
         <div className="form-section">
           <h2>Event Image</h2>
@@ -202,7 +245,6 @@ function CreateEvent() {
 
           {/* CATEGORY + CAPACITY */}
           <div className="form-row">
-
             <div className="form-group">
               <label>Category</label>
 
@@ -256,12 +298,10 @@ function CreateEvent() {
                 required
               />
             </div>
-
           </div>
 
           {/* EVENT DATE + TIME */}
           <div className="form-row">
-
             <div className="form-group">
               <label>
                 Event Date <span>*</span>
@@ -286,12 +326,10 @@ function CreateEvent() {
                 onChange={handleChange}
               />
             </div>
-
           </div>
 
           {/* VENUE + ORGANIZER */}
           <div className="form-row">
-
             <div className="form-group">
               <label>
                 Venue <span>*</span>
@@ -321,7 +359,6 @@ function CreateEvent() {
                 required
               />
             </div>
-
           </div>
 
           {/* REGISTRATION FEE */}
@@ -406,12 +443,10 @@ function CreateEvent() {
               rows="5"
             />
           </div>
-
         </div>
 
         {/* ACTIONS */}
         <div className="form-actions">
-
           <button
             type="button"
             className="cancel-btn"
@@ -425,12 +460,11 @@ function CreateEvent() {
           <button
             type="submit"
             className="primary-btn"
+            disabled={isSubmitting}
           >
-            Save Event
+            {isSubmitting ? "Saving..." : "Save Event"}
           </button>
-
         </div>
-
       </form>
     </div>
   );
