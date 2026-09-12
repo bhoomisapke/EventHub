@@ -21,6 +21,23 @@ import "./Dashboard.css";
 const API_BASE = "http://localhost:8000";
 
 /* ============================================================
+   IMAGE URL
+============================================================ */
+
+function getImageUrl(image) {
+  if (!image) return null;
+
+  if (
+    image.startsWith("http://") ||
+    image.startsWith("https://")
+  ) {
+    return image;
+  }
+
+  return `${API_BASE}${image.startsWith("/") ? "" : "/"}${image}`;
+}
+
+/* ============================================================
    AUTH TOKEN
 ============================================================ */
 
@@ -29,12 +46,15 @@ function getAuthToken() {
     localStorage.getItem("token") ||
     localStorage.getItem("authToken") ||
     localStorage.getItem("access_token") ||
+    sessionStorage.getItem("token") ||
+    sessionStorage.getItem("authToken") ||
+    sessionStorage.getItem("access_token") ||
     ""
   );
 }
 
 /* ============================================================
-   API HELPERS
+   API REQUEST
 ============================================================ */
 
 async function apiRequest(url, options = {}) {
@@ -63,11 +83,20 @@ async function apiRequest(url, options = {}) {
         message = errorData.detail;
       } else if (errorData?.message) {
         message = errorData.message;
-      } else {
-        message = JSON.stringify(errorData);
+      } else if (
+        typeof errorData === "object" &&
+        errorData !== null
+      ) {
+        const firstError = Object.values(errorData)[0];
+
+        if (Array.isArray(firstError)) {
+          message = firstError[0];
+        } else if (typeof firstError === "string") {
+          message = firstError;
+        }
       }
     } catch {
-      // Keep default message
+      // Keep default error message
     }
 
     throw new Error(message);
@@ -81,24 +110,7 @@ async function apiRequest(url, options = {}) {
 }
 
 /* ============================================================
-   IMAGE
-============================================================ */
-
-function getImageUrl(image) {
-  if (!image) return null;
-
-  if (
-    image.startsWith("http://") ||
-    image.startsWith("https://")
-  ) {
-    return image;
-  }
-
-  return `${API_BASE}${image.startsWith("/") ? "" : "/"}${image}`;
-}
-
-/* ============================================================
-   DATE / TIME HELPERS
+   DATE FORMAT
 ============================================================ */
 
 function formatDate(dateValue) {
@@ -116,6 +128,10 @@ function formatDate(dateValue) {
     year: "numeric",
   });
 }
+
+/* ============================================================
+   DATE PARTS
+============================================================ */
 
 function getDateParts(dateValue) {
   if (!dateValue) {
@@ -147,6 +163,10 @@ function getDateParts(dateValue) {
   };
 }
 
+/* ============================================================
+   TIME FORMAT
+============================================================ */
+
 function formatTime(timeValue) {
   if (!timeValue) return "Time not set";
 
@@ -172,7 +192,7 @@ function formatTime(timeValue) {
 }
 
 /* ============================================================
-   EVENT DATA HELPERS
+   PARTICIPANTS
 ============================================================ */
 
 function getParticipants(event) {
@@ -181,16 +201,23 @@ function getParticipants(event) {
       event?.participantCount ??
       event?.registeredParticipants ??
       event?.registrations_count ??
-      event?.registration_count ??
       0
   );
 }
+
+/* ============================================================
+   CAPACITY
+============================================================ */
 
 function getCapacity(event) {
   const capacity = Number(event?.capacity ?? 0);
 
   return capacity > 0 ? capacity : 0;
 }
+
+/* ============================================================
+   REGISTRATION PERCENTAGE
+============================================================ */
 
 function getRegistrationPercentage(event) {
   const participants = getParticipants(event);
@@ -204,44 +231,19 @@ function getRegistrationPercentage(event) {
   );
 }
 
-/*
-  Django backend currently uses:
-  draft
-  published
-  cancelled
+/* ============================================================
+   STATUS
+============================================================ */
 
-  The dashboard also supports:
-  upcoming
-  ongoing
-  completed
-*/
 function getStatus(event) {
-  const backendStatus = String(
-    event?.status || ""
+  return String(
+    event?.status || "upcoming"
   ).toLowerCase();
-
-  if (backendStatus === "published") {
-    return "upcoming";
-  }
-
-  if (backendStatus === "draft") {
-    return "draft";
-  }
-
-  if (backendStatus === "cancelled") {
-    return "cancelled";
-  }
-
-  if (
-    backendStatus === "upcoming" ||
-    backendStatus === "ongoing" ||
-    backendStatus === "completed"
-  ) {
-    return backendStatus;
-  }
-
-  return "upcoming";
 }
+
+/* ============================================================
+   STATUS LABEL
+============================================================ */
 
 function statusLabel(status) {
   const labels = {
@@ -249,11 +251,17 @@ function statusLabel(status) {
     ongoing: "ONGOING",
     completed: "COMPLETED",
     cancelled: "CANCELLED",
-    draft: "DRAFT",
   };
 
-  return labels[status] || status.toUpperCase();
+  return (
+    labels[status] ||
+    status.toUpperCase()
+  );
 }
+
+/* ============================================================
+   SORT EVENTS
+============================================================ */
 
 function sortByDate(events) {
   return [...events].sort((a, b) => {
@@ -300,6 +308,9 @@ export default function Dashboard() {
 
           Backend:
           GET /api/events/my/
+
+          Authentication:
+          Authorization: Token <token>
         */
 
         const data = await apiRequest(
@@ -336,6 +347,18 @@ export default function Dashboard() {
       }
     }
 
+    const token = getAuthToken();
+
+    if (!token) {
+      setEvents([]);
+      setError(
+        "You are not logged in. Please login again."
+      );
+      setLoading(false);
+
+      return;
+    }
+
     loadMyEvents();
 
     return () => {
@@ -351,18 +374,21 @@ export default function Dashboard() {
     const totalEvents = events.length;
 
     const upcomingEvents = events.filter(
-      (event) => getStatus(event) === "upcoming"
+      (event) =>
+        getStatus(event) === "upcoming"
     ).length;
 
     const ongoingEvents = events.filter(
-      (event) => getStatus(event) === "ongoing"
+      (event) =>
+        getStatus(event) === "ongoing"
     ).length;
 
-    const totalParticipants = events.reduce(
-      (total, event) =>
-        total + getParticipants(event),
-      0
-    );
+    const totalParticipants =
+      events.reduce(
+        (total, event) =>
+          total + getParticipants(event),
+        0
+      );
 
     return {
       totalEvents,
@@ -381,7 +407,8 @@ export default function Dashboard() {
     [events]
   );
 
-  const displayedEvents = sortedEvents.slice(0, 6);
+  const displayedEvents =
+    sortedEvents.slice(0, 6);
 
   /* ==========================================================
      UPCOMING DEADLINES
@@ -444,6 +471,7 @@ export default function Dashboard() {
 
   return (
     <div className="organizer-dashboard-page">
+
       <main className="organizer-dashboard-main">
 
         {/* =====================================================
@@ -451,6 +479,7 @@ export default function Dashboard() {
         ====================================================== */}
 
         <section className="clean-organizer-hero">
+
           <div className="clean-hero-content">
 
             <div className="clean-hero-label">
@@ -461,13 +490,17 @@ export default function Dashboard() {
             <h1>
               Welcome back,
               <br />
-              <span>Event Organizer.</span>
+              <span>
+                Event Organizer.
+              </span>
             </h1>
 
             <p>
-              Create memorable experiences, manage your events,
+              Create memorable experiences,
+              manage your events,
               <br />
-              and keep your participants connected.
+              and keep your participants
+              connected.
             </p>
 
             <div className="clean-hero-actions">
@@ -499,7 +532,10 @@ export default function Dashboard() {
                 </div>
 
                 <div>
-                  <strong>Plan events</strong>
+                  <strong>
+                    Plan events
+                  </strong>
+
                   <small>
                     Keep everything organized
                   </small>
@@ -555,13 +591,17 @@ export default function Dashboard() {
                   EVENTHUB
                 </div>
 
-                <span>ORGANIZER</span>
+                <span>
+                  ORGANIZER
+                </span>
 
               </div>
 
               <div className="clean-card-center">
 
-                <small>EVENTS CREATED</small>
+                <small>
+                  EVENTS CREATED
+                </small>
 
                 <strong>
                   {statistics.totalEvents}
@@ -576,15 +616,21 @@ export default function Dashboard() {
               <div className="clean-card-footer">
 
                 <span>
-                  {statistics.upcomingEvents} UPCOMING
+                  {statistics.upcomingEvents}
+                  {" "}
+                  UPCOMING
                 </span>
 
                 <span>
-                  {statistics.ongoingEvents} LIVE
+                  {statistics.ongoingEvents}
+                  {" "}
+                  LIVE
                 </span>
 
                 <span>
-                  {statistics.totalParticipants} PEOPLE
+                  {statistics.totalParticipants}
+                  {" "}
+                  PEOPLE
                 </span>
 
               </div>
@@ -598,11 +644,15 @@ export default function Dashboard() {
               </div>
 
               <div>
-                <strong>Create Event</strong>
+
+                <strong>
+                  Create Event
+                </strong>
 
                 <small>
                   Build your next experience
                 </small>
+
               </div>
 
             </div>
@@ -614,6 +664,7 @@ export default function Dashboard() {
               </div>
 
               <div>
+
                 <strong>
                   {statistics.totalParticipants}
                 </strong>
@@ -621,84 +672,78 @@ export default function Dashboard() {
                 <small>
                   Total participants
                 </small>
+
               </div>
 
             </div>
 
-            <div className="hero-mini-orbit orbit-one" />
-
-            <div className="hero-mini-orbit orbit-two" />
-
           </div>
+
         </section>
 
         {/* =====================================================
             STATISTICS
         ====================================================== */}
 
-        <section className="organizer-dashboard-stats">
+        <section className="clean-statistics">
 
-          <div className="dashboard-stat-card">
+          <div className="clean-stat-card">
 
-            <div className="dashboard-stat-icon purple">
-              <CalendarDays size={20} />
+            <div className="clean-stat-icon">
+              <CalendarDays size={18} />
             </div>
 
-            <div>
-              <span>Total Events</span>
+            <span>
+              Total Events
+            </span>
 
-              <strong>
-                {statistics.totalEvents}
-              </strong>
-            </div>
+            <strong>
+              {statistics.totalEvents}
+            </strong>
+
+            <small>
+              Events in your organizer workspace
+            </small>
 
           </div>
 
-          <div className="dashboard-stat-card">
+          <div className="clean-stat-card">
 
-            <div className="dashboard-stat-icon pink">
-              <Timer size={20} />
+            <div className="clean-stat-icon pink">
+              <Clock3 size={18} />
             </div>
 
-            <div>
-              <span>Upcoming Events</span>
+            <span>
+              Upcoming Events
+            </span>
 
-              <strong>
-                {statistics.upcomingEvents}
-              </strong>
-            </div>
+            <strong>
+              {statistics.upcomingEvents}
+            </strong>
+
+            <small>
+              Events waiting to happen
+            </small>
 
           </div>
 
-          <div className="dashboard-stat-card">
+          <div className="clean-stat-card">
 
-            <div className="dashboard-stat-icon blue">
-              <Activity size={20} />
+            <div className="clean-stat-icon purple">
+              <Users size={18} />
             </div>
 
-            <div>
-              <span>Live Events</span>
+            <span>
+              Total Participants
+            </span>
 
-              <strong>
-                {statistics.ongoingEvents}
-              </strong>
-            </div>
+            <strong>
+              {statistics.totalParticipants}
+            </strong>
 
-          </div>
-
-          <div className="dashboard-stat-card">
-
-            <div className="dashboard-stat-icon purple">
-              <Users size={20} />
-            </div>
-
-            <div>
-              <span>Participants</span>
-
-              <strong>
-                {statistics.totalParticipants}
-              </strong>
-            </div>
+            <small>
+              Registrations across your events
+            </small>
 
           </div>
 
@@ -708,67 +753,98 @@ export default function Dashboard() {
             MY EVENTS
         ====================================================== */}
 
-        <section className="dashboard-panel events-panel">
+        <section className="clean-events-section">
 
-          <div className="dashboard-panel-heading">
+          <div className="clean-events-heading">
 
             <div>
-              <span className="dashboard-section-label">
-                YOUR EVENTS
-              </span>
 
-              <h2>My Events</h2>
+              <h2>
+                My Events
+              </h2>
+
+              <p>
+                Manage the events you have created.
+              </p>
+
             </div>
 
             <Link
               to="/organizer/events"
-              className="dashboard-panel-link"
+              className="clean-view-all"
             >
               View all
-              <ArrowRight size={15} />
+
+              <span>
+                <ArrowRight size={16} />
+              </span>
+
             </Link>
 
           </div>
 
-          {/* ERROR */}
-
-          {error && (
-            <div className="dashboard-error">
-              <span>{error}</span>
-
-              <button
-                type="button"
-                onClick={() => window.location.reload()}
-              >
-                Retry
-              </button>
-            </div>
-          )}
-
-          {/* LOADING */}
+          {/* ===================================================
+              LOADING
+          ==================================================== */}
 
           {loading ? (
-            <div className="dashboard-loading">
-              <div className="dashboard-loading-spinner" />
-              <span>Loading your events...</span>
+
+            <div className="dashboard-state-card">
+
+              <div className="dashboard-spinner" />
+
+              <h3>
+                Loading your events...
+              </h3>
+
+              <p>
+                Connecting to the EventHub backend.
+              </p>
+
             </div>
+
+          ) : error ? (
+
+            /* =================================================
+               ERROR
+            ================================================= */
+
+            <div className="dashboard-state-card dashboard-error-card">
+
+              <div className="dashboard-state-icon">
+                <Activity size={22} />
+              </div>
+
+              <h3>
+                Could not load events
+              </h3>
+
+              <p>
+                {error}
+              </p>
+
+            </div>
+
           ) : displayedEvents.length === 0 ? (
 
-            /* EMPTY */
+            /* =================================================
+               EMPTY
+            ================================================= */
 
-            <div className="dashboard-empty-wide">
+            <div className="dashboard-state-card">
 
-              <Sparkles size={22} />
-
-              <div>
-                <strong>
-                  No events created yet
-                </strong>
-
-                <span>
-                  Create your first EventHub event to see it here.
-                </span>
+              <div className="dashboard-state-icon">
+                <CalendarPlus size={22} />
               </div>
+
+              <h3>
+                No events yet
+              </h3>
+
+              <p>
+                Create your first EventHub event
+                to see it here.
+              </p>
 
               <Link
                 to="/organizer/create-event"
@@ -782,222 +858,266 @@ export default function Dashboard() {
 
           ) : (
 
-            /* EVENT GRID */
+            /* =================================================
+               EVENT GRID
+            ================================================= */
 
-            <div className="eventhub-dashboard-event-grid">
+            <div className="eventhub-dashboard-events-grid">
 
-              {displayedEvents.map((event, index) => {
+              {displayedEvents.map(
+                (event, index) => {
 
-                const imageUrl = getImageUrl(
-                  event.image || event.image_url
-                );
+                  const imageUrl =
+                    getImageUrl(
+                      event.image ||
+                        event.image_url
+                    );
 
-                const dateParts = getDateParts(
-                  event.date
-                );
+                  const dateParts =
+                    getDateParts(
+                      event.date
+                    );
 
-                const status = getStatus(event);
+                  const status =
+                    getStatus(event);
 
-                const participants =
-                  getParticipants(event);
+                  const participants =
+                    getParticipants(event);
 
-                const capacity =
-                  getCapacity(event);
+                  const capacity =
+                    getCapacity(event);
 
-                const percentage =
-                  getRegistrationPercentage(event);
+                  const percentage =
+                    getRegistrationPercentage(
+                      event
+                    );
 
-                const deadline =
-                  event.registration_deadline ||
-                  event.registrationDeadline;
+                  const deadline =
+                    event.registration_deadline ||
+                    event.registrationDeadline;
 
-                return (
+                  return (
 
-                  <article
-                    className="eventhub-dashboard-event-card"
-                    key={event.id}
-                  >
+                    <article
+                      className="eventhub-dashboard-event-card"
+                      key={event.id}
+                    >
 
-                    {/* IMAGE */}
+                      {/* =====================================
+                          IMAGE
+                      ====================================== */}
 
-                    <div className="eventhub-dashboard-event-image">
+                      <div className="eventhub-dashboard-event-image">
 
-                      {imageUrl ? (
+                        {imageUrl ? (
 
-                        <img
-                          src={imageUrl}
-                          alt={
-                            event.title || "Event"
-                          }
-                        />
+                          <img
+                            src={imageUrl}
+                            alt={
+                              event.title ||
+                              "Event"
+                            }
+                          />
 
-                      ) : (
+                        ) : (
 
-                        <div className="eventhub-event-image-placeholder">
+                          <div className="eventhub-event-image-placeholder">
 
-                          <CalendarDays size={42} />
+                            <CalendarDays size={42} />
+
+                            <span>
+                              EVENTHUB
+                            </span>
+
+                          </div>
+
+                        )}
+
+                        <div className="eventhub-event-image-overlay" />
+
+                        <div className="eventhub-event-category">
+                          {String(
+                            event.category ||
+                              "EVENT"
+                          ).toUpperCase()}
+                        </div>
+
+                        <div className="eventhub-event-number">
+                          {String(
+                            index + 1
+                          ).padStart(2, "0")}
+                        </div>
+
+                        <div className="eventhub-event-date">
+
+                          <strong>
+                            {dateParts.day}
+                          </strong>
 
                           <span>
-                            EVENTHUB
+                            {dateParts.month}
                           </span>
 
                         </div>
 
-                      )}
-
-                      <div className="eventhub-event-image-overlay" />
-
-                      <div className="eventhub-event-category">
-                        {String(
-                          event.category || "EVENT"
-                        ).toUpperCase()}
-                      </div>
-
-                      <div className="eventhub-event-number">
-                        {String(index + 1).padStart(
-                          2,
-                          "0"
-                        )}
-                      </div>
-
-                      <div className="eventhub-event-date">
-
-                        <strong>
-                          {dateParts.day}
-                        </strong>
-
-                        <span>
-                          {dateParts.month}
-                        </span>
+                        <div
+                          className={`eventhub-event-status status-${status}`}
+                        >
+                          {statusLabel(status)}
+                        </div>
 
                       </div>
 
-                      <div
-                        className={`eventhub-event-status status-${status}`}
-                      >
-                        {statusLabel(status)}
-                      </div>
+                      {/* =====================================
+                          EVENT INFO
+                      ====================================== */}
 
-                    </div>
+                      <div className="eventhub-dashboard-event-info">
 
-                    {/* EVENT INFO */}
+                        <h3>
+                          {event.title ||
+                            "Untitled Event"}
+                        </h3>
 
-                    <div className="eventhub-dashboard-event-info">
-
-                      <h3>
-                        {event.title ||
-                          "Untitled Event"}
-                      </h3>
-
-                      <div className="eventhub-event-details">
-
-                        <span>
-                          <Clock3 size={12} />
-                          {formatTime(event.time)}
-                        </span>
-
-                        <span>
-                          <MapPin size={12} />
-                          {event.venue ||
-                            event.location ||
-                            "Venue not set"}
-                        </span>
-
-                      </div>
-
-                      {/* DEADLINE */}
-
-                      <div className="eventhub-event-deadline">
-
-                        <Timer size={14} />
-
-                        <span>
-                          Registration deadline
-                        </span>
-
-                        <strong>
-                          {deadline
-                            ? formatDate(deadline)
-                            : "Not set"}
-                        </strong>
-
-                      </div>
-
-                      {/* REGISTRATIONS */}
-
-                      <div className="eventhub-registration">
-
-                        <div className="eventhub-registration-heading">
+                        <div className="eventhub-event-details">
 
                           <span>
-                            Registrations
+
+                            <Clock3 size={12} />
+
+                            {formatTime(
+                              event.time
+                            )}
+
+                          </span>
+
+                          <span>
+
+                            <MapPin size={12} />
+
+                            {event.venue ||
+                              "Venue not set"}
+
+                          </span>
+
+                        </div>
+
+                        {/* =================================
+                            DEADLINE
+                        ================================== */}
+
+                        <div className="eventhub-event-deadline">
+
+                          <Timer size={14} />
+
+                          <span>
+                            Registration deadline
                           </span>
 
                           <strong>
-                            {participants}
-
-                            {capacity > 0
-                              ? ` / ${capacity}`
-                              : ""}
+                            {deadline
+                              ? formatDate(
+                                  deadline
+                                )
+                              : "Not set"}
                           </strong>
 
                         </div>
 
-                        <div className="eventhub-progress-row">
+                        {/* =================================
+                            REGISTRATIONS
+                        ================================== */}
 
-                          <div className="eventhub-progress">
-                            <span
-                              style={{
-                                width: `${percentage}%`,
-                              }}
-                            />
+                        <div className="eventhub-registration">
+
+                          <div className="eventhub-registration-heading">
+
+                            <span>
+                              Registrations
+                            </span>
+
+                            <strong>
+
+                              {participants}
+
+                              {capacity > 0
+                                ? ` / ${capacity}`
+                                : ""}
+
+                            </strong>
+
                           </div>
 
-                          <b>
-                            {percentage}%
-                          </b>
+                          <div className="eventhub-progress-row">
+
+                            <div className="eventhub-progress">
+
+                              <span
+                                style={{
+                                  width: `${percentage}%`,
+                                }}
+                              />
+
+                            </div>
+
+                            <b>
+                              {percentage}%
+                            </b>
+
+                          </div>
+
+                        </div>
+
+                        {/* =================================
+                            ACTIONS
+                        ================================== */}
+
+                        <div className="eventhub-dashboard-event-actions">
+
+                          <Link
+                            to={`/organizer/events/${event.id}`}
+                            className="eventhub-view-event"
+                          >
+
+                            <Eye size={14} />
+
+                            View Event
+
+                            <ArrowRight size={14} />
+
+                          </Link>
+
+                          <Link
+                            to={`/organizer/events/${event.id}/edit`}
+                            className="eventhub-edit-event"
+                          >
+
+                            <Edit3 size={14} />
+
+                            Edit
+
+                          </Link>
+
+                          <Link
+                            to={`/organizer/events/${event.id}/participants`}
+                            className="eventhub-participants-event"
+                          >
+
+                            <Users size={14} />
+
+                            Participants
+
+                          </Link>
 
                         </div>
 
                       </div>
 
-                      {/* ACTIONS */}
+                    </article>
 
-                      <div className="eventhub-dashboard-event-actions">
-
-                        <Link
-                          to={`/organizer/events/${event.id}`}
-                          className="eventhub-view-event"
-                        >
-                          <Eye size={14} />
-                          View Event
-                          <ArrowRight size={14} />
-                        </Link>
-
-                        <Link
-                          to={`/organizer/events/${event.id}/edit`}
-                          className="eventhub-edit-event"
-                        >
-                          <Edit3 size={14} />
-                          Edit
-                        </Link>
-
-                        <Link
-                          to={`/organizer/events/${event.id}/participants`}
-                          className="eventhub-participants-event"
-                        >
-                          <Users size={14} />
-                          Participants
-                        </Link>
-
-                      </div>
-
-                    </div>
-
-                  </article>
-
-                );
-              })}
+                  );
+                }
+              )}
 
             </div>
 
@@ -1011,7 +1131,9 @@ export default function Dashboard() {
 
         <section className="organizer-dashboard-lower-grid">
 
-          {/* QUICK ACTIONS */}
+          {/* ===================================================
+              QUICK ACTIONS
+          ==================================================== */}
 
           <div className="dashboard-panel quick-section">
 
@@ -1043,6 +1165,7 @@ export default function Dashboard() {
                 </div>
 
                 <div>
+
                   <strong>
                     Create Event
                   </strong>
@@ -1050,6 +1173,7 @@ export default function Dashboard() {
                   <small>
                     Publish a new event
                   </small>
+
                 </div>
 
                 <ArrowRight size={16} />
@@ -1066,6 +1190,7 @@ export default function Dashboard() {
                 </div>
 
                 <div>
+
                   <strong>
                     Manage Events
                   </strong>
@@ -1073,6 +1198,7 @@ export default function Dashboard() {
                   <small>
                     View and edit events
                   </small>
+
                 </div>
 
                 <ArrowRight size={16} />
@@ -1089,6 +1215,7 @@ export default function Dashboard() {
                 </div>
 
                 <div>
+
                   <strong>
                     Participants
                   </strong>
@@ -1096,6 +1223,7 @@ export default function Dashboard() {
                   <small>
                     Review registrations
                   </small>
+
                 </div>
 
                 <ArrowRight size={16} />
@@ -1106,7 +1234,9 @@ export default function Dashboard() {
 
           </div>
 
-          {/* RECENT ACTIVITY */}
+          {/* ===================================================
+              RECENT ACTIVITY
+          ==================================================== */}
 
           <div className="dashboard-panel">
 
@@ -1144,38 +1274,45 @@ export default function Dashboard() {
 
               ) : (
 
-                recentActivity.map((event) => (
+                recentActivity.map(
+                  (event) => (
 
-                  <div
-                    className="recent-activity-item"
-                    key={`activity-${event.id}`}
-                  >
+                    <div
+                      className="recent-activity-item"
+                      key={`activity-${event.id}`}
+                    >
 
-                    <div className="activity-dot">
-                      <CheckCircle2 size={14} />
+                      <div className="activity-dot">
+
+                        <CheckCircle2 size={14} />
+
+                      </div>
+
+                      <div>
+
+                        <strong>
+                          {event.title ||
+                            "Untitled Event"}
+                        </strong>
+
+                        <p>
+
+                          Event is currently{" "}
+
+                          <span>
+                            {statusLabel(
+                              getStatus(event)
+                            ).toLowerCase()}
+                          </span>
+
+                        </p>
+
+                      </div>
+
                     </div>
 
-                    <div>
-
-                      <strong>
-                        {event.title ||
-                          "Untitled Event"}
-                      </strong>
-
-                      <p>
-                        Event is currently{" "}
-                        <span>
-                          {statusLabel(
-                            getStatus(event)
-                          ).toLowerCase()}
-                        </span>
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                ))
+                  )
+                )
 
               )}
 
@@ -1225,44 +1362,50 @@ export default function Dashboard() {
 
             <div className="deadline-list">
 
-              {upcomingDeadlines.map((event) => {
+              {upcomingDeadlines.map(
+                (event) => {
 
-                const deadline =
-                  event.registration_deadline ||
-                  event.registrationDeadline;
+                  const deadline =
+                    event.registration_deadline ||
+                    event.registrationDeadline;
 
-                return (
+                  return (
 
-                  <Link
-                    to={`/organizer/events/${event.id}/edit`}
-                    className="deadline-item"
-                    key={`deadline-${event.id}`}
-                  >
+                    <Link
+                      to={`/organizer/events/${event.id}/edit`}
+                      className="deadline-item"
+                      key={`deadline-${event.id}`}
+                    >
 
-                    <div className="deadline-icon">
-                      <Timer size={17} />
-                    </div>
+                      <div className="deadline-icon">
 
-                    <div className="deadline-content">
+                        <Timer size={17} />
 
-                      <strong>
-                        {event.title ||
-                          "Untitled Event"}
-                      </strong>
+                      </div>
 
-                      <span>
-                        Deadline:{" "}
-                        {formatDate(deadline)}
-                      </span>
+                      <div className="deadline-content">
 
-                    </div>
+                        <strong>
+                          {event.title ||
+                            "Untitled Event"}
+                        </strong>
 
-                    <ArrowRight size={16} />
+                        <span>
+                          Deadline:{" "}
+                          {formatDate(
+                            deadline
+                          )}
+                        </span>
 
-                  </Link>
+                      </div>
 
-                );
-              })}
+                      <ArrowRight size={16} />
+
+                    </Link>
+
+                  );
+                }
+              )}
 
             </div>
 
@@ -1273,6 +1416,7 @@ export default function Dashboard() {
         <div className="organizer-dashboard-footer-space" />
 
       </main>
+
     </div>
   );
 }

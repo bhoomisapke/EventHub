@@ -19,7 +19,8 @@ import {
 } from "react-router-dom";
 
 import EventCard from "../../components/EventCard";
-
+import Navbar from "../../components/Navbar";
+import "./Events.css";
 
 const API_URL =
   "http://127.0.0.1:8000/api/events/";
@@ -27,17 +28,13 @@ const API_URL =
 
 const CATEGORIES = [
   "All",
-  "Hackathon",
-  "Coding",
-  "AI & ML",
-  "Web Development",
-  "Cyber Security",
-  "Robotics",
-  "IoT",
+  "Technology",
+  "Cultural",
+  "Sports",
   "Workshop",
-  "Tech Fest",
+  "Competition",
+  "Seminar",
 ];
-
 
 export default function Events() {
 
@@ -401,6 +398,8 @@ export default function Events() {
      ========================================================== */
 
   return (
+  <>
+    <Navbar />
 
     <main className="eventhub">
 
@@ -413,7 +412,7 @@ export default function Events() {
               HEADER
           ================================================== */}
 
-          <div className="events-header reveal">
+          <div className="events-header">
 
             <div>
 
@@ -464,14 +463,13 @@ export default function Events() {
               FILTER BAR
           ================================================== */}
 
-          <section className="events-filter-panel reveal">
+          <section className="events-page-tools">
 
 
             {/* SEARCH */}
 
-            <div className="events-filter-top">
+            <div className="events-page-search">
 
-              <div className="events-search">
 
                 <Search
                   size={18}
@@ -491,7 +489,7 @@ export default function Events() {
 
               {/* VIEW MODE */}
 
-              <div className="events-view-switch">
+              <div className="events-view-toggle">
 
                 <button
                   type="button"
@@ -530,12 +528,12 @@ export default function Events() {
 
               </div>
 
-            </div>
+          </section>
 
 
             {/* CATEGORIES */}
 
-            <div className="events-categories">
+            <div className="events-page-categories">
 
               {CATEGORIES.map(
                 (category) => (
@@ -644,8 +642,6 @@ export default function Events() {
 
             )}
 
-          </section>
-
 
           {/* ==================================================
               LOADING
@@ -653,9 +649,9 @@ export default function Events() {
 
           {loading && (
 
-            <section className="empty-events reveal">
+            <section className="events-empty">
 
-              <div className="empty-icon">
+              <div className="events-empty-icon">
 
                 <LoaderCircle
                   size={32}
@@ -684,9 +680,9 @@ export default function Events() {
           {!loading &&
             error && (
 
-            <section className="empty-events reveal">
+            <section className="events-empty">
 
-              <div className="empty-icon">
+              <div className="events-empty-icon">
 
                 <Sparkles
                   size={32}
@@ -772,9 +768,9 @@ export default function Events() {
             !error &&
             events.length === 0 && (
 
-            <section className="empty-events reveal">
+            <section className="events-empty">
 
-              <div className="empty-icon">
+              <div className="events-empty-icon">
 
                 <Sparkles
                   size={32}
@@ -804,9 +800,9 @@ export default function Events() {
             events.length > 0 &&
             filteredEvents.length === 0 && (
 
-            <section className="empty-events reveal">
+            <section className="events-empty">
 
-              <div className="empty-icon">
+              <div className="events-empty-icon">
 
                 <Sparkles
                   size={32}
@@ -841,7 +837,7 @@ export default function Events() {
 
       </section>
 
-    </main>
-
+        </main>
+  </>
   );
 }

@@ -196,7 +196,7 @@ const EventCard = ({
 
   return (
 
-    <article className="event-card reveal">
+    <article className="event-card">
 
       {/* ==================================================
           EVENT IMAGE
