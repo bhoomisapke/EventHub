@@ -135,7 +135,7 @@ const Dashboard = () => {
           <div className="student-preview-card">
 
             <div className="preview-top">
-              <strong>EVENTHUB</strong>
+              EVENTHUB
 
               <span>
                 <i></i>

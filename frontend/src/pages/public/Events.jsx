@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, Grid, List, Sparkles } from 'lucide-react';
 import EventCard from '../../components/EventCard';
-import { mockEvents } from '../../data/events';
+import {eventsData } from '../../data/events';
 
 const CATEGORIES = [
   'All', 'Hackathon', 'Coding', 'AI & ML', 'Web Development', 
@@ -37,7 +37,7 @@ export default function Events() {
     );
   };
 
-  const filteredEvents = mockEvents.filter(event => {
+  const filteredEvents = eventsData.filter(event => {
     const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           event.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || event.category === selectedCategory;

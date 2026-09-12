@@ -1,0 +1,506 @@
+/* ============================================================
+   ORGANIZER LAYOUT
+   ============================================================ */
+
+.organizer-layout {
+  min-height: 100vh;
+  background: #f7f3ee;
+}
+
+
+/* ============================================================
+   NAVBAR
+   Same as main website
+   ============================================================ */
+
+.navbar {
+  position: sticky;
+
+  top: 0;
+
+  z-index: 1000;
+
+  width: 100%;
+
+  min-height: 76px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 5%;
+
+  background: rgba(247, 243, 238, 0.94);
+
+  backdrop-filter: blur(18px);
+
+  -webkit-backdrop-filter: blur(18px);
+
+  border-bottom: 1px solid rgba(221, 216, 225, 0.90);
+
+  box-shadow:
+    0 8px 30px rgba(11, 18, 48, 0.07);
+
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   BRAND
+   ============================================================ */
+
+.brand {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  color: var(--navy);
+
+  flex-shrink: 0;
+
+  text-decoration: none;
+}
+
+
+.brand-symbol {
+  width: 39px;
+
+  height: 39px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--navy),
+      var(--purple-dark)
+    );
+
+  color: var(--cream);
+
+  box-shadow:
+    0 0 18px rgba(109, 40, 217, 0.25);
+
+  font-size: 19px;
+}
+
+
+.brand strong {
+  display: block;
+
+  font-size: 20px;
+
+  line-height: 1;
+
+  letter-spacing: -0.5px;
+}
+
+
+.brand strong span {
+  color: var(--pink);
+}
+
+
+.brand small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #697184;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+}
+
+
+/* ============================================================
+   NAV MENU
+   ============================================================ */
+
+.nav-menu {
+  display: flex;
+
+  align-items: center;
+
+  gap: 30px;
+
+  margin-left: auto;
+
+  margin-right: 30px;
+}
+
+
+.nav-menu a {
+  position: relative;
+
+  color: #30384D;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.nav-menu a::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+
+  bottom: -8px;
+
+  width: 0;
+
+  height: 2px;
+
+  transform: translateX(-50%);
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--red),
+      var(--purple),
+      var(--pink)
+    );
+
+  box-shadow:
+    0 0 9px rgba(236, 72, 153, 0.30);
+
+  transition: width 0.25s ease;
+}
+
+
+.nav-menu a:hover {
+  color: var(--purple-dark);
+
+  transform: translateY(-1px);
+}
+
+
+.nav-menu a:hover::after {
+  width: 100%;
+}
+
+
+/* Active Organizer page */
+
+.nav-menu a.organizer-active {
+  color: var(--purple-dark);
+}
+
+
+.nav-menu a.organizer-active::after {
+  width: 100%;
+}
+
+
+/* ============================================================
+   NAV BUTTONS
+   ============================================================ */
+
+.nav-buttons {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+
+.login-button,
+.register-button {
+  min-height: 40px;
+
+  padding: 0 17px;
+
+  border-radius: 9px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   PROFILE BUTTON
+   Same as main website login button
+   ============================================================ */
+
+.login-button {
+  background: var(--cream);
+
+  border: 1px solid #CEC8D0;
+
+  color: var(--navy);
+
+  text-decoration: none;
+}
+
+
+.login-button:hover {
+  border-color: var(--purple);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0 18px rgba(109, 40, 217, 0.18);
+}
+
+
+/* Profile circle */
+
+.organizer-profile-button {
+  min-width: 42px;
+
+  width: 42px;
+
+  height: 42px;
+
+  min-height: 42px;
+
+  padding: 0;
+
+  border-radius: 50%;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+/* ============================================================
+   LOGOUT BUTTON
+   Same as main website register button
+   ============================================================ */
+
+.register-button {
+  border: 1px solid var(--navy);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--navy),
+      var(--deep-blue)
+    );
+
+  color: var(--cream);
+
+  box-shadow:
+    0 7px 20px rgba(11, 18, 48, 0.18);
+
+  cursor: pointer;
+}
+
+
+.register-button:hover {
+  transform: translateY(-2px);
+
+  border-color: var(--pink);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--deep-blue),
+      var(--purple-dark)
+    );
+
+  box-shadow:
+    0 0 22px rgba(139, 92, 246, 0.30),
+    0 0 40px rgba(236, 72, 153, 0.12);
+}
+
+
+/* Logout circle */
+
+.organizer-logout-button {
+  min-width: 42px;
+
+  width: 42px;
+
+  height: 42px;
+
+  min-height: 42px;
+
+  padding: 0;
+
+  border-radius: 50%;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+/* ============================================================
+   MOBILE MENU
+   ============================================================ */
+
+.mobile-menu {
+  display: none;
+
+  border: 0;
+
+  background: transparent;
+
+  color: var(--navy);
+
+  font-size: 25px;
+}
+
+
+/* ============================================================
+   ORGANIZER CONTENT
+   ============================================================ */
+
+.organizer-layout-content {
+  min-height: calc(100vh - 76px);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 850px) {
+
+  .navbar {
+    padding: 0 4%;
+  }
+
+  .nav-menu {
+    gap: 20px;
+
+    margin-right: 20px;
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .navbar {
+    min-height: 70px;
+  }
+
+  .brand strong {
+    font-size: 18px;
+  }
+
+  .brand small {
+    font-size: 7px;
+  }
+
+  .nav-menu {
+    gap: 15px;
+
+    margin-right: 15px;
+  }
+
+  .nav-menu a {
+    font-size: 12px;
+  }
+
+  .organizer-layout-content {
+    min-height: calc(100vh - 70px);
+  }
+
+}
+
+
+@media (max-width: 580px) {
+
+  .navbar {
+    padding: 10px 4%;
+  }
+
+  .nav-menu {
+    gap: 12px;
+  }
+
+  .nav-menu a {
+    font-size: 11px;
+  }
+
+  .organizer-profile-button,
+  .organizer-logout-button {
+    width: 38px;
+
+    height: 38px;
+
+    min-width: 38px;
+
+    min-height: 38px;
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .brand-symbol {
+    width: 36px;
+
+    height: 36px;
+
+    font-size: 17px;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .brand strong {
+    font-size: 17px;
+  }
+
+  .brand small {
+    display: none;
+  }
+
+  .nav-menu {
+    gap: 10px;
+
+    margin-left: 10px;
+
+    margin-right: 10px;
+  }
+
+  .nav-menu a {
+    font-size: 10px;
+  }
+
+}

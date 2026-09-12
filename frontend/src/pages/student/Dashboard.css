@@ -1,886 +1,1490 @@
 /* =========================================================
-   EVENTHUB - STUDENT DASHBOARD
-   Official EventHub Theme
-   ========================================================= */
+   EVENTHUB STUDENT DASHBOARD
+   MAIN WEBSITE VISUAL THEME
+========================================================= */
 
 .student-page {
   min-height: 100vh;
-  padding: 42px;
-  background: #F7F3EE;
+
+  padding: 65px 5% 90px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 8% 8%,
+      rgba(236, 72, 153, 0.07),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 92% 15%,
+      rgba(109, 40, 217, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      rgba(37, 99, 235, 0.05),
+      transparent 35%
+    ),
+    #F7F3EE;
+
   color: #10152C;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 
 /* =========================================================
    HERO
-   ========================================================= */
+========================================================= */
 
 .student-hero {
-  position: relative;
-  min-height: 520px;
+  max-width: 1250px;
+
+  margin: 0 auto;
+
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  overflow: hidden;
-  border: 1px solid #E8E1F0;
-  border-radius: 32px;
 
-  background:
-    radial-gradient(
-      circle at 80% 30%,
-      rgba(139, 92, 246, 0.16),
-      transparent 32%
-    ),
-    linear-gradient(
-      135deg,
-      #FFFFFF 0%,
-      #F7F3EE 55%,
-      #EEEAF4 100%
-    );
-}
+  grid-template-columns: 1fr 0.85fr;
 
+  align-items: center;
 
-/* subtle background shape */
+  gap: 70px;
 
-.student-hero::after {
-  content: "";
-  position: absolute;
-  width: 360px;
-  height: 360px;
-  right: -120px;
-  bottom: -170px;
-  border-radius: 50%;
-  background: rgba(139, 92, 246, 0.12);
-  filter: blur(30px);
+  min-height: 470px;
 }
 
 
 /* =========================================================
    HERO CONTENT
-   ========================================================= */
+========================================================= */
 
 .student-hero-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 70px 60px;
+  max-width: 650px;
 }
 
+
+/* =========================================================
+   STUDENT BADGE
+========================================================= */
+
 .student-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
   width: fit-content;
-  margin-bottom: 25px;
-  padding: 9px 17px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 8px 13px;
+
+  border: 1px solid rgba(139, 92, 246, 0.20);
+
   border-radius: 999px;
-  background: #EEEAF4;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(236, 72, 153, 0.08),
+      rgba(139, 92, 246, 0.08)
+    );
+
   color: #6D28D9;
-  font-size: 11px;
+
+  font-size: 10px;
+
   font-weight: 800;
+
   letter-spacing: 1.5px;
 }
 
 .student-badge span {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
+
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    #8B5CF6,
-    #EC4899
-  );
+
+  background: #EC4899;
+
+  box-shadow:
+    0 0 12px rgba(236, 72, 153, 0.55);
 }
 
+
+/* =========================================================
+   HERO HEADING
+========================================================= */
+
 .student-hero h1 {
-  max-width: 650px;
-  margin: 0;
-  color: #10152C;
-  font-size: clamp(42px, 5vw, 64px);
-  line-height: 1.03;
-  letter-spacing: -2.5px;
-  font-weight: 850;
+  margin: 22px 0 20px;
+
+  color: #0B1230;
+
+  font-size: clamp(42px, 5vw, 68px);
+
+  line-height: 0.98;
+
+  letter-spacing: -3px;
+
+  font-weight: 800;
 }
 
 .student-hero h1 span {
-  background: linear-gradient(
-    90deg,
-    #6D28D9,
-    #8B5CF6,
-    #EC4899
-  );
+  background:
+    linear-gradient(
+      90deg,
+      #E11D48,
+      #EC4899,
+      #8B5CF6
+    );
+
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  color: transparent;
 }
 
+
+/* =========================================================
+   HERO PARAGRAPH
+========================================================= */
+
 .student-hero-content > p {
-  max-width: 590px;
-  margin: 24px 0 28px;
+  max-width: 570px;
+
   color: #5B6478;
-  font-size: 16px;
+
+  font-size: 14px;
+
   line-height: 1.75;
 }
 
 
 /* =========================================================
-   BUTTONS
-   ========================================================= */
+   HERO BUTTONS
+========================================================= */
 
 .student-hero-actions {
   display: flex;
+
+  align-items: center;
+
   gap: 12px;
-  flex-wrap: wrap;
+
+  margin-top: 28px;
 }
 
-.primary-student-button,
-.secondary-student-button {
+
+/* PRIMARY */
+
+.primary-student-button {
+  min-height: 43px;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  padding: 14px 20px;
-  border-radius: 13px;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 800;
-  transition: 0.25s ease;
-}
 
-.primary-student-button {
-  color: #FFFFFF;
-  background: linear-gradient(
-    135deg,
-    #8B5CF6,
-    #6D28D9
-  );
-  box-shadow: 0 12px 30px rgba(109, 40, 217, 0.22);
+  gap: 8px;
+
+  padding: 0 19px;
+
+  border: 1px solid #0B1230;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0B1230,
+      #111A46
+    );
+
+  color: #FFF8ED;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+  box-shadow:
+    0 7px 20px rgba(11, 18, 48, 0.16);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .primary-student-button:hover {
   transform: translateY(-2px);
-  background: linear-gradient(
-    135deg,
-    #6D28D9,
-    #8B5CF6
-  );
-  box-shadow: 0 15px 35px rgba(109, 40, 217, 0.30);
+
+  border-color: #8B5CF6;
+
+  box-shadow:
+    0 10px 26px rgba(109, 40, 217, 0.20);
 }
 
+
+/* SECONDARY */
+
 .secondary-student-button {
-  color: #10152C;
-  border: 1px solid #D8D1E2;
-  background: #FFFFFF;
+  min-height: 43px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 18px;
+
+  border: 1px solid #CEC8D0;
+
+  border-radius: 9px;
+
+  background: #FFF8ED;
+
+  color: #0B1230;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .secondary-student-button:hover {
-  border-color: #8B5CF6;
-  color: #6D28D9;
   transform: translateY(-2px);
+
+  border-color: #8B5CF6;
+
+  color: #6D28D9;
+
+  box-shadow:
+    0 0 18px rgba(109, 40, 217, 0.13);
 }
 
 
 /* =========================================================
    HERO FEATURES
-   ========================================================= */
+========================================================= */
 
 .student-hero-features {
   display: flex;
-  gap: 38px;
-  margin-top: 43px;
+
+  gap: 30px;
+
+  margin-top: 35px;
 }
 
 .student-hero-features > div {
   display: flex;
+
   align-items: center;
-  gap: 12px;
+
+  gap: 10px;
 }
 
 .feature-icon {
-  width: 43px;
-  height: 43px;
+  width: 35px;
+  height: 35px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 13px;
+
+  border-radius: 10px;
+
+  transition:
+    transform 0.25s ease;
+}
+
+.student-hero-features > div:hover .feature-icon {
+  transform: translateY(-2px);
 }
 
 .purple-icon {
-  background: #EEEAF4;
+  background: rgba(139, 92, 246, 0.10);
   color: #6D28D9;
 }
 
 .pink-icon {
-  background: #FCE7F3;
+  background: rgba(236, 72, 153, 0.10);
   color: #EC4899;
 }
 
-.student-hero-features strong,
+.student-hero-features strong {
+  display: block;
+
+  color: #0B1230;
+
+  font-size: 11px;
+}
+
 .student-hero-features span {
   display: block;
-}
 
-.student-hero-features strong {
-  margin-bottom: 4px;
-  font-size: 13px;
-}
+  margin-top: 3px;
 
-.student-hero-features span {
-  color: #5B6478;
-  font-size: 10px;
+  color: #687185;
+
+  font-size: 9px;
 }
 
 
 /* =========================================================
    HERO VISUAL
-   ========================================================= */
+========================================================= */
 
 .student-hero-visual {
   position: relative;
+
+  min-height: 390px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 480px;
 }
+
+
+/* GLOW */
 
 .hero-glow {
   position: absolute;
+
   border-radius: 50%;
-  filter: blur(2px);
+
+  filter: blur(45px);
+
+  pointer-events: none;
 }
 
 .glow-one {
-  width: 300px;
-  height: 300px;
-  right: 80px;
-  top: 80px;
-  background: rgba(139, 92, 246, 0.16);
+  width: 260px;
+  height: 260px;
+
+  background: rgba(139, 92, 246, 0.15);
+
+  top: 30px;
+  right: 10px;
 }
 
 .glow-two {
-  width: 180px;
-  height: 180px;
-  left: 70px;
-  bottom: 60px;
-  background: rgba(236, 72, 153, 0.13);
+  width: 220px;
+  height: 220px;
+
+  background: rgba(236, 72, 153, 0.12);
+
+  bottom: 10px;
+  left: 10px;
 }
 
 
 /* =========================================================
    PREVIEW CARD
-   ========================================================= */
+========================================================= */
 
 .student-preview-card {
   position: relative;
-  z-index: 2;
-  width: 410px;
-  min-height: 300px;
-  padding: 24px;
-  border: 1px solid rgba(139, 92, 246, 0.18);
-  border-radius: 25px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 30px 70px rgba(16, 21, 44, 0.12);
-  transform: rotate(-3deg);
+
+  width: min(420px, 90%);
+
+  min-height: 270px;
+
+  padding: 22px;
+
+  overflow: hidden;
+
+  border-radius: 26px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #0B1230,
+      #111A46
+    );
+
+  border: 1px solid rgba(139, 92, 246, 0.45);
+
+  box-shadow:
+    0 25px 60px rgba(7, 9, 20, 0.24),
+    0 0 35px rgba(139, 92, 246, 0.12);
+
+  transform:
+    perspective(1000px)
+    rotateY(-3deg)
+    rotateX(2deg);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
 }
+
+.student-preview-card:hover {
+  transform:
+    perspective(1000px)
+    rotateY(0deg)
+    rotateX(0deg)
+    translateY(-5px);
+
+  box-shadow:
+    0 30px 70px rgba(7, 9, 20, 0.27),
+    0 0 45px rgba(139, 92, 246, 0.17);
+}
+
+
+/* =========================================================
+   PREVIEW TOP
+========================================================= */
 
 .preview-top {
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
-  padding-bottom: 18px;
-  border-bottom: 1px solid #EEEAF4;
+  justify-content: space-between;
 }
 
 .preview-top strong {
-  color: #10152C;
-  font-size: 13px;
+  color: #FFF8ED;
+
+  font-size: 14px;
+
   letter-spacing: 1px;
 }
 
-.preview-top strong::first-letter {
-  color: #8B5CF6;
-}
-
 .preview-top span {
-  color: #5B6478;
-  font-size: 9px;
-  font-weight: 700;
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  color: #F472B6;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
 }
 
 .preview-top i {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 5px;
+  width: 6px;
+  height: 6px;
+
   border-radius: 50%;
-  background: #8B5CF6;
+
+  background: #EC4899;
+
+  box-shadow:
+    0 0 10px rgba(236, 72, 153, 0.7);
 }
 
+
+/* =========================================================
+   PREVIEW CENTER
+========================================================= */
+
 .preview-center {
-  padding: 30px 5px;
+  padding-top: 45px;
 }
 
 .preview-center small {
-  color: #5B6478;
+  color: #F472B6;
+
   font-size: 8px;
-  letter-spacing: 1.8px;
-  font-weight: 700;
+
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
 }
 
 .preview-center h3 {
-  margin: 8px 0 22px;
-  color: #10152C;
-  font-size: 22px;
+  margin-top: 8px;
+
+  color: #FFF8ED;
+
+  font-size: 28px;
+
+  letter-spacing: -1px;
 }
+
+
+/* =========================================================
+   PREVIEW STATS
+========================================================= */
 
 .preview-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
   gap: 10px;
+
+  margin-top: 28px;
 }
 
 .preview-stats div {
-  padding: 15px 10px;
-  border: 1px solid #EEEAF4;
-  border-radius: 12px;
-  background: #FFF8ED;
+  padding: 12px;
+
+  border-radius: 11px;
+
+  background: rgba(255, 248, 237, 0.07);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .preview-stats span {
   display: block;
-  color: #5B6478;
+
+  color: #AEB7CB;
+
   font-size: 7px;
-  font-weight: 800;
+
   letter-spacing: 0.8px;
 }
 
 .preview-stats strong {
   display: block;
-  margin-top: 6px;
-  color: #6D28D9;
-  font-size: 25px;
+
+  margin-top: 5px;
+
+  color: #FFF8ED;
+
+  font-size: 19px;
 }
+
+
+/* =========================================================
+   PREVIEW BOTTOM
+========================================================= */
 
 .preview-bottom {
   display: flex;
+
   justify-content: space-between;
-  padding-top: 16px;
-  border-top: 1px solid #EEEAF4;
-  color: #5B6478;
-  font-size: 9px;
-  font-weight: 700;
+
+  margin-top: 24px;
+
+  padding-top: 14px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: #AEB7CB;
+
+  font-size: 8px;
 }
 
 
 /* =========================================================
    FLOATING CARDS
-   ========================================================= */
+========================================================= */
 
 .floating-card {
   position: absolute;
-  z-index: 3;
+
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 13px 17px;
-  border: 1px solid #E8E1F0;
-  border-radius: 15px;
-  background: #FFFFFF;
-  box-shadow: 0 15px 35px rgba(16, 21, 44, 0.10);
+
+  gap: 9px;
+
+  padding: 11px 14px;
+
+  border-radius: 12px;
+
+  background:
+    rgba(11, 18, 48, 0.96);
+
+  border: 1px solid rgba(139, 92, 246, 0.28);
+
+  box-shadow:
+    0 15px 30px rgba(7, 9, 20, 0.16);
+
+  transition:
+    transform 0.25s ease;
+}
+
+.floating-card:hover {
+  transform: translateY(-4px);
 }
 
 .floating-card-one {
-  top: 120px;
-  right: 25px;
+  top: 35px;
+  left: 0;
 }
 
 .floating-card-two {
-  bottom: 100px;
-  left: 30px;
+  right: 0;
+  bottom: 35px;
 }
 
 .floating-icon {
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  background: #EEEAF4;
-  color: #6D28D9;
+
+  border-radius: 9px;
+
+  background:
+    rgba(139, 92, 246, 0.17);
+
+  color: #8B5CF6;
 }
 
 .pink-floating {
-  background: #FCE7F3;
+  background: rgba(236, 72, 153, 0.15);
+
   color: #EC4899;
 }
 
-.floating-card strong,
+.floating-card strong {
+  display: block;
+
+  color: #FFF8ED;
+
+  font-size: 10px;
+}
+
 .floating-card small {
   display: block;
-}
 
-.floating-card strong {
-  color: #10152C;
-  font-size: 11px;
-}
+  margin-top: 2px;
 
-.floating-card small {
-  margin-top: 3px;
-  color: #5B6478;
+  color: #AEB7CB;
+
   font-size: 8px;
 }
 
 
 /* =========================================================
-   STATISTICS
-   ========================================================= */
+   STATS
+========================================================= */
 
 .student-stats {
+  max-width: 1250px;
+
+  margin: 45px auto 0;
+
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-  margin: 25px 0 55px;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 18px;
 }
 
 .student-stat-card {
+  position: relative;
+
   display: flex;
+
   align-items: center;
-  gap: 18px;
-  padding: 25px;
-  border: 1px solid #E8E1F0;
-  border-radius: 21px;
+
+  gap: 15px;
+
+  padding: 21px;
+
+  overflow: hidden;
+
   background: #FFFFFF;
-  box-shadow: 0 8px 25px rgba(16, 21, 44, 0.04);
-  transition: 0.25s ease;
+
+  border: 1px solid #E4DFE5;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 28px rgba(34, 41, 93, 0.06);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.student-stat-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 100px;
+  height: 100px;
+
+  right: -30px;
+  bottom: -55px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(139, 92, 246, 0.07);
 }
 
 .student-stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(16, 21, 44, 0.08);
+  transform: translateY(-5px);
+
+  border-color: rgba(139, 92, 246, 0.22);
+
+  box-shadow:
+    0 18px 38px rgba(34, 41, 93, 0.10);
 }
 
+
+/* =========================================================
+   STAT ICON
+========================================================= */
+
 .stat-circle {
-  width: 55px;
-  height: 55px;
-  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 16px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
 }
 
 .purple-stat {
-  background: #EEEAF4;
+  background: rgba(139, 92, 246, 0.11);
   color: #6D28D9;
 }
 
 .pink-stat {
-  background: #FCE7F3;
+  background: rgba(236, 72, 153, 0.11);
   color: #EC4899;
 }
 
 .blue-stat {
-  background: #E8F0FE;
+  background: rgba(37, 99, 235, 0.10);
   color: #2563EB;
 }
 
-.student-stat-card span,
-.student-stat-card small {
-  display: block;
-}
+
+/* =========================================================
+   STAT TEXT
+========================================================= */
 
 .student-stat-card span {
-  color: #5B6478;
-  font-size: 9px;
+  display: block;
+
+  color: #687185;
+
+  font-size: 8px;
+
   font-weight: 800;
-  letter-spacing: 1px;
+
+  letter-spacing: 0.8px;
 }
 
 .student-stat-card strong {
   display: block;
-  margin: 3px 0;
-  color: #10152C;
-  font-size: 29px;
+
+  margin-top: 3px;
+
+  color: #0B1230;
+
+  font-size: 26px;
+
+  line-height: 1;
 }
 
 .student-stat-card small {
-  color: #5B6478;
+  display: block;
+
+  margin-top: 4px;
+
+  color: #8A92A5;
+
   font-size: 9px;
 }
 
 
 /* =========================================================
-   SECTION HEADERS
-   ========================================================= */
+   SECTIONS
+========================================================= */
 
 .student-section {
-  margin-bottom: 55px;
+  max-width: 1250px;
+
+  margin: 65px auto 0;
 }
 
 .student-section-header {
   display: flex;
+
   align-items: flex-end;
+
   justify-content: space-between;
+
+  gap: 20px;
+
   margin-bottom: 22px;
 }
 
 .section-small-label {
-  display: block;
-  margin-bottom: 7px;
-  color: #6D28D9;
+  color: #EC4899;
+
   font-size: 9px;
+
   font-weight: 800;
-  letter-spacing: 1.7px;
+
+  letter-spacing: 1.6px;
 }
 
 .student-section-header h2 {
-  margin: 0;
-  color: #10152C;
-  font-size: 28px;
-  letter-spacing: -0.8px;
+  margin-top: 7px;
+
+  color: #0B1230;
+
+  font-size: 30px;
+
+  line-height: 1.1;
+
+  letter-spacing: -1px;
 }
 
 .student-section-header p {
-  margin: 7px 0 0;
-  color: #5B6478;
+  margin-top: 7px;
+
+  color: #687185;
+
   font-size: 12px;
-}
-
-.view-all-link {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #6D28D9;
-  font-size: 11px;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.view-all-link:hover {
-  color: #EC4899;
 }
 
 
 /* =========================================================
-   EVENT CARDS
-   ========================================================= */
+   VIEW ALL
+========================================================= */
+
+.view-all-link {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  color: #6D28D9;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.view-all-link:hover {
+  color: #EC4899;
+
+  transform: translateX(3px);
+}
+
+
+/* =========================================================
+   EVENT GRID
+========================================================= */
 
 .student-events-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
   gap: 22px;
 }
 
+
+/* =========================================================
+   EVENT CARD
+========================================================= */
+
 .student-event-card {
   overflow: hidden;
-  border: 1px solid #E8E1F0;
-  border-radius: 21px;
+
   background: #FFFFFF;
-  box-shadow: 0 8px 25px rgba(16, 21, 44, 0.04);
-  transition: 0.3s ease;
+
+  border: 1px solid #E4DFE5;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 28px rgba(34, 41, 93, 0.06);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .student-event-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(139, 92, 246, 0.35);
-  box-shadow: 0 18px 40px rgba(16, 21, 44, 0.10);
+  transform: translateY(-6px);
+
+  border-color: rgba(139, 92, 246, 0.22);
+
+  box-shadow:
+    0 18px 38px rgba(34, 41, 93, 0.11);
 }
+
+
+/* =========================================================
+   EVENT IMAGE
+========================================================= */
 
 .student-event-image {
   position: relative;
-  height: 190px;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
   overflow: hidden;
+
+  background: #EEEAF4;
 }
 
 .student-event-image img {
   width: 100%;
   height: 100%;
+
+  display: block;
+
   object-fit: cover;
-  transition: 0.4s ease;
+
+  transition:
+    transform 0.4s ease;
 }
 
-.student-event-card:hover img {
+.student-event-card:hover .student-event-image img {
   transform: scale(1.04);
-}
-
-.event-tag {
-  position: absolute;
-  top: 13px;
-  left: 13px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94);
-  color: #6D28D9;
-  font-size: 8px;
-  font-weight: 800;
-}
-
-.student-event-body {
-  padding: 19px;
-}
-
-.student-event-body h3 {
-  min-height: 42px;
-  margin: 0 0 14px;
-  color: #10152C;
-  font-size: 16px;
-  line-height: 1.35;
-}
-
-.student-event-info {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #EEEAF4;
-}
-
-.student-event-info div {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: #5B6478;
-  font-size: 10px;
-}
-
-.student-event-info svg {
-  color: #2563EB;
-}
-
-.student-event-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 14px;
-}
-
-.student-event-footer > span {
-  color: #5B6478;
-  font-size: 9px;
-}
-
-.student-event-footer a {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #6D28D9;
-  font-size: 10px;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.student-event-footer a:hover {
-  color: #2563EB;
 }
 
 
 /* =========================================================
-   REGISTRATIONS
-   ========================================================= */
+   CATEGORY
+========================================================= */
+
+.event-tag {
+  position: absolute;
+
+  left: 13px;
+  top: 13px;
+
+  padding: 6px 9px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 248, 237, 0.94);
+
+  color: #6D28D9;
+
+  font-size: 8px;
+
+  font-weight: 800;
+}
+
+
+/* =========================================================
+   EVENT BODY
+========================================================= */
+
+.student-event-body {
+  padding: 18px;
+}
+
+.student-event-body h3 {
+  color: #0B1230;
+
+  font-size: 17px;
+
+  line-height: 1.25;
+
+  letter-spacing: -0.4px;
+}
+
+
+/* =========================================================
+   EVENT INFORMATION
+========================================================= */
+
+.student-event-info {
+  display: grid;
+
+  gap: 7px;
+
+  margin-top: 14px;
+}
+
+.student-event-info div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  color: #687185;
+
+  font-size: 9px;
+}
+
+.student-event-info svg {
+  flex-shrink: 0;
+
+  color: #8B5CF6;
+}
+
+
+/* =========================================================
+   EVENT FOOTER
+========================================================= */
+
+.student-event-footer {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-top: 16px;
+
+  padding-top: 13px;
+
+  border-top: 1px solid #ECEAF1;
+}
+
+.dashboard-registration-status {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  color: #27834D;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+.student-event-footer > a {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  color: #6D28D9;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.student-event-footer > a:hover {
+  color: #EC4899;
+
+  transform: translateX(2px);
+}
+
+
+/* =========================================================
+   RECENT REGISTRATIONS
+========================================================= */
 
 .registrations-card {
   overflow: hidden;
-  border: 1px solid #E8E1F0;
-  border-radius: 21px;
+
   background: #FFFFFF;
-  box-shadow: 0 8px 25px rgba(16, 21, 44, 0.04);
+
+  border: 1px solid #E4DFE5;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 28px rgba(34, 41, 93, 0.06);
 }
 
 .registration-row {
-  display: flex;
+  display: grid;
+
+  grid-template-columns:
+    auto 1fr auto auto;
+
   align-items: center;
-  gap: 16px;
-  padding: 19px 22px;
-  border-bottom: 1px solid #EEEAF4;
+
+  gap: 14px;
+
+  padding: 17px 20px;
+
+  border-bottom: 1px solid #ECEAF1;
+
+  transition:
+    background 0.2s ease;
 }
 
 .registration-row:last-child {
   border-bottom: none;
 }
 
-.registration-icon {
-  width: 43px;
-  height: 43px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  background: #EEEAF4;
-  color: #6D28D9;
-}
-
-.pink-registration {
-  background: #FCE7F3;
-  color: #EC4899;
-}
-
-.registration-details {
-  flex: 1;
-}
-
-.registration-details strong,
-.registration-details span {
-  display: block;
-}
-
-.registration-details strong {
-  color: #10152C;
-  font-size: 12px;
-}
-
-.registration-details span {
-  margin-top: 4px;
-  color: #5B6478;
-  font-size: 9px;
-}
-
-.registration-status {
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: #ECFDF3;
-  color: #15803D;
-  font-size: 8px;
-  font-weight: 800;
-}
-
-.registration-row > a {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #6D28D9;
-  font-size: 10px;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.registration-row > a:hover {
-  color: #2563EB;
+.registration-row:hover {
+  background: #FCFAFD;
 }
 
 
 /* =========================================================
-   CTA
-   ========================================================= */
+   REGISTRATION ICON
+========================================================= */
 
-.student-cta {
-  position: relative;
-  overflow: hidden;
+.registration-icon {
+  width: 38px;
+  height: 38px;
+
   display: flex;
   align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: rgba(139, 92, 246, 0.10);
+
+  color: #6D28D9;
+}
+
+.pink-registration {
+  background: rgba(236, 72, 153, 0.10);
+
+  color: #EC4899;
+}
+
+
+/* =========================================================
+   REGISTRATION DETAILS
+========================================================= */
+
+.registration-details strong {
+  display: block;
+
+  color: #0B1230;
+
+  font-size: 11px;
+}
+
+.registration-details span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #8A92A5;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   REGISTRATION STATUS
+========================================================= */
+
+.registration-status {
+  padding: 6px 9px;
+
+  border-radius: 999px;
+
+  background: #EDF8F2;
+
+  color: #27834D;
+
+  font-size: 8px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   REGISTRATION LINK
+========================================================= */
+
+.registration-row > a {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  color: #6D28D9;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.registration-row > a:hover {
+  color: #EC4899;
+
+  transform: translateX(2px);
+}
+
+
+/* =========================================================
+   BOTTOM CTA
+========================================================= */
+
+.student-cta {
+  max-width: 1250px;
+
+  margin: 70px auto 0;
+
+  padding: 40px 45px;
+
+  display: flex;
+
+  align-items: center;
+
   justify-content: space-between;
+
   gap: 30px;
-  padding: 42px 48px;
-  border-radius: 25px;
+
+  overflow: hidden;
+
+  position: relative;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0B1230,
+      #111A46
+    );
+
+  border: 1px solid #29335F;
+
+  box-shadow:
+    0 20px 50px rgba(7, 9, 20, 0.15);
+}
+
+.student-cta::after {
+  content: "";
+
+  position: absolute;
+
+  width: 280px;
+  height: 280px;
+
+  right: -90px;
+  top: -130px;
+
+  border-radius: 50%;
 
   background:
     radial-gradient(
-      circle at 85% 50%,
-      rgba(139, 92, 246, 0.30),
-      transparent 30%
-    ),
-    #0B1230;
+      circle,
+      rgba(236, 72, 153, 0.22),
+      transparent 70%
+    );
+}
 
-  color: #FFFFFF;
+.student-cta > div {
+  position: relative;
+
+  z-index: 1;
 }
 
 .student-cta > div > span {
   color: #F472B6;
+
   font-size: 9px;
+
   font-weight: 800;
+
   letter-spacing: 1.7px;
 }
 
 .student-cta h2 {
-  margin: 10px 0 0;
-  font-size: 29px;
-  line-height: 1.2;
+  margin-top: 9px;
+
+  color: #FFF8ED;
+
+  font-size: 30px;
+
+  line-height: 1.1;
+
+  letter-spacing: -1px;
 }
 
 .student-cta h2 span {
-  color: #A78BFA;
+  color: #EC4899;
 }
 
+
+/* CTA BUTTON */
+
 .student-cta > a {
-  display: flex;
+  position: relative;
+
+  z-index: 1;
+
+  min-height: 42px;
+
+  display: inline-flex;
+
   align-items: center;
+  justify-content: center;
+
   gap: 8px;
-  padding: 14px 20px;
-  border-radius: 12px;
-  background: #E11D48;
-  color: #FFFFFF;
+
+  padding: 0 18px;
+
+  border: 1px solid rgba(236, 72, 153, 0.45);
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6D28D9,
+      #EC4899
+    );
+
+  color: white;
+
   font-size: 11px;
-  font-weight: 800;
+
+  font-weight: 700;
+
   text-decoration: none;
-  white-space: nowrap;
-  transition: 0.25s ease;
+
+  box-shadow:
+    0 8px 25px rgba(236, 72, 153, 0.18);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .student-cta > a:hover {
-  background: #BE123C;
   transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 30px rgba(236, 72, 153, 0.28);
 }
 
 
 /* =========================================================
    RESPONSIVE
-   ========================================================= */
+========================================================= */
 
-@media (max-width: 1100px) {
-
-  .student-page {
-    padding: 28px;
-  }
+@media (max-width: 1050px) {
 
   .student-hero {
     grid-template-columns: 1fr;
+
+    gap: 35px;
+  }
+
+  .student-hero-content {
+    max-width: 720px;
   }
 
   .student-hero-visual {
-    min-height: 400px;
-    padding-bottom: 40px;
+    min-height: 420px;
   }
 
   .student-events-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns:
+      repeat(2, 1fr);
   }
 
 }
 
 
-@media (max-width: 800px) {
+@media (max-width: 750px) {
+
+  .student-page {
+    padding:
+      45px 5% 70px;
+  }
+
+  .student-hero {
+    min-height: auto;
+  }
+
+  .student-hero h1 {
+    font-size:
+      clamp(40px, 12vw, 60px);
+
+    letter-spacing: -2px;
+  }
+
+  .student-hero-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .primary-student-button,
+  .secondary-student-button {
+    width: 100%;
+  }
+
+  .student-hero-features {
+    gap: 18px;
+  }
 
   .student-stats {
     grid-template-columns: 1fr;
   }
 
-  .student-hero-content {
-    padding: 45px 30px;
-  }
+  .student-section-header {
+    align-items: flex-start;
 
-  .student-hero h1 {
-    font-size: 42px;
-  }
-
-  .student-hero-features {
     flex-direction: column;
-    gap: 18px;
   }
 
   .student-events-grid {
     grid-template-columns: 1fr;
   }
 
-  .student-section-header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 15px;
-  }
-
   .student-cta {
-    align-items: flex-start;
+    padding: 32px 25px;
+
     flex-direction: column;
+
+    align-items: flex-start;
   }
 
 }
@@ -888,603 +1492,56 @@
 
 @media (max-width: 520px) {
 
-  .student-page {
-    padding: 16px;
-  }
-
-  .student-hero-content {
-    padding: 35px 22px;
-  }
-
-  .student-hero h1 {
-    font-size: 36px;
-    letter-spacing: -1.5px;
-  }
-
   .student-hero-visual {
-    transform: scale(0.85);
-    margin-top: -30px;
-    margin-bottom: -20px;
+    min-height: 350px;
   }
 
   .student-preview-card {
-    width: 330px;
+    width: 100%;
+
+    min-height: 250px;
+
+    padding: 18px;
   }
 
   .floating-card-one {
-    right: 0;
+    left: -5px;
   }
 
   .floating-card-two {
-    left: 0;
+    right: -5px;
   }
 
-  .student-cta {
-    padding: 30px 25px;
+  .preview-center {
+    padding-top: 30px;
+  }
+
+  .preview-center h3 {
+    font-size: 23px;
+  }
+
+  .student-hero-features {
+    flex-direction: column;
+  }
+
+  .registration-row {
+    grid-template-columns:
+      auto 1fr;
+
+    gap: 10px;
   }
 
   .registration-status {
-    display: none;
+    grid-column: 2;
+    width: fit-content;
   }
 
-}
-
-
-/* =========================================================
-   EVENTHUB STUDENT DASHBOARD
-   FINAL HOMEPAGE-MATCHING DESIGN LAYER
-   ========================================================= */
-
-/* Shared page atmosphere */
-.student-page {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(
-      circle at 88% 8%,
-      rgba(139, 92, 246, 0.07),
-      transparent 24%
-    ),
-    radial-gradient(
-      circle at 8% 55%,
-      rgba(236, 72, 153, 0.045),
-      transparent 22%
-    ),
-    #F7F3EE;
-}
-
-/* Keep the decorative atmosphere behind the UI */
-.student-page::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.32;
-  background-image:
-    linear-gradient(rgba(139, 92, 246, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(139, 92, 246, 0.035) 1px, transparent 1px);
-  background-size: 34px 34px;
-  mask-image: linear-gradient(to bottom, black, transparent 88%);
-}
-
-.student-page > * {
-  position: relative;
-  z-index: 1;
-}
-
-
-/* =========================================================
-   HERO — SAME VISUAL LANGUAGE AS EVENTHUB HOMEPAGE
-   ========================================================= */
-
-.student-hero {
-  box-shadow:
-    0 24px 70px rgba(16, 21, 44, 0.06),
-    0 0 60px rgba(139, 92, 246, 0.045);
-}
-
-.student-hero::before {
-  content: "";
-  position: absolute;
-  width: 460px;
-  height: 460px;
-  right: 12%;
-  top: -170px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(139, 92, 246, 0.10),
-    rgba(236, 72, 153, 0.035) 42%,
-    transparent 70%
-  );
-  pointer-events: none;
-}
-
-.student-badge {
-  border: 1px solid rgba(139, 92, 246, 0.16);
-  box-shadow: 0 8px 24px rgba(109, 40, 217, 0.05);
-}
-
-.student-hero h1 span {
-  background: linear-gradient(
-    90deg,
-    #E11D48 0%,
-    #EC4899 35%,
-    #8B5CF6 72%,
-    #6D28D9 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-.student-hero-content > p {
-  max-width: 600px;
-}
-
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-.primary-student-button {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(
-    135deg,
-    #8B5CF6 0%,
-    #6D28D9 55%,
-    #EC4899 125%
-  );
-  box-shadow:
-    0 12px 30px rgba(109, 40, 217, 0.20),
-    0 0 24px rgba(139, 92, 246, 0.08);
-}
-
-.primary-student-button::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  transform: translateX(-110%);
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.18),
-    transparent
-  );
-  transition: transform 0.55s ease;
-}
-
-.primary-student-button:hover::after {
-  transform: translateX(110%);
-}
-
-.primary-student-button:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    0 16px 38px rgba(109, 40, 217, 0.27),
-    0 0 28px rgba(139, 92, 246, 0.12);
-}
-
-.secondary-student-button:hover {
-  box-shadow: 0 10px 26px rgba(16, 21, 44, 0.07);
-}
-
-
-/* =========================================================
-   HERO VISUAL — FLOATING / 3D DEPTH
-   ========================================================= */
-
-.student-preview-card {
-  box-shadow:
-    0 30px 70px rgba(16, 21, 44, 0.12),
-    0 0 42px rgba(139, 92, 246, 0.08);
-  animation: dashboardPreviewFloat 6s ease-in-out infinite;
-  transform-origin: center;
-}
-
-.floating-card {
-  box-shadow:
-    0 15px 35px rgba(16, 21, 44, 0.10),
-    0 0 25px rgba(139, 92, 246, 0.05);
-}
-
-.floating-card-one {
-  animation: dashboardFloatOne 5.5s ease-in-out infinite;
-}
-
-.floating-card-two {
-  animation: dashboardFloatTwo 5.9s ease-in-out infinite;
-}
-
-.glow-one {
-  animation: dashboardGlowOne 6s ease-in-out infinite;
-}
-
-.glow-two {
-  animation: dashboardGlowTwo 7s ease-in-out infinite;
-}
-
-@keyframes dashboardPreviewFloat {
-  0%, 100% {
-    transform: rotate(-3deg) translateY(0);
-  }
-  50% {
-    transform: rotate(-2deg) translateY(-8px);
-  }
-}
-
-@keyframes dashboardFloatOne {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-9px);
-  }
-}
-
-@keyframes dashboardFloatTwo {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(8px);
-  }
-}
-
-@keyframes dashboardGlowOne {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.85;
-  }
-  50% {
-    transform: scale(1.08);
-    opacity: 1;
-  }
-}
-
-@keyframes dashboardGlowTwo {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.12);
-    opacity: 1;
-  }
-}
-
-
-/* =========================================================
-   STAT CARDS
-   ========================================================= */
-
-.student-stat-card {
-  position: relative;
-  overflow: hidden;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
-}
-
-.student-stat-card::after {
-  content: "";
-  position: absolute;
-  width: 110px;
-  height: 110px;
-  right: -55px;
-  top: -55px;
-  border-radius: 50%;
-  background: rgba(139, 92, 246, 0.055);
-  pointer-events: none;
-}
-
-.student-stat-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(139, 92, 246, 0.24);
-  box-shadow:
-    0 18px 40px rgba(16, 21, 44, 0.08),
-    0 0 25px rgba(139, 92, 246, 0.055);
-}
-
-
-/* =========================================================
-   SECTION HEADERS
-   ========================================================= */
-
-.section-small-label {
-  color: #6D28D9;
-}
-
-.view-all-link {
-  padding: 9px 13px;
-  border: 1px solid rgba(139, 92, 246, 0.18);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.78);
-  transition:
-    transform 0.25s ease,
-    color 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.view-all-link:hover {
-  transform: translateX(4px);
-  color: #EC4899;
-  border-color: rgba(236, 72, 153, 0.25);
-  box-shadow: 0 8px 22px rgba(109, 40, 217, 0.07);
-}
-
-
-/* =========================================================
-   EVENT CARDS
-   ========================================================= */
-
-.student-event-card {
-  position: relative;
-  box-shadow:
-    0 8px 25px rgba(16, 21, 44, 0.04),
-    0 0 0 rgba(139, 92, 246, 0);
-}
-
-.student-event-card:hover {
-  transform: translateY(-8px) scale(1.008);
-  border-color: rgba(139, 92, 246, 0.32);
-  box-shadow:
-    0 20px 42px rgba(16, 21, 44, 0.10),
-    0 0 26px rgba(139, 92, 246, 0.065);
-}
-
-.event-tag {
-  box-shadow: 0 7px 18px rgba(16, 21, 44, 0.07);
-}
-
-.student-event-image::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    to top,
-    rgba(16, 21, 44, 0.10),
-    transparent 42%
-  );
-}
-
-.student-event-footer a {
-  transition:
-    transform 0.25s ease,
-    color 0.25s ease;
-}
-
-.student-event-footer a:hover {
-  transform: translateX(4px);
-}
-
-
-/* =========================================================
-   REGISTRATION LIST
-   ========================================================= */
-
-.registrations-card {
-  box-shadow:
-    0 8px 25px rgba(16, 21, 44, 0.04),
-    0 0 0 rgba(139, 92, 246, 0);
-}
-
-.registration-row {
-  transition:
-    background 0.25s ease,
-    padding-left 0.25s ease;
-}
-
-.registration-row:hover {
-  background: rgba(139, 92, 246, 0.025);
-  padding-left: 27px;
-}
-
-.dashboard-registration-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: #ECFDF3;
-  color: #15803D;
-  font-size: 8px;
-  font-weight: 800;
-}
-
-.registration-row > a {
-  transition:
-    transform 0.25s ease,
-    color 0.25s ease;
-}
-
-.registration-row > a:hover {
-  transform: translateX(4px);
-}
-
-
-/* =========================================================
-   CTA — DARK CONTRAST SECTION
-   ========================================================= */
-
-.student-cta {
-  box-shadow:
-    0 25px 60px rgba(16, 21, 44, 0.12),
-    0 0 35px rgba(139, 92, 246, 0.07);
-}
-
-.student-cta::before {
-  content: "";
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  right: -90px;
-  top: -130px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(236, 72, 153, 0.22),
-    transparent 68%
-  );
-  pointer-events: none;
-}
-
-.student-cta > a {
-  box-shadow: 0 12px 28px rgba(225, 29, 72, 0.18);
-}
-
-.student-cta > a:hover {
-  box-shadow: 0 16px 34px rgba(190, 18, 60, 0.25);
-}
-
-
-/* =========================================================
-   SCROLL REVEAL
-   ========================================================= */
-
-.student-hero,
-.student-stats,
-.student-section,
-.student-cta {
-  animation: dashboardSectionReveal 0.75s ease both;
-}
-
-.student-stats {
-  animation-delay: 0.08s;
-}
-
-.student-section:nth-of-type(2) {
-  animation-delay: 0.14s;
-}
-
-.student-section:nth-of-type(3) {
-  animation-delay: 0.20s;
-}
-
-.student-cta {
-  animation-delay: 0.26s;
-}
-
-@keyframes dashboardSectionReveal {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-/* =========================================================
-   ACCESSIBILITY
-   ========================================================= */
-
-.primary-student-button:focus-visible,
-.secondary-student-button:focus-visible,
-.view-all-link:focus-visible,
-.student-event-footer a:focus-visible,
-.registration-row > a:focus-visible,
-.student-cta > a:focus-visible {
-  outline: 2px solid #EC4899;
-  outline-offset: 3px;
-}
-
-
-/* =========================================================
-   RESPONSIVE REFINEMENT
-   ========================================================= */
-
-@media (max-width: 1100px) {
-  .student-page {
-    padding: 28px;
+  .registration-row > a {
+    grid-column: 2;
   }
 
-  .student-preview-card {
-    width: min(410px, 82%);
-  }
-}
-
-@media (max-width: 800px) {
-  .student-page {
-    padding: 22px;
+  .student-cta h2 {
+    font-size: 25px;
   }
 
-  .student-hero {
-    border-radius: 26px;
-  }
-
-  .student-preview-card {
-    animation-duration: 7s;
-  }
-
-  .student-section-header {
-    gap: 14px;
-  }
-
-  .view-all-link {
-    align-self: flex-start;
-  }
-}
-
-@media (max-width: 520px) {
-  .student-page {
-    padding: 14px;
-  }
-
-  .student-hero {
-    border-radius: 22px;
-  }
-
-  .student-preview-card {
-    width: 315px;
-  }
-
-  .floating-card {
-    transform: scale(0.92);
-  }
-
-  .floating-card-one {
-    right: -8px;
-  }
-
-  .floating-card-two {
-    left: -8px;
-  }
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  .student-preview-card,
-  .floating-card-one,
-  .floating-card-two,
-  .glow-one,
-  .glow-two {
-    animation: none !important;
-  }
-
-  .student-hero,
-  .student-stats,
-  .student-section,
-  .student-cta {
-    animation: none !important;
-  }
-
-  .student-event-card,
-  .student-stat-card,
-  .view-all-link,
-  .primary-student-button,
-  .secondary-student-button,
-  .registration-row {
-    transition: none !important;
-  }
 }

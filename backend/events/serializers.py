@@ -4,17 +4,19 @@ from .models import Event
 
 class EventSerializer(serializers.ModelSerializer):
 
-    # Accept frontend names
+    # Frontend field name -> backend field name
     organizerName = serializers.CharField(
         source="organizer_name",
         required=False,
         allow_blank=True
     )
 
-    registrationFee = serializers.CharField(
+    registrationFee = serializers.DecimalField(
         source="registration_fee",
+        max_digits=10,
+        decimal_places=2,
         required=False,
-        allow_blank=True
+        default=0
     )
 
     registrationDeadline = serializers.DateField(
@@ -25,6 +27,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
+
         fields = [
             "id",
             "title",
@@ -35,14 +38,16 @@ class EventSerializer(serializers.ModelSerializer):
             "time",
             "venue",
             "capacity",
-
-            # frontend names
             "organizerName",
             "registrationFee",
             "registrationDeadline",
-
-            # backend fields
             "status",
+            "created_at",
+            "updated_at",
+        ]
+
+        read_only_fields = [
+            "id",
             "created_at",
             "updated_at",
         ]

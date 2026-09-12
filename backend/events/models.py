@@ -1,6 +1,3 @@
-
-
-# Create your models here.
 from django.db import models
 
 
@@ -19,7 +16,9 @@ class Event(models.Model):
         null=True
     )
 
-    image = models.TextField(
+    # Stores the actual uploaded event image
+    image = models.ImageField(
+        upload_to="events/",
         blank=True,
         null=True
     )

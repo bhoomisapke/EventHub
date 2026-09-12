@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   CalendarDays,
@@ -12,43 +12,127 @@ import {
 
 import "./MyRegistrations.css";
 
-const registrations = [
-  {
-    id: 1,
-    title: "Tech Innovation Summit 2026",
-    category: "Technology",
-    date: "15 September 2026",
-    time: "10:00 AM",
-    location: "Main Auditorium",
-    status: "Confirmed",
-    image:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    id: 2,
-    title: "Web Development Workshop",
-    category: "Workshop",
-    date: "20 September 2026",
-    time: "11:30 AM",
-    location: "Computer Lab 2",
-    status: "Confirmed",
-    image:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    id: 3,
-    title: "Robotics & AI Expo",
-    category: "Robotics",
-    date: "25 September 2026",
-    time: "9:30 AM",
-    location: "Innovation Hall",
-    status: "Confirmed",
-    image:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80",
-  },
-];
+const API_URL = "http://127.0.0.1:8000";
 
 const MyRegistrations = () => {
+  const [registrations, setRegistrations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchMyRegistrations();
+  }, []);
+
+  const fetchMyRegistrations = async () => {
+    const token =
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token");
+
+    if (!token) {
+      setError("Please login to view your registrations.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_URL}/api/registrations/my/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 401) {
+        setError("Your session has expired. Please login again.");
+        setLoading(false);
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to load registrations.");
+      }
+
+      const data = await response.json();
+
+      setRegistrations(Array.isArray(data) ? data : data.results || []);
+    } catch (err) {
+      console.error("Registration fetch error:", err);
+      setError("Unable to load your registrations.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Format backend date: 2026-09-15 → 15 September 2026
+  const formatDate = (dateString) => {
+    if (!dateString) return "Date not available";
+
+    const date = new Date(dateString);
+
+    if (Number.isNaN(date.getTime())) {
+      return dateString;
+    }
+
+    return date.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
+  // Format backend time: 10:00:00 → 10:00 AM
+  const formatTime = (timeString) => {
+    if (!timeString) return "Time not available";
+
+    const [hours, minutes] = timeString.split(":");
+
+    const date = new Date();
+    date.setHours(Number(hours), Number(minutes), 0, 0);
+
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const getStatusClass = (status) => {
+    if (status?.toLowerCase() === "cancelled") {
+      return "cancelled-badge";
+    }
+
+    return "confirmed-badge";
+  };
+
+  const getStatusIcon = (status) => {
+    if (status?.toLowerCase() === "cancelled") {
+      return <XCircle size={13} />;
+    }
+
+    return <CheckCircle2 size={13} />;
+  };
+
+  const confirmedCount = registrations.filter(
+    (registration) =>
+      registration.status?.toLowerCase() === "confirmed"
+  ).length;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const upcomingCount = registrations.filter((registration) => {
+    if (!registration.event_date) return false;
+
+    const eventDate = new Date(registration.event_date);
+    eventDate.setHours(0, 0, 0, 0);
+
+    return eventDate >= today;
+  }).length;
+
   return (
     <div className="registrations-page">
 
@@ -92,7 +176,7 @@ const MyRegistrations = () => {
 
           <div>
             <span>TOTAL REGISTRATIONS</span>
-            <strong>03</strong>
+            <strong>{registrations.length}</strong>
           </div>
 
         </div>
@@ -106,7 +190,7 @@ const MyRegistrations = () => {
 
           <div>
             <span>CONFIRMED</span>
-            <strong>03</strong>
+            <strong>{confirmedCount}</strong>
           </div>
 
         </div>
@@ -120,7 +204,7 @@ const MyRegistrations = () => {
 
           <div>
             <span>UPCOMING</span>
-            <strong>03</strong>
+            <strong>{upcomingCount}</strong>
           </div>
 
         </div>
@@ -140,91 +224,128 @@ const MyRegistrations = () => {
         </div>
 
 
-        <div className="registration-list">
-
-          {registrations.map((event) => (
-
-            <article
-              className="registration-item"
-              key={event.id}
-            >
-
-              {/* Image */}
-
-              <div className="registration-image">
-
-                <img
-                  src={event.image}
-                  alt={event.title}
-                />
-
-                <span>
-                  {event.category}
-                </span>
-
-              </div>
+        {loading && (
+          <div className="registration-empty-state">
+            <CalendarDays size={30} />
+            <h3>Loading your registrations...</h3>
+            <p>Please wait while we fetch your events.</p>
+          </div>
+        )}
 
 
-              {/* Details */}
+        {!loading && error && (
+          <div className="registration-empty-state">
+            <XCircle size={30} />
+            <h3>Unable to load registrations</h3>
+            <p>{error}</p>
+          </div>
+        )}
 
-              <div className="registration-event-details">
 
-                <h3>{event.title}</h3>
+        {!loading && !error && registrations.length === 0 && (
+          <div className="registration-empty-state">
+            <CalendarDays size={30} />
+            <h3>No registrations yet</h3>
+            <p>
+              You haven't registered for any events yet.
+            </p>
 
-                <div className="registration-detail-row">
+            <Link to="/events" className="browse-registration-btn">
+              Explore Events
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        )}
 
-                  <div>
-                    <CalendarDays size={15} />
-                    {event.date}
+
+        {!loading && !error && registrations.length > 0 && (
+          <div className="registration-list">
+
+            {registrations.map((registration) => (
+
+              <article
+                className="registration-item"
+                key={registration.id}
+              >
+
+                {/* Image */}
+
+                <div className="registration-image">
+
+                  <div className="registration-image-placeholder">
+                    <Ticket size={32} />
                   </div>
 
-                  <div>
-                    <Clock size={15} />
-                    {event.time}
+                  <span>
+                    Event
+                  </span>
+
+                </div>
+
+
+                {/* Details */}
+
+                <div className="registration-event-details">
+
+                  <h3>
+                    {registration.event_title}
+                  </h3>
+
+                  <div className="registration-detail-row">
+
+                    <div>
+                      <CalendarDays size={15} />
+                      {formatDate(registration.event_date)}
+                    </div>
+
+                    <div>
+                      <Clock size={15} />
+                      {formatTime(registration.event_time)}
+                    </div>
+
+                  </div>
+
+                  <div className="registration-location">
+
+                    <MapPin size={15} />
+
+                    {registration.event_venue || "Venue not available"}
+
                   </div>
 
                 </div>
 
-                <div className="registration-location">
 
-                  <MapPin size={15} />
+                {/* Status */}
 
-                  {event.location}
+                <div className="registration-status-area">
+
+                  <span className={getStatusClass(registration.status)}>
+                    {getStatusIcon(registration.status)}
+                    {registration.status || "Confirmed"}
+                  </span>
+
+                  <Link
+                    to="/student/tickets"
+                    className="ticket-button"
+                  >
+                    View Ticket
+                    <ArrowRight size={14} />
+                  </Link>
 
                 </div>
 
-              </div>
+              </article>
 
+            ))}
 
-              {/* Status */}
-
-              <div className="registration-status-area">
-
-                <span className="confirmed-badge">
-                  <CheckCircle2 size={13} />
-                  {event.status}
-                </span>
-
-                <Link
-                  to="/student/tickets"
-                  className="ticket-button"
-                >
-                  View Ticket
-                  <ArrowRight size={14} />
-                </Link>
-
-              </div>
-
-            </article>
-
-          ))}
-
-        </div>
+          </div>
+        )}
 
       </section>
 
 
-      {/* ================= EMPTY / INFO CTA ================= */}
+      {/* ================= BOTTOM CTA ================= */}
 
       <section className="registration-bottom">
 
