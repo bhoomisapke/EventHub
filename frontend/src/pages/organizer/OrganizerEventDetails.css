@@ -1,0 +1,2882 @@
+/* ============================================================
+   EVENTHUB ORGANIZER EVENT DETAILS
+   SAME THEME AS MAIN WEBSITE
+   Deep Navy + Black + Purple + Crimson + Pink + Cream
+   ============================================================ */
+
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+
+.organizer-event-details-page {
+  --event-black: #070914;
+  --event-black-soft: #0A0D1A;
+  --event-navy: #0B1230;
+  --event-deep-blue: #111A46;
+  --event-blue: #2563EB;
+  --event-blue-light: #3B82F6;
+  --event-purple-dark: #6D28D9;
+  --event-purple: #8B5CF6;
+  --event-red: #E11D48;
+  --event-red-dark: #BE123C;
+  --event-pink: #EC4899;
+  --event-pink-light: #F472B6;
+  --event-cream: #FFF8ED;
+  --event-white: #FFFFFF;
+  --event-page-bg: #F7F3EE;
+  --event-page-bg-2: #EEEAF4;
+  --event-dark-text: #10152C;
+  --event-muted: #5B6478;
+  --event-border: #DDD8E1;
+
+  width: 100% !important;
+  min-height: 100vh !important;
+  box-sizing: border-box !important;
+
+  padding: 24px 0 55px !important;
+  margin: 0 !important;
+
+  position: relative !important;
+  overflow-x: hidden !important;
+
+  color: var(--event-dark-text) !important;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif !important;
+
+  background:
+    radial-gradient(
+      circle at 8% 8%,
+      rgba(236, 72, 153, 0.07),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 92% 18%,
+      rgba(109, 40, 217, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      rgba(37, 99, 235, 0.06),
+      transparent 35%
+    ),
+    var(--event-page-bg) !important;
+}
+
+
+/* ============================================================
+   BACKGROUND DECORATION
+   ============================================================ */
+
+.organizer-event-details-page::before {
+  content: "";
+
+  position: fixed;
+
+  width: 240px;
+  height: 240px;
+
+  left: -120px;
+  top: 170px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(236, 72, 153, 0.10),
+      rgba(139, 92, 246, 0.06),
+      transparent 70%
+    );
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+.organizer-event-details-page::after {
+  content: "";
+
+  position: fixed;
+
+  width: 280px;
+  height: 280px;
+
+  right: -140px;
+  bottom: 40px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(109, 40, 217, 0.10),
+      rgba(236, 72, 153, 0.06),
+      transparent 70%
+    );
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+/* ============================================================
+   CONTENT WIDTH
+   ============================================================ */
+
+.organizer-event-details-page .event-details-wrapper,
+.organizer-event-details-page .event-details-main {
+  width: 780px !important;
+  max-width: calc(100% - 40px) !important;
+
+  margin-left: auto !important;
+  margin-right: auto !important;
+
+  box-sizing: border-box !important;
+
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+
+/* ============================================================
+   BACK BUTTON
+   ============================================================ */
+
+.organizer-event-details-page .event-details-wrapper {
+  margin-bottom: 14px !important;
+}
+
+.organizer-event-details-page .event-back-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  gap: 7px !important;
+
+  margin: 0 !important;
+  padding: 8px 14px !important;
+
+  color: var(--event-navy) !important;
+
+  background: rgba(255, 248, 237, 0.78) !important;
+
+  border: 1px solid #CEC8D0 !important;
+  border-radius: 999px !important;
+
+  text-decoration: none !important;
+
+  font-size: 11px !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+
+  box-shadow:
+    0 6px 18px rgba(11, 18, 48, 0.07) !important;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease !important;
+}
+
+.organizer-event-details-page .event-back-button:hover {
+  color: var(--event-purple-dark) !important;
+
+  border-color: var(--event-purple) !important;
+
+  transform: translateY(-2px) !important;
+
+  box-shadow:
+    0 0 18px rgba(109, 40, 217, 0.14) !important;
+}
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.organizer-event-details-page .event-hero-section {
+  width: 100% !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  margin: 0 0 17px !important;
+  padding: 0 !important;
+}
+
+.organizer-event-details-page .event-hero-image-wrapper {
+  width: 700px !important;
+  max-width: 100% !important;
+
+  height: 255px !important;
+
+  position: relative !important;
+
+  margin: 0 auto !important;
+  padding: 0 !important;
+
+  overflow: hidden !important;
+
+  border-radius: 14px !important;
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--event-navy),
+      var(--event-purple-dark)
+    ) !important;
+
+  border: 1px solid rgba(139, 92, 246, 0.30) !important;
+
+  box-shadow:
+    0 18px 38px rgba(7, 9, 20, 0.18),
+    0 0 30px rgba(139, 92, 246, 0.10) !important;
+
+  box-sizing: border-box !important;
+
+  cursor: pointer !important;
+}
+
+.organizer-event-details-page .event-hero-image {
+  width: 100% !important;
+  height: 100% !important;
+
+  display: block !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  object-fit: cover !important;
+
+  transition:
+    transform 0.5s ease,
+    filter 0.5s ease !important;
+}
+
+.organizer-event-details-page
+.event-hero-image-wrapper:hover
+.event-hero-image {
+  transform: scale(1.025) !important;
+
+  filter:
+    brightness(0.92)
+    saturate(1.05) !important;
+}
+
+
+/* ============================================================
+   HERO DARK OVERLAY
+   ============================================================ */
+
+.organizer-event-details-page
+.event-hero-image-wrapper::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(7, 9, 20, 0.02) 0%,
+      rgba(7, 9, 20, 0.03) 45%,
+      rgba(7, 9, 20, 0.48) 100%
+    ) !important;
+}
+
+
+/* ============================================================
+   IMAGE HOVER
+   ============================================================ */
+
+.organizer-event-details-page
+.event-image-hover {
+  position: absolute !important;
+
+  inset: 0 !important;
+
+  z-index: 4 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  opacity: 0 !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(7, 9, 20, 0.08),
+      rgba(7, 9, 20, 0.58)
+    ) !important;
+
+  transition:
+    opacity 0.25s ease !important;
+
+  pointer-events: none !important;
+}
+
+.organizer-event-details-page
+.event-hero-image-wrapper:hover
+.event-image-hover {
+  opacity: 1 !important;
+}
+
+
+/* ============================================================
+   VIEW FULL IMAGE BUTTON
+   ============================================================ */
+
+.organizer-event-details-page
+.event-image-view-button {
+  display: inline-flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 7px !important;
+
+  padding: 9px 15px !important;
+
+  color: #FFF8ED !important;
+
+  background:
+    rgba(11, 18, 48, 0.78) !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.30) !important;
+
+  border-radius: 999px !important;
+
+  font-size: 10px !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.1px !important;
+
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.25) !important;
+
+  transform: translateY(8px) !important;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease !important;
+}
+
+.organizer-event-details-page
+.event-hero-image-wrapper:hover
+.event-image-view-button {
+  transform: translateY(0) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(109, 40, 217, 0.92),
+      rgba(236, 72, 153, 0.92)
+    ) !important;
+}
+
+
+/* ============================================================
+   IMAGE VIEW ICON
+   ============================================================ */
+
+.organizer-event-details-page
+.image-view-icon {
+  width: 20px !important;
+  height: 20px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  color: #FFF8ED !important;
+
+  font-size: 15px !important;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.65) !important;
+
+  border-radius: 50% !important;
+}
+
+
+/* ============================================================
+   HERO BADGES
+   ============================================================ */
+
+.organizer-event-details-page .hero-category,
+.organizer-event-details-page .hero-status {
+  position: absolute !important;
+
+  bottom: 10px !important;
+
+  z-index: 5 !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  display: inline-flex !important;
+
+  align-items: center !important;
+
+  gap: 5px !important;
+
+  padding: 6px 11px !important;
+
+  border-radius: 999px !important;
+
+  font-size: 10px !important;
+  line-height: 1 !important;
+  font-weight: 750 !important;
+
+  box-sizing: border-box !important;
+}
+
+.organizer-event-details-page .hero-category {
+  left: 10px !important;
+
+  color: var(--event-cream) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--event-red),
+      var(--event-purple-dark),
+      var(--event-pink)
+    ) !important;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.18) !important;
+
+  box-shadow:
+    0 5px 16px rgba(7, 9, 20, 0.18) !important;
+}
+
+.organizer-event-details-page .hero-status {
+  right: 10px !important;
+
+  color: #16734e !important;
+
+  background:
+    rgba(255, 255, 255, 0.95) !important;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.80) !important;
+
+  box-shadow:
+    0 5px 16px rgba(7, 9, 20, 0.14) !important;
+}
+
+
+/* ============================================================
+   TITLE
+   ============================================================ */
+
+.organizer-event-details-page .event-title-section {
+  width: 100% !important;
+
+  display: block !important;
+
+  margin: 0 0 21px !important;
+  padding: 0 !important;
+
+  text-align: center !important;
+}
+
+.organizer-event-details-page .event-details-label {
+  display: block !important;
+
+  margin: 0 0 5px !important;
+
+  color: var(--event-purple-dark) !important;
+
+  font-size: 9px !important;
+  line-height: 1.2 !important;
+
+  font-weight: 800 !important;
+
+  letter-spacing: 1.8px !important;
+}
+
+.organizer-event-details-page
+.event-title-section h1 {
+  width: 100% !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  color: var(--event-navy) !important;
+
+  font-size: 25px !important;
+  line-height: 1.25 !important;
+
+  font-weight: 800 !important;
+
+  letter-spacing: -0.4px !important;
+
+  text-align: center !important;
+}
+
+.organizer-event-details-page
+.title-gradient-line {
+  width: 65px !important;
+  height: 4px !important;
+
+  margin: 8px auto 0 !important;
+
+  border-radius: 999px !important;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--event-red),
+      var(--event-purple),
+      var(--event-pink)
+    ) !important;
+
+  box-shadow:
+    0 0 12px rgba(236, 72, 153, 0.18) !important;
+}
+
+
+/* ============================================================
+   ABOUT EVENT
+   ============================================================ */
+
+.organizer-event-details-page .about-event-card {
+  width: 100% !important;
+
+  display: flex !important;
+  align-items: flex-start !important;
+
+  gap: 12px !important;
+
+  margin: 0 0 19px !important;
+
+  padding: 14px 16px !important;
+
+  box-sizing: border-box !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 248, 237, 0.82),
+      rgba(255, 255, 255, 0.88)
+    ) !important;
+
+  border:
+    1px solid rgba(221, 216, 225, 0.95) !important;
+
+  border-left:
+    4px solid var(--event-purple-dark) !important;
+
+  border-radius: 10px !important;
+
+  box-shadow:
+    0 8px 22px rgba(11, 18, 48, 0.045) !important;
+
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+
+  cursor: pointer !important;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease !important;
+}
+
+.organizer-event-details-page
+.about-event-card:hover {
+  transform: translateY(-2px) !important;
+
+  border-left-color:
+    var(--event-pink) !important;
+
+  box-shadow:
+    0 10px 28px rgba(11, 18, 48, 0.08) !important;
+}
+
+.organizer-event-details-page .about-icon {
+  width: 36px !important;
+  height: 36px !important;
+
+  min-width: 36px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  color: var(--event-purple-dark) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.12),
+      rgba(236, 72, 153, 0.08)
+    ) !important;
+
+  border:
+    1px solid rgba(139, 92, 246, 0.13) !important;
+
+  border-radius: 50% !important;
+}
+
+.organizer-event-details-page .about-content {
+  flex: 1 !important;
+
+  min-width: 0 !important;
+}
+
+.organizer-event-details-page
+.about-content h2 {
+  margin: 1px 0 5px !important;
+
+  color: var(--event-navy) !important;
+
+  font-size: 13px !important;
+  line-height: 1.3 !important;
+
+  font-weight: 800 !important;
+}
+
+.organizer-event-details-page
+.about-content p {
+  margin: 0 !important;
+
+  color: var(--event-muted) !important;
+
+  font-size: 10.5px !important;
+  line-height: 1.55 !important;
+}
+
+.organizer-event-details-page
+.character-note {
+  display: block !important;
+
+  margin-top: 5px !important;
+
+  color: #7B8495 !important;
+
+  font-size: 8px !important;
+}
+
+.organizer-event-details-page
+.description-toggle-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-top: 7px !important;
+  padding: 7px 12px !important;
+  border: 1px solid rgba(109, 40, 217, 0.22) !important;
+  border-radius: 999px !important;
+  color: var(--event-purple-dark) !important;
+  background: rgba(139, 92, 246, 0.07) !important;
+  font-family: inherit !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+  font-weight: 750 !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease !important;
+}
+
+.organizer-event-details-page
+.description-toggle-button:hover {
+  color: var(--event-cream) !important;
+  border-color: var(--event-purple) !important;
+  background: linear-gradient(135deg, var(--event-purple-dark), var(--event-pink)) !important;
+  transform: translateY(-1px) !important;
+}
+
+.organizer-event-details-page
+.description-collapsed {
+  max-width: 100% !important;
+}
+
+.organizer-event-details-page
+.description-expanded {
+  white-space: pre-wrap !important;
+}
+
+
+/* ============================================================
+   SECTION HEADINGS
+   ============================================================ */
+
+.organizer-event-details-page .details-section {
+  width: 100% !important;
+
+  margin: 0 0 18px !important;
+
+  padding: 0 !important;
+}
+
+.organizer-event-details-page
+.section-title-row {
+  width: 100% !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  gap: 9px !important;
+
+  margin: 0 0 8px !important;
+
+  padding: 0 !important;
+
+  text-align: left !important;
+}
+
+.organizer-event-details-page
+.section-title-left {
+  display: flex !important;
+
+  align-items: center !important;
+
+  gap: 7px !important;
+
+  flex-shrink: 0 !important;
+
+  color: var(--event-purple-dark) !important;
+}
+
+.organizer-event-details-page
+.section-title-left h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+
+  color: var(--event-navy) !important;
+
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+
+  font-weight: 800 !important;
+
+  text-align: left !important;
+}
+
+.organizer-event-details-page
+.section-title-line {
+  width: 38px !important;
+  height: 2px !important;
+
+  flex-shrink: 0 !important;
+
+  margin: 0 !important;
+
+  border-radius: 999px !important;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--event-red),
+      var(--event-purple),
+      var(--event-pink)
+    ) !important;
+}
+
+
+/* ============================================================
+   EVENT INFORMATION
+   ============================================================ */
+
+.organizer-event-details-page
+.event-information-card {
+  width: 100% !important;
+
+  display: grid !important;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr)) !important;
+
+  gap: 8px !important;
+
+  margin: 0 !important;
+
+  padding: 7px !important;
+
+  box-sizing: border-box !important;
+
+  background:
+    rgba(255, 255, 255, 0.60) !important;
+
+  border:
+    1px solid rgba(221, 216, 225, 0.95) !important;
+
+  border-radius: 10px !important;
+
+  box-shadow:
+    0 6px 18px rgba(11, 18, 48, 0.035) !important;
+}
+
+.organizer-event-details-page
+.information-item {
+  width: auto !important;
+
+  min-width: 0 !important;
+  min-height: 63px !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  gap: 9px !important;
+
+  margin: 0 !important;
+
+  padding: 9px 10px !important;
+
+  box-sizing: border-box !important;
+
+  background:
+    rgba(255, 255, 255, 0.92) !important;
+
+  border:
+    1px solid rgba(221, 216, 225, 0.78) !important;
+
+  border-radius: 8px !important;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease !important;
+}
+
+.organizer-event-details-page
+.information-item:hover {
+  transform: translateY(-2px) !important;
+
+  border-color:
+    rgba(139, 92, 246, 0.28) !important;
+
+  box-shadow:
+    0 7px 17px rgba(11, 18, 48, 0.07) !important;
+}
+
+.organizer-event-details-page
+.information-icon {
+  width: 33px !important;
+  height: 33px !important;
+
+  min-width: 33px !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: 50% !important;
+}
+
+.organizer-event-details-page
+.information-item > div:last-child {
+  min-width: 0 !important;
+
+  flex: 1 !important;
+}
+
+.organizer-event-details-page
+.information-item span {
+  display: block !important;
+
+  margin: 0 0 3px !important;
+
+  color: #727C8E !important;
+
+  font-size: 8.5px !important;
+  line-height: 1.2 !important;
+}
+
+.organizer-event-details-page
+.information-item strong {
+  display: block !important;
+
+  margin: 0 !important;
+
+  color: var(--event-navy) !important;
+
+  font-size: 9.5px !important;
+  line-height: 1.35 !important;
+
+  font-weight: 700 !important;
+
+  overflow-wrap: anywhere !important;
+}
+
+
+/* ============================================================
+   INFORMATION ICON COLORS
+   ============================================================ */
+
+.organizer-event-details-page
+.information-icon.purple {
+  color: var(--event-purple-dark) !important;
+
+  background:
+    rgba(139, 92, 246, 0.12) !important;
+}
+
+.organizer-event-details-page
+.information-icon.pink {
+  color: var(--event-pink) !important;
+
+  background:
+    rgba(236, 72, 153, 0.12) !important;
+}
+
+.organizer-event-details-page
+.information-icon.blue {
+  color: var(--event-blue) !important;
+
+  background:
+    rgba(37, 99, 235, 0.11) !important;
+}
+
+.organizer-event-details-page
+.information-icon.violet {
+  color: var(--event-purple) !important;
+
+  background:
+    rgba(109, 40, 217, 0.11) !important;
+}
+
+.organizer-event-details-page
+.information-icon.green {
+  color: #15845F !important;
+
+  background:
+    rgba(22, 163, 116, 0.11) !important;
+}
+
+
+/* ============================================================
+   ORGANIZER
+   ============================================================ */
+
+.organizer-event-details-page
+.organizer-information-card {
+  width: 100% !important;
+
+  min-height: 69px !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  gap: 12px !important;
+
+  margin: 0 !important;
+
+  padding: 10px 14px !important;
+
+  box-sizing: border-box !important;
+
+  background:
+    linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0.96),
+      rgba(255, 255, 255, 0.90) 72%,
+      rgba(139, 92, 246, 0.08)
+    ) !important;
+
+  border:
+    1px solid rgba(221, 216, 225, 0.95) !important;
+
+  border-radius: 10px !important;
+
+  box-shadow:
+    0 7px 18px rgba(11, 18, 48, 0.045) !important;
+}
+
+.organizer-event-details-page
+.organizer-avatar {
+  width: 46px !important;
+  height: 46px !important;
+
+  min-width: 46px !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  margin: 0 !important;
+
+  color: var(--event-cream) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--event-navy),
+      var(--event-purple-dark)
+    ) !important;
+
+  border-radius: 50% !important;
+
+  font-size: 15px !important;
+  line-height: 1 !important;
+
+  font-weight: 800 !important;
+
+  box-shadow:
+    0 5px 16px rgba(11, 18, 48, 0.16) !important;
+}
+
+.organizer-event-details-page
+.organizer-details {
+  min-width: 0 !important;
+
+  flex: 1 !important;
+}
+
+.organizer-event-details-page
+.organizer-details h3 {
+  margin: 0 0 2px !important;
+
+  color: var(--event-navy) !important;
+
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+
+  font-weight: 800 !important;
+}
+
+.organizer-event-details-page
+.organizer-details p {
+  margin: 0 0 4px !important;
+
+  color: #737D90 !important;
+
+  font-size: 8.5px !important;
+  line-height: 1.3 !important;
+}
+
+.organizer-event-details-page
+.organizer-phone {
+  display: flex !important;
+
+  align-items: center !important;
+
+  gap: 5px !important;
+
+  color: var(--event-muted) !important;
+
+  font-size: 8.5px !important;
+}
+
+.organizer-event-details-page
+.organizer-phone svg {
+  color: var(--event-purple-dark) !important;
+}
+
+.organizer-event-details-page
+.organizer-decoration {
+  margin-left: auto !important;
+
+  padding-right: 10px !important;
+
+  display: flex !important;
+
+  flex-direction: column !important;
+
+  align-items: center !important;
+
+  color: var(--event-purple-dark) !important;
+
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+
+  font-style: italic !important;
+
+  font-weight: 700 !important;
+
+  transform: rotate(-5deg) !important;
+}
+
+
+/* ============================================================
+   DEADLINE
+   ============================================================ */
+
+.organizer-event-details-page
+.deadline-card {
+  width: 100% !important;
+
+  min-height: 58px !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  gap: 11px !important;
+
+  margin: 0 0 17px !important;
+
+  padding: 9px 14px !important;
+
+  box-sizing: border-box !important;
+
+  color: var(--event-cream) !important;
+
+  background:
+    linear-gradient(
+      105deg,
+      var(--event-navy),
+      var(--event-deep-blue) 35%,
+      var(--event-purple-dark) 70%,
+      var(--event-pink)
+    ) !important;
+
+  border:
+    1px solid rgba(139, 92, 246, 0.32) !important;
+
+  border-radius: 10px !important;
+
+  box-shadow:
+    0 10px 25px rgba(11, 18, 48, 0.18),
+    0 0 25px rgba(139, 92, 246, 0.10) !important;
+
+  position: relative !important;
+
+  overflow: hidden !important;
+}
+
+.organizer-event-details-page
+.deadline-card::after {
+  content: "";
+
+  position: absolute;
+
+  width: 150px;
+  height: 150px;
+
+  right: 70px;
+  top: -75px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(236, 72, 153, 0.10) !important;
+
+  pointer-events: none !important;
+}
+
+.organizer-event-details-page
+.deadline-icon {
+  width: 36px !important;
+  height: 36px !important;
+
+  min-width: 36px !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  background:
+    rgba(255, 255, 255, 0.12) !important;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.12) !important;
+
+  border-radius: 50% !important;
+
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.organizer-event-details-page
+.deadline-content {
+  display: flex !important;
+
+  flex-direction: column !important;
+
+  gap: 2px !important;
+
+  position: relative !important;
+
+  z-index: 2 !important;
+}
+
+.organizer-event-details-page
+.deadline-content span {
+  margin: 0 !important;
+
+  color:
+    rgba(255, 248, 237, 0.86) !important;
+
+  font-size: 8.5px !important;
+  line-height: 1.2 !important;
+}
+
+.organizer-event-details-page
+.deadline-content strong {
+  margin: 0 !important;
+
+  color: var(--event-cream) !important;
+
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+}
+
+.organizer-event-details-page
+.deadline-right {
+  margin-left: auto !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  gap: 5px !important;
+
+  color:
+    rgba(255, 248, 237, 0.92) !important;
+
+  font-size: 8.5px !important;
+
+  white-space: nowrap !important;
+
+  position: relative !important;
+
+  z-index: 2 !important;
+}
+
+
+/* ============================================================
+   REGISTRATION PROGRESS
+   ============================================================ */
+
+.organizer-event-details-page
+.registration-section {
+  margin-bottom: 12px !important;
+}
+
+.organizer-event-details-page
+.registration-progress-card {
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding: 11px 14px !important;
+
+  box-sizing: border-box !important;
+
+  background:
+    rgba(255, 255, 255, 0.82) !important;
+
+  border:
+    1px solid rgba(221, 216, 225, 0.95) !important;
+
+  border-radius: 10px !important;
+
+  box-shadow:
+    0 6px 17px rgba(11, 18, 48, 0.035) !important;
+}
+
+.organizer-event-details-page
+.progress-top {
+  width: 100% !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: space-between !important;
+
+  margin: 0 0 6px !important;
+
+  padding: 0 !important;
+
+  color: var(--event-muted) !important;
+
+  font-size: 9px !important;
+
+  line-height: 1.2 !important;
+}
+
+.organizer-event-details-page
+.progress-top strong {
+  color: var(--event-navy) !important;
+}
+
+.organizer-event-details-page
+.progress-track {
+  width: 100% !important;
+
+  height: 6px !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  overflow: hidden !important;
+
+  background: #DDDCE5 !important;
+
+  border-radius: 999px !important;
+}
+
+.organizer-event-details-page
+.progress-fill {
+  height: 100% !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border-radius: 999px !important;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--event-red),
+      var(--event-purple),
+      var(--event-pink)
+    ) !important;
+
+  box-shadow:
+    0 0 10px rgba(236, 72, 153, 0.22) !important;
+
+  transition:
+    width 0.5s ease !important;
+}
+
+
+/* ============================================================
+   REGISTER BUTTON
+   ============================================================ */
+
+.organizer-event-details-page
+.register-event-wrapper {
+  width: 100% !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+}
+
+.organizer-event-details-page
+.register-event-button {
+  width: auto !important;
+
+  min-width: 210px !important;
+
+  height: auto !important;
+
+  display: inline-flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  gap: 7px !important;
+
+  margin: 0 !important;
+
+  padding: 10px 17px !important;
+
+  border:
+    1px solid rgba(11, 18, 48, 0.12) !important;
+
+  border-radius: 999px !important;
+
+  color: var(--event-cream) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--event-navy),
+      var(--event-purple-dark),
+      var(--event-pink)
+    ) !important;
+
+  font-family: inherit !important;
+
+  font-size: 10px !important;
+
+  line-height: 1 !important;
+
+  font-weight: 800 !important;
+
+  cursor: pointer !important;
+
+  box-shadow:
+    0 9px 24px rgba(11, 18, 48, 0.18),
+    0 0 20px rgba(139, 92, 246, 0.12) !important;
+
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease !important;
+}
+
+.organizer-event-details-page
+.register-event-button:hover {
+  transform: translateY(-3px) !important;
+
+  border-color: var(--event-pink) !important;
+
+  box-shadow:
+    0 12px 28px rgba(11, 18, 48, 0.22),
+    0 0 25px rgba(139, 92, 246, 0.28),
+    0 0 45px rgba(236, 72, 153, 0.12) !important;
+}
+
+.organizer-event-details-page
+.register-arrow {
+  font-size: 15px !important;
+  line-height: 1 !important;
+}
+
+
+/* ============================================================
+   FULL IMAGE MODAL
+   ============================================================ */
+
+.organizer-event-details-page
+.event-image-modal {
+  position: fixed !important;
+
+  inset: 0 !important;
+
+  z-index: 99999 !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  padding: 25px !important;
+
+  box-sizing: border-box !important;
+
+  background:
+    rgba(7, 9, 20, 0.90) !important;
+
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+
+  overflow: auto !important;
+
+  animation:
+    eventImageModalIn 0.22s ease !important;
+}
+
+.organizer-event-details-page
+.event-image-modal-content {
+  position: relative !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  max-width: 95vw !important;
+  max-height: 95vh !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  margin: auto !important;
+}
+
+.organizer-event-details-page
+.event-full-image {
+  display: block !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  max-width: 92vw !important;
+  max-height: 88vh !important;
+
+  object-fit: contain !important;
+
+  border-radius: 10px !important;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.20) !important;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.60) !important;
+}
+
+.organizer-event-details-page
+.event-image-close {
+  position: absolute !important;
+
+  top: -14px !important;
+  right: -14px !important;
+
+  z-index: 20 !important;
+
+  width: 34px !important;
+  height: 34px !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 0 !important;
+
+  color: #FFF8ED !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6D28D9,
+      #EC4899
+    ) !important;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.35) !important;
+
+  border-radius: 50% !important;
+
+  font-family: inherit !important;
+
+  font-size: 23px !important;
+
+  line-height: 1 !important;
+
+  cursor: pointer !important;
+
+  box-shadow:
+    0 7px 20px rgba(0, 0, 0, 0.40) !important;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease !important;
+}
+
+.organizer-event-details-page
+.event-image-close:hover {
+  transform:
+    rotate(90deg) scale(1.08) !important;
+
+  box-shadow:
+    0 8px 25px rgba(236, 72, 153, 0.40) !important;
+}
+
+
+/* ============================================================
+   MODAL ANIMATION
+   ============================================================ */
+
+@keyframes eventImageModalIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+
+.organizer-event-details-page
+.event-details-loading {
+  min-height: 65vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: var(--event-muted);
+
+  font-size: 12px;
+}
+
+.organizer-event-details-page
+.loading-spinner {
+  width: 29px;
+  height: 29px;
+
+  margin-bottom: 10px;
+
+  border:
+    3px solid rgba(139, 92, 246, 0.16);
+
+  border-top-color:
+    var(--event-purple);
+
+  border-right-color:
+    var(--event-pink);
+
+  border-radius: 50%;
+
+  animation:
+    eventHubSpin 0.8s linear infinite;
+}
+
+@keyframes eventHubSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* ============================================================
+   ERROR
+   ============================================================ */
+
+.organizer-event-details-page
+.event-details-error {
+  width: min(400px, calc(100% - 30px));
+
+  min-height: 55vh;
+
+  margin: auto;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+}
+
+.organizer-event-details-page
+.event-details-error svg {
+  color: var(--event-purple);
+
+  margin-bottom: 9px;
+}
+
+.organizer-event-details-page
+.event-details-error h2 {
+  margin: 0 0 5px;
+
+  color: var(--event-navy);
+
+  font-size: 19px;
+}
+
+.organizer-event-details-page
+.event-details-error p {
+  margin: 0 0 14px;
+
+  color: var(--event-muted);
+
+  font-size: 11px;
+}
+
+.organizer-event-details-page
+.back-events-btn {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 8px 13px;
+
+  border-radius: 999px;
+
+  color: var(--event-cream);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--event-navy),
+      var(--event-purple-dark),
+      var(--event-pink)
+    );
+
+  text-decoration: none;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+  .organizer-event-details-page {
+    padding-top: 18px !important;
+  }
+
+  .organizer-event-details-page
+  .event-details-wrapper,
+
+  .organizer-event-details-page
+  .event-details-main {
+    width: calc(100% - 24px) !important;
+
+    max-width: none !important;
+  }
+
+  .organizer-event-details-page
+  .event-hero-image-wrapper {
+    height: 220px !important;
+  }
+
+  .organizer-event-details-page
+  .event-information-card {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .organizer-event-details-page
+  .organizer-decoration {
+    display: none !important;
+  }
+}
+
+
+@media (max-width: 450px) {
+
+  .organizer-event-details-page
+  .event-hero-image-wrapper {
+    height: 185px !important;
+  }
+
+  .organizer-event-details-page
+  .event-title-section h1 {
+    font-size: 21px !important;
+  }
+
+  .organizer-event-details-page
+  .event-information-card {
+    grid-template-columns: 1fr !important;
+  }
+
+  .organizer-event-details-page
+  .deadline-right {
+    display: none !important;
+  }
+
+  .organizer-event-details-page
+  .register-event-button {
+    width: 100% !important;
+
+    max-width: 250px !important;
+  }
+
+  .organizer-event-details-page
+  .event-image-modal {
+    padding: 15px !important;
+  }
+
+  .organizer-event-details-page
+  .event-full-image {
+    max-width: 94vw !important;
+    max-height: 88vh !important;
+
+    border-radius: 7px !important;
+  }
+
+  .organizer-event-details-page
+  .event-image-close {
+    top: -10px !important;
+    right: -5px !important;
+
+    width: 31px !important;
+    height: 31px !important;
+
+    font-size: 20px !important;
+  }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .organizer-event-details-page *,
+  .organizer-event-details-page *::before,
+  .organizer-event-details-page *::after {
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+  }
+}
+/* ============================================================
+   FINAL WORKING FIX
+   IMAGE MODAL + ABOUT EVENT DESCRIPTION
+   ============================================================ */
+
+/* ============================================================
+   HERO IMAGE
+   ============================================================ */
+
+.organizer-event-details-page
+.event-hero-image-wrapper {
+  position: relative !important;
+  cursor: zoom-in !important;
+  overflow: hidden !important;
+  z-index: 1 !important;
+}
+
+.organizer-event-details-page
+.event-hero-image-wrapper:focus-visible {
+  outline: 3px solid var(--event-purple, #8b5cf6) !important;
+  outline-offset: 3px !important;
+}
+
+.organizer-event-details-page
+.event-hero-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  cursor: zoom-in !important;
+}
+
+/* ============================================================
+   IMAGE HOVER
+   ============================================================ */
+
+.organizer-event-details-page
+.event-image-hover {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 5 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: rgba(7, 9, 20, 0.35) !important;
+
+  opacity: 0 !important;
+
+  pointer-events: none !important;
+
+  transition:
+    opacity 0.25s ease,
+    background 0.25s ease !important;
+}
+
+.organizer-event-details-page
+.event-hero-image-wrapper:hover
+.event-image-hover {
+  opacity: 1 !important;
+  background: rgba(7, 9, 20, 0.48) !important;
+}
+
+.organizer-event-details-page
+.event-image-view-button {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+
+  padding: 9px 14px !important;
+
+  border-radius: 999px !important;
+
+  color: #ffffff !important;
+
+  background: rgba(255, 255, 255, 0.16) !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+
+  font-size: 10px !important;
+  font-weight: 700 !important;
+}
+
+.organizer-event-details-page
+.image-view-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* ============================================================
+   FULL IMAGE MODAL
+   ============================================================ */
+
+.organizer-event-details-page
+.event-image-modal {
+  position: fixed !important;
+
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+
+  width: 100vw !important;
+  height: 100vh !important;
+
+  z-index: 2147483647 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 25px !important;
+
+  box-sizing: border-box !important;
+
+  background: rgba(5, 7, 18, 0.95) !important;
+
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+
+  overflow: auto !important;
+
+  animation: eventImageModalIn 0.2s ease-out !important;
+}
+
+@keyframes eventImageModalIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   MODAL CONTENT
+   ============================================================ */
+
+.organizer-event-details-page
+.event-image-modal-content {
+  position: relative !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  max-width: 96vw !important;
+  max-height: 96vh !important;
+
+  margin: auto !important;
+
+  box-sizing: border-box !important;
+}
+
+/* ============================================================
+   FULL ORIGINAL IMAGE
+   ============================================================ */
+
+.organizer-event-details-page
+.event-full-image {
+  display: block !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  max-width: 92vw !important;
+  max-height: 90vh !important;
+
+  object-fit: contain !important;
+
+  border-radius: 10px !important;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.55) !important;
+
+  animation: fullImageIn 0.2s ease-out !important;
+}
+
+@keyframes fullImageIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   CLOSE BUTTON
+   ============================================================ */
+
+.organizer-event-details-page
+.event-image-close {
+  position: absolute !important;
+
+  top: -16px !important;
+  right: -16px !important;
+
+  z-index: 20 !important;
+
+  width: 38px !important;
+  height: 38px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 0 !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+
+  border-radius: 50% !important;
+
+  color: #ffffff !important;
+
+  background: rgba(15, 17, 30, 0.95) !important;
+
+  cursor: pointer !important;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease !important;
+}
+
+.organizer-event-details-page
+.event-image-close:hover {
+  transform: scale(1.08) !important;
+
+  background: #6d28d9 !important;
+}
+
+.organizer-event-details-page
+.event-image-close:focus-visible {
+  outline: 2px solid #ffffff !important;
+  outline-offset: 3px !important;
+}
+
+/* ============================================================
+   ABOUT THIS EVENT CARD
+   ============================================================ */
+
+.organizer-event-details-page
+.about-event-card {
+  position: relative !important;
+
+  cursor: pointer !important;
+
+  user-select: none !important;
+
+  -webkit-user-select: none !important;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease !important;
+}
+
+.organizer-event-details-page
+.about-event-card:hover {
+  transform: translateY(-1px) !important;
+}
+
+.organizer-event-details-page
+.about-event-card:focus-visible {
+  outline: 3px solid var(--event-purple, #8b5cf6) !important;
+  outline-offset: 3px !important;
+}
+
+/* ============================================================
+   ABOUT CONTENT
+   ============================================================ */
+
+.organizer-event-details-page
+.about-event-card
+.about-content {
+  min-width: 0 !important;
+  flex: 1 !important;
+}
+
+/* ============================================================
+   ABOUT HEADING
+   ============================================================ */
+
+.organizer-event-details-page
+.about-event-card
+.about-content
+h2 {
+  display: block !important;
+
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ============================================================
+   DESCRIPTION
+   ============================================================ */
+
+.organizer-event-details-page
+.about-event-card
+.about-content
+p {
+  display: block !important;
+
+  visibility: visible !important;
+
+  opacity: 1 !important;
+
+  width: 100% !important;
+
+  height: auto !important;
+
+  min-height: 20px !important;
+
+  margin: 0 !important;
+
+  padding: 0 !important;
+
+  overflow: visible !important;
+
+  color: var(--event-muted, #64748b) !important;
+
+  font-family: inherit !important;
+
+  font-size: 11px !important;
+
+  line-height: 1.65 !important;
+
+  font-weight: 500 !important;
+
+  text-align: left !important;
+}
+
+/* ============================================================
+   COLLAPSED DESCRIPTION
+   ============================================================ */
+
+.organizer-event-details-page
+.about-event-card
+.description-collapsed {
+  display: block !important;
+
+  max-width: 100% !important;
+
+  white-space: normal !important;
+
+  overflow: visible !important;
+
+  text-overflow: clip !important;
+
+  word-break: normal !important;
+
+  overflow-wrap: anywhere !important;
+}
+
+/* ============================================================
+   EXPANDED DESCRIPTION
+   ============================================================ */
+
+.organizer-event-details-page
+.about-event-card
+.description-expanded {
+  display: block !important;
+
+  max-width: 100% !important;
+
+  white-space: pre-wrap !important;
+
+  overflow: visible !important;
+
+  word-break: normal !important;
+
+  overflow-wrap: anywhere !important;
+}
+
+/* ============================================================
+   READ MORE / SHOW LESS
+   ============================================================ */
+
+.organizer-event-details-page
+.description-toggle-button {
+  display: inline-flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  margin-top: 9px !important;
+
+  padding: 7px 13px !important;
+
+  border: 1px solid rgba(109, 40, 217, 0.25) !important;
+
+  border-radius: 999px !important;
+
+  color: #6d28d9 !important;
+
+  background: rgba(109, 40, 217, 0.07) !important;
+
+  font-family: inherit !important;
+
+  font-size: 10px !important;
+
+  line-height: 1 !important;
+
+  font-weight: 750 !important;
+
+  cursor: pointer !important;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease !important;
+}
+
+.organizer-event-details-page
+.description-toggle-button:hover {
+  color: #ffffff !important;
+
+  background: linear-gradient(
+    135deg,
+    #6d28d9,
+    #ec4899
+  ) !important;
+
+  border-color: #6d28d9 !important;
+
+  transform: translateY(-1px) !important;
+}
+
+.organizer-event-details-page
+.description-toggle-button:focus-visible {
+  outline: 2px solid #8b5cf6 !important;
+
+  outline-offset: 2px !important;
+}
+
+/* ============================================================
+   CHARACTER NOTE
+   ============================================================ */
+
+.organizer-event-details-page
+.character-note {
+  display: block !important;
+
+  margin-top: 7px !important;
+
+  color: #94a3b8 !important;
+
+  font-size: 9px !important;
+
+  line-height: 1.4 !important;
+
+  font-style: italic !important;
+
+  font-weight: 500 !important;
+}
+
+/* ============================================================
+   EXPANDED CARD
+   ============================================================ */
+
+.organizer-event-details-page
+.about-event-card.is-expanded {
+  cursor: pointer !important;
+}
+
+.organizer-event-details-page
+.about-event-card.is-expanded
+.description-toggle-button {
+  color: #6d28d9 !important;
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+  .organizer-event-details-page
+  .event-image-modal {
+    padding: 15px !important;
+  }
+
+  .organizer-event-details-page
+  .event-full-image {
+    max-width: 94vw !important;
+    max-height: 88vh !important;
+
+    border-radius: 8px !important;
+  }
+
+  .organizer-event-details-page
+  .event-image-close {
+    top: -10px !important;
+    right: -7px !important;
+
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .organizer-event-details-page
+  .about-event-card
+  .about-content
+  p {
+    font-size: 10.5px !important;
+  }
+}
+/* ============================================================
+   FINAL MODIFICATION
+   IMAGE FULL VIEW + ABOUT DESCRIPTION
+   KEEP ALL PREVIOUS STYLES UNCHANGED
+   ============================================================ */
+
+
+/* ============================================================
+   HERO IMAGE - CLICK / HOVER
+   ============================================================ */
+
+.organizer-event-details-page .event-hero-image-wrapper {
+  position: relative !important;
+  cursor: zoom-in !important;
+  overflow: hidden !important;
+  z-index: 1 !important;
+}
+
+.organizer-event-details-page .event-hero-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  cursor: zoom-in !important;
+}
+
+
+/* Image hover effect */
+
+.organizer-event-details-page
+.event-hero-image-wrapper:hover
+.event-hero-image {
+  transform: scale(1.025) !important;
+  filter: brightness(0.92) saturate(1.05) !important;
+}
+
+
+/* ============================================================
+   IMAGE HOVER OVERLAY
+   ============================================================ */
+
+.organizer-event-details-page .event-image-hover {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 5 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  opacity: 0 !important;
+  pointer-events: none !important;
+
+  background: rgba(7, 9, 20, 0.42) !important;
+
+  transition: opacity 0.25s ease !important;
+}
+
+
+/* IMPORTANT: real :hover selector */
+
+.organizer-event-details-page
+.event-hero-image-wrapper:hover
+.event-image-hover {
+  opacity: 1 !important;
+}
+
+
+/* ============================================================
+   VIEW FULL IMAGE BUTTON
+   ============================================================ */
+
+.organizer-event-details-page .event-image-view-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 7px !important;
+
+  padding: 9px 14px !important;
+
+  color: #ffffff !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6d28d9,
+      #ec4899
+    ) !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border-radius: 999px !important;
+
+  font-size: 10px !important;
+  font-weight: 700 !important;
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.25) !important;
+
+  transform: translateY(8px) !important;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease !important;
+}
+
+
+.organizer-event-details-page
+.event-hero-image-wrapper:hover
+.event-image-view-button {
+  transform: translateY(0) !important;
+}
+
+
+/* ============================================================
+   FULL IMAGE MODAL
+   ============================================================ */
+
+.organizer-event-details-page .event-image-modal {
+  position: fixed !important;
+
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+
+  width: 100vw !important;
+  height: 100vh !important;
+
+  z-index: 2147483647 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 20px !important;
+
+  box-sizing: border-box !important;
+
+  background: rgba(5, 7, 18, 0.95) !important;
+
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+
+  overflow: auto !important;
+
+  animation: eventImageModalIn 0.2s ease-out !important;
+}
+
+
+/* ============================================================
+   MODAL CONTENT
+   ============================================================ */
+
+.organizer-event-details-page .event-image-modal-content {
+  position: relative !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  max-width: 96vw !important;
+  max-height: 96vh !important;
+
+  margin: auto !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   FULL IMAGE
+   ============================================================ */
+
+.organizer-event-details-page .event-full-image {
+  display: block !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  max-width: 92vw !important;
+  max-height: 90vh !important;
+
+  object-fit: contain !important;
+
+  border-radius: 10px !important;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.20) !important;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.60) !important;
+
+  animation: fullImageIn 0.2s ease-out !important;
+}
+
+
+/* ============================================================
+   CLOSE BUTTON
+   ============================================================ */
+
+.organizer-event-details-page .event-image-close {
+  position: absolute !important;
+
+  top: -15px !important;
+  right: -15px !important;
+
+  z-index: 20 !important;
+
+  width: 38px !important;
+  height: 38px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 0 !important;
+
+  color: #ffffff !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6d28d9,
+      #ec4899
+    ) !important;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.35) !important;
+
+  border-radius: 50% !important;
+
+  cursor: pointer !important;
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.40) !important;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease !important;
+}
+
+
+.organizer-event-details-page
+.event-image-close:hover {
+  transform: rotate(90deg) scale(1.08) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #ec4899
+    ) !important;
+}
+
+
+/* ============================================================
+   MODAL ANIMATIONS
+   ============================================================ */
+
+@keyframes eventImageModalIn {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+@keyframes fullImageIn {
+
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* ============================================================
+   ABOUT EVENT
+   ============================================================ */
+
+.organizer-event-details-page .about-event-card {
+  position: relative !important;
+
+  cursor: pointer !important;
+
+  user-select: none !important;
+  -webkit-user-select: none !important;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease !important;
+}
+
+
+.organizer-event-details-page
+.about-event-card:hover {
+  transform: translateY(-2px) !important;
+}
+
+
+/* ============================================================
+   ABOUT CONTENT
+   ============================================================ */
+
+.organizer-event-details-page
+.about-event-card
+.about-content {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+
+/* ============================================================
+   ABOUT DESCRIPTION
+   ============================================================ */
+
+.organizer-event-details-page
+.about-event-card
+.about-content
+p {
+  display: block !important;
+
+  visibility: visible !important;
+  opacity: 1 !important;
+
+  width: 100% !important;
+  height: auto !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow: visible !important;
+
+  color: var(--event-muted, #64748b) !important;
+
+  font-family: inherit !important;
+
+  font-size: 11px !important;
+  line-height: 1.65 !important;
+
+  font-weight: 500 !important;
+
+  text-align: left !important;
+}
+
+
+/* ============================================================
+   COLLAPSED DESCRIPTION
+   ============================================================ */
+
+.organizer-event-details-page
+.about-event-card
+.description-collapsed {
+  display: block !important;
+
+  max-width: 100% !important;
+
+  white-space: normal !important;
+
+  overflow: visible !important;
+
+  text-overflow: clip !important;
+
+  word-break: normal !important;
+
+  overflow-wrap: anywhere !important;
+}
+
+
+/* ============================================================
+   EXPANDED DESCRIPTION
+   ============================================================ */
+
+.organizer-event-details-page
+.about-event-card
+.description-expanded {
+  display: block !important;
+
+  max-width: 100% !important;
+
+  white-space: pre-wrap !important;
+
+  overflow: visible !important;
+
+  word-break: normal !important;
+
+  overflow-wrap: anywhere !important;
+}
+
+
+/* ============================================================
+   READ MORE / SHOW LESS
+   ============================================================ */
+
+.organizer-event-details-page
+.description-toggle-button {
+  display: inline-flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  margin-top: 9px !important;
+
+  padding: 7px 13px !important;
+
+  color: #6d28d9 !important;
+
+  background:
+    rgba(109, 40, 217, 0.07) !important;
+
+  border:
+    1px solid rgba(109, 40, 217, 0.25) !important;
+
+  border-radius: 999px !important;
+
+  font-family: inherit !important;
+
+  font-size: 10px !important;
+
+  line-height: 1 !important;
+
+  font-weight: 700 !important;
+
+  cursor: pointer !important;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease !important;
+}
+
+
+.organizer-event-details-page
+.description-toggle-button:hover {
+  color: #ffffff !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6d28d9,
+      #ec4899
+    ) !important;
+
+  border-color: #6d28d9 !important;
+
+  transform: translateY(-1px) !important;
+}
+
+
+/* ============================================================
+   CHARACTER NOTE
+   ============================================================ */
+
+.organizer-event-details-page
+.character-note {
+  display: block !important;
+
+  margin-top: 7px !important;
+
+  color: #94a3b8 !important;
+
+  font-size: 9px !important;
+
+  line-height: 1.4 !important;
+
+  font-style: italic !important;
+
+  font-weight: 500 !important;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+  .organizer-event-details-page
+  .event-image-modal {
+    padding: 15px !important;
+  }
+
+  .organizer-event-details-page
+  .event-full-image {
+    max-width: 94vw !important;
+    max-height: 88vh !important;
+
+    border-radius: 8px !important;
+  }
+
+  .organizer-event-details-page
+  .event-image-close {
+    top: -10px !important;
+    right: -7px !important;
+
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .organizer-event-details-page
+  .about-event-card
+  .about-content
+  p {
+    font-size: 10.5px !important;
+  }
+}

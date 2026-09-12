@@ -1,0 +1,204 @@
+/* =========================================================
+   EVENTHUB WEBSITE MESSAGE
+   ========================================================= */
+
+.website-message-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 10, 25, 0.58);
+  backdrop-filter: blur(5px);
+
+  animation: messageOverlayIn 0.2s ease;
+}
+
+/* =========================================================
+   MESSAGE BOX
+   ========================================================= */
+
+.website-message-box {
+  width: min(430px, 100%);
+
+  background: #17121a;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+
+  padding: 28px;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  animation: messageBoxIn 0.25s ease;
+}
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.website-message-icon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  margin-bottom: 16px;
+
+  font-size: 28px;
+  font-weight: 800;
+
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #ec4899
+  );
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.website-message-content h3 {
+  margin: 0 0 8px;
+
+  color: #ffffff;
+
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.website-message-content p {
+  margin: 0;
+
+  color: #cfc8d6;
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
+.website-message-button {
+  margin-top: 24px;
+
+  min-width: 100px;
+
+  border: none;
+  border-radius: 12px;
+
+  padding: 11px 24px;
+
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #ec4899
+  );
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.website-message-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 25px rgba(124, 58, 237, 0.35);
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.website-message-box.error .website-message-icon {
+  background: linear-gradient(
+    135deg,
+    #ef4444,
+    #f97316
+  );
+}
+
+/* =========================================================
+   WARNING
+   ========================================================= */
+
+.website-message-box.warning .website-message-icon {
+  background: linear-gradient(
+    135deg,
+    #f59e0b,
+    #f97316
+  );
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes messageOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes messageBoxIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 500px) {
+  .website-message-box {
+    padding: 24px 20px;
+    border-radius: 18px;
+  }
+
+  .website-message-content h3 {
+    font-size: 20px;
+  }
+
+  .website-message-content p {
+    font-size: 14px;
+  }
+}

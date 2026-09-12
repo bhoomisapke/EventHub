@@ -1,159 +1,243 @@
-/* =========================================================
+/* =========================================
    CREATE EVENT PAGE
-   EVENTHUB - CREAM + NAVY + PINK + PURPLE
-   ========================================================= */
+========================================= */
 
 .create-event-page {
-  min-height: 100vh;
-
-  padding: 45px 60px 70px;
+  position: relative;
+  min-height: calc(100vh - 76px);
+  overflow: hidden;
+  padding: 52px 5% 80px;
 
   background:
     radial-gradient(
-      circle at 90% 5%,
-      rgba(236, 72, 153, 0.09),
-      transparent 25%
+      circle at 7% 10%,
+      rgba(139, 92, 246, 0.09),
+      transparent 30%
     ),
     radial-gradient(
-      circle at 5% 50%,
-      rgba(139, 92, 246, 0.06),
-      transparent 25%
+      circle at 94% 30%,
+      rgba(236, 72, 153, 0.08),
+      transparent 28%
     ),
     #f7f3ee;
-
-  color: #10152c;
 }
 
 
-/* =========================================================
-   PAGE HEADER
-   ========================================================= */
+/* =========================================
+   DECORATIVE GLOW
+========================================= */
 
-.create-event-page .organizer-header {
-  max-width: 1050px;
+.create-event-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(5px);
+}
 
-  margin: 0 auto 28px;
+.create-glow-one {
+  width: 330px;
+  height: 330px;
+  top: 80px;
+  left: -190px;
+  background: rgba(109, 40, 217, 0.10);
+}
+
+.create-glow-two {
+  width: 380px;
+  height: 380px;
+  right: -220px;
+  bottom: 40px;
+  background: rgba(236, 72, 153, 0.09);
+}
+
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.create-event-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.create-event-header {
+  margin-bottom: 35px;
+}
+
+.create-event-heading {
+  max-width: 750px;
+}
+
+.create-event-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 13px;
+
+  color: #6d28d9;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.create-event-label svg {
+  color: #ec4899;
+}
+
+.create-event-heading h1 {
+  margin: 0;
+
+  color: #0b1230;
+
+  font-size: clamp(40px, 5vw, 58px);
+  line-height: 1;
+  letter-spacing: -2.5px;
+  font-weight: 800;
+}
+
+.create-event-heading h1 span {
+  background: linear-gradient(
+    90deg,
+    #6d28d9,
+    #8b5cf6,
+    #ec4899
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.create-event-heading p {
+  margin: 16px 0 0;
+
+  color: #697184;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.create-event-form {
+  overflow: hidden;
+
+  border: 1px solid rgba(221, 216, 225, 0.9);
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.88);
+
+  box-shadow:
+    0 20px 55px rgba(11, 18, 48, 0.08);
+
+  backdrop-filter: blur(14px);
+}
+
+
+/* =========================================
+   FORM SECTION
+========================================= */
+
+.create-form-section {
+  padding: 34px 36px;
+
+  border-bottom: 1px solid #ece8ed;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  margin-bottom: 28px;
+}
+
+.section-icon {
+  width: 44px;
+  height: 44px;
+
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
+  justify-content: center;
 
+  border-radius: 12px;
 
-.create-event-page .organizer-header h1 {
-  margin: 0;
-
-  color: #10152c !important;
-
-  font-size: 32px;
-  font-weight: 850;
-
-  letter-spacing: -0.8px;
-}
-
-
-.create-event-page .page-subtitle {
-  margin-top: 7px;
-
-  color: #68728a;
-
-  font-size: 14px;
-}
-
-
-/* =========================================================
-   MAIN FORM
-   ========================================================= */
-
-.create-event-page .event-form {
-  max-width: 1050px;
-
-  margin: 0 auto;
-
-  padding: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 20px;
-}
-
-
-/* =========================================================
-   FORM SECTIONS
-   ========================================================= */
-
-.create-event-page .form-section {
-  background: #ffffff;
-
-  border: 1px solid #e7e0e4;
-
-  border-radius: 18px;
-
-  padding: 27px 30px;
-
-  box-shadow:
-    0 10px 30px rgba(16, 21, 44, 0.045);
-}
-
-
-.create-event-page .form-section h2 {
-  margin: 0 0 22px;
-
-  color: #10152c;
-
-  font-size: 17px;
-  font-weight: 800;
-
-  position: relative;
-
-  padding-left: 14px;
-}
-
-
-.create-event-page .form-section h2::before {
-  content: "";
-
-  position: absolute;
-
-  left: 0;
-  top: 3px;
-
-  width: 4px;
-  height: 18px;
-
-  border-radius: 10px;
+  color: #ffffff;
 
   background: linear-gradient(
-    180deg,
-    #ec4899,
-    #8b5cf6
+    135deg,
+    #0b1230,
+    #6d28d9
   );
+
+  box-shadow:
+    0 8px 20px rgba(109, 40, 217, 0.20);
+}
+
+.section-heading span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #ec4899;
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.section-heading h2 {
+  margin: 0;
+
+  color: #17172b;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.section-heading p {
+  margin: 4px 0 0;
+
+  color: #8a91a0;
+
+  font-size: 12px;
 }
 
 
-/* =========================================================
+/* =========================================
    IMAGE UPLOAD
-   ========================================================= */
+========================================= */
 
-.create-event-page .image-upload {
-  width: 100%;
-
-  min-height: 250px;
-
+.create-image-upload {
   display: block;
+
+  width: 100%;
+  height: 270px;
 
   cursor: pointer;
 
-  border: 2px dashed #e4d7e1;
-
-  border-radius: 15px;
+  border: 1.5px dashed #cfc8d8;
+  border-radius: 16px;
 
   background:
     linear-gradient(
       135deg,
-      #fffafd,
-      #faf7ff
+      rgba(109, 40, 217, 0.035),
+      rgba(236, 72, 153, 0.025)
     );
 
   overflow: hidden;
@@ -164,205 +248,168 @@
     transform 0.25s ease;
 }
 
-
-.create-event-page .image-upload:hover {
-  border-color: #ec4899;
+.create-image-upload:hover {
+  border-color: #8b5cf6;
 
   background:
     linear-gradient(
       135deg,
-      #fff7fb,
-      #faf5ff
+      rgba(109, 40, 217, 0.06),
+      rgba(236, 72, 153, 0.045)
     );
 
   transform: translateY(-2px);
 }
 
-
-/* Upload placeholder */
-
-.create-event-page .upload-placeholder {
-  min-height: 250px;
+.create-upload-placeholder {
+  width: 100%;
+  height: 100%;
 
   display: flex;
-  flex-direction: column;
-
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 
   text-align: center;
 }
 
-
-.create-event-page .upload-icon {
-  width: 62px;
-  height: 62px;
+.upload-image-icon {
+  width: 58px;
+  height: 58px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  margin-bottom: 14px;
+  margin-bottom: 13px;
 
-  border-radius: 18px;
+  border-radius: 16px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #fce7f3,
-      #ede9fe
-    );
+  color: #6d28d9;
 
-  font-size: 27px;
-
-  box-shadow:
-    0 8px 20px rgba(236, 72, 153, 0.10);
+  background: linear-gradient(
+    135deg,
+    rgba(109, 40, 217, 0.10),
+    rgba(236, 72, 153, 0.10)
+  );
 }
 
-
-.create-event-page .upload-placeholder strong {
-  color: #20263a;
+.create-upload-placeholder strong {
+  color: #17172b;
 
   font-size: 15px;
-
-  font-weight: 800;
 }
 
-
-.create-event-page .upload-placeholder small {
+.create-upload-placeholder span {
   margin-top: 6px;
 
-  color: #8b94a7;
+  color: #6d28d9;
 
   font-size: 11px;
+  font-weight: 700;
 }
 
+.create-upload-placeholder small {
+  margin-top: 8px;
 
-/* Image preview */
+  color: #9aa0ad;
 
-.create-event-page .image-preview-container {
+  font-size: 10px;
+}
+
+.create-image-preview-container {
   position: relative;
 
   width: 100%;
-  height: 300px;
-
-  overflow: hidden;
+  height: 100%;
 }
 
-
-.create-event-page .event-image-preview {
+.create-event-image-preview {
   width: 100%;
   height: 100%;
-
-  display: block;
 
   object-fit: cover;
 }
 
-
-.create-event-page .image-preview-container::after {
-  content: "";
-
+.change-image-overlay {
   position: absolute;
-
   inset: 0;
 
-  background:
-    linear-gradient(
-      to top,
-      rgba(10, 13, 26, 0.55),
-      transparent 45%
-    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
 
-  pointer-events: none;
+  color: #ffffff;
+
+  background: rgba(11, 18, 48, 0.58);
+
+  opacity: 0;
+
+  transition: opacity 0.25s ease;
+}
+
+.create-image-preview-container:hover .change-image-overlay {
+  opacity: 1;
+}
+
+.change-image-overlay span {
+  font-size: 12px;
+  font-weight: 700;
 }
 
 
-.create-event-page .change-image {
-  position: absolute;
+/* =========================================
+   FORM GROUP
+========================================= */
 
-  left: 50%;
-  bottom: 18px;
-
-  transform: translateX(-50%);
-
-  z-index: 2;
-
-  padding: 9px 17px;
-
-  border-radius: 9px;
-
-  background: rgba(255,255,255,0.95);
-
-  color: #be185d;
-
-  font-size: 11px;
-
-  font-weight: 800;
-
-  box-shadow:
-    0 6px 18px rgba(0,0,0,0.12);
+.create-form-group {
+  margin-bottom: 22px;
 }
 
-
-/* =========================================================
-   FORM GROUPS
-   ========================================================= */
-
-.create-event-page .form-group {
-  margin-bottom: 19px;
-}
-
-
-.create-event-page .form-group:last-child {
+.create-form-group:last-child {
   margin-bottom: 0;
 }
 
-
-.create-event-page .form-group label {
+.create-form-group label {
   display: block;
 
-  margin-bottom: 7px;
+  margin-bottom: 8px;
 
-  color: #20263a;
+  color: #30384d;
 
-  font-size: 12px;
-
-  font-weight: 750;
+  font-size: 11px;
+  font-weight: 800;
 }
 
-
-.create-event-page .form-group label span {
+.create-form-group label span {
   color: #ec4899;
 }
 
 
-/* =========================================================
-   INPUTS / SELECT / TEXTAREA
-   ========================================================= */
+/* =========================================
+   INPUTS
+========================================= */
 
-.create-event-page .form-group input,
-.create-event-page .form-group select,
-.create-event-page .form-group textarea {
+.create-form-group input,
+.create-form-group select,
+.create-form-group textarea {
   width: 100%;
 
   box-sizing: border-box;
 
-  border: 1px solid #dfe2e8;
-
-  border-radius: 9px;
-
-  background: #ffffff;
-
-  color: #20263a;
-
-  padding: 12px 13px;
+  border: 1px solid #dcd7df;
+  border-radius: 10px;
 
   outline: none;
 
-  font-family: inherit;
+  background: #ffffff;
 
-  font-size: 12px;
+  color: #17172b;
+
+  font-family: inherit;
+  font-size: 13px;
 
   transition:
     border-color 0.2s ease,
@@ -370,241 +417,354 @@
     background 0.2s ease;
 }
 
+.create-form-group input,
+.create-form-group select {
+  height: 46px;
 
-.create-event-page .form-group input:hover,
-.create-event-page .form-group select:hover,
-.create-event-page .form-group textarea:hover {
-  border-color: #d3c9d5;
+  padding: 0 14px;
 }
 
+.create-form-group textarea {
+  padding: 13px 14px;
 
-.create-event-page .form-group input:focus,
-.create-event-page .form-group select:focus,
-.create-event-page .form-group textarea:focus {
-  border-color: #ec4899;
-
-  background: #fffafd;
-
-  box-shadow:
-    0 0 0 3px rgba(236, 72, 153, 0.09);
-}
-
-
-.create-event-page .form-group input::placeholder,
-.create-event-page .form-group textarea::placeholder {
-  color: #a0a7b5;
-}
-
-
-.create-event-page .form-group textarea {
-  min-height: 125px;
+  min-height: 140px;
 
   resize: vertical;
+}
 
-  line-height: 1.6;
+.create-form-group input::placeholder,
+.create-form-group textarea::placeholder {
+  color: #a2a7b2;
+}
+
+.create-form-group input:focus,
+.create-form-group select:focus,
+.create-form-group textarea:focus {
+  border-color: #8b5cf6;
+
+  background: #fff;
+
+  box-shadow:
+    0 0 0 3px rgba(139, 92, 246, 0.10);
 }
 
 
-/* =========================================================
-   TWO COLUMN ROWS
-   ========================================================= */
+/* =========================================
+   TWO COLUMN ROW
+========================================= */
 
-.create-event-page .form-row {
+.create-form-row {
   display: grid;
 
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
 
   gap: 20px;
 }
 
 
-/* =========================================================
-   HELP TEXT
-   ========================================================= */
+/* =========================================
+   INPUT WITH ICON
+========================================= */
 
-.create-event-page .form-help {
-  display: block;
+.input-with-icon {
+  position: relative;
+}
 
-  margin-top: 6px;
+.input-with-icon svg {
+  position: absolute;
 
-  color: #8b94a7;
+  left: 14px;
+  top: 50%;
 
-  font-size: 10px;
+  transform: translateY(-50%);
+
+  color: #8b5cf6;
+
+  pointer-events: none;
+}
+
+.input-with-icon input,
+.input-with-icon select {
+  padding-left: 42px;
 }
 
 
-/* =========================================================
-   FORM ACTIONS
-   ========================================================= */
+/* =========================================
+   MOBILE NUMBER
+========================================= */
 
-.create-event-page .form-actions {
-  max-width: 1050px;
-
-  padding: 5px 0 0;
-
+.mobile-input-wrapper {
   display: flex;
-
-  justify-content: flex-end;
-
   align-items: center;
 
-  gap: 12px;
-}
+  width: 100%;
+  height: 46px;
 
+  overflow: hidden;
 
-/* Cancel */
-
-.create-event-page .cancel-btn {
-  min-width: 105px;
-
-  padding: 12px 20px;
-
-  border: 1px solid #ddd7df;
-
-  border-radius: 9px;
+  border: 1px solid #dcd7df;
+  border-radius: 10px;
 
   background: #ffffff;
 
-  color: #4f5870;
-
-  font-size: 12px;
-
-  font-weight: 750;
-
-  cursor: pointer;
-
-  transition: 0.2s ease;
-}
-
-
-.create-event-page .cancel-btn:hover {
-  border-color: #ec4899;
-
-  color: #be185d;
-
-  background: #fff8fc;
-}
-
-
-/* Save Event */
-
-.create-event-page .primary-btn {
-  min-width: 125px;
-
-  padding: 12px 22px;
-
-  border: none;
-
-  border-radius: 9px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8b5cf6,
-      #ec4899
-    );
-
-  color: #ffffff;
-
-  font-size: 12px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 9px 22px rgba(236, 72, 153, 0.20);
-
   transition:
-    transform 0.2s ease,
+    border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
-
-.create-event-page .primary-btn:hover {
-  transform: translateY(-2px);
+.mobile-input-wrapper:focus-within {
+  border-color: #8b5cf6;
 
   box-shadow:
-    0 13px 27px rgba(236, 72, 153, 0.27);
+    0 0 0 3px rgba(139, 92, 246, 0.10);
+}
+
+.mobile-country-code {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 13px;
+
+  border-right: 1px solid #e3dfe5;
+
+  color: #30384d;
+
+  background: #faf8f7;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mobile-input-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding-left: 13px;
+
+  color: #8b5cf6;
+}
+
+.mobile-input-wrapper input {
+  height: 100% !important;
+
+  border: 0 !important;
+
+  box-shadow: none !important;
+
+  outline: none;
+
+  padding: 0 13px !important;
+}
+
+.create-form-help {
+  display: block;
+
+  margin-top: 7px;
+
+  color: #8b91a0;
+
+  font-size: 10px;
+  line-height: 1.5;
 }
 
 
-.create-event-page .primary-btn:active {
-  transform: translateY(0);
-}
+/* =========================================
+   CUSTOM FEE
+========================================= */
 
-
-/* =========================================================
-   CUSTOM FEE INPUT
-   ========================================================= */
-
-.create-event-page
-.form-group
-input[name="customFee"] {
+.custom-fee-input {
   margin-top: 12px;
 }
 
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+/* =========================================
+   TEXTAREA ICON
+========================================= */
 
-@media (max-width: 900px) {
+.textarea-wrapper {
+  position: relative;
+}
 
-  .create-event-page {
-    padding: 35px 25px 55px;
-  }
+.textarea-wrapper svg {
+  position: absolute;
 
-  .create-event-page .organizer-header,
-  .create-event-page .event-form {
-    max-width: 100%;
-  }
+  top: 15px;
+  left: 14px;
+
+  color: #8b5cf6;
+
+  pointer-events: none;
+}
+
+.textarea-wrapper textarea {
+  padding-left: 42px;
 }
 
 
-@media (max-width: 650px) {
+/* =========================================
+   ACTIONS
+========================================= */
+
+.create-event-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  padding: 24px 36px;
+
+  background: #faf8f7;
+}
+
+.create-cancel-btn,
+.create-save-btn {
+  min-height: 44px;
+
+  padding: 0 22px;
+
+  border-radius: 9px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.create-cancel-btn {
+  border: 1px solid #cec8d0;
+
+  background: #f7f3ee;
+
+  color: #30384d;
+}
+
+.create-cancel-btn:hover {
+  transform: translateY(-2px);
+
+  border-color: #8b5cf6;
+
+  box-shadow:
+    0 7px 18px rgba(109, 40, 217, 0.10);
+}
+
+.create-save-btn {
+  border: 1px solid #0b1230;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0b1230,
+      #6d28d9
+    );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 8px 22px rgba(11, 18, 48, 0.18);
+}
+
+.create-save-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  border-color: #ec4899;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6d28d9,
+      #ec4899
+    );
+
+  box-shadow:
+    0 0 22px rgba(139, 92, 246, 0.25),
+    0 0 35px rgba(236, 72, 153, 0.12);
+}
+
+.create-save-btn:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.65;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 800px) {
 
   .create-event-page {
-    padding: 25px 15px 45px;
+    padding: 40px 4% 60px;
   }
 
-  .create-event-page .organizer-header h1 {
-    font-size: 25px;
-  }
-
-  .create-event-page .page-subtitle {
-    font-size: 12px;
-  }
-
-  .create-event-page .form-section {
-    padding: 20px 17px;
-
-    border-radius: 14px;
-  }
-
-  .create-event-page .form-row {
+  .create-form-row {
     grid-template-columns: 1fr;
-
     gap: 0;
   }
 
-  .create-event-page .image-upload,
-  .create-event-page .upload-placeholder {
-    min-height: 210px;
+  .create-form-section {
+    padding: 28px 24px;
   }
 
-  .create-event-page .image-preview-container {
-    height: 230px;
+  .create-event-actions {
+    padding: 20px 24px;
   }
 
-  .create-event-page .form-actions {
-    justify-content: stretch;
+}
 
+
+@media (max-width: 600px) {
+
+  .create-event-page {
+    padding: 32px 16px 50px;
+  }
+
+  .create-event-heading h1 {
+    font-size: 40px;
+    letter-spacing: -1.5px;
+  }
+
+  .create-event-heading p {
+    font-size: 13px;
+  }
+
+  .create-form-section {
+    padding: 24px 18px;
+  }
+
+  .create-image-upload {
+    height: 220px;
+  }
+
+  .section-heading {
+    margin-bottom: 22px;
+  }
+
+  .section-heading h2 {
+    font-size: 18px;
+  }
+
+  .create-event-actions {
     flex-direction: column-reverse;
+    align-items: stretch;
+    padding: 18px;
   }
 
-  .create-event-page .cancel-btn,
-  .create-event-page .primary-btn {
+  .create-cancel-btn,
+  .create-save-btn {
     width: 100%;
   }
+
 }
