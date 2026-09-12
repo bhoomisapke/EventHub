@@ -1,29 +1,16 @@
 from rest_framework import serializers
+
 from .models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
 
-    # Frontend field name -> backend field name
-    organizerName = serializers.CharField(
-        source="organizer_name",
-        required=False,
-        allow_blank=True
+    organizer_name = serializers.CharField(
+        source="organizer.name",
+        read_only=True
     )
 
-    registrationFee = serializers.DecimalField(
-        source="registration_fee",
-        max_digits=10,
-        decimal_places=2,
-        required=False,
-        default=0
-    )
-
-    registrationDeadline = serializers.DateField(
-        source="registration_deadline",
-        required=False,
-        allow_null=True
-    )
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
@@ -33,14 +20,15 @@ class EventSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "image",
+            "image_url",
             "category",
             "date",
             "time",
             "venue",
             "capacity",
-            "organizerName",
-            "registrationFee",
-            "registrationDeadline",
+            "registration_deadline",
+            "organizer",
+            "organizer_name",
             "status",
             "created_at",
             "updated_at",
@@ -48,6 +36,22 @@ class EventSerializer(serializers.ModelSerializer):
 
         read_only_fields = [
             "id",
+            "organizer",
+            "organizer_name",
             "created_at",
             "updated_at",
+            "image_url",
         ]
+
+    def get_image_url(self, obj):
+        request = self.context.get("request")
+
+        if not obj.image:
+            return None
+
+        url = obj.image.url
+
+        if request:
+            return request.build_absolute_uri(url)
+
+        return url
