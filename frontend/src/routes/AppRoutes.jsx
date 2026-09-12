@@ -18,6 +18,7 @@ import Profile from "../pages/student/Profile.jsx";
 // Public Pages
 import Categories from "../pages/public/Categories.jsx";
 import EventDetails from "../pages/public/EventDetails.jsx";
+import Events from "../pages/public/Events.jsx";
 
 // Organizer Pages
 import OrganizerDashboard from "../pages/organizer/Dashboard.jsx";
@@ -57,14 +58,11 @@ const AppRoutes = () => {
         />
 
         {/* Events Page */}
-        <Route
-          path="/events"
-          element={
-            <div className="pt-28 p-8 text-white">
-              Events Page
-            </div>
-          }
-        />
+      <Route
+  path="/events"
+  element={<Events />}
+
+/>
 
         {/* About Page */}
         <Route

@@ -10,6 +10,8 @@ urlpatterns = [
     path("api/events/", include("events.urls")),
 
     path("api/auth/", include("accounts.urls")),
+
+    path("api/registrations/", include("registrations.urls")),
 ]
 
 
