@@ -3,10 +3,11 @@ Django settings for config project.
 """
 
 from pathlib import Path
-
+import os
+from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(BASE_DIR / ".env")
 
 # Security
 SECRET_KEY = 'django-insecure-c+ho5wg$h&b4q-f3swny6g9k&s(y1==q*a4!n1oys__=@4&(o$'
@@ -123,11 +124,22 @@ STATIC_URL = 'static/'
 
 # Email
 
+# Email
+
 MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+    "default": {
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": "smtp.gmail.com",
+            "port": 587,
+            "username": os.getenv("EMAIL_HOST_USER"),
+            "password": os.getenv("EMAIL_HOST_PASSWORD"),
+            "use_tls": True,
+        },
     },
 }
+
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
 
 
 # CORS

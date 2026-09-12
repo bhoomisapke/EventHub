@@ -25,6 +25,7 @@ import CreateEvent from "../pages/organizer/CreateEvent.jsx";
 import MyEvents from "../pages/organizer/MyEvents.jsx";
 import EditEvent from "../pages/organizer/EditEvent.jsx";
 import Participants from "../pages/organizer/Participants.jsx";
+import ResetPassword from "../pages/auth/ResetPassword.jsx";
 
 const AppRoutes = () => {
   return (
@@ -39,6 +40,11 @@ const AppRoutes = () => {
           AUTHENTICATION
           ===================================================== */}
       <Route path="/auth" element={<Auth />} />
+
+      <Route
+  path="/reset-password/:uid/:token"
+  element={<ResetPassword />}
+/>
 
       {/* =====================================================
           PUBLIC PAGES

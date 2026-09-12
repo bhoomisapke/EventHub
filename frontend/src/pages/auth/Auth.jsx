@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Auth.css";
 
 /* =========================================================
@@ -169,8 +169,7 @@ const initialForm = {
    INPUT FIELD
    IMPORTANT:
    Keep this OUTSIDE Auth().
-   This prevents the input from losing focus after every
-   character typed.
+   This prevents input focus problems.
 ========================================================= */
 
 function InputField({
@@ -195,19 +194,25 @@ function InputField({
   }
 
   if (name === "confirmPassword") {
-    inputType = showConfirmPassword ? "text" : "password";
+    inputType = showConfirmPassword
+      ? "text"
+      : "password";
   }
 
-  const hasError = Boolean(errors[name] && touched[name]);
+  const hasError = Boolean(
+    errors[name] && touched[name]
+  );
 
   return (
     <div className="auth-field">
+
       <label htmlFor={name}>
         {label}
         <span>*</span>
       </label>
 
       <div className="auth-input-wrapper">
+
         <span className="auth-input-icon">
           {icon}
         </span>
@@ -239,6 +244,7 @@ function InputField({
         />
 
         {children}
+
       </div>
 
       {hasError && (
@@ -249,6 +255,7 @@ function InputField({
           {errors[name]}
         </p>
       )}
+
     </div>
   );
 }
@@ -258,34 +265,17 @@ function InputField({
 ========================================================= */
 
 function Auth() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
-  /* -------------------------------------------------------
+  const navigate = useNavigate();
+
+  /* =======================================================
      STATE
-  ------------------------------------------------------- */
+  ======================================================= */
 
   const [mode, setMode] = useState("login");
-  const [role, setRole] = useState("student");
 
-  useEffect(() => {
-    const requestedRole = searchParams.get("role");
-    const reason = searchParams.get("reason");
-
-    if (requestedRole === "student" || requestedRole === "organizer") {
-      setRole(requestedRole);
-      setMode("login");
-
-      if (reason === "wrong-role") {
-        setStatus(
-          requestedRole === "organizer"
-            ? "You are currently logged in as a student. Please log in with an organizer account to continue."
-            : "You are currently logged in as an organizer. Please log in with a student account to continue."
-        );
-        setSuccess(false);
-      }
-    }
-  }, [searchParams]);
+  const [role, setRole] =
+    useState("student");
 
   const [form, setForm] =
     useState(initialForm);
@@ -316,11 +306,26 @@ function Auth() {
   const [status, setStatus] =
     useState("");
 
-  /* -------------------------------------------------------
+  /* =======================================================
+     FORGOT PASSWORD STATE
+  ======================================================= */
+
+  const [
+    showForgotPassword,
+    setShowForgotPassword,
+  ] = useState(false);
+
+  const [
+    forgotEmail,
+    setForgotEmail,
+  ] = useState("");
+
+  /* =======================================================
      UPDATE FIELD
-  ------------------------------------------------------- */
+  ======================================================= */
 
   const updateField = (field, value) => {
+
     setForm((prev) => ({
       ...prev,
       [field]: value,
@@ -334,31 +339,36 @@ function Auth() {
     }
 
     setStatus("");
+    setSuccess(false);
   };
 
-  /* -------------------------------------------------------
+  /* =======================================================
      CHANGE LOGIN / REGISTER MODE
-  ------------------------------------------------------- */
+  ======================================================= */
 
   const changeMode = (newMode) => {
+
     setMode(newMode);
 
     setErrors({});
     setTouched({});
-    setStatus("");
 
+    setStatus("");
     setSuccess(false);
     setLoading(false);
 
     setShowPassword(false);
     setShowConfirmPassword(false);
+
+    setShowForgotPassword(false);
   };
 
-  /* -------------------------------------------------------
+  /* =======================================================
      CHANGE ROLE
-  ------------------------------------------------------- */
+  ======================================================= */
 
   const changeRole = (newRole) => {
+
     setRole(newRole);
 
     setErrors((prev) => ({
@@ -378,25 +388,30 @@ function Auth() {
     }));
 
     setStatus("");
+    setSuccess(false);
   };
 
-  /* -------------------------------------------------------
+  /* =======================================================
      VALIDATION
-  ------------------------------------------------------- */
+  ======================================================= */
 
   const validate = () => {
+
     const newErrors = {};
 
     /* EMAIL */
 
     if (!form.email.trim()) {
+
       newErrors.email =
         "Email address is required.";
+
     } else if (
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
         form.email
       )
     ) {
+
       newErrors.email =
         "Enter a valid email address.";
     }
@@ -404,21 +419,26 @@ function Auth() {
     /* PASSWORD */
 
     if (!form.password) {
+
       newErrors.password =
         "Password is required.";
+
     } else if (
       form.password.length < 8
     ) {
+
       newErrors.password =
         "Password must contain at least 8 characters.";
     }
 
-    /* REGISTER VALIDATION */
+    /* REGISTER */
 
     if (mode === "register") {
+
       /* FIRST NAME */
 
       if (!form.firstName.trim()) {
+
         newErrors.firstName =
           "First name is required.";
       }
@@ -426,6 +446,7 @@ function Auth() {
       /* LAST NAME */
 
       if (!form.lastName.trim()) {
+
         newErrors.lastName =
           "Last name is required.";
       }
@@ -433,12 +454,15 @@ function Auth() {
       /* CONFIRM PASSWORD */
 
       if (!form.confirmPassword) {
+
         newErrors.confirmPassword =
           "Please confirm your password.";
+
       } else if (
         form.password !==
         form.confirmPassword
       ) {
+
         newErrors.confirmPassword =
           "Passwords do not match.";
       }
@@ -446,12 +470,15 @@ function Auth() {
       /* STUDENT */
 
       if (role === "student") {
+
         if (!form.college.trim()) {
+
           newErrors.college =
             "College name is required.";
         }
 
         if (!form.year.trim()) {
+
           newErrors.year =
             "Please select your year.";
         }
@@ -460,19 +487,24 @@ function Auth() {
       /* ORGANIZER */
 
       if (role === "organizer") {
+
         if (!form.organization.trim()) {
+
           newErrors.organization =
             "Organization is required.";
         }
 
         if (!form.phone.trim()) {
+
           newErrors.phone =
             "Phone number is required.";
+
         } else if (
           !/^[+]?[\d\s()-]{10,15}$/.test(
             form.phone
           )
         ) {
+
           newErrors.phone =
             "Enter a valid phone number.";
         }
@@ -486,42 +518,153 @@ function Auth() {
     );
   };
 
-  /* -------------------------------------------------------
-     SUBMIT
-  ------------------------------------------------------- */
+  /* =======================================================
+     FORGOT PASSWORD
+  ======================================================= */
 
-  const handleSubmit = async (e) => {
+  const handleForgotPassword = async (e) => {
+
     e.preventDefault();
 
-    const allTouched = {
-      email: true,
-      password: true,
-      firstName: mode === "register",
-      lastName: mode === "register",
-      confirmPassword: mode === "register",
-      college: mode === "register" && role === "student",
-      year: mode === "register" && role === "student",
-      organization: mode === "register" && role === "organizer",
-      phone: mode === "register" && role === "organizer",
-    };
+    if (!forgotEmail.trim()) {
 
-    setTouched(allTouched);
+      setStatus(
+        "Please enter your email address."
+      );
 
-    if (!validate()) return;
+      setSuccess(false);
+
+      return;
+    }
 
     setLoading(true);
     setStatus("");
     setSuccess(false);
 
     try {
+
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/auth/forgot-password/",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+
+          body: JSON.stringify({
+            email: forgotEmail.trim(),
+          }),
+        }
+      );
+
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+
+        setLoading(false);
+
+        setStatus(
+          data.message ||
+            "Unable to send password reset link."
+        );
+
+        return;
+      }
+
+      setLoading(false);
+      setSuccess(true);
+
+      setStatus(
+        "Password reset link has been sent. Check your email."
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Forgot password error:",
+        error
+      );
+
+      setLoading(false);
+      setSuccess(false);
+
+      setStatus(
+        "Unable to connect to the backend. Make sure Django is running."
+      );
+    }
+  };
+
+  /* =======================================================
+     LOGIN / REGISTER SUBMIT
+  ======================================================= */
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+
+    const allTouched = {
+
+      email: true,
+
+      password: true,
+
+      firstName:
+        mode === "register",
+
+      lastName:
+        mode === "register",
+
+      confirmPassword:
+        mode === "register",
+
+      college:
+        mode === "register" &&
+        role === "student",
+
+      year:
+        mode === "register" &&
+        role === "student",
+
+      organization:
+        mode === "register" &&
+        role === "organizer",
+
+      phone:
+        mode === "register" &&
+        role === "organizer",
+    };
+
+    setTouched(allTouched);
+
+    if (!validate()) {
+      return;
+    }
+
+    setLoading(true);
+    setStatus("");
+    setSuccess(false);
+
+    try {
+
+      /* =====================================================
+         LOGIN
+      ===================================================== */
+
       if (mode === "login") {
+
         const response = await fetch(
           "http://127.0.0.1:8000/api/auth/login/",
           {
             method: "POST",
+
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type":
+                "application/json",
             },
+
             body: JSON.stringify({
               email: form.email.trim(),
               password: form.password,
@@ -529,51 +672,126 @@ function Auth() {
           }
         );
 
-        const data = await response.json();
+        const data =
+          await response.json();
 
         if (!response.ok) {
+
           setLoading(false);
-          setStatus(data.message || "Invalid email or password.");
+
+          setStatus(
+            data.message ||
+              "Invalid email or password."
+          );
+
           return;
         }
 
+        /* SAVE TOKEN */
+
         if (rememberMe) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("user", JSON.stringify(data.user));
-          sessionStorage.removeItem("token");
-          sessionStorage.removeItem("user");
+
+          localStorage.setItem(
+            "token",
+            data.token
+          );
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify(data.user)
+          );
+
+          sessionStorage.removeItem(
+            "token"
+          );
+
+          sessionStorage.removeItem(
+            "user"
+          );
+
         } else {
-          sessionStorage.setItem("token", data.token);
-          sessionStorage.setItem("user", JSON.stringify(data.user));
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+
+          sessionStorage.setItem(
+            "token",
+            data.token
+          );
+
+          sessionStorage.setItem(
+            "user",
+            JSON.stringify(data.user)
+          );
+
+          localStorage.removeItem(
+            "token"
+          );
+
+          localStorage.removeItem(
+            "user"
+          );
         }
 
         setLoading(false);
         setSuccess(true);
-        setStatus("Login successful! Redirecting...");
+
+        setStatus(
+          "Login successful! Redirecting..."
+        );
 
         setTimeout(() => {
-          if (data.user.role === "student") {
-            navigate("/student/dashboard");
-          } else if (data.user.role === "organizer") {
-            navigate("/organizer/dashboard");
+
+          if (
+            data.user.role ===
+            "student"
+          ) {
+
+            navigate(
+              "/student/dashboard"
+            );
+
+          } else if (
+            data.user.role ===
+            "organizer"
+          ) {
+
+            navigate(
+              "/organizer/dashboard"
+            );
           }
+
         }, 900);
 
         return;
       }
 
-      const fullName = `${form.firstName} ${form.lastName}`.trim();
+      /* =====================================================
+         REGISTER
+      ===================================================== */
+
+      const fullName =
+        `${form.firstName} ${form.lastName}`.trim();
 
       const registerData = {
+
         name: fullName,
+
         email: form.email.trim(),
+
         password: form.password,
+
         role: role,
-        phone: role === "organizer" ? form.phone.trim() : "",
+
+        phone:
+          role === "organizer"
+            ? form.phone.trim()
+            : "",
+
         student_id: "",
-        department: role === "student" ? form.college.trim() : "",
+
+        department:
+          role === "student"
+            ? form.college.trim()
+            : "",
+
         year:
           role === "student"
             ? form.year === "1st Year"
@@ -592,65 +810,101 @@ function Auth() {
         "http://127.0.0.1:8000/api/auth/register/",
         {
           method: "POST",
+
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type":
+              "application/json",
           },
-          body: JSON.stringify(registerData),
+
+          body: JSON.stringify(
+            registerData
+          ),
         }
       );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
       if (!response.ok) {
+
         setLoading(false);
 
-        let errorMessage = "Registration failed.";
+        let errorMessage =
+          "Registration failed.";
 
         if (data.email) {
-          errorMessage = data.email[0];
+
+          errorMessage =
+            data.email[0];
+
         } else if (data.message) {
-          errorMessage = data.message;
+
+          errorMessage =
+            data.message;
+
         } else if (data.role) {
-          errorMessage = data.role[0];
+
+          errorMessage =
+            data.role[0];
+
         } else if (data.password) {
-          errorMessage = data.password[0];
+
+          errorMessage =
+            data.password[0];
         }
 
         setStatus(errorMessage);
+
         return;
       }
 
       setLoading(false);
       setSuccess(true);
-      setStatus("Account created successfully!");
+
+      setStatus(
+        "Account created successfully!"
+      );
 
       setTimeout(() => {
+
         setSuccess(false);
         setStatus("");
+
         setMode("login");
+
         setForm({
           ...initialForm,
           email: form.email,
           password: "",
         });
+
         setTouched({});
         setErrors({});
+
       }, 1200);
+
     } catch (error) {
-      console.error("Authentication error:", error);
+
+      console.error(
+        "Authentication error:",
+        error
+      );
+
       setLoading(false);
       setSuccess(false);
+
       setStatus(
         "Unable to connect to the backend. Make sure Django is running."
       );
     }
   };
 
-  /* -------------------------------------------------------
-     COMMON PROPS FOR INPUT FIELD
-  ------------------------------------------------------- */
+  /* =======================================================
+     COMMON INPUT PROPS
+  ======================================================= */
 
   const inputProps = {
+
     form,
     errors,
     touched,
@@ -658,6 +912,7 @@ function Auth() {
     setTouched,
     showPassword,
     showConfirmPassword,
+
   };
 
   /* =======================================================
@@ -665,6 +920,7 @@ function Auth() {
   ======================================================= */
 
   return (
+
     <main className="eventhub-auth">
 
       {/* =================================================
@@ -682,30 +938,41 @@ function Auth() {
         {/* LAPTOP */}
 
         <div className="tech-laptop">
+
           <div className="laptop-screen">
+
             <div className="code-lines">
+
               <i />
               <i />
               <i />
               <i />
               <i />
+
             </div>
+
           </div>
 
           <div className="laptop-base">
+
             <div className="keyboard" />
+
           </div>
+
         </div>
 
         {/* MEGAPHONE */}
 
         <div className="tech-megaphone">
+
           <div className="mega-cone" />
+
           <div className="mega-handle" />
 
           <div className="mega-wave wave-one" />
           <div className="mega-wave wave-two" />
           <div className="mega-wave wave-three" />
+
         </div>
 
         {/* SERVER */}
@@ -736,6 +1003,7 @@ function Auth() {
           <div className="calendar-top" />
 
           <div className="calendar-grid">
+
             <i />
             <i />
             <i />
@@ -745,6 +1013,7 @@ function Auth() {
             <i />
             <i />
             <i />
+
           </div>
 
           <div className="calendar-check">
@@ -782,15 +1051,19 @@ function Auth() {
         {/* CIRCUITS */}
 
         <div className="circuit circuit-one">
+
           <span />
           <span />
           <span />
+
         </div>
 
         <div className="circuit circuit-two">
+
           <span />
           <span />
           <span />
+
         </div>
 
       </div>
@@ -806,7 +1079,9 @@ function Auth() {
         <button
           type="button"
           className="auth-logo"
-          onClick={() => navigate("/")}
+          onClick={() =>
+            navigate("/")
+          }
           aria-label="Go to EventHub home"
         >
 
@@ -833,7 +1108,9 @@ function Auth() {
         <button
           type="button"
           className="back-home"
-          onClick={() => navigate("/")}
+          onClick={() =>
+            navigate("/")
+          }
         >
           ← Back to Home
         </button>
@@ -858,7 +1135,9 @@ function Auth() {
 
               <span />
 
-              {mode === "login"
+              {showForgotPassword
+                ? "PASSWORD RECOVERY"
+                : mode === "login"
                 ? "WELCOME BACK"
                 : "JOIN EVENTHUB"}
 
@@ -866,24 +1145,41 @@ function Auth() {
 
             <h1>
 
-              {mode === "login" ? (
+              {showForgotPassword ? (
+
+                <>
+                  Reset your{" "}
+                  <em>password.</em>
+                </>
+
+              ) : mode === "login" ? (
+
                 <>
                   Welcome{" "}
                   <em>back.</em>
                 </>
+
               ) : (
+
                 <>
                   Create your{" "}
                   <em>account.</em>
                 </>
+
               )}
 
             </h1>
 
             <p>
 
-              {mode === "login"
+              {showForgotPassword
+
+                ? "Enter your registered email and we'll send you a password reset link."
+
+                : mode === "login"
+
                 ? "Sign in and continue discovering amazing college events."
+
                 : "Join students and organizers creating memorable campus experiences."}
 
             </p>
@@ -891,544 +1187,763 @@ function Auth() {
           </div>
 
           {/* =================================================
-              LOGIN / REGISTER TABS
+              FORGOT PASSWORD SCREEN
           ================================================= */}
 
-          <div className="auth-tabs">
+          {showForgotPassword ? (
 
-            <button
-              type="button"
-              className={
-                mode === "login"
-                  ? "active"
-                  : ""
+            <form
+              className="auth-form"
+              onSubmit={
+                handleForgotPassword
               }
-              onClick={() =>
-                changeMode("login")
-              }
+              noValidate
             >
-              Login
-            </button>
 
-            <button
-              type="button"
-              className={
-                mode === "register"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                changeMode("register")
-              }
-            >
-              Register
-            </button>
+              {/* EMAIL */}
 
-            <span
-              className={`tab-slider ${
-                mode === "register"
-                  ? "move-right"
-                  : ""
-              }`}
-            />
+              <InputField
+                label="Email Address"
+                name="forgotEmail"
+                type="email"
+                placeholder="you@example.com"
+                icon={<MailIcon />}
+                form={{
+                  forgotEmail:
+                    forgotEmail,
+                }}
+                errors={{}}
+                touched={{}}
+                updateField={(
+                  field,
+                  value
+                ) => {
+                  setForgotEmail(value);
+                  setStatus("");
+                  setSuccess(false);
+                }}
+                setTouched={() => {}}
+                showPassword={false}
+                showConfirmPassword={false}
+              />
 
-          </div>
+              {/* STATUS */}
 
-          {/* =================================================
-              ROLE
-          ================================================= */}
+              {status && (
 
-          <div className="role-section">
+                <div
+                  className={`auth-status ${
+                    success
+                      ? "success"
+                      : ""
+                  }`}
+                >
 
-            <p>
-              {mode === "register"
-                ? "I want to continue as"
-                : "Continue as"}
-            </p>
+                  <span>
+                    {success
+                      ? "✓"
+                      : "i"}
+                  </span>
 
-            <div className="role-options">
+                  {status}
 
-              {/* STUDENT */}
+                </div>
+
+              )}
+
+              {/* SEND BUTTON */}
 
               <button
-                type="button"
-                className={
-                  role === "student"
-                    ? "role-card selected"
-                    : "role-card"
-                }
-                onClick={() =>
-                  changeRole("student")
-                }
+                type="submit"
+                className={`auth-submit ${
+                  loading
+                    ? "loading"
+                    : ""
+                } ${
+                  success
+                    ? "submit-success"
+                    : ""
+                }`}
+                disabled={loading}
               >
 
-                <span className="role-icon">
-                  <CollegeIcon />
-                </span>
+                {loading ? (
 
-                <span className="role-content">
+                  <>
+                    <span className="spinner" />
+                    Sending...
+                  </>
 
-                  <strong>
-                    Student
-                  </strong>
+                ) : success ? (
 
-                  <small>
-                    Discover & register
-                  </small>
+                  <>
+                    Sent
+                    <span>✓</span>
+                  </>
 
-                </span>
+                ) : (
 
-                {role === "student" && (
-                  <b className="role-check">
-                    ✓
-                  </b>
+                  <>
+                    Send Reset Link
+                    <ArrowIcon />
+                  </>
+
                 )}
 
               </button>
 
-              {/* ORGANIZER */}
+              {/* BACK TO LOGIN */}
 
-              <button
-                type="button"
-                className={
-                  role === "organizer"
-                    ? "role-card selected organizer"
-                    : "role-card"
-                }
-                onClick={() =>
-                  changeRole("organizer")
-                }
+              <div
+                style={{
+                  textAlign: "center",
+                  marginTop: "14px",
+                }}
               >
 
-                <span className="role-icon organizer-icon">
-                  <BuildingIcon />
-                </span>
+                <button
+                  type="button"
+                  onClick={() => {
 
-                <span className="role-content">
+                    setShowForgotPassword(
+                      false
+                    );
 
-                  <strong>
-                    Organizer
-                  </strong>
+                    setForgotEmail("");
 
-                  <small>
-                    Create & manage
-                  </small>
+                    setStatus("");
 
-                </span>
+                    setSuccess(false);
 
-                {role === "organizer" && (
-                  <b className="role-check organizer-check">
-                    ✓
-                  </b>
-                )}
+                    setLoading(false);
 
-              </button>
+                  }}
+                  style={{
+                    border: "0",
+                    background:
+                      "transparent",
+                    color:
+                      "var(--pink-light)",
+                    fontSize: "9px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                  }}
+                >
+                  ← Back to Login
+                </button>
 
-            </div>
+              </div>
 
-          </div>
+            </form>
 
-          {/* =================================================
-              FORM
-          ================================================= */}
+          ) : (
 
-          <form
-            className="auth-form"
-            onSubmit={handleSubmit}
-            noValidate
-          >
+            <>
+              {/* =================================================
+                  LOGIN / REGISTER TABS
+              ================================================= */}
 
-            {/* =================================================
-                FIRST + LAST NAME
-            ================================================= */}
+              <div className="auth-tabs">
 
-            {mode === "register" && (
-              <div className="two-columns">
+                <button
+                  type="button"
+                  className={
+                    mode === "login"
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() =>
+                    changeMode("login")
+                  }
+                >
+                  Login
+                </button>
 
-                <InputField
-                  {...inputProps}
-                  label="First Name"
-                  name="firstName"
-                  placeholder="John"
-                  icon={<UserIcon />}
-                />
+                <button
+                  type="button"
+                  className={
+                    mode === "register"
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() =>
+                    changeMode(
+                      "register"
+                    )
+                  }
+                >
+                  Register
+                </button>
 
-                <InputField
-                  {...inputProps}
-                  label="Last Name"
-                  name="lastName"
-                  placeholder="Doe"
-                  icon={<UserIcon />}
+                <span
+                  className={`tab-slider ${
+                    mode === "register"
+                      ? "move-right"
+                      : ""
+                  }`}
                 />
 
               </div>
-            )}
 
-            {/* =================================================
-                EMAIL
-            ================================================= */}
+              {/* =================================================
+                  ROLE
+              ================================================= */}
 
-            <InputField
-              {...inputProps}
-              label="Email Address"
-              name="email"
-              type="email"
-              placeholder="you@example.com"
-              icon={<MailIcon />}
-            />
+              <div className="role-section">
 
-            {/* =================================================
-                STUDENT REGISTRATION
-            ================================================= */}
+                <p>
 
-            {mode === "register" &&
-              role === "student" && (
-                <div className="two-columns">
+                  {mode === "register"
+                    ? "I want to continue as"
+                    : "Continue as"}
 
-                  {/* COLLEGE */}
+                </p>
 
-                  <InputField
-                    {...inputProps}
-                    label="College"
-                    name="college"
-                    placeholder="Your college"
-                    icon={<CollegeIcon />}
-                  />
+                <div className="role-options">
 
-                  {/* YEAR */}
+                  {/* STUDENT */}
 
-                  <div className="auth-field">
+                  <button
+                    type="button"
+                    className={
+                      role === "student"
+                        ? "role-card selected"
+                        : "role-card"
+                    }
+                    onClick={() =>
+                      changeRole(
+                        "student"
+                      )
+                    }
+                  >
 
-                    <label htmlFor="year">
-                      Year
-                      <span>*</span>
-                    </label>
+                    <span className="role-icon">
 
-                    <div className="auth-input-wrapper">
+                      <CollegeIcon />
 
-                      <span className="auth-input-icon">
-                        <CollegeIcon />
-                      </span>
+                    </span>
 
-                      <select
-                        id="year"
-                        name="year"
-                        value={form.year}
-                        onChange={(e) =>
-                          updateField(
-                            "year",
-                            e.target.value
-                          )
-                        }
-                        onBlur={() =>
-                          setTouched(
-                            (prev) => ({
-                              ...prev,
-                              year: true,
-                            })
-                          )
-                        }
-                        aria-invalid={Boolean(
-                          errors.year &&
-                          touched.year
-                        )}
-                        className={`auth-input auth-select ${
-                          errors.year &&
-                          touched.year
-                            ? "input-error"
-                            : ""
-                        }`}
-                      >
+                    <span className="role-content">
 
-                        <option value="">
-                          Select your year
-                        </option>
+                      <strong>
+                        Student
+                      </strong>
 
-                        <option value="1st Year">
-                          1st Year
-                        </option>
+                      <small>
+                        Discover & register
+                      </small>
 
-                        <option value="2nd Year">
-                          2nd Year
-                        </option>
+                    </span>
 
-                        <option value="3rd Year">
-                          3rd Year
-                        </option>
+                    {role ===
+                      "student" && (
 
-                        <option value="4th Year">
-                          4th Year
-                        </option>
+                      <b className="role-check">
+                        ✓
+                      </b>
 
-                        <option value="Final Year">
-                          Final Year
-                        </option>
+                    )}
 
-                      </select>
+                  </button>
 
-                    </div>
+                  {/* ORGANIZER */}
 
-                    {errors.year &&
-                      touched.year && (
-                        <p className="auth-error">
-                          {errors.year}
-                        </p>
-                      )}
+                  <button
+                    type="button"
+                    className={
+                      role === "organizer"
+                        ? "role-card selected organizer"
+                        : "role-card"
+                    }
+                    onClick={() =>
+                      changeRole(
+                        "organizer"
+                      )
+                    }
+                  >
+
+                    <span className="role-icon organizer-icon">
+
+                      <BuildingIcon />
+
+                    </span>
+
+                    <span className="role-content">
+
+                      <strong>
+                        Organizer
+                      </strong>
+
+                      <small>
+                        Create & manage
+                      </small>
+
+                    </span>
+
+                    {role ===
+                      "organizer" && (
+
+                      <b className="role-check organizer-check">
+                        ✓
+                      </b>
+
+                    )}
+
+                  </button>
+
+                </div>
+
+              </div>
+
+              {/* =================================================
+                  NORMAL FORM
+              ================================================= */}
+
+              <form
+                className="auth-form"
+                onSubmit={
+                  handleSubmit
+                }
+                noValidate
+              >
+
+                {/* FIRST + LAST NAME */}
+
+                {mode === "register" && (
+
+                  <div className="two-columns">
+
+                    <InputField
+                      {...inputProps}
+                      label="First Name"
+                      name="firstName"
+                      placeholder="John"
+                      icon={
+                        <UserIcon />
+                      }
+                    />
+
+                    <InputField
+                      {...inputProps}
+                      label="Last Name"
+                      name="lastName"
+                      placeholder="Doe"
+                      icon={
+                        <UserIcon />
+                      }
+                    />
 
                   </div>
 
-                </div>
-              )}
+                )}
 
-            {/* =================================================
-                ORGANIZER REGISTRATION
-            ================================================= */}
+                {/* EMAIL */}
 
-            {mode === "register" &&
-              role === "organizer" && (
-                <div className="two-columns">
-
-                  {/* ORGANIZATION */}
-
-                  <InputField
-                    {...inputProps}
-                    label="Organization"
-                    name="organization"
-                    placeholder="Event club / department"
-                    icon={<BuildingIcon />}
-                  />
-
-                  {/* PHONE */}
-
-                  <InputField
-                    {...inputProps}
-                    label="Phone"
-                    name="phone"
-                    type="tel"
-                    placeholder="+91 98765 43210"
-                    icon={<PhoneIcon />}
-                  />
-
-                </div>
-              )}
-
-            {/* =================================================
-                PASSWORD
-            ================================================= */}
-
-            <InputField
-              {...inputProps}
-              label="Password"
-              name="password"
-              type="password"
-              placeholder="Minimum 8 characters"
-              icon={<LockIcon />}
-            >
-
-              <button
-                type="button"
-                className="password-eye"
-                onClick={() =>
-                  setShowPassword(
-                    (prev) => !prev
-                  )
-                }
-                aria-label={
-                  showPassword
-                    ? "Hide password"
-                    : "Show password"
-                }
-              >
-                <EyeIcon
-                  open={showPassword}
-                />
-              </button>
-
-            </InputField>
-
-            {/* =================================================
-                CONFIRM PASSWORD
-            ================================================= */}
-
-            {mode === "register" && (
-              <InputField
-                {...inputProps}
-                label="Confirm Password"
-                name="confirmPassword"
-                type="password"
-                placeholder="Enter password again"
-                icon={<LockIcon />}
-              >
-
-                <button
-                  type="button"
-                  className="password-eye"
-                  onClick={() =>
-                    setShowConfirmPassword(
-                      (prev) => !prev
-                    )
+                <InputField
+                  {...inputProps}
+                  label="Email Address"
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  icon={
+                    <MailIcon />
                   }
-                  aria-label={
-                    showConfirmPassword
-                      ? "Hide confirm password"
-                      : "Show confirm password"
+                />
+
+                {/* STUDENT */}
+
+                {mode === "register" &&
+                  role === "student" && (
+
+                  <div className="two-columns">
+
+                    {/* COLLEGE */}
+
+                    <InputField
+                      {...inputProps}
+                      label="College"
+                      name="college"
+                      placeholder="Your college"
+                      icon={
+                        <CollegeIcon />
+                      }
+                    />
+
+                    {/* YEAR */}
+
+                    <div className="auth-field">
+
+                      <label htmlFor="year">
+
+                        Year
+
+                        <span>
+                          *
+                        </span>
+
+                      </label>
+
+                      <div className="auth-input-wrapper">
+
+                        <span className="auth-input-icon">
+
+                          <CollegeIcon />
+
+                        </span>
+
+                        <select
+                          id="year"
+                          name="year"
+                          value={
+                            form.year
+                          }
+                          onChange={(e) =>
+                            updateField(
+                              "year",
+                              e.target.value
+                            )
+                          }
+                          onBlur={() =>
+                            setTouched(
+                              (prev) => ({
+                                ...prev,
+                                year: true,
+                              })
+                            )
+                          }
+                          className={`auth-input auth-select ${
+                            errors.year &&
+                            touched.year
+                              ? "input-error"
+                              : ""
+                          }`}
+                        >
+
+                          <option value="">
+                            Select your year
+                          </option>
+
+                          <option value="1st Year">
+                            1st Year
+                          </option>
+
+                          <option value="2nd Year">
+                            2nd Year
+                          </option>
+
+                          <option value="3rd Year">
+                            3rd Year
+                          </option>
+
+                          <option value="4th Year">
+                            4th Year
+                          </option>
+
+                          <option value="Final Year">
+                            Final Year
+                          </option>
+
+                        </select>
+
+                      </div>
+
+                      {errors.year &&
+                        touched.year && (
+
+                        <p className="auth-error">
+                          {errors.year}
+                        </p>
+
+                      )}
+
+                    </div>
+
+                  </div>
+
+                )}
+
+                {/* ORGANIZER */}
+
+                {mode === "register" &&
+                  role === "organizer" && (
+
+                  <div className="two-columns">
+
+                    <InputField
+                      {...inputProps}
+                      label="Organization"
+                      name="organization"
+                      placeholder="Event club / department"
+                      icon={
+                        <BuildingIcon />
+                      }
+                    />
+
+                    <InputField
+                      {...inputProps}
+                      label="Phone"
+                      name="phone"
+                      type="tel"
+                      placeholder="+91 98765 43210"
+                      icon={
+                        <PhoneIcon />
+                      }
+                    />
+
+                  </div>
+
+                )}
+
+                {/* PASSWORD */}
+
+                <InputField
+                  {...inputProps}
+                  label="Password"
+                  name="password"
+                  type="password"
+                  placeholder="Minimum 8 characters"
+                  icon={
+                    <LockIcon />
                   }
                 >
 
-                  <EyeIcon
-                    open={
-                      showConfirmPassword
-                    }
-                  />
-
-                </button>
-
-              </InputField>
-            )}
-
-            {/* =================================================
-                LOGIN OPTIONS
-            ================================================= */}
-
-            {mode === "login" && (
-              <div className="auth-options">
-
-                <label>
-
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) =>
-                      setRememberMe(
-                        e.target.checked
+                  <button
+                    type="button"
+                    className="password-eye"
+                    onClick={() =>
+                      setShowPassword(
+                        (prev) =>
+                          !prev
                       )
                     }
-                  />
+                    aria-label={
+                      showPassword
+                        ? "Hide password"
+                        : "Show password"
+                    }
+                  >
 
-                  <span className="custom-check">
-                    ✓
-                  </span>
+                    <EyeIcon
+                      open={
+                        showPassword
+                      }
+                    />
 
-                  Remember me
+                  </button>
 
-                </label>
+                </InputField>
+
+                {/* CONFIRM PASSWORD */}
+
+                {mode === "register" && (
+
+                  <InputField
+                    {...inputProps}
+                    label="Confirm Password"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Enter password again"
+                    icon={
+                      <LockIcon />
+                    }
+                  >
+
+                    <button
+                      type="button"
+                      className="password-eye"
+                      onClick={() =>
+                        setShowConfirmPassword(
+                          (prev) =>
+                            !prev
+                        )
+                      }
+                      aria-label={
+                        showConfirmPassword
+                          ? "Hide confirm password"
+                          : "Show confirm password"
+                      }
+                    >
+
+                      <EyeIcon
+                        open={
+                          showConfirmPassword
+                        }
+                      />
+
+                    </button>
+
+                  </InputField>
+
+                )}
+
+                {/* LOGIN OPTIONS */}
+
+                {mode === "login" && (
+
+                  <div className="auth-options">
+
+                    <label>
+
+                      <input
+                        type="checkbox"
+                        checked={
+                          rememberMe
+                        }
+                        onChange={(e) =>
+                          setRememberMe(
+                            e.target.checked
+                          )
+                        }
+                      />
+
+                      <span className="custom-check">
+                        ✓
+                      </span>
+
+                      Remember me
+
+                    </label>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+
+                        setForgotEmail(
+                          form.email
+                        );
+
+                        setStatus("");
+
+                        setSuccess(false);
+
+                        setLoading(false);
+
+                        setShowForgotPassword(
+                          true
+                        );
+
+                      }}
+                    >
+                      Forgot password?
+                    </button>
+
+                  </div>
+
+                )}
+
+                {/* STATUS */}
+
+                {status && (
+
+                  <div
+                    className={`auth-status ${
+                      success
+                        ? "success"
+                        : ""
+                    }`}
+                  >
+
+                    <span>
+                      {success
+                        ? "✓"
+                        : "i"}
+                    </span>
+
+                    {status}
+
+                  </div>
+
+                )}
+
+                {/* SUBMIT */}
 
                 <button
-                  type="button"
-                  onClick={() =>
-                    setStatus(
-                      "Password reset will be available when the backend is connected."
-                    )
+                  type="submit"
+                  className={`auth-submit ${
+                    loading
+                      ? "loading"
+                      : ""
+                  } ${
+                    success
+                      ? "submit-success"
+                      : ""
+                  }`}
+                  disabled={
+                    loading ||
+                    success
                   }
                 >
-                  Forgot password?
+
+                  {loading ? (
+
+                    <>
+                      <span className="spinner" />
+                      Please wait...
+                    </>
+
+                  ) : success ? (
+
+                    <>
+                      Success
+                      <span>✓</span>
+                    </>
+
+                  ) : (
+
+                    <>
+                      {mode === "login"
+                        ? "Sign In"
+                        : "Create Account"}
+
+                      <ArrowIcon />
+
+                    </>
+
+                  )}
+
                 </button>
 
-              </div>
-            )}
+              </form>
 
-            {/* =================================================
-                STATUS
-            ================================================= */}
+              {/* =================================================
+                  BOTTOM SWITCH
+              ================================================= */}
 
-            {status && (
-              <div
-                className={`auth-status ${
-                  success
-                    ? "success"
-                    : ""
-                }`}
-              >
+              <div className="auth-switch-footer">
 
-                <span>
-                  {success ? "✓" : "i"}
-                </span>
+                <span />
 
-                {status}
+                <p>
 
-              </div>
-            )}
-
-            {/* =================================================
-                SUBMIT BUTTON
-            ================================================= */}
-
-            <button
-              type="submit"
-              className={`auth-submit ${
-                loading
-                  ? "loading"
-                  : ""
-              } ${
-                success
-                  ? "submit-success"
-                  : ""
-              }`}
-              disabled={
-                loading || success
-              }
-            >
-
-              {loading ? (
-                <>
-                  <span className="spinner" />
-                  Please wait...
-                </>
-              ) : success ? (
-                <>
-                  Success
-                  <span>✓</span>
-                </>
-              ) : (
-                <>
                   {mode === "login"
-                    ? "Sign In"
-                    : "Create Account"}
+                    ? "New to EventHub?"
+                    : "Already have an account?"}
 
-                  <ArrowIcon />
-                </>
-              )}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      changeMode(
+                        mode === "login"
+                          ? "register"
+                          : "login"
+                      )
+                    }
+                  >
 
-            </button>
+                    {mode === "login"
+                      ? "Create account"
+                      : "Sign in"}
 
-          </form>
+                  </button>
 
-          {/* =================================================
-              BOTTOM SWITCH
-          ================================================= */}
+                </p>
 
-          <div className="auth-switch-footer">
+                <span />
 
-            <span />
+              </div>
 
-            <p>
-
-              {mode === "login"
-                ? "New to EventHub?"
-                : "Already have an account?"}
-
-              <button
-                type="button"
-                onClick={() =>
-                  changeMode(
-                    mode === "login"
-                      ? "register"
-                      : "login"
-                  )
-                }
-              >
-
-                {mode === "login"
-                  ? "Create account"
-                  : "Sign in"}
-
-              </button>
-
-            </p>
-
-            <span />
-
-          </div>
+            </>
+          )}
 
           {/* =================================================
               SECURITY NOTE
@@ -1436,7 +1951,9 @@ function Auth() {
 
           <div className="security-note">
 
-            <span>🔒</span>
+            <span>
+              🔒
+            </span>
 
             Secure access to your EventHub account
 
