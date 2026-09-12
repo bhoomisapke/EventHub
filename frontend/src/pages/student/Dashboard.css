@@ -224,12 +224,21 @@
 }
 
 .primary-student-button:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 
   border-color: #8B5CF6;
 
+  background:
+    linear-gradient(
+      135deg,
+      #6D28D9,
+      #8B5CF6
+    );
+
+  color: #FFFFFF;
+
   box-shadow:
-    0 10px 26px rgba(109, 40, 217, 0.20);
+    0 12px 28px rgba(109, 40, 217, 0.28);
 }
 
 
@@ -268,14 +277,21 @@
 }
 
 .secondary-student-button:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 
   border-color: #8B5CF6;
+
+  background:
+    linear-gradient(
+      135deg,
+      #EEEAF4,
+      #F7EAF3
+    );
 
   color: #6D28D9;
 
   box-shadow:
-    0 0 18px rgba(109, 40, 217, 0.13);
+    0 8px 22px rgba(109, 40, 217, 0.15);
 }
 
 
@@ -349,7 +365,6 @@
 /* =========================================================
    HERO VISUAL
 ========================================================= */
-
 .student-hero-visual {
   position: relative;
 
@@ -358,6 +373,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  isolation: isolate;
 }
 
 
@@ -459,7 +476,7 @@
 }
 
 .preview-top strong {
-  color: #FFF8ED;
+  color: #0B1230;
 
   font-size: 14px;
 
@@ -473,7 +490,7 @@
 
   gap: 6px;
 
-  color: #F472B6;
+  color: #6D28D9;
 
   font-size: 8px;
 
@@ -504,7 +521,7 @@
 }
 
 .preview-center small {
-  color: #F472B6;
+  color: #EC4899;
 
   font-size: 8px;
 
@@ -516,13 +533,12 @@
 .preview-center h3 {
   margin-top: 8px;
 
-  color: #FFF8ED;
+  color: #0B1230;
 
   font-size: 28px;
 
   letter-spacing: -1px;
 }
-
 
 /* =========================================================
    PREVIEW STATS
@@ -544,15 +560,29 @@
 
   border-radius: 11px;
 
-  background: rgba(255, 248, 237, 0.07);
+  background: #F7F3EE;
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid #E8E2EC;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.preview-stats div:hover {
+  transform: translateY(-3px);
+
+  border-color: rgba(139, 92, 246, 0.30);
+
+  box-shadow:
+    0 8px 18px rgba(139, 92, 246, 0.08);
 }
 
 .preview-stats span {
   display: block;
 
-  color: #AEB7CB;
+  color: #687185;
 
   font-size: 7px;
 
@@ -564,11 +594,10 @@
 
   margin-top: 5px;
 
-  color: #FFF8ED;
+  color: #0B1230;
 
   font-size: 19px;
 }
-
 
 /* =========================================================
    PREVIEW BOTTOM
@@ -583,11 +612,23 @@
 
   padding-top: 14px;
 
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid #ECEAF1;
 
-  color: #AEB7CB;
+  color: #687185;
 
   font-size: 8px;
+}
+
+.preview-bottom span {
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.preview-bottom span:hover {
+  color: #6D28D9;
+
+  transform: translateY(-1px);
 }
 
 
@@ -607,30 +648,71 @@
 
   border-radius: 12px;
 
-  background:
-    rgba(11, 18, 48, 0.96);
+  background: #FFFFFF;
 
-  border: 1px solid rgba(139, 92, 246, 0.28);
+  border: 1px solid rgba(139, 92, 246, 0.20);
 
   box-shadow:
-    0 15px 30px rgba(7, 9, 20, 0.16);
+    0 15px 30px rgba(11, 18, 48, 0.14),
+    0 5px 15px rgba(139, 92, 246, 0.07);
 
   transition:
-    transform 0.25s ease;
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .floating-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 20px 38px rgba(11, 18, 48, 0.18),
+    0 0 20px rgba(139, 92, 246, 0.10);
 }
 
 .floating-card-one {
   top: 35px;
   left: 0;
+
+  animation:
+    floatingCardOne 4s ease-in-out infinite;
 }
 
 .floating-card-two {
   right: 0;
   bottom: 35px;
+
+  animation:
+    floatingCardTwo 4.5s ease-in-out infinite;
+}
+
+
+@keyframes floatingCardOne {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes floatingCardTwo {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(8px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .floating-icon {
@@ -658,7 +740,7 @@
 .floating-card strong {
   display: block;
 
-  color: #FFF8ED;
+  color: #0B1230;
 
   font-size: 10px;
 }
@@ -668,11 +750,10 @@
 
   margin-top: 2px;
 
-  color: #AEB7CB;
+  color: #687185;
 
   font-size: 8px;
 }
-
 
 /* =========================================================
    STATS
@@ -1397,10 +1478,17 @@
 }
 
 .student-cta > a:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+
+  background:
+    linear-gradient(
+      135deg,
+      #8B5CF6,
+      #EC4899
+    );
 
   box-shadow:
-    0 12px 30px rgba(236, 72, 153, 0.28);
+    0 14px 32px rgba(236, 72, 153, 0.32);
 }
 
 
@@ -1496,13 +1584,90 @@
     min-height: 350px;
   }
 
-  .student-preview-card {
-    width: 100%;
+  /* =========================================================
+   PREVIEW CARD — FLOATING WHITE WINDOW
+========================================================= */
 
-    min-height: 250px;
+.student-preview-card {
+  position: relative;
 
-    padding: 18px;
+  width: min(420px, 90%);
+
+  min-height: 270px;
+
+  padding: 22px;
+
+  overflow: hidden;
+
+  border-radius: 26px;
+
+  /* WHITE FLOATING WINDOW */
+  background: #FFFFFF;
+
+  border: 1px solid rgba(139, 92, 246, 0.18);
+
+  box-shadow:
+    0 25px 55px rgba(11, 18, 48, 0.16),
+    0 10px 25px rgba(139, 92, 246, 0.08);
+
+  transform:
+    perspective(1000px)
+    rotateY(-3deg)
+    rotateX(2deg);
+
+  /*
+     Gentle floating animation
+  */
+  animation: previewFloat 4.5s ease-in-out infinite;
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+
+/* FLOATING ANIMATION */
+
+@keyframes previewFloat {
+  0% {
+    transform:
+      perspective(1000px)
+      rotateY(-3deg)
+      rotateX(2deg)
+      translateY(0);
   }
+
+  50% {
+    transform:
+      perspective(1000px)
+      rotateY(-3deg)
+      rotateX(2deg)
+      translateY(-10px);
+  }
+
+  100% {
+    transform:
+      perspective(1000px)
+      rotateY(-3deg)
+      rotateX(2deg)
+      translateY(0);
+  }
+}
+
+
+.student-preview-card:hover {
+  animation-play-state: paused;
+
+  transform:
+    perspective(1000px)
+    rotateY(0deg)
+    rotateX(0deg)
+    translateY(-8px);
+
+  box-shadow:
+    0 30px 70px rgba(11, 18, 48, 0.20),
+    0 0 40px rgba(139, 92, 246, 0.14);
+}
 
   .floating-card-one {
     left: -5px;

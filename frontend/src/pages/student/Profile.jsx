@@ -164,7 +164,7 @@ const Profile = () => {
         : sessionStorage;
 
       storage.setItem("user", JSON.stringify(updatedUser));
-
+      window.dispatchEvent(new Event("profileUpdated"));
     } catch (err) {
       console.error("Profile update error:", err);
       setError(err.message || "Unable to update profile.");

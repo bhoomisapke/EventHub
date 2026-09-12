@@ -14,7 +14,7 @@ import Dashboard from "../pages/student/Dashboard.jsx";
 import MyRegistrations from "../pages/student/MyRegistrations.jsx";
 import MyTickets from "../pages/student/MyTickets.jsx";
 import Profile from "../pages/student/Profile.jsx";
-
+import RegistrationForm from "../pages/student/RegistrationForm.jsx";
 // Public Pages
 import Categories from "../pages/public/Categories.jsx";
 import EventDetails from "../pages/public/EventDetails.jsx";
@@ -112,6 +112,11 @@ const AppRoutes = () => {
         <Route
           path="profile"
           element={<Profile />}
+        />
+        
+        <Route
+          path="register"
+          element={<RegistrationForm />}
         />
 
       </Route>
