@@ -49,43 +49,42 @@ const dashboardData = {
 
 const categories = [
   {
-    symbol: "</>",
-    title: "CODING",
+    symbol: "⌁",
+    title: "Technology",
     description:
-      "Programming contests and coding challenges.",
+      "Explore technology and innovation events.",
   },
   {
-    symbol: "AI",
-    title: "AI / ML",
+    symbol: "✦",
+    title: "Cultural",
     description:
-      "Artificial intelligence and machine learning.",
+      "Discover creative and cultural events.",
   },
   {
     symbol: "◈",
-    title: "ROBOTICS",
+    title: "Sports",
     description:
-      "Build, experiment and compete with robots.",
+      "Participate in exciting sports events.",
   },
   {
     symbol: "⚡",
-    title: "HACKATHONS",
+    title: "Workshop",
     description:
-      "Turn innovative ideas into real solutions.",
+      "Learn practical skills through workshops.",
   },
   {
     symbol: "◉",
-    title: "PROJECTS",
+    title: "Competition",
     description:
-      "Showcase innovative college projects.",
+      "Challenge yourself and compete with others.",
   },
   {
-    symbol: "⌁",
-    title: "WORKSHOPS",
+    symbol: "✧",
+    title: "Seminar",
     description:
-      "Learn practical technical skills.",
+      "Learn from experts and industry speakers.",
   },
 ];
-
 /* ============================================================
    FEATURE DATA
    ============================================================ */
@@ -185,6 +184,12 @@ function App() {
 
   const [selectedEvent, setSelectedEvent] =
     useState("");
+
+  const [feedbackText, setFeedbackText] =
+  useState("");
+
+const [likedThings, setLikedThings] =
+  useState([]);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -397,24 +402,88 @@ setEvents(upcomingEvents);
      FEEDBACK
      ========================================================== */
 
-  const submitFeedback = (event) => {
-    event.preventDefault();
+  const submitFeedback = async (event) => {
+  event.preventDefault();
 
-    if (!rating || !selectedEvent) {
-      alert(
-        "Please select an event and rating."
-      );
-      return;
-    }
+  if (!selectedEvent) {
+    alert("Please select an event.");
+    return;
+  }
+
+  if (!rating) {
+    alert("Please give a rating.");
+    return;
+  }
+
+  if (!feedbackText.trim()) {
+    alert("Please write your feedback.");
+    return;
+  }
+
+  const token =
+    localStorage.getItem("token") ||
+    localStorage.getItem("authToken") ||
+    localStorage.getItem("access_token") ||
+    sessionStorage.getItem("token") ||
+    sessionStorage.getItem("authToken") ||
+    sessionStorage.getItem("access_token") ||
+    "";
+
+  if (!token) {
+    alert("Please login as a student to submit feedback.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/feedback/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify({
+          event: Number(selectedEvent),
+          rating: rating,
+          feedback_text: feedbackText.trim(),
+          liked_things: likedThings,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+  console.error("Feedback API error:", data);
+
+  alert(
+    typeof data === "object"
+      ? JSON.stringify(data)
+      : "Unable to submit feedback."
+  );
+
+  return;
+}
+
+    console.log("Feedback submitted:", data);
 
     setFeedbackSent(true);
-  };
+  } catch (error) {
+    console.error("Feedback submission error:", error);
+    alert(
+      "Unable to connect to the server. Please try again."
+    );
+  }
+};
 
   const resetFeedback = () => {
-    setFeedbackSent(false);
-    setRating(0);
-    setSelectedEvent("");
-  };
+  setFeedbackSent(false);
+  setRating(0);
+  setSelectedEvent("");
+  setFeedbackText("");
+  setLikedThings([]);
+};
 
   /* ==========================================================
      RENDER
@@ -1370,10 +1439,17 @@ setEvents(upcomingEvents);
 
               {categories.map((category) => (
 
-                <div
-                  className="category-item reveal"
-                  key={category.title}
-                >
+              <div
+  className="category-item reveal show"
+  key={category.title}
+  onClick={() =>
+    navigate(
+      `/events?category=${encodeURIComponent(category.title)}`
+    )
+  }
+  role="button"
+  tabIndex={0}
+>
 
                   <div className="category-symbol">
                     {category.symbol}
@@ -1656,7 +1732,7 @@ setEvents(upcomingEvents);
 
                         <option
                           key={event.id}
-                          value={event.title}
+                          value={event.id}
                         >
                           {event.title}
                         </option>
@@ -1702,9 +1778,13 @@ setEvents(upcomingEvents);
                     </label>
 
                     <textarea
-                      placeholder="Tell us what you liked about the event..."
-                      rows="5"
-                    ></textarea>
+  placeholder="Tell us what you liked about the event..."
+  rows="5"
+  value={feedbackText}
+  onChange={(event) =>
+    setFeedbackText(event.target.value)
+  }
+/>
 
                     <div className="feedback-options">
 
@@ -1713,23 +1793,83 @@ setEvents(upcomingEvents);
                       </span>
 
                       <label>
-                        <input type="checkbox" />
-                        Content
+                        <input
+  type="checkbox"
+  checked={likedThings.includes("Content")}
+  onChange={(event) => {
+    if (event.target.checked) {
+      setLikedThings((prev) => [
+        ...prev,
+        "Content",
+      ]);
+    } else {
+      setLikedThings((prev) =>
+        prev.filter((item) => item !== "Content")
+      );
+    }
+  }}
+/>
+Content
                       </label>
 
                       <label>
-                        <input type="checkbox" />
-                        Speakers
+                        <input
+  type="checkbox"
+  checked={likedThings.includes("Speakers")}
+  onChange={(event) => {
+    if (event.target.checked) {
+      setLikedThings((prev) => [
+        ...prev,
+        "Speakers",
+      ]);
+    } else {
+      setLikedThings((prev) =>
+        prev.filter((item) => item !== "Speakers")
+      );
+    }
+  }}
+/>
+Speakers
                       </label>
 
                       <label>
-                        <input type="checkbox" />
-                        Organization
+                        <input
+  type="checkbox"
+  checked={likedThings.includes("Organization")}
+  onChange={(event) => {
+    if (event.target.checked) {
+      setLikedThings((prev) => [
+        ...prev,
+        "Organization",
+      ]);
+    } else {
+      setLikedThings((prev) =>
+        prev.filter((item) => item !== "Organization")
+      );
+    }
+  }}
+/>
+Organization
                       </label>
 
                       <label>
-                        <input type="checkbox" />
-                        Activities
+                        <input
+  type="checkbox"
+  checked={likedThings.includes("Activities")}
+  onChange={(event) => {
+    if (event.target.checked) {
+      setLikedThings((prev) => [
+        ...prev,
+        "Activities",
+      ]);
+    } else {
+      setLikedThings((prev) =>
+        prev.filter((item) => item !== "Activities")
+      );
+    }
+  }}
+/>
+Activities
                       </label>
 
                     </div>
