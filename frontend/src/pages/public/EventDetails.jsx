@@ -1,193 +1,957 @@
-import React, { useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  Users, 
-  Tag, 
-  Share2, 
-  Bookmark, 
-  ArrowLeft, 
-  CheckCircle2, 
-  Building2,
-  ExternalLink
-} from 'lucide-react';
-import { eventsData } from '../../data/events';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-const EventDetails = () => {
+import {
+  ArrowLeft,
+  CalendarDays,
+  Clock3,
+  MapPin,
+  Users,
+  IndianRupee,
+  UserRound,
+  Phone,
+  Tag,
+  FileText,
+  CheckCircle2,
+  AlertCircle,
+  X,
+  Maximize2,
+} from "lucide-react";
+
+import "./EventDetails.css";
+
+function EventDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [isSaved, setIsSaved] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(false);
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // Find matching event or fallback to first item
-  const event = eventsData.find((item) => item.id === id) || eventsData[0];
+  const [showFullImage, setShowFullImage] = useState(false);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
-  const handleRegister = () => {
-    setIsRegistered(!isRegistered);
+  /* ============================================================
+     FETCH EVENT
+  ============================================================ */
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(
+          `http://localhost:8000/api/events/${id}/`
+        );
+
+        if (!response.ok) {
+          throw new Error("Event not found");
+        }
+
+        const data = await response.json();
+
+        setEvent(data);
+      } catch (err) {
+        console.error("Error fetching event:", err);
+        setError("Unable to load event details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvent();
+  }, [id]);
+
+  /* ============================================================
+     CLEANUP
+  ============================================================ */
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  /* ============================================================
+     DATE FORMAT
+  ============================================================ */
+
+  const formatDate = (dateValue) => {
+    if (!dateValue) {
+      return "Not specified";
+    }
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+      return dateValue;
+    }
+
+    return date.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
   };
 
-  return (
-    <div className="min-h-screen bg-[#090D16] text-[#F1F5F9] pt-24 pb-16 px-6 lg:px-16 space-y-8">
-      
-      {/* Back Button */}
-      <button 
-        onClick={() => navigate(-1)}
-        className="inline-flex items-center gap-2 text-sm font-medium text-[#E0F2FE] hover:text-[#0EA5E9] transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" /> Back to events
-      </button>
+  /* ============================================================
+     IMAGE URL
+  ============================================================ */
 
-      {/* Hero Banner Showcase */}
-      <div className="relative rounded-3xl overflow-hidden border border-[#FFFFFF]/10 bg-[#0F172A] h-72 sm:h-96">
-        <img 
-          src={event.image} 
-          alt={event.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#090D16] via-[#090D16]/50 to-transparent" />
-        
-        {/* Top Badges */}
-        <div className="absolute top-6 left-6 right-6 flex items-center justify-between">
-          <span className="px-4 py-1.5 rounded-full text-xs font-semibold bg-[#0F172A]/90 text-[#E0F2FE] border border-[#FFFFFF]/15 backdrop-blur-md">
-            {event.category}
-          </span>
-          <div className="flex items-center gap-3">
-            <button 
-              onClick={() => setIsSaved(!isSaved)}
-              className={`p-2.5 rounded-full backdrop-blur-md border transition-all ${
-                isSaved 
-                  ? 'bg-[#0EA5E9] text-[#FFFFFF] border-[#0EA5E9]' 
-                  : 'bg-[#0F172A]/80 text-[#FFFFFF] border-[#FFFFFF]/20 hover:text-[#0EA5E9]'
-              }`}
-            >
-              <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
-            </button>
-            <button className="p-2.5 rounded-full bg-[#0F172A]/80 text-[#FFFFFF] border border-[#FFFFFF]/20 backdrop-blur-md hover:text-[#0EA5E9] transition-all">
-              <Share2 className="w-4 h-4" />
-            </button>
-          </div>
+  const getImageUrl = () => {
+    if (!event?.image) {
+      return "/images/event-placeholder.jpg";
+    }
+
+    const image = String(event.image);
+
+    if (
+      image.startsWith("http://") ||
+      image.startsWith("https://")
+    ) {
+      return image;
+    }
+
+    if (image.startsWith("/")) {
+      return `http://localhost:8000${image}`;
+    }
+
+    return `http://localhost:8000/${image}`;
+  };
+
+  /* ============================================================
+     IMAGE MODAL
+  ============================================================ */
+
+  const openFullImage = () => {
+    setShowFullImage(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeFullImage = () => {
+    setShowFullImage(false);
+    document.body.style.overflow = "";
+  };
+
+  const handleImageKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      openFullImage();
+    }
+
+    if (e.key === "Escape") {
+      closeFullImage();
+    }
+  };
+
+  /* ============================================================
+     DESCRIPTION
+  ============================================================ */
+
+  const toggleDescription = () => {
+    setShowFullDescription((previous) => !previous);
+  };
+
+  const handleDescriptionKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleDescription();
+    }
+  };
+
+  /* ============================================================
+     LOADING
+  ============================================================ */
+
+  if (loading) {
+    return (
+      <div className="organizer-event-details-page">
+        <div className="event-details-loading">
+          <div className="loading-spinner"></div>
+
+          <p>Loading event details...</p>
         </div>
+      </div>
+    );
+  }
 
-        {/* Hero Bottom Overlay Details */}
-        <div className="absolute bottom-6 left-6 right-6 space-y-2">
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-[#FFFFFF] tracking-tight">
+  /* ============================================================
+     ERROR
+  ============================================================ */
+
+  if (error || !event) {
+    return (
+      <div className="organizer-event-details-page">
+        <div className="event-details-error">
+          <AlertCircle size={38} />
+
+          <h2>Event not found</h2>
+
+          <p>
+            {error || "The requested event could not be found."}
+          </p>
+
+          <Link
+            to="/events"
+            className="back-events-btn"
+          >
+            <ArrowLeft size={16} />
+            Back to All Events
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  /* ============================================================
+     EVENT DATA
+  ============================================================ */
+
+  const registrationFee =
+    event.registrationFee ??
+    event.registration_fee ??
+    0;
+
+  const organizerName =
+    event.organizerName ||
+    event.organizer_name ||
+    "EventHub Organizer";
+
+  const organizerMobile =
+    event.organizerMobile ||
+    event.organizer_mobile ||
+    "Not provided";
+
+  const participants =
+    Number(event.participants || 0);
+
+  const capacity =
+    Number(event.capacity || 0);
+
+  const registrationPercentage =
+    capacity > 0
+      ? Math.min(
+          (participants / capacity) * 100,
+          100
+        )
+      : 0;
+
+  const status =
+    event.status || "upcoming";
+
+  const deadline =
+    event.registrationDeadline ||
+    event.registration_deadline;
+
+  /* ============================================================
+     PARTICIPATION DATA
+  ============================================================ */
+
+  const participationType =
+    event.participationType ||
+    event.participation_type ||
+    "individual";
+
+  const minTeamSize =
+    Number(
+      event.minTeamSize ??
+      event.min_team_size ??
+      1
+    );
+
+  const maxTeamSize =
+    Number(
+      event.maxTeamSize ??
+      event.max_team_size ??
+      1
+    );
+
+  const isGroupEvent =
+    participationType === "group";
+
+  const participationLabel =
+    isGroupEvent
+      ? "Group Event"
+      : "Individual Event";
+
+  const teamSizeLabel =
+    isGroupEvent
+      ? `${minTeamSize}–${maxTeamSize} Members`
+      : "1 Participant";
+
+  /* ============================================================
+     DESCRIPTION
+  ============================================================ */
+
+  const fullDescription =
+    event.description ||
+    "No description available for this event.";
+
+  const descriptionLimit = 55;
+
+  const isLongDescription =
+    fullDescription.length > descriptionLimit;
+
+  const shortDescription =
+    isLongDescription
+      ? `${fullDescription.substring(
+          0,
+          descriptionLimit
+        )}...`
+      : fullDescription;
+
+  const displayedDescription =
+    showFullDescription
+      ? fullDescription
+      : shortDescription;
+
+  /* ============================================================
+     PAGE
+  ============================================================ */
+
+  return (
+    <div className="organizer-event-details-page">
+
+      {/* ======================================================
+          BACK BUTTON
+      ====================================================== */}
+
+      <div className="event-details-wrapper">
+
+        <Link
+          to="/events"
+          className="event-back-button"
+        >
+          <ArrowLeft size={16} />
+
+          <span>
+            Back to All Events
+          </span>
+        </Link>
+
+      </div>
+
+      {/* ======================================================
+          MAIN EVENT CONTENT
+      ====================================================== */}
+
+      <main className="event-details-main">
+
+        {/* ====================================================
+            HERO IMAGE
+        ==================================================== */}
+
+        <section className="event-hero-section">
+
+          <div
+            className="event-hero-image-wrapper"
+            onClick={openFullImage}
+            onKeyDown={handleImageKeyDown}
+            role="button"
+            tabIndex={0}
+            aria-label="View full event image"
+            title="Click to view full image"
+          >
+
+            <img
+              src={getImageUrl()}
+              alt={event.title || "Event"}
+              className="event-hero-image"
+              onError={(e) => {
+                e.currentTarget.src =
+                  "/images/event-placeholder.jpg";
+              }}
+            />
+
+            {/* IMAGE HOVER */}
+
+            <div className="event-image-hover">
+
+              <div className="event-image-view-button">
+
+                <Maximize2 size={14} />
+
+                <span>
+                  View Full Image
+                </span>
+
+              </div>
+
+            </div>
+
+            {/* CATEGORY */}
+
+            <div className="hero-category">
+
+              <Tag size={14} />
+
+              {event.category || "General"}
+
+            </div>
+
+            {/* STATUS */}
+
+            <div
+              className={`hero-status ${status}`}
+            >
+
+              <CheckCircle2 size={14} />
+
+              {status.charAt(0).toUpperCase() +
+                status.slice(1)}
+
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* ====================================================
+            EVENT TITLE
+        ==================================================== */}
+
+        <section className="event-title-section">
+
+          <span className="event-details-label">
+            EVENT DETAILS
+          </span>
+
+          <h1>
             {event.title}
           </h1>
-          <p className="text-sm text-[#E0F2FE] flex items-center gap-2">
-            <Building2 className="w-4 h-4 text-[#0EA5E9]" />
-            Organized by <span className="font-semibold text-[#FFFFFF]">{event.organizer}</span>
-          </p>
-        </div>
-      </div>
 
-      {/* Main Grid Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Left Column: Event Overview & Location */}
-        <div className="lg:col-span-2 space-y-8">
-          
-          {/* Quick Info Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl bg-[#0F172A]/80 border border-[#FFFFFF]/10 backdrop-blur-xl">
-              <Calendar className="w-5 h-5 text-[#0EA5E9] mb-2" />
-              <p className="text-xs text-[#F1F5F9]/60">Date</p>
-              <p className="text-sm font-semibold text-[#FFFFFF]">{event.date}</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-[#0F172A]/80 border border-[#FFFFFF]/10 backdrop-blur-xl">
-              <Clock className="w-5 h-5 text-[#06B6D4] mb-2" />
-              <p className="text-xs text-[#F1F5F9]/60">Time</p>
-              <p className="text-sm font-semibold text-[#FFFFFF]">{event.time}</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-[#0F172A]/80 border border-[#FFFFFF]/10 backdrop-blur-xl col-span-2 sm:col-span-1">
-              <Users className="w-5 h-5 text-[#0EA5E9] mb-2" />
-              <p className="text-xs text-[#F1F5F9]/60">Attendees</p>
-              <p className="text-sm font-semibold text-[#FFFFFF]">{event.attendees} Registered</p>
-            </div>
+          <div className="title-gradient-line"></div>
+
+        </section>
+
+        {/* ====================================================
+            ABOUT THIS EVENT
+        ==================================================== */}
+
+        <section
+          className={`about-event-card ${
+            showFullDescription
+              ? "is-expanded"
+              : ""
+          }`}
+          onClick={toggleDescription}
+          onKeyDown={handleDescriptionKeyDown}
+          role="button"
+          tabIndex={0}
+          aria-expanded={showFullDescription}
+          aria-label={
+            showFullDescription
+              ? "Collapse event description"
+              : "Expand event description"
+          }
+        >
+
+          <div className="about-icon">
+            <FileText size={20} />
           </div>
 
-          {/* Description */}
-          <div className="p-6 rounded-2xl bg-[#0F172A]/80 border border-[#FFFFFF]/10 backdrop-blur-xl space-y-4">
-            <h2 className="text-xl font-bold text-[#FFFFFF]">About This Event</h2>
-            <p className="text-[#F1F5F9]/80 leading-relaxed text-sm sm:text-base">
-              {event.description}
-            </p>
-            <p className="text-[#F1F5F9]/80 leading-relaxed text-sm sm:text-base">
-              Expect engaging sessions, hands-on activities, networking opportunities with peers and mentors, and exclusive event perks.
-            </p>
-          </div>
+          <div className="about-content">
 
-          {/* Location & Map Section */}
-          <div className="p-6 rounded-2xl bg-[#0F172A]/80 border border-[#FFFFFF]/10 backdrop-blur-xl space-y-4">
-            <h2 className="text-xl font-bold text-[#FFFFFF] flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-[#06B6D4]" />
-              Location & Venue
+            <h2>
+              About This Event
             </h2>
-            <p className="text-sm text-[#E0F2FE] font-medium">{event.location}</p>
-            
-            {/* Visual Map Placeholder Box */}
-            <div className="w-full h-48 rounded-xl bg-[#090D16] border border-[#FFFFFF]/10 flex flex-col items-center justify-center space-y-2 text-center p-4">
-              <MapPin className="w-8 h-8 text-[#0EA5E9] animate-bounce" />
-              <p className="text-sm font-semibold text-[#FFFFFF]">Interactive Campus Map</p>
-              <p className="text-xs text-[#F1F5F9]/50">Venue navigation will render here</p>
-            </div>
-          </div>
-        </div>
 
-        {/* Right Column: Registration Card Sidebar */}
-        <div className="space-y-6">
-          <div className="p-6 rounded-2xl bg-[#0F172A]/90 border border-[#FFFFFF]/15 backdrop-blur-xl shadow-2xl space-y-6 sticky top-28">
-            <div className="flex items-center justify-between border-b border-[#FFFFFF]/10 pb-4">
-              <div>
-                <p className="text-xs text-[#F1F5F9]/60">Ticket Price</p>
-                <p className="text-2xl font-extrabold text-[#FFFFFF]">{event.price}</p>
-              </div>
-              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#06B6D4]/10 text-[#06B6D4] border border-[#06B6D4]/30">
-                Open Registration
-              </span>
-            </div>
+            <p
+              className={
+                showFullDescription
+                  ? "description-expanded"
+                  : "description-collapsed"
+              }
+            >
+              {displayedDescription}
+            </p>
 
-            <div className="space-y-3">
+            {isLongDescription && (
               <button
-                onClick={handleRegister}
-                className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-lg ${
-                  isRegistered
-                    ? 'bg-[#06B6D4] text-[#FFFFFF] shadow-[#06B6D4]/20'
-                    : 'bg-[#0EA5E9] hover:bg-[#06B6D4] text-[#FFFFFF] shadow-[#0EA5E9]/25 active:scale-95'
-                }`}
+                type="button"
+                className="description-toggle-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleDescription();
+                }}
               >
-                {isRegistered ? (
-                  <>
-                    <CheckCircle2 className="w-5 h-5" /> Registered
-                  </>
-                ) : (
-                  'Register Now'
-                )}
+                {showFullDescription
+                  ? "Show Less"
+                  : "Read More"}
               </button>
+            )}
 
-              <p className="text-xs text-center text-[#F1F5F9]/50">
-                Instant confirmation email sent upon registration.
-              </p>
-            </div>
+            {!showFullDescription &&
+              isLongDescription && (
+                <span className="character-note">
+                  Showing only first 55 characters
+                </span>
+              )}
 
-            <div className="pt-4 border-t border-[#FFFFFF]/10 space-y-3 text-xs text-[#E0F2FE]">
-              <div className="flex items-center justify-between">
-                <span className="text-[#F1F5F9]/60">Organizer</span>
-                <span className="font-semibold text-[#FFFFFF]">{event.organizer}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-[#F1F5F9]/60">Category</span>
-                <span className="font-semibold text-[#FFFFFF]">{event.category}</span>
-              </div>
-            </div>
           </div>
+
+        </section>
+
+        {/* ====================================================
+            EVENT INFORMATION
+        ==================================================== */}
+
+        <section className="details-section">
+
+          <div className="section-title-row">
+
+            <div className="section-title-left">
+
+              <CalendarDays size={19} />
+
+              <h2>
+                Event Information
+              </h2>
+
+            </div>
+
+            <div className="section-title-line"></div>
+
+          </div>
+
+          <div className="event-information-card">
+
+            {/* DATE */}
+
+            <div className="information-item">
+
+              <div className="information-icon purple">
+                <CalendarDays size={19} />
+              </div>
+
+              <div>
+
+                <span>
+                  Date
+                </span>
+
+                <strong>
+                  {formatDate(event.date)}
+                </strong>
+
+              </div>
+
+            </div>
+
+            {/* TIME */}
+
+            <div className="information-item">
+
+              <div className="information-icon pink">
+                <Clock3 size={19} />
+              </div>
+
+              <div>
+
+                <span>
+                  Time
+                </span>
+
+                <strong>
+                  {event.time || "Not specified"}
+                </strong>
+
+              </div>
+
+            </div>
+
+            {/* VENUE */}
+
+            <div className="information-item">
+
+              <div className="information-icon blue">
+                <MapPin size={19} />
+              </div>
+
+              <div>
+
+                <span>
+                  Venue
+                </span>
+
+                <strong>
+                  {event.venue || "Not specified"}
+                </strong>
+
+              </div>
+
+            </div>
+
+            {/* CATEGORY */}
+
+            <div className="information-item">
+
+              <div className="information-icon violet">
+                <Tag size={19} />
+              </div>
+
+              <div>
+
+                <span>
+                  Category
+                </span>
+
+                <strong>
+                  {event.category || "General"}
+                </strong>
+
+              </div>
+
+            </div>
+
+            {/* CAPACITY */}
+
+            <div className="information-item">
+
+              <div className="information-icon pink">
+                <Users size={19} />
+              </div>
+
+              <div>
+
+                <span>
+                  Capacity
+                </span>
+
+                <strong>
+                  {capacity || "Unlimited"}
+                </strong>
+
+              </div>
+
+            </div>
+
+            {/* PARTICIPATION */}
+
+            <div className="information-item">
+
+              <div className="information-icon violet">
+                <Users size={19} />
+              </div>
+
+              <div>
+
+                <span>
+                  Participation
+                </span>
+
+                <strong>
+                  {participationLabel}
+                </strong>
+
+              </div>
+
+            </div>
+
+            {/* TEAM SIZE */}
+
+            <div className="information-item">
+
+              <div className="information-icon purple">
+                <Users size={19} />
+              </div>
+
+              <div>
+
+                <span>
+                  Team Size
+                </span>
+
+                <strong>
+                  {teamSizeLabel}
+                </strong>
+
+              </div>
+
+            </div>
+
+            {/* REGISTRATION FEE */}
+
+            <div className="information-item">
+
+              <div className="information-icon green">
+                <IndianRupee size={19} />
+              </div>
+
+              <div>
+
+                <span>
+                  Registration Fee
+                </span>
+
+                <strong>
+                  ₹{" "}
+                  {Number(
+                    registrationFee
+                  ).toLocaleString("en-IN")}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* ====================================================
+            ORGANIZER INFORMATION
+        ==================================================== */}
+
+        <section className="details-section">
+
+          <div className="section-title-row">
+
+            <div className="section-title-left">
+
+              <UserRound size={19} />
+
+              <h2>
+                Organizer Information
+              </h2>
+
+            </div>
+
+            <div className="section-title-line"></div>
+
+          </div>
+
+          <div className="organizer-information-card">
+
+            <div className="organizer-avatar">
+
+              {organizerName
+                .charAt(0)
+                .toUpperCase()}
+
+            </div>
+
+            <div className="organizer-details">
+
+              <h3>
+                {organizerName}
+              </h3>
+
+              <p>
+                Professional event management team
+              </p>
+
+              <div className="organizer-phone">
+
+                <Phone size={14} />
+
+                <span>
+                  {organizerMobile}
+                </span>
+
+              </div>
+
+            </div>
+
+            <div className="organizer-decoration">
+
+              <span>
+                Building
+              </span>
+
+              <span>
+                Better Events
+              </span>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* ====================================================
+            REGISTRATION DEADLINE
+        ==================================================== */}
+
+        <section className="deadline-card">
+
+          <div className="deadline-icon">
+            <CalendarDays size={20} />
+          </div>
+
+          <div className="deadline-content">
+
+            <span>
+              Registration Deadline
+            </span>
+
+            <strong>
+              {deadline
+                ? formatDate(deadline)
+                : "No deadline specified"}
+            </strong>
+
+          </div>
+
+          <div className="deadline-right">
+
+            <Clock3 size={15} />
+
+            <span>
+              Registration
+            </span>
+
+          </div>
+
+        </section>
+
+        {/* ====================================================
+            REGISTRATION PROGRESS
+        ==================================================== */}
+
+        <section className="details-section registration-section">
+
+          <div className="section-title-row">
+
+            <div className="section-title-left">
+
+              <Users size={19} />
+
+              <h2>
+                Registration Progress
+              </h2>
+
+            </div>
+
+            <div className="section-title-line"></div>
+
+          </div>
+
+          <div className="registration-progress-card">
+
+            <div className="progress-top">
+
+              <span>
+
+                <strong>
+                  {participants}
+                </strong>
+
+                {" / "}
+
+                {capacity || "∞"}
+
+                {" participants"}
+
+              </span>
+
+              <strong>
+
+                {Math.round(
+                  registrationPercentage
+                )}
+                %
+
+              </strong>
+
+            </div>
+
+            <div className="progress-track">
+
+              <div
+                className="progress-fill"
+                style={{
+                  width: `${registrationPercentage}%`,
+                }}
+              ></div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* ====================================================
+            REGISTER BUTTON
+        ==================================================== */}
+
+        <div className="register-event-wrapper">
+
+          <button
+            type="button"
+            className="register-event-button"
+            onClick={() =>
+              navigate(
+                `/events/${event.id}/register`
+              )
+            }
+          >
+
+            <UserRound size={17} />
+
+            <span>
+              Register for This Event
+            </span>
+
+            <span className="register-arrow">
+              →
+            </span>
+
+          </button>
+
         </div>
 
-      </div>
+      </main>
+
+      {/* ======================================================
+          FULL IMAGE MODAL
+      ====================================================== */}
+
+      {showFullImage && (
+
+        <div
+          className="event-image-modal"
+          onClick={closeFullImage}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Full event image"
+        >
+
+          <div
+            className="event-image-modal-content"
+            onClick={(e) =>
+              e.stopPropagation()
+            }
+          >
+
+            <button
+              type="button"
+              className="event-image-close"
+              onClick={closeFullImage}
+              aria-label="Close full image"
+              title="Close"
+            >
+              <X size={20} />
+            </button>
+
+            <img
+              src={getImageUrl()}
+              alt={
+                event.title ||
+                "Full event image"
+              }
+              className="event-full-image"
+            />
+
+          </div>
+
+        </div>
+
+      )}
+
     </div>
   );
-};
+}
 
 export default EventDetails;

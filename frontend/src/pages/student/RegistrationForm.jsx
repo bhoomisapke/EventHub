@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import {
   CalendarDays,
   Clock,
@@ -15,20 +16,20 @@ const API_URL = "http://127.0.0.1:8000";
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { id } = useParams();
 
-  // Event Details page will send the event information here
-  const event = location.state?.event;
+  const [event, setEvent] = useState(null);
+  const [student, setStudent] = useState(null);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  });
+  /* ============================================================
+     GET TOKEN
+  ============================================================ */
 
   const getToken = () => {
     return (
@@ -37,14 +38,140 @@ const RegistrationForm = () => {
     );
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  /* ============================================================
+     FETCH EVENT + STUDENT
+  ============================================================ */
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  useEffect(() => {
+    const loadRegistrationData = async () => {
+      const token = getToken();
+
+      if (!token) {
+        setError("Please login before registering for an event.");
+        setLoading(false);
+        return;
+      }
+
+      if (!id) {
+        setError("Event information is missing.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError("");
+
+        const [eventResponse, studentResponse] =
+          await Promise.all([
+            fetch(`${API_URL}/api/events/${id}/`),
+
+            fetch(`${API_URL}/api/auth/me/`, {
+              method: "GET",
+              headers: {
+                Authorization: `Token ${token}`,
+                "Content-Type": "application/json",
+              },
+            }),
+          ]);
+
+        /* --------------------------------------------------------
+           EVENT RESPONSE
+        -------------------------------------------------------- */
+
+        const eventData = await eventResponse.json();
+
+        if (!eventResponse.ok) {
+          throw new Error(
+            eventData?.detail ||
+            eventData?.message ||
+            "Unable to load event."
+          );
+        }
+
+        /* --------------------------------------------------------
+           STUDENT RESPONSE
+        -------------------------------------------------------- */
+
+        const studentData = await studentResponse.json();
+
+        if (!studentResponse.ok) {
+          throw new Error(
+            studentData?.detail ||
+            studentData?.message ||
+            "Unable to load student information."
+          );
+        }
+
+        setEvent(eventData);
+        setStudent(studentData);
+
+      } catch (err) {
+        console.error("Registration page error:", err);
+        setError(
+          err.message ||
+          "Unable to load registration information."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRegistrationData();
+  }, [id]);
+
+  /* ============================================================
+     FORMAT DATE
+  ============================================================ */
+
+  const formatDate = (dateValue) => {
+    if (!dateValue) {
+      return "Not specified";
+    }
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+      return dateValue;
+    }
+
+    return date.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
   };
+
+  /* ============================================================
+     FORMAT TIME
+  ============================================================ */
+
+  const formatTime = (timeValue) => {
+    if (!timeValue) {
+      return "Not specified";
+    }
+
+    const [hours, minutes] = timeValue.split(":");
+
+    const date = new Date();
+
+    date.setHours(
+      Number(hours),
+      Number(minutes),
+      0,
+      0
+    );
+
+    return date.toLocaleTimeString("en-IN", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  /* ============================================================
+     SUBMIT REGISTRATION
+  ============================================================ */
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,18 +188,27 @@ const RegistrationForm = () => {
       return;
     }
 
-    setLoading(true);
-    setError("");
-
     try {
+      setSubmitting(true);
+      setError("");
+
       const response = await fetch(
         `${API_URL}/api/registrations/`,
         {
           method: "POST",
+
           headers: {
             Authorization: `Token ${token}`,
             "Content-Type": "application/json",
           },
+
+          /*
+             The backend gets the student automatically
+             from the authentication token.
+
+             Only the event ID needs to be sent.
+          */
+
           body: JSON.stringify({
             event: event.id,
           }),
@@ -82,125 +218,225 @@ const RegistrationForm = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          data.detail ||
-          data.event?.[0] ||
-          "Registration failed."
-        );
+        let message = "Registration failed.";
+
+        if (data?.detail) {
+          message =
+            typeof data.detail === "string"
+              ? data.detail
+              : "Unable to complete registration.";
+        } else if (data?.event?.[0]) {
+          message = data.event[0];
+        }
+
+        throw new Error(message);
       }
+
+      console.log("Registration successful:", data);
 
       setSuccess(true);
 
-      // After successful registration
       setTimeout(() => {
         navigate("/student/registrations");
       }, 1200);
 
     } catch (err) {
       console.error("Registration error:", err);
-      setError(err.message || "Unable to register for this event.");
+
+      setError(
+        err.message ||
+        "Unable to register for this event."
+      );
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
-  if (!event) {
+  /* ============================================================
+     LOADING
+  ============================================================ */
+
+  if (loading) {
     return (
       <div className="registration-form-page">
-        <div className="registration-error-card">
-          <h2>Event information not found</h2>
-          <p>Please go back and select an event again.</p>
+        <div className="registration-success-card">
+          <h2>Loading Registration...</h2>
 
-          <button onClick={() => navigate("/events")}>
-            Browse Events
-          </button>
+          <p>
+            Please wait while we load the event
+            and your information.
+          </p>
         </div>
       </div>
     );
   }
+
+  /* ============================================================
+     ERROR
+  ============================================================ */
+
+  if (error && !event) {
+    return (
+      <div className="registration-form-page">
+        <div className="registration-error-card">
+
+          <h2>
+            Unable to Open Registration
+          </h2>
+
+          <p>{error}</p>
+
+          <button
+            onClick={() => navigate("/events")}
+          >
+            Browse Events
+          </button>
+
+        </div>
+      </div>
+    );
+  }
+
+  /* ============================================================
+     SUCCESS
+  ============================================================ */
 
   if (success) {
     return (
       <div className="registration-form-page">
+
         <div className="registration-success-card">
+
           <CheckCircle2 size={52} />
 
-          <h2>Registration Successful!</h2>
+          <h2>
+            Registration Successful!
+          </h2>
 
           <p>
             You have successfully registered for{" "}
-            <strong>{event.title}</strong>.
+            <strong>{event?.title}</strong>.
           </p>
+
+          <span>
+            Your ticket has been generated.
+          </span>
 
           <span>
             Redirecting to My Registrations...
           </span>
+
         </div>
+
       </div>
     );
   }
 
+  /* ============================================================
+     REGISTRATION PAGE
+  ============================================================ */
+
   return (
     <div className="registration-form-page">
 
-      {/* BACK BUTTON */}
+      {/* ========================================================
+          BACK BUTTON
+      ======================================================== */}
 
       <button
         className="registration-back-btn"
         onClick={() => navigate(-1)}
       >
         <ArrowLeft size={17} />
+
         Back to Event
       </button>
 
 
-      {/* HEADER */}
+      {/* ========================================================
+          HEADER
+      ======================================================== */}
 
       <div className="registration-form-header">
-        <span>EVENT REGISTRATION</span>
 
-        <h1>Register for Event</h1>
+        <span>
+          EVENT REGISTRATION
+        </span>
+
+        <h1>
+          Register for Event
+        </h1>
 
         <p>
           Confirm your details and register for this
           college event.
         </p>
+
       </div>
 
 
-      {/* EVENT SUMMARY */}
+      {/* ========================================================
+          EVENT SUMMARY
+      ======================================================== */}
 
       <div className="registration-event-card">
 
-        <div className="registration-event-icon">
-          <CalendarDays size={28} />
+        <div className="registration-event-image">
+
+          {event?.image ? (
+            <img
+              src={event.image}
+              alt={event?.title || "Event"}
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+                e.currentTarget.nextElementSibling.style.display = "flex";
+              }}
+            />
+          ) : null}
+
+          <div
+            className="registration-event-image-placeholder"
+            style={{
+              display: event?.image ? "none" : "flex",
+            }}
+          >
+            <CalendarDays size={30} />
+          </div>
+
         </div>
 
         <div className="registration-event-info">
 
-          <span>SELECTED EVENT</span>
+          <span>
+            SELECTED EVENT
+          </span>
 
-          <h2>{event.title}</h2>
+          <h2>
+            {event?.title}
+          </h2>
 
           <div className="registration-event-meta">
 
-            {event.date && (
+            {event?.date && (
               <div>
                 <CalendarDays size={15} />
-                {event.date}
+
+                {formatDate(event.date)}
               </div>
             )}
 
-            {event.time && (
+            {event?.time && (
               <div>
                 <Clock size={15} />
-                {event.time}
+
+                {formatTime(event.time)}
               </div>
             )}
 
-            {event.venue && (
+            {event?.venue && (
               <div>
                 <MapPin size={15} />
+
                 {event.venue}
               </div>
             )}
@@ -212,73 +448,141 @@ const RegistrationForm = () => {
       </div>
 
 
-      {/* FORM */}
+      {/* ========================================================
+          FORM
+      ======================================================== */}
 
       <form
         className="registration-form-card"
         onSubmit={handleSubmit}
       >
 
+        {/* FORM TITLE */}
+
         <div className="registration-form-title">
+
           <UserRound size={20} />
 
           <div>
-            <span>STUDENT DETAILS</span>
-            <h2>Confirm Your Information</h2>
+
+            <span>
+              STUDENT DETAILS
+            </span>
+
+            <h2>
+              Confirm Your Information
+            </h2>
+
           </div>
+
         </div>
 
 
-        {/* NAME */}
+        {/* ======================================================
+            NAME
+        ====================================================== */}
 
         <div className="registration-input-group">
 
-          <label>Full Name</label>
+          <label>
+            Full Name
+          </label>
 
           <input
             type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Enter your full name"
+            value={student?.name || ""}
+            placeholder="Your full name"
+            readOnly
           />
 
         </div>
 
 
-        {/* EMAIL */}
+        {/* ======================================================
+            EMAIL
+        ====================================================== */}
 
         <div className="registration-input-group">
 
-          <label>Email Address</label>
+          <label>
+            Email Address
+          </label>
 
           <input
             type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
+            value={student?.email || ""}
+            placeholder="Your email address"
+            readOnly
           />
 
         </div>
 
 
-        {/* PHONE */}
+        {/* ======================================================
+            PHONE
+        ====================================================== */}
 
         <div className="registration-input-group">
 
-          <label>Phone Number</label>
+          <label>
+            Phone Number
+          </label>
 
           <input
             type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="Enter your phone number"
+            value={student?.phone || ""}
+            placeholder="Phone number not added"
+            readOnly
           />
 
         </div>
 
+
+        {/* ======================================================
+            EXTRA STUDENT INFORMATION
+        ====================================================== */}
+
+        <div className="registration-student-info">
+
+          {student?.student_id && (
+            <div>
+              <span>Student ID</span>
+              <strong>{student.student_id}</strong>
+            </div>
+          )}
+
+          {student?.department && (
+            <div>
+              <span>Department</span>
+              <strong>{student.department}</strong>
+            </div>
+          )}
+
+          {student?.year && (
+            <div>
+              <span>Year</span>
+              <strong>{student.year}</strong>
+            </div>
+          )}
+
+        </div>
+
+
+        {/* ======================================================
+            INFORMATION MESSAGE
+        ====================================================== */}
+
+        <div className="registration-confirmation-note">
+
+          Your registered account information will be used
+          for this event registration.
+
+        </div>
+
+
+        {/* ======================================================
+            ERROR
+        ====================================================== */}
 
         {error && (
           <div className="registration-error">
@@ -287,16 +591,20 @@ const RegistrationForm = () => {
         )}
 
 
-        {/* SUBMIT */}
+        {/* ======================================================
+            SUBMIT
+        ====================================================== */}
 
         <button
           type="submit"
           className="registration-submit-btn"
-          disabled={loading}
+          disabled={submitting}
         >
-          {loading
+
+          {submitting
             ? "Registering..."
             : "Confirm Registration"}
+
         </button>
 
       </form>

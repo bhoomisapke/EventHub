@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CalendarDays,
   Clock3,
@@ -13,49 +12,272 @@ import {
 
 import "./MyTickets.css";
 
-const tickets = [
-  {
-    id: "EVH-2026-00124",
-    title: "Tech Innovation Summit 2026",
-    category: "Technology",
-    date: "15 September 2026",
-    shortDate: "15 SEP 2026",
-    time: "10:00 AM",
-    location: "Main Auditorium",
-    image:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1000&q=80",
-  },
-  {
-    id: "EVH-2026-00125",
-    title: "Web Development Workshop",
-    category: "Workshop",
-    date: "20 September 2026",
-    shortDate: "20 SEP 2026",
-    time: "11:30 AM",
-    location: "Computer Lab 2",
-    image:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80",
-  },
-  {
-    id: "EVH-2026-00126",
-    title: "Robotics & AI Expo",
-    category: "Robotics",
-    date: "25 September 2026",
-    shortDate: "25 SEP 2026",
-    time: "09:30 AM",
-    location: "Innovation Hall",
-    image:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=80",
-  },
-];
+const API_URL = "http://127.0.0.1:8000/api";
 
 const MyTickets = () => {
+  const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
+  // ==================================================
+  // GET LOGGED-IN STUDENT'S TICKETS
+  // ==================================================
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const token =
+          localStorage.getItem("token") ||
+          sessionStorage.getItem("token");
+
+        if (!token) {
+          setError("Please login to view your tickets.");
+          setLoading(false);
+          return;
+        }
+
+        const response = await fetch(`${API_URL}/tickets/my/`, {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.status === 401) {
+          setError("Your session has expired. Please login again.");
+          setLoading(false);
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error("Unable to load your tickets.");
+        }
+
+        const data = await response.json();
+
+        const ticketData = Array.isArray(data)
+          ? data
+          : Array.isArray(data.results)
+          ? data.results
+          : [];
+
+        setTickets(ticketData);
+      } catch (err) {
+        console.error("Ticket fetch error:", err);
+        setError("Unable to load your tickets. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTickets();
+  }, []);
+
+  // ==================================================
+  // GET STUDENT NAME
+  // ==================================================
+  const getStudentName = () => {
+    try {
+      const storedUser =
+        localStorage.getItem("user") ||
+        sessionStorage.getItem("user");
+
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+
+        return (
+          user.name ||
+          user.full_name ||
+          user.username ||
+          "Student"
+        );
+      }
+    } catch (err) {
+      console.error("Unable to read user information:", err);
+    }
+
+    return "Student";
+  };
+
+  const studentName = getStudentName();
+
+  // ==================================================
+  // DATE FORMAT
+  // ==================================================
+  const formatDate = (dateValue) => {
+    if (!dateValue) return "Date not available";
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+      return dateValue;
+    }
+
+    return date.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
+  const formatShortDate = (dateValue) => {
+    if (!dateValue) return "—";
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+      return dateValue;
+    }
+
+    return date
+      .toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+      .toUpperCase();
+  };
+
+  // ==================================================
+  // TIME FORMAT
+  // ==================================================
+  const formatTime = (timeValue) => {
+    if (!timeValue) return "Time not available";
+
+    const parts = timeValue.split(":");
+
+    if (parts.length < 2) {
+      return timeValue;
+    }
+
+    const hours = Number(parts[0]);
+    const minutes = parts[1];
+
+    if (Number.isNaN(hours)) {
+      return timeValue;
+    }
+
+    const period = hours >= 12 ? "PM" : "AM";
+    const displayHour = hours % 12 || 12;
+
+    return `${displayHour}:${minutes} ${period}`;
+  };
+
+  // ==================================================
+  // STATUS
+  // ==================================================
+  const getStatusText = (status) => {
+    if (!status) return "Confirmed";
+
+    return (
+      status.charAt(0).toUpperCase() +
+      status.slice(1)
+    );
+  };
+
+  // ==================================================
+  // LOADING
+  // ==================================================
+  if (loading) {
+    return (
+      <div className="tickets-page">
+        <div className="tickets-header">
+          <div>
+            <span className="tickets-label">
+              YOUR EVENT PASSES
+            </span>
+
+            <h1>My Tickets</h1>
+
+            <p>
+              Loading your registered event passes...
+            </p>
+          </div>
+
+          <div className="ticket-total">
+            <div className="ticket-total-icon">
+              <Ticket size={18} />
+            </div>
+
+            <div>
+              <span>TOTAL TICKETS</span>
+              <strong>00</strong>
+            </div>
+          </div>
+        </div>
+
+        <section className="registered-section">
+          <div className="section-heading">
+            <span>REGISTERED EVENTS</span>
+            <h2>Your Event Tickets</h2>
+          </div>
+
+          <div className="ticket-list">
+            <p className="ticket-message">
+              Loading tickets...
+            </p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  // ==================================================
+  // ERROR
+  // ==================================================
+  if (error) {
+    return (
+      <div className="tickets-page">
+        <div className="tickets-header">
+          <div>
+            <span className="tickets-label">
+              YOUR EVENT PASSES
+            </span>
+
+            <h1>My Tickets</h1>
+
+            <p>{error}</p>
+          </div>
+
+          <div className="ticket-total">
+            <div className="ticket-total-icon">
+              <Ticket size={18} />
+            </div>
+
+            <div>
+              <span>TOTAL TICKETS</span>
+              <strong>00</strong>
+            </div>
+          </div>
+        </div>
+
+        <section className="registered-section">
+          <div className="section-heading">
+            <span>REGISTERED EVENTS</span>
+            <h2>Your Event Tickets</h2>
+          </div>
+
+          <div className="ticket-list">
+            <p className="ticket-message">
+              {error}
+            </p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  // ==================================================
+  // MAIN PAGE
+  // ==================================================
   return (
     <div className="tickets-page">
 
-      {/* PAGE HEADER */}
+      {/* ================= HEADER ================= */}
       <div className="tickets-header">
 
         <div>
@@ -74,7 +296,7 @@ const MyTickets = () => {
         <div className="ticket-total">
 
           <div className="ticket-total-icon">
-            <Ticket size={18} />
+            <Ticket size={19} />
           </div>
 
           <div>
@@ -89,108 +311,170 @@ const MyTickets = () => {
 
       </div>
 
-      {/* TICKET LIST */}
+      {/* ================= TICKET LIST ================= */}
       <section className="registered-section">
 
         <div className="section-heading">
-
           <div>
             <span>REGISTERED EVENTS</span>
-
             <h2>Your Event Tickets</h2>
           </div>
-
         </div>
 
         <div className="ticket-list">
 
-          {tickets.map((ticket) => (
+          {tickets.length === 0 ? (
 
-            <article
-              className="ticket-list-card"
-              key={ticket.id}
-            >
+            <p className="ticket-message">
+              You don't have any tickets yet.
+            </p>
 
-              {/* IMAGE */}
-              <div className="list-image">
+          ) : (
 
-                <img
-                  src={ticket.image}
-                  alt={ticket.title}
-                />
+            tickets.map((ticket) => (
 
-                <span>
-                  {ticket.category}
-                </span>
+              <article
+                className="ticket-list-card"
+                key={ticket.id}
+              >
 
-              </div>
+                {/* ================= IMAGE ================= */}
+                <div className="list-image">
 
-              {/* DETAILS */}
-              <div className="list-content">
+                  {ticket.event_image ? (
 
-                <h3>{ticket.title}</h3>
+                    <img
+                      src={ticket.event_image}
+                      alt={
+                        ticket.event_title || "Event"
+                      }
+                      onError={(e) => {
+                        e.currentTarget.style.display =
+                          "none";
 
-                <div className="list-details">
+                        const placeholder =
+                          e.currentTarget
+                            .nextElementSibling;
 
-                  <span>
-                    <CalendarDays size={14} />
-                    {ticket.date}
-                  </span>
+                        if (placeholder) {
+                          placeholder.style.display =
+                            "flex";
+                        }
+                      }}
+                    />
 
-                  <span>
-                    <Clock3 size={14} />
-                    {ticket.time}
-                  </span>
+                  ) : null}
 
-                  <span>
-                    <MapPin size={14} />
-                    {ticket.location}
-                  </span>
+                  <div
+                    className="list-image-placeholder"
+                    style={{
+                      display: ticket.event_image
+                        ? "none"
+                        : "flex",
+                    }}
+                  >
+                    <Ticket size={40} />
+                  </div>
+
+                  <span>EVENT</span>
 
                 </div>
 
-              </div>
+                {/* ================= CONTENT ================= */}
+                <div className="list-content">
 
-              {/* ACTION */}
-              <div className="list-action">
+                  <h3>
+                    {ticket.event_title || "Event"}
+                  </h3>
 
-                <span className="confirmed">
-                  <CheckCircle2 size={13} />
-                  Confirmed
-                </span>
+                  <div className="category-badge">
+                    <Ticket size={12} />
 
-                <button
-                  onClick={() => setSelectedTicket(ticket)}
-                >
-                  <Ticket size={15} />
-                  View Ticket
-                </button>
+                    {ticket.event_category ||
+                      "College Event"}
+                  </div>
 
-              </div>
+                  <div className="list-details">
 
-            </article>
+                    <span>
+                      <CalendarDays size={15} />
+                      {formatDate(
+                        ticket.event_date
+                      )}
+                    </span>
 
-          ))}
+                    <span>
+                      <Clock3 size={15} />
+                      {formatTime(
+                        ticket.event_time
+                      )}
+                    </span>
+
+                    <span>
+                      <MapPin size={15} />
+                      {ticket.event_venue ||
+                        "Venue not available"}
+                    </span>
+
+                  </div>
+
+                </div>
+
+                {/* ================= ACTION ================= */}
+                <div className="list-action">
+
+                  <span className="confirmed">
+
+                    <CheckCircle2 size={14} />
+
+                    {getStatusText(
+                      ticket.status
+                    )}
+
+                  </span>
+
+                  <button
+                    onClick={() =>
+                      setSelectedTicket(ticket)
+                    }
+                  >
+                    <Ticket size={15} />
+                    View Ticket
+                  </button>
+
+                </div>
+
+              </article>
+
+            ))
+
+          )}
 
         </div>
 
       </section>
 
-      {/* VERTICAL TICKET */}
+      {/* ==================================================
+          TICKET MODAL
+      ================================================== */}
       {selectedTicket && (
 
         <div className="ticket-modal">
 
           <div
             className="ticket-backdrop"
-            onClick={() => setSelectedTicket(null)}
+            onClick={() =>
+              setSelectedTicket(null)
+            }
           />
 
           <div className="ticket-modal-container">
 
             <button
               className="ticket-close"
-              onClick={() => setSelectedTicket(null)}
+              onClick={() =>
+                setSelectedTicket(null)
+              }
               aria-label="Close ticket"
             >
               <X size={18} />
@@ -198,7 +482,7 @@ const MyTickets = () => {
 
             <div className="event-ticket">
 
-              {/* TOP */}
+              {/* ================= TOP ================= */}
               <div className="ticket-top">
 
                 <div className="ticket-logo">
@@ -209,34 +493,56 @@ const MyTickets = () => {
 
                   <div>
                     <strong>EventHub</strong>
-                    <small>COLLEGE EVENTS</small>
+
+                    <small>
+                      COLLEGE EVENTS
+                    </small>
                   </div>
 
                 </div>
 
                 <div className="admit">
+
                   <span>STUDENT</span>
-                  <strong>ADMIT ONE</strong>
+
+                  <strong>
+                    ADMIT ONE
+                  </strong>
+
                 </div>
 
               </div>
 
-              {/* EVENT IMAGE */}
+              {/* ================= COVER ================= */}
               <div className="ticket-cover">
 
-                <img
-                  src={selectedTicket.image}
-                  alt={selectedTicket.title}
-                />
+                {selectedTicket.event_image ? (
+
+                  <img
+                    src={
+                      selectedTicket.event_image
+                    }
+                    alt={
+                      selectedTicket.event_title ||
+                      "Event"
+                    }
+                  />
+
+                ) : (
+
+                  <div className="ticket-cover-placeholder">
+                    <Ticket size={55} />
+                  </div>
+
+                )}
 
                 <div className="cover-overlay">
 
-                  <span>
-                    {selectedTicket.category}
-                  </span>
+                  <span>EVENT</span>
 
                   <h2>
-                    {selectedTicket.title}
+                    {selectedTicket.event_title ||
+                      "Event"}
                   </h2>
 
                   <p>
@@ -247,7 +553,7 @@ const MyTickets = () => {
 
               </div>
 
-              {/* TICKET BODY */}
+              {/* ================= BODY ================= */}
               <div className="ticket-body">
 
                 <div className="ticket-event-heading">
@@ -255,7 +561,8 @@ const MyTickets = () => {
                   <span>EVENT PASS</span>
 
                   <h3>
-                    {selectedTicket.title}
+                    {selectedTicket.event_title ||
+                      "Event"}
                   </h3>
 
                 </div>
@@ -273,7 +580,9 @@ const MyTickets = () => {
                       <span>DATE</span>
 
                       <strong>
-                        {selectedTicket.shortDate}
+                        {formatShortDate(
+                          selectedTicket.event_date
+                        )}
                       </strong>
                     </div>
 
@@ -289,10 +598,30 @@ const MyTickets = () => {
                       <span>TIME</span>
 
                       <strong>
-                        {selectedTicket.time}
+                        {formatTime(
+                          selectedTicket.event_time
+                        )}
                       </strong>
                     </div>
 
+                  </div>
+
+                </div>
+
+                {/* CATEGORY */}
+                <div className="ticket-venue">
+
+                  <div className="detail-icon">
+                    <Ticket size={16} />
+                  </div>
+
+                  <div>
+                    <span>CATEGORY</span>
+
+                    <strong>
+                      {selectedTicket.event_category ||
+                        "College Event"}
+                    </strong>
                   </div>
 
                 </div>
@@ -308,7 +637,8 @@ const MyTickets = () => {
                     <span>VENUE</span>
 
                     <strong>
-                      {selectedTicket.location}
+                      {selectedTicket.event_venue ||
+                        "Venue not available"}
                     </strong>
                   </div>
 
@@ -320,7 +650,7 @@ const MyTickets = () => {
                   <span />
                 </div>
 
-                {/* QR + REGISTRATION */}
+                {/* QR + TICKET NUMBER */}
                 <div className="ticket-verification">
 
                   <div className="qr-area">
@@ -341,16 +671,22 @@ const MyTickets = () => {
                   <div className="registration">
 
                     <span>
-                      REGISTRATION ID
+                      TICKET NUMBER
                     </span>
 
                     <strong>
-                      {selectedTicket.id}
+                      {selectedTicket.ticket_number ||
+                        "Not available"}
                     </strong>
 
                     <div className="verified">
+
                       <CheckCircle2 size={13} />
-                      VERIFIED
+
+                      {getStatusText(
+                        selectedTicket.status
+                      ).toUpperCase()}
+
                     </div>
 
                   </div>
@@ -371,14 +707,19 @@ const MyTickets = () => {
                     </span>
 
                     <strong>
-                      Student
+                      {studentName}
                     </strong>
 
                   </div>
 
                   <div className="student-status">
+
                     <CheckCircle2 size={13} />
-                    Confirmed
+
+                    {getStatusText(
+                      selectedTicket.status
+                    )}
+
                   </div>
 
                 </div>
@@ -388,9 +729,7 @@ const MyTickets = () => {
               {/* FOOTER */}
               <div className="ticket-footer">
 
-                <span>
-                  EventHub
-                </span>
+                <span>EventHub</span>
 
                 <p>
                   Present this pass at the entrance
@@ -411,4 +750,3 @@ const MyTickets = () => {
 };
 
 export default MyTickets;
-

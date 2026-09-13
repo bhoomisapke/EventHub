@@ -1,130 +1,241 @@
-/* =========================================
-   EVENTHUB STUDENT THEME
-   Complete replacement stylesheet.
-   Original classes, layout and responsive rules preserved.
-   ========================================= */
+/* =========================================================
+   EVENTHUB - MY REGISTRATIONS
+   DARK NAVY / PURPLE / PINK EVENT THEME
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
 
 .registrations-page {
   min-height: calc(100vh - 78px);
+
   padding: 45px 42px 70px;
+
   background: #F7F3EE;
+
   color: #10152C;
 }
 
 
-/* ================= HEADER ================= */
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .registrations-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+
   gap: 30px;
+
   margin-bottom: 30px;
 }
 
 .registration-label {
   display: block;
+
   margin-bottom: 8px;
+
   color: #6D28D9;
+
   font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 1.7px;
+  font-weight: 900;
+
+  letter-spacing: 1.8px;
 }
 
 .registrations-header h1 {
   margin: 0;
+
+  color: #10152C;
+
   font-size: 38px;
+
   letter-spacing: -1.3px;
 }
 
 .registrations-header p {
   max-width: 600px;
+
   margin: 10px 0 0;
+
   color: #5B6478;
+
   font-size: 13px;
+
   line-height: 1.7;
 }
+
+
+/* =========================================================
+   BROWSE BUTTON
+   ========================================================= */
 
 .browse-registration-btn {
   display: flex;
   align-items: center;
+
   gap: 8px;
+
   padding: 13px 18px;
+
+  border: none;
   border-radius: 12px;
-  background: linear-gradient(
-    135deg,
-    #8B5CF6,
-    #EC4899
-  );
+
+  background:
+    linear-gradient(
+      135deg,
+      #8B5CF6,
+      #EC4899
+    );
+
   color: white;
+
   text-decoration: none;
+
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 900;
+
   white-space: nowrap;
-  box-shadow: 0 10px 25px rgba(112, 49, 211, 0.2);
+
+  box-shadow:
+    0 10px 25px rgba(
+      112,
+      49,
+      211,
+      0.20
+    );
+
+  transition: 0.2s ease;
+}
+
+.browse-registration-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 30px rgba(
+      112,
+      49,
+      211,
+      0.28
+    );
 }
 
 
-/* ================= SUMMARY ================= */
+/* =========================================================
+   SUMMARY
+   ========================================================= */
 
 .registration-summary {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
   gap: 20px;
+
   margin-bottom: 42px;
 }
 
 .registration-summary-card {
   display: flex;
   align-items: center;
+
   gap: 16px;
+
   padding: 22px;
-  border: 1px solid #EEEAF4;
+
+  border: 1px solid #E5E0EC;
+
   border-radius: 19px;
-  background: white;
-  box-shadow: 0 7px 25px rgba(40, 30, 70, 0.04);
+
+  background: #FFFFFF;
+
+  box-shadow:
+    0 7px 25px rgba(
+      40,
+      30,
+      70,
+      0.05
+    );
+
+  transition: 0.2s ease;
+}
+
+.registration-summary-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 30px rgba(
+      40,
+      30,
+      70,
+      0.08
+    );
 }
 
 .summary-icon {
   width: 50px;
   height: 50px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  flex-shrink: 0;
+
   border-radius: 14px;
 }
 
 .purple-summary {
   background: #EEEAF4;
+
   color: #6D28D9;
 }
 
 .green-summary {
-  background: #e8f8ef;
+  background: #E8F8EF;
+
   color: #31915B;
 }
 
 .blue-summary {
   background: #EAF0FF;
-  color: #536ed9;
+
+  color: #536ED9;
 }
 
 .registration-summary-card span {
   display: block;
+
   color: #5B6478;
+
   font-size: 8px;
-  font-weight: 800;
+  font-weight: 900;
+
   letter-spacing: 1px;
 }
 
 .registration-summary-card strong {
   display: block;
+
   margin-top: 3px;
+
+  color: #10152C;
+
   font-size: 27px;
 }
 
 
-/* ================= SECTION ================= */
+/* =========================================================
+   SECTION
+   ========================================================= */
 
 .registration-list-section {
   margin-bottom: 35px;
@@ -136,192 +247,677 @@
 
 .registration-list-heading span {
   color: #6D28D9;
+
   font-size: 9px;
-  font-weight: 800;
+  font-weight: 900;
+
   letter-spacing: 1.6px;
 }
 
 .registration-list-heading h2 {
   margin: 6px 0 0;
+
+  color: #10152C;
+
   font-size: 25px;
 }
 
 
-/* ================= LIST ================= */
+/* =========================================================
+   LIST
+   ========================================================= */
 
 .registration-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+
+  gap: 16px;
 }
 
+
+/* =========================================================
+   DARK REGISTRATION CARD
+   ========================================================= */
+
 .registration-item {
+  position: relative;
+
   display: grid;
-  grid-template-columns: 190px 1fr auto;
+
+  grid-template-columns:
+    190px
+    minmax(0, 1fr)
+    auto;
+
   align-items: center;
+
   gap: 22px;
+
+  min-height: 150px;
+
   padding: 15px;
-  border: 1px solid #EEEAF4;
-  border-radius: 19px;
-  background: white;
-  box-shadow: 0 7px 25px rgba(40, 30, 70, 0.04);
-  transition: 0.25s ease;
+
+  overflow: hidden;
+
+  border: 1px solid
+    rgba(139, 92, 246, 0.25);
+
+  border-radius: 20px;
+
+  background:
+    radial-gradient(
+      circle at 88% 120%,
+      rgba(139, 92, 246, 0.22),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(236, 72, 153, 0.10),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #0B1230,
+      #111A3A 55%,
+      #17133C
+    );
+
+  box-shadow:
+    0 14px 35px
+    rgba(12, 18, 48, 0.20);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+
+/* Decorative glow */
+
+.registration-item::after {
+  content: "";
+
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  right: -85px;
+  bottom: -115px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(139, 92, 246, 0.15);
+
+  pointer-events: none;
 }
 
 .registration-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(50, 30, 80, 0.08);
+  transform: translateY(-3px);
+
+  border-color:
+    rgba(139, 92, 246, 0.55);
+
+  box-shadow:
+    0 20px 45px
+    rgba(12, 18, 48, 0.28);
 }
 
 
-/* Image */
+/* =========================================================
+   IMAGE
+   ========================================================= */
 
 .registration-image {
   position: relative;
+
+  width: 190px;
   height: 120px;
+
   overflow: hidden;
-  border-radius: 13px;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #17204B,
+      #29145C
+    );
 }
 
 .registration-image img {
   width: 100%;
   height: 100%;
+
+  display: block;
+
   object-fit: cover;
+
+  transition:
+    transform 0.35s ease;
 }
+
+.registration-item:hover
+.registration-image img {
+  transform: scale(1.05);
+}
+
+
+/* Image overlay */
+
+.registration-image::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to right,
+      rgba(8, 13, 38, 0.05),
+      rgba(8, 13, 38, 0.35)
+    );
+
+  pointer-events: none;
+}
+
+
+/* Placeholder */
+
+.registration-image-placeholder {
+  width: 100%;
+  height: 100%;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #A78BFA;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(139, 92, 246, 0.30),
+      transparent 60%
+    ),
+    #111A3A;
+}
+
+
+/* Event badge */
 
 .registration-image span {
   position: absolute;
+
   top: 9px;
   left: 9px;
+
+  z-index: 3;
+
   padding: 5px 9px;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.14);
+
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.93);
-  color: #6D28D9;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8B5CF6,
+      #EC4899
+    );
+
+  color: white;
+
+  font-size: 7px;
+  font-weight: 900;
+
+  letter-spacing: 0.8px;
+
+  box-shadow:
+    0 5px 15px
+    rgba(139, 92, 246, 0.30);
+}
+
+
+/* =========================================================
+   EVENT DETAILS
+   ========================================================= */
+
+.registration-event-details {
+  position: relative;
+
+  z-index: 2;
+
+  min-width: 0;
+
+  padding: 12px 0;
+}
+
+.registration-event-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 15px;
+}
+
+.event-mini-label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #A78BFA;
+
+  font-size: 6px;
+  font-weight: 900;
+
+  letter-spacing: 1.2px;
+}
+
+.registration-event-details h3 {
+  max-width: 430px;
+
+  margin: 0;
+
+  overflow: hidden;
+
+  color: #FFFFFF;
+
+  font-size: 19px;
+  font-weight: 800;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* Small EventHub badge */
+
+.registration-mini-ticket {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  flex-shrink: 0;
+
+  padding: 6px 9px;
+
+  border: 1px solid
+    rgba(139, 92, 246, 0.30);
+
+  border-radius: 50px;
+
+  background:
+    rgba(139, 92, 246, 0.13);
+
+  color: #C4B5FD;
+
   font-size: 7px;
   font-weight: 800;
 }
 
 
-/* Details */
-
-.registration-event-details h3 {
-  margin: 0 0 14px;
-  font-size: 17px;
-}
+/* =========================================================
+   DATE + TIME
+   ========================================================= */
 
 .registration-detail-row {
   display: flex;
-  gap: 20px;
-  margin-bottom: 9px;
+  flex-wrap: wrap;
+
+  gap: 15px 24px;
+
+  margin-bottom: 10px;
 }
 
 .registration-detail-row div,
 .registration-location {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: #5B6478;
-  font-size: 10px;
+
+  gap: 7px;
+
+  color: #CBD2E5;
+
+  font-size: 9px;
 }
 
 .registration-detail-row svg,
 .registration-location svg {
-  color: #2563EB;
+  flex-shrink: 0;
+
+  color: #A78BFA;
 }
 
 
-/* Status */
+/* =========================================================
+   LOCATION
+   ========================================================= */
+
+.registration-location {
+  color: #AEB7CF;
+}
+
+
+/* =========================================================
+   STATUS + TICKET
+   ========================================================= */
 
 .registration-status-area {
+  position: relative;
+
+  z-index: 3;
+
   display: flex;
   flex-direction: column;
+
   align-items: flex-end;
+
   gap: 17px;
+
   padding-right: 10px;
 }
+
+
+/* Confirmed */
 
 .confirmed-badge {
   display: flex;
   align-items: center;
+
   gap: 5px;
+
   padding: 6px 10px;
+
+  border: 1px solid
+    rgba(52, 211, 153, 0.20);
+
   border-radius: 999px;
-  background: #EAF8EF;
-  color: #31915a;
+
+  background:
+    rgba(16, 185, 129, 0.13);
+
+  color: #6EE7B7;
+
   font-size: 8px;
-  font-weight: 800;
+  font-weight: 900;
+
+  text-transform: capitalize;
 }
+
+.confirmed-badge svg {
+  color: #34D399;
+}
+
+
+/* Cancelled */
+
+.cancelled-badge {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 6px 10px;
+
+  border: 1px solid
+    rgba(248, 113, 113, 0.20);
+
+  border-radius: 999px;
+
+  background:
+    rgba(239, 68, 68, 0.13);
+
+  color: #FCA5A5;
+
+  font-size: 8px;
+  font-weight: 900;
+
+  text-transform: capitalize;
+}
+
+.cancelled-badge svg {
+  color: #F87171;
+}
+
+
+/* =========================================================
+   VIEW TICKET
+   ========================================================= */
 
 .ticket-button {
   display: flex;
   align-items: center;
-  gap: 5px;
-  color: #6D28D9;
+
+  gap: 6px;
+
+  padding: 10px 14px;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8B5CF6,
+      #EC4899
+    );
+
+  color: white;
+
   text-decoration: none;
-  font-size: 10px;
-  font-weight: 800;
+
+  font-size: 9px;
+  font-weight: 900;
+
+  box-shadow:
+    0 7px 18px
+    rgba(139, 92, 246, 0.25);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .ticket-button:hover {
-  color: #d12ca8;
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 11px 24px
+    rgba(139, 92, 246, 0.38);
 }
 
 
-/* ================= BOTTOM CTA ================= */
+/* =========================================================
+   EMPTY / LOADING
+   ========================================================= */
+
+.registration-empty-state {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 230px;
+
+  padding: 35px;
+
+  border: 1px solid
+    rgba(139, 92, 246, 0.20);
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0B1230,
+      #111A3A
+    );
+
+  color: white;
+
+  text-align: center;
+
+  box-shadow:
+    0 14px 35px
+    rgba(12, 18, 48, 0.18);
+}
+
+.registration-empty-state > svg {
+  margin-bottom: 10px;
+
+  color: #A78BFA;
+}
+
+.registration-empty-state h3 {
+  margin: 0;
+
+  color: white;
+
+  font-size: 17px;
+}
+
+.registration-empty-state p {
+  margin: 7px 0 18px;
+
+  color: #AEB7CF;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   BOTTOM CTA
+   ========================================================= */
 
 .registration-bottom {
+  position: relative;
+
   display: flex;
   align-items: center;
+
   gap: 15px;
+
+  overflow: hidden;
+
   padding: 25px;
-  border: 1px solid #EEEAF4;
-  border-radius: 19px;
-  background: linear-gradient(
-    100deg,
-    #EEEAF4,
-    #FFF8ED
-  );
+
+  border: 1px solid
+    rgba(139, 92, 246, 0.25);
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #EEEAF4,
+      #FFF8ED
+    );
 }
 
 .registration-bottom-icon {
   width: 48px;
   height: 48px;
+
   flex-shrink: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   border-radius: 14px;
-  background: white;
-  color: #8B5CF6;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8B5CF6,
+      #EC4899
+    );
+
+  color: white;
+
+  box-shadow:
+    0 7px 20px
+    rgba(139, 92, 246, 0.22);
 }
 
 .registration-bottom h3 {
   margin: 0;
+
+  color: #10152C;
+
   font-size: 14px;
 }
 
 .registration-bottom p {
   margin: 5px 0 0;
+
   color: #5B6478;
+
   font-size: 10px;
 }
 
 .registration-bottom a {
   display: flex;
   align-items: center;
+
   gap: 6px;
+
   margin-left: auto;
+
   padding: 11px 16px;
+
   border-radius: 10px;
-  background: #0B1230;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8B5CF6,
+      #EC4899
+    );
+
   color: white;
+
   text-decoration: none;
+
   font-size: 9px;
-  font-weight: 800;
+  font-weight: 900;
+
+  box-shadow:
+    0 7px 18px
+    rgba(139, 92, 246, 0.20);
 }
 
 
-/* ================= RESPONSIVE ================= */
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .registration-item {
+    grid-template-columns:
+      165px
+      minmax(0, 1fr)
+      auto;
+
+    gap: 17px;
+  }
+
+  .registration-image {
+    width: 165px;
+  }
+
+}
+
 
 @media (max-width: 900px) {
 
@@ -330,14 +926,45 @@
   }
 
   .registration-item {
-    grid-template-columns: 150px 1fr;
+    grid-template-columns:
+      150px
+      minmax(0, 1fr);
+  }
+
+  .registration-image {
+    width: 150px;
   }
 
   .registration-status-area {
     grid-column: 2;
+
     flex-direction: row;
+
     align-items: center;
     justify-content: space-between;
+
+    padding-right: 0;
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .registrations-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .browse-registration-btn {
+    align-self: flex-start;
+  }
+
+  .registration-summary {
+    grid-template-columns: 1fr;
+
+    gap: 12px;
   }
 
 }
@@ -345,29 +972,63 @@
 
 @media (max-width: 650px) {
 
-  .registrations-header {
-    align-items: flex-start;
-    flex-direction: column;
+  .registrations-page {
+    padding: 28px 18px 45px;
   }
 
-  .registration-summary {
-    grid-template-columns: 1fr;
+  .registrations-header h1 {
+    font-size: 34px;
   }
 
   .registration-item {
     grid-template-columns: 1fr;
+
+    gap: 0;
+
+    padding: 12px;
   }
 
   .registration-image {
-    height: 180px;
+    width: 100%;
+    height: 175px;
+
+    margin-bottom: 4px;
+  }
+
+  .registration-event-details {
+    padding: 17px 6px;
+  }
+
+  .registration-event-top {
+    align-items: flex-start;
+  }
+
+  .registration-event-details h3 {
+    max-width: 100%;
+
+    font-size: 18px;
+
+    white-space: normal;
+  }
+
+  .registration-mini-ticket {
+    display: none;
   }
 
   .registration-status-area {
     grid-column: auto;
+
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 4px 6px 7px;
   }
 
   .registration-bottom {
     align-items: flex-start;
+
     flex-direction: column;
   }
 
@@ -375,4 +1036,109 @@
     margin-left: 0;
   }
 
+}
+
+
+@media (max-width: 430px) {
+
+  .registrations-page {
+    padding: 24px 14px 40px;
+  }
+
+  .registrations-header h1 {
+    font-size: 31px;
+  }
+
+  .registration-summary-card {
+    padding: 17px;
+  }
+
+  .summary-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .registration-detail-row {
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+  .registration-bottom {
+    padding: 20px;
+  }
+
+}
+.registration-image {
+  position: relative;
+
+  width: 190px;
+  height: 120px;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #17204B,
+      #29145C
+    );
+}
+
+.registration-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.registration-image-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #A78BFA;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(139, 92, 246, 0.30),
+      transparent 60%
+    ),
+    #111A3A;
+}
+
+.registration-image span {
+  position: absolute;
+
+  top: 9px;
+  left: 9px;
+
+  z-index: 3;
+
+  padding: 5px 9px;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8B5CF6,
+      #EC4899
+    );
+
+  color: white;
+
+  font-size: 7px;
+  font-weight: 900;
+
+  letter-spacing: 0.8px;
 }

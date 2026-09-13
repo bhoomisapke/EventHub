@@ -50,7 +50,10 @@ import ResetPassword from "../pages/auth/ResetPassword.jsx";
 const AppRoutes = () => {
   return (
     <Routes>
-
+      <Route
+  path="/events/:id/register"
+  element={<RegistrationForm />}
+/>
       {/* =====================================================
           LANDING PAGE
           ===================================================== */}
@@ -129,8 +132,8 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="registrations"
-          element={<MyRegistrations />}
+          path="events/:id/register"
+          element={<RegistrationForm />}
         />
 
         <Route
@@ -147,7 +150,10 @@ const AppRoutes = () => {
           path="register"
           element={<RegistrationForm />}
         />
-
+        <Route
+          path="/student/registrations"
+          element={<MyRegistrations />}
+        />
       </Route>
 
 
