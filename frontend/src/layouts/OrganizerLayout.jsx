@@ -60,6 +60,8 @@ function OrganizerLayout() {
 
         <nav className="nav-menu">
 
+          {/* DASHBOARD */}
+
           <Link
             to="/organizer/dashboard"
             className={
@@ -70,6 +72,9 @@ function OrganizerLayout() {
           >
             Dashboard
           </Link>
+
+
+          {/* MY EVENTS */}
 
           <Link
             to="/organizer/events"
@@ -82,6 +87,9 @@ function OrganizerLayout() {
             My Events
           </Link>
 
+
+          {/* PARTICIPANTS */}
+
           <Link
             to="/organizer/participants"
             className={
@@ -91,6 +99,16 @@ function OrganizerLayout() {
             }
           >
             Participants
+          </Link>
+
+
+          {/* HOME */}
+
+          <Link
+            to="/"
+            className="organizer-home-button"
+          >
+            Home
           </Link>
 
         </nav>

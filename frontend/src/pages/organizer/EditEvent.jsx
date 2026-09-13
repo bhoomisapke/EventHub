@@ -14,19 +14,12 @@ function EditEvent() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  /* =========================================================
-     NOTIFICATION
-  ========================================================= */
-
   const [notification, setNotification] = useState({
     message: "",
     type: "success",
   });
 
-  const showNotification = (
-    message,
-    type = "success"
-  ) => {
+  const showNotification = (message, type = "success") => {
     setNotification({
       message,
       type,
@@ -41,6 +34,17 @@ function EditEvent() {
   };
 
   /* =========================================================
+     GET AUTH TOKEN
+  ========================================================= */
+
+  const getToken = () => {
+    return (
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token")
+    );
+  };
+
+  /* =========================================================
      FETCH EVENT
   ========================================================= */
 
@@ -49,20 +53,35 @@ function EditEvent() {
       try {
         setLoading(true);
 
+        const token = getToken();
+
+        if (!token) {
+          showNotification(
+            "Please login again before editing the event.",
+            "error"
+          );
+          return;
+        }
+
         const response = await fetch(
-          `http://localhost:8000/api/events/${id}/`
+          `http://localhost:8000/api/events/${id}/`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Token ${token}`,
+              Accept: "application/json",
+            },
+          }
         );
 
         const data = await response.json();
 
         if (!response.ok) {
-          console.error(
-            "Fetch event error:",
-            data
-          );
+          console.error("Fetch event error:", data);
 
           showNotification(
-            data.message ||
+            data.detail ||
+              data.message ||
               JSON.stringify(data) ||
               "Failed to fetch event.",
             "error"
@@ -82,8 +101,7 @@ function EditEvent() {
 
         let customFee = "";
 
-        const numericFee =
-          Number(registrationFee);
+        const numericFee = Number(registrationFee);
 
         if (
           registrationFee === null ||
@@ -98,8 +116,7 @@ function EditEvent() {
           numericFee === 50 ||
           numericFee === 100
         ) {
-          registrationFee =
-            String(numericFee);
+          registrationFee = String(numericFee);
         } else {
           registrationFee = "Custom";
           customFee = String(numericFee);
@@ -109,30 +126,41 @@ function EditEvent() {
            EXISTING IMAGE
         ===================================================== */
 
-        const existingImage =
-          data.image || "";
+        const existingImage = data.image || "";
 
         let previewImage = "";
 
         if (existingImage) {
           if (
-            existingImage.startsWith(
-              "http://"
-            ) ||
-            existingImage.startsWith(
-              "https://"
-            ) ||
-            existingImage.startsWith(
-              "data:"
-            )
+            existingImage.startsWith("http://") ||
+            existingImage.startsWith("https://") ||
+            existingImage.startsWith("data:")
           ) {
-            previewImage =
-              existingImage;
+            previewImage = existingImage;
           } else {
             previewImage =
               `http://localhost:8000${existingImage}`;
           }
         }
+
+        /* =====================================================
+           PARTICIPATION
+        ===================================================== */
+
+        const participationType =
+          data.participationType ||
+          data.participation_type ||
+          "individual";
+
+        const minTeamSize =
+          data.minTeamSize ??
+          data.min_team_size ??
+          1;
+
+        const maxTeamSize =
+          data.maxTeamSize ??
+          data.max_team_size ??
+          1;
 
         /* =====================================================
            FORMAT EVENT DATA
@@ -143,21 +171,14 @@ function EditEvent() {
 
           title: data.title || "",
 
-          category:
-            data.category || "",
+          category: data.category || "",
 
           date: data.date
-            ? String(data.date).slice(
-                0,
-                10
-              )
+            ? String(data.date).slice(0, 10)
             : "",
 
           time: data.time
-            ? String(data.time).slice(
-                0,
-                5
-              )
+            ? String(data.time).slice(0, 5)
             : "",
 
           venue: data.venue || "",
@@ -187,29 +208,22 @@ function EditEvent() {
             data.registration_deadline ||
             "",
 
-          description:
-            data.description || "",
+          description: data.description || "",
+
+          participationType,
+
+          minTeamSize,
+
+          maxTeamSize,
 
           image: existingImage,
         };
 
         setEvent(formattedEvent);
-
-        setImagePreview(
-          previewImage
-        );
-
-        /*
-          Existing image is NOT a File.
-          Only newly selected images go into imageFile.
-        */
-
+        setImagePreview(previewImage);
         setImageFile(null);
       } catch (error) {
-        console.error(
-          "Fetch event error:",
-          error
-        );
+        console.error("Fetch event error:", error);
 
         showNotification(
           "Unable to connect to the backend. Make sure the backend server is running.",
@@ -228,10 +242,7 @@ function EditEvent() {
   ========================================================= */
 
   const handleChange = (e) => {
-    const {
-      name,
-      value,
-    } = e.target;
+    const { name, value } = e.target;
 
     setEvent((previous) => ({
       ...previous,
@@ -244,16 +255,11 @@ function EditEvent() {
   ========================================================= */
 
   const handleImageChange = (e) => {
-    const file =
-      e.target.files[0];
+    const file = e.target.files[0];
 
     if (!file) {
       return;
     }
-
-    /* =======================================================
-       CHECK IMAGE TYPE
-    ======================================================= */
 
     const allowedTypes = [
       "image/jpeg",
@@ -261,55 +267,31 @@ function EditEvent() {
       "image/webp",
     ];
 
-    if (
-      !allowedTypes.includes(
-        file.type
-      )
-    ) {
+    if (!allowedTypes.includes(file.type)) {
       showNotification(
         "Please select a JPG, PNG or WEBP image.",
         "error"
       );
 
       e.target.value = "";
-
       return;
     }
 
-    /* =======================================================
-       CHECK IMAGE SIZE
-    ======================================================= */
-
-    if (
-      file.size >
-      5 * 1024 * 1024
-    ) {
+    if (file.size > 5 * 1024 * 1024) {
       showNotification(
         "Image size must be less than 5 MB.",
         "error"
       );
 
       e.target.value = "";
-
       return;
     }
 
-    /* =======================================================
-       SAVE ACTUAL FILE
-    ======================================================= */
-
     setImageFile(file);
 
-    /* =======================================================
-       CREATE IMAGE PREVIEW
-    ======================================================= */
+    const previewUrl = URL.createObjectURL(file);
 
-    const previewUrl =
-      URL.createObjectURL(file);
-
-    setImagePreview(
-      previewUrl
-    );
+    setImagePreview(previewUrl);
   };
 
   /* =========================================================
@@ -323,9 +305,24 @@ function EditEvent() {
       return;
     }
 
-    /* =======================================================
+    /* =====================================================
+       TOKEN CHECK
+    ===================================================== */
+
+    const token = getToken();
+
+    if (!token) {
+      showNotification(
+        "Your login session has expired. Please login again.",
+        "error"
+      );
+
+      return;
+    }
+
+    /* =====================================================
        REQUIRED FIELD VALIDATION
-    ======================================================= */
+    ===================================================== */
 
     if (
       !event.title ||
@@ -343,17 +340,14 @@ function EditEvent() {
       return;
     }
 
-    /* =======================================================
+    /* =====================================================
        CAPACITY VALIDATION
-    ======================================================= */
+    ===================================================== */
 
-    const capacityNumber =
-      Number(event.capacity);
+    const capacityNumber = Number(event.capacity);
 
     if (
-      !Number.isInteger(
-        capacityNumber
-      ) ||
+      !Number.isInteger(capacityNumber) ||
       capacityNumber <= 0
     ) {
       showNotification(
@@ -364,16 +358,49 @@ function EditEvent() {
       return;
     }
 
-    /* =======================================================
+    /* =====================================================
+       PARTICIPATION VALIDATION
+    ===================================================== */
+
+    const participationType =
+      event.participationType || "individual";
+
+    let minTeamSize =
+      Number(event.minTeamSize || 1);
+
+    let maxTeamSize =
+      Number(event.maxTeamSize || 1);
+
+    if (participationType === "individual") {
+      minTeamSize = 1;
+      maxTeamSize = 1;
+    }
+
+    if (participationType === "group") {
+      if (
+        !Number.isInteger(minTeamSize) ||
+        !Number.isInteger(maxTeamSize) ||
+        minTeamSize < 2 ||
+        maxTeamSize < 2 ||
+        minTeamSize > maxTeamSize
+      ) {
+        showNotification(
+          "Please enter valid minimum and maximum team sizes.",
+          "error"
+        );
+
+        return;
+      }
+    }
+
+    /* =====================================================
        CUSTOM FEE VALIDATION
-    ======================================================= */
+    ===================================================== */
 
     if (
-      event.registrationFee ===
-        "Custom" &&
+      event.registrationFee === "Custom" &&
       (!event.customFee ||
-        Number(event.customFee) <=
-          0)
+        Number(event.customFee) <= 0)
     ) {
       showNotification(
         "Please enter a valid custom registration fee.",
@@ -383,14 +410,13 @@ function EditEvent() {
       return;
     }
 
-    /* =======================================================
+    /* =====================================================
        DEADLINE VALIDATION
-    ======================================================= */
+    ===================================================== */
 
     if (
       event.registrationDeadline &&
-      event.registrationDeadline >
-        event.date
+      event.registrationDeadline > event.date
     ) {
       showNotification(
         "Registration deadline cannot be after the event date.",
@@ -407,33 +433,22 @@ function EditEvent() {
          REGISTRATION FEE
       ===================================================== */
 
-      let finalRegistrationFee =
-        0;
+      let finalRegistrationFee = 0;
 
-      if (
-        event.registrationFee ===
-        "Free"
-      ) {
+      if (event.registrationFee === "Free") {
         finalRegistrationFee = 0;
-      } else if (
-        event.registrationFee ===
-        "Custom"
-      ) {
-        finalRegistrationFee =
-          Number(event.customFee);
+      } else if (event.registrationFee === "Custom") {
+        finalRegistrationFee = Number(event.customFee);
       } else {
         finalRegistrationFee =
-          Number(
-            event.registrationFee
-          );
+          Number(event.registrationFee);
       }
 
       /* =====================================================
          CREATE FORMDATA
       ===================================================== */
 
-      const formData =
-        new FormData();
+      const formData = new FormData();
 
       /* =====================================================
          BASIC EVENT INFORMATION
@@ -471,9 +486,7 @@ function EditEvent() {
 
       formData.append(
         "registrationFee",
-        String(
-          finalRegistrationFee
-        )
+        String(finalRegistrationFee)
       );
 
       formData.append(
@@ -482,7 +495,7 @@ function EditEvent() {
       );
 
       /* =====================================================
-         ORGANIZER NAME
+         ORGANIZER
       ===================================================== */
 
       formData.append(
@@ -490,13 +503,7 @@ function EditEvent() {
         event.organizerName.trim()
       );
 
-      /* =====================================================
-         ORGANIZER MOBILE
-      ===================================================== */
-
-      if (
-        event.organizerMobile
-      ) {
+      if (event.organizerMobile) {
         formData.append(
           "organizerMobile",
           event.organizerMobile
@@ -507,9 +514,7 @@ function EditEvent() {
          REGISTRATION DEADLINE
       ===================================================== */
 
-      if (
-        event.registrationDeadline
-      ) {
+      if (event.registrationDeadline) {
         formData.append(
           "registrationDeadline",
           event.registrationDeadline
@@ -517,16 +522,27 @@ function EditEvent() {
       }
 
       /* =====================================================
-         IMAGE
+         PARTICIPATION
       ===================================================== */
 
-      /*
-        Only append image when the user
-        selected a NEW image.
+      formData.append(
+        "participationType",
+        participationType
+      );
 
-        If no new image is selected,
-        backend keeps the existing image.
-      */
+      formData.append(
+        "minTeamSize",
+        String(minTeamSize)
+      );
+
+      formData.append(
+        "maxTeamSize",
+        String(maxTeamSize)
+      );
+
+      /* =====================================================
+         IMAGE
+      ===================================================== */
 
       if (imageFile) {
         formData.append(
@@ -554,6 +570,11 @@ function EditEvent() {
       );
 
       console.log(
+        "Authentication:",
+        "Token provided"
+      );
+
+      console.log(
         "Image:",
         imageFile
           ? imageFile.name
@@ -566,6 +587,16 @@ function EditEvent() {
       );
 
       console.log(
+        "Participation:",
+        participationType
+      );
+
+      console.log(
+        "Team Size:",
+        `${minTeamSize} - ${maxTeamSize}`
+      );
+
+      console.log(
         "===================================="
       );
 
@@ -573,14 +604,19 @@ function EditEvent() {
          SEND PUT REQUEST
       ===================================================== */
 
-      const response =
-        await fetch(
-          `http://localhost:8000/api/events/${id}/`,
-          {
-            method: "PUT",
-            body: formData,
-          }
-        );
+      const response = await fetch(
+        `http://localhost:8000/api/events/${id}/`,
+        {
+          method: "PUT",
+
+          headers: {
+            Authorization: `Token ${token}`,
+            Accept: "application/json",
+          },
+
+          body: formData,
+        }
+      );
 
       /* =====================================================
          READ RESPONSE
@@ -589,8 +625,7 @@ function EditEvent() {
       let data = {};
 
       try {
-        data =
-          await response.json();
+        data = await response.json();
       } catch (error) {
         console.error(
           "Could not read backend response:",
@@ -621,45 +656,32 @@ function EditEvent() {
         let errorMessage =
           "Failed to update event.";
 
-        if (data.message) {
+        if (response.status === 401) {
           errorMessage =
-            data.message;
+            "Authentication failed. Please login again.";
+        } else if (response.status === 403) {
+          errorMessage =
+            "You do not have permission to update this event.";
+        } else if (data.message) {
+          errorMessage = data.message;
         } else if (data.detail) {
-          errorMessage =
-            data.detail;
-        } else if (
-          typeof data ===
-          "string"
-        ) {
+          errorMessage = data.detail;
+        } else if (typeof data === "string") {
           errorMessage = data;
         } else if (
           data &&
-          typeof data ===
-            "object" &&
-          Object.keys(data)
-            .length > 0
+          typeof data === "object" &&
+          Object.keys(data).length > 0
         ) {
-          errorMessage =
-            Object.entries(data)
-              .map(
-                ([
-                  field,
-                  errors,
-                ]) => {
-                  if (
-                    Array.isArray(
-                      errors
-                    )
-                  ) {
-                    return `${field}: ${errors.join(
-                      ", "
-                    )}`;
-                  }
+          errorMessage = Object.entries(data)
+            .map(([field, errors]) => {
+              if (Array.isArray(errors)) {
+                return `${field}: ${errors.join(", ")}`;
+              }
 
-                  return `${field}: ${errors}`;
-                }
-              )
-              .join("\n");
+              return `${field}: ${errors}`;
+            })
+            .join("\n");
         }
 
         showNotification(
@@ -684,15 +706,8 @@ function EditEvent() {
         "success"
       );
 
-      /*
-        Give the website notification
-        time to appear before navigating.
-      */
-
       setTimeout(() => {
-        navigate(
-          "/organizer/events"
-        );
+        navigate("/organizer/events");
       }, 1200);
     } catch (error) {
       console.error(
@@ -716,32 +731,19 @@ function EditEvent() {
   if (loading) {
     return (
       <div className="organizer-page">
-
         <Notification
-          message={
-            notification.message
-          }
-          type={
-            notification.type
-          }
-          onClose={
-            closeNotification
-          }
+          message={notification.message}
+          type={notification.type}
+          onClose={closeNotification}
         />
 
         <div className="empty-state">
-
-          <h2>
-            Loading Event...
-          </h2>
+          <h2>Loading Event...</h2>
 
           <p>
-            Please wait while the
-            event details are loaded.
+            Please wait while the event details are loaded.
           </p>
-
         </div>
-
       </div>
     );
   }
@@ -753,44 +755,29 @@ function EditEvent() {
   if (!event) {
     return (
       <div className="organizer-page">
-
         <Notification
-          message={
-            notification.message
-          }
-          type={
-            notification.type
-          }
-          onClose={
-            closeNotification
-          }
+          message={notification.message}
+          type={notification.type}
+          onClose={closeNotification}
         />
 
         <div className="empty-state">
-
-          <h2>
-            Event Not Found
-          </h2>
+          <h2>Event Not Found</h2>
 
           <p>
-            The event you are
-            looking for does not exist.
+            The event you are looking for does not exist.
           </p>
 
           <button
             type="button"
             className="primary-btn"
             onClick={() =>
-              navigate(
-                "/organizer/events"
-              )
+              navigate("/organizer/events")
             }
           >
             Back to My Events
           </button>
-
         </div>
-
       </div>
     );
   }
@@ -802,20 +789,10 @@ function EditEvent() {
   return (
     <div className="organizer-page">
 
-      {/* =====================================================
-          WEBSITE NOTIFICATION
-      ===================================================== */}
-
       <Notification
-        message={
-          notification.message
-        }
-        type={
-          notification.type
-        }
-        onClose={
-          closeNotification
-        }
+        message={notification.message}
+        type={notification.type}
+        onClose={closeNotification}
       />
 
       {/* =====================================================
@@ -823,19 +800,13 @@ function EditEvent() {
       ===================================================== */}
 
       <div className="organizer-header">
-
         <div>
-
-          <h1>
-            EDIT EVENT
-          </h1>
+          <h1>EDIT EVENT</h1>
 
           <p className="page-subtitle">
             Update your event information.
           </p>
-
         </div>
-
       </div>
 
       {/* =====================================================
@@ -852,15 +823,11 @@ function EditEvent() {
         =================================================== */}
 
         <div className="form-section">
-
-          <h2>
-            Event Image
-          </h2>
+          <h2>Event Image</h2>
 
           <label className="image-upload">
 
             {imagePreview ? (
-
               <div className="image-preview-container">
 
                 <img
@@ -874,9 +841,7 @@ function EditEvent() {
                 </div>
 
               </div>
-
             ) : (
-
               <div className="upload-placeholder">
 
                 <span className="upload-icon">
@@ -892,20 +857,16 @@ function EditEvent() {
                 </small>
 
               </div>
-
             )}
 
             <input
               type="file"
               accept="image/png,image/jpeg,image/webp"
-              onChange={
-                handleImageChange
-              }
+              onChange={handleImageChange}
               hidden
             />
 
           </label>
-
         </div>
 
         {/* ===================================================
@@ -914,13 +875,9 @@ function EditEvent() {
 
         <div className="form-section">
 
-          <h2>
-            Event Information
-          </h2>
+          <h2>Event Information</h2>
 
-          {/* =================================================
-              TITLE
-          ================================================= */}
+          {/* TITLE */}
 
           <div className="form-group">
 
@@ -932,21 +889,15 @@ function EditEvent() {
             <input
               type="text"
               name="title"
-              value={
-                event.title || ""
-              }
-              onChange={
-                handleChange
-              }
+              value={event.title || ""}
+              onChange={handleChange}
               placeholder="Enter event title"
               required
             />
 
           </div>
 
-          {/* =================================================
-              CATEGORY + CAPACITY
-          ================================================= */}
+          {/* CATEGORY + CAPACITY */}
 
           <div className="form-row">
 
@@ -958,12 +909,8 @@ function EditEvent() {
 
               <select
                 name="category"
-                value={
-                  event.category || ""
-                }
-                onChange={
-                  handleChange
-                }
+                value={event.category || ""}
+                onChange={handleChange}
               >
 
                 <option value="">
@@ -1008,12 +955,8 @@ function EditEvent() {
               <input
                 type="number"
                 name="capacity"
-                value={
-                  event.capacity || ""
-                }
-                onChange={
-                  handleChange
-                }
+                value={event.capacity || ""}
+                onChange={handleChange}
                 placeholder="100"
                 min="1"
                 required
@@ -1023,9 +966,7 @@ function EditEvent() {
 
           </div>
 
-          {/* =================================================
-              DATE + TIME
-          ================================================= */}
+          {/* DATE + TIME */}
 
           <div className="form-row">
 
@@ -1039,12 +980,8 @@ function EditEvent() {
               <input
                 type="date"
                 name="date"
-                value={
-                  event.date || ""
-                }
-                onChange={
-                  handleChange
-                }
+                value={event.date || ""}
+                onChange={handleChange}
                 required
               />
 
@@ -1059,21 +996,15 @@ function EditEvent() {
               <input
                 type="time"
                 name="time"
-                value={
-                  event.time || ""
-                }
-                onChange={
-                  handleChange
-                }
+                value={event.time || ""}
+                onChange={handleChange}
               />
 
             </div>
 
           </div>
 
-          {/* =================================================
-              VENUE + ORGANIZER
-          ================================================= */}
+          {/* VENUE + ORGANIZER */}
 
           <div className="form-row">
 
@@ -1087,12 +1018,8 @@ function EditEvent() {
               <input
                 type="text"
                 name="venue"
-                value={
-                  event.venue || ""
-                }
-                onChange={
-                  handleChange
-                }
+                value={event.venue || ""}
+                onChange={handleChange}
                 placeholder="Example: Seminar Hall"
                 required
               />
@@ -1109,13 +1036,8 @@ function EditEvent() {
               <input
                 type="text"
                 name="organizerName"
-                value={
-                  event.organizerName ||
-                  ""
-                }
-                onChange={
-                  handleChange
-                }
+                value={event.organizerName || ""}
+                onChange={handleChange}
                 placeholder="Enter organizer name"
                 required
               />
@@ -1124,12 +1046,9 @@ function EditEvent() {
 
           </div>
 
-          {/* =================================================
-              ORGANIZER MOBILE
-          ================================================= */}
+          {/* ORGANIZER MOBILE */}
 
-          {event.organizerMobile !==
-            undefined && (
+          {event.organizerMobile !== undefined && (
             <div className="form-group">
 
               <label>
@@ -1139,22 +1058,90 @@ function EditEvent() {
               <input
                 type="tel"
                 name="organizerMobile"
-                value={
-                  event.organizerMobile ||
-                  ""
-                }
-                onChange={
-                  handleChange
-                }
+                value={event.organizerMobile || ""}
+                onChange={handleChange}
                 placeholder="Enter mobile number"
               />
 
             </div>
           )}
 
-          {/* =================================================
-              REGISTRATION FEE
-          ================================================= */}
+          {/* PARTICIPATION TYPE */}
+
+          <div className="form-group">
+
+            <label>
+              Participation Type
+            </label>
+
+            <select
+              name="participationType"
+              value={
+                event.participationType ||
+                "individual"
+              }
+              onChange={handleChange}
+            >
+
+              <option value="individual">
+                Individual
+              </option>
+
+              <option value="group">
+                Group
+              </option>
+
+            </select>
+
+          </div>
+
+          {/* TEAM SIZE */}
+
+          {event.participationType === "group" && (
+            <div className="form-row">
+
+              <div className="form-group">
+
+                <label>
+                  Minimum Team Size
+                </label>
+
+                <input
+                  type="number"
+                  name="minTeamSize"
+                  value={
+                    event.minTeamSize || ""
+                  }
+                  onChange={handleChange}
+                  min="2"
+                  placeholder="2"
+                />
+
+              </div>
+
+              <div className="form-group">
+
+                <label>
+                  Maximum Team Size
+                </label>
+
+                <input
+                  type="number"
+                  name="maxTeamSize"
+                  value={
+                    event.maxTeamSize || ""
+                  }
+                  onChange={handleChange}
+                  min="2"
+                  placeholder="5"
+                />
+
+              </div>
+
+            </div>
+          )}
+
+          {/* REGISTRATION FEE */}
 
           <div className="form-group">
 
@@ -1166,12 +1153,9 @@ function EditEvent() {
             <select
               name="registrationFee"
               value={
-                event.registrationFee ||
-                ""
+                event.registrationFee || ""
               }
-              onChange={
-                handleChange
-              }
+              onChange={handleChange}
               required
             >
 
@@ -1201,20 +1185,12 @@ function EditEvent() {
 
             </select>
 
-            {/* CUSTOM FEE */}
-
-            {event.registrationFee ===
-              "Custom" && (
-
+            {event.registrationFee === "Custom" && (
               <input
                 type="number"
                 name="customFee"
-                value={
-                  event.customFee || ""
-                }
-                onChange={
-                  handleChange
-                }
+                value={event.customFee || ""}
+                onChange={handleChange}
                 placeholder="Enter custom amount (₹)"
                 min="1"
                 required
@@ -1222,14 +1198,11 @@ function EditEvent() {
                   marginTop: "12px",
                 }}
               />
-
             )}
 
           </div>
 
-          {/* =================================================
-              REGISTRATION DEADLINE
-          ================================================= */}
+          {/* REGISTRATION DEADLINE */}
 
           <div className="form-group">
 
@@ -1241,28 +1214,20 @@ function EditEvent() {
               type="date"
               name="registrationDeadline"
               value={
-                event.registrationDeadline ||
-                ""
+                event.registrationDeadline || ""
               }
-              onChange={
-                handleChange
-              }
-              max={
-                event.date ||
-                undefined
-              }
+              onChange={handleChange}
+              max={event.date || undefined}
             />
 
             <small className="form-help">
-              Last date for students
-              to register for this event.
+              Last date for students to register
+              for this event.
             </small>
 
           </div>
 
-          {/* =================================================
-              DESCRIPTION
-          ================================================= */}
+          {/* DESCRIPTION */}
 
           <div className="form-group">
 
@@ -1272,12 +1237,8 @@ function EditEvent() {
 
             <textarea
               name="description"
-              value={
-                event.description || ""
-              }
-              onChange={
-                handleChange
-              }
+              value={event.description || ""}
+              onChange={handleChange}
               placeholder="Describe your event..."
               rows="5"
             />
@@ -1296,9 +1257,7 @@ function EditEvent() {
             type="button"
             className="cancel-btn"
             onClick={() =>
-              navigate(
-                "/organizer/events"
-              )
+              navigate("/organizer/events")
             }
             disabled={saving}
           >

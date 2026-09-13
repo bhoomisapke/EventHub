@@ -10,24 +10,18 @@
 
 /* ============================================================
    NAVBAR
-   Same as main website
    ============================================================ */
 
 .navbar {
   position: sticky;
-
   top: 0;
-
   z-index: 1000;
 
   width: 100%;
-
   min-height: 76px;
 
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
 
   padding: 0 5%;
@@ -35,10 +29,9 @@
   background: rgba(247, 243, 238, 0.94);
 
   backdrop-filter: blur(18px);
-
   -webkit-backdrop-filter: blur(18px);
 
-  border-bottom: 1px solid rgba(221, 216, 225, 0.90);
+  border-bottom: 1px solid rgba(221, 216, 225, 0.9);
 
   box-shadow:
     0 8px 30px rgba(11, 18, 48, 0.07);
@@ -53,7 +46,6 @@
 
 .brand {
   display: flex;
-
   align-items: center;
 
   gap: 11px;
@@ -68,13 +60,10 @@
 
 .brand-symbol {
   width: 39px;
-
   height: 39px;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
   border-radius: 11px;
@@ -132,13 +121,11 @@
 
 .nav-menu {
   display: flex;
-
   align-items: center;
 
   gap: 30px;
 
   margin-left: auto;
-
   margin-right: 30px;
 }
 
@@ -146,7 +133,7 @@
 .nav-menu a {
   position: relative;
 
-  color: #30384D;
+  color: #30384d;
 
   font-size: 13px;
 
@@ -166,11 +153,9 @@
   position: absolute;
 
   left: 50%;
-
   bottom: -8px;
 
   width: 0;
-
   height: 2px;
 
   transform: translateX(-50%);
@@ -186,7 +171,7 @@
     );
 
   box-shadow:
-    0 0 9px rgba(236, 72, 153, 0.30);
+    0 0 9px rgba(236, 72, 153, 0.3);
 
   transition: width 0.25s ease;
 }
@@ -204,7 +189,9 @@
 }
 
 
-/* Active Organizer page */
+/* ============================================================
+   ACTIVE ORGANIZER PAGE
+   ============================================================ */
 
 .nav-menu a.organizer-active {
   color: var(--purple-dark);
@@ -217,12 +204,69 @@
 
 
 /* ============================================================
+   HOME BUTTON
+   Beside Participants
+   No icon
+   ============================================================ */
+
+.organizer-home-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 40px;
+
+  padding: 0 18px;
+
+  border-radius: 20px;
+
+  background: #f1e9ff;
+
+  border: 1px solid rgba(109, 40, 217, 0.12);
+
+  color: var(--purple-dark) !important;
+
+  font-size: 13px !important;
+
+  font-weight: 700 !important;
+
+  text-decoration: none !important;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+/* Remove normal underline from Home */
+
+.nav-menu a.organizer-home-button::after {
+  display: none;
+}
+
+
+/* Home hover */
+
+.nav-menu a.organizer-home-button:hover {
+  transform: translateY(-2px);
+
+  background: #e8dcff;
+
+  color: var(--purple-dark) !important;
+
+  box-shadow:
+    0 7px 18px rgba(109, 40, 217, 0.15);
+}
+
+
+/* ============================================================
    NAV BUTTONS
    ============================================================ */
 
 .nav-buttons {
   display: flex;
-
   align-items: center;
 
   gap: 9px;
@@ -253,13 +297,12 @@
 
 /* ============================================================
    PROFILE BUTTON
-   Same as main website login button
    ============================================================ */
 
 .login-button {
   background: var(--cream);
 
-  border: 1px solid #CEC8D0;
+  border: 1px solid #cec8d0;
 
   color: var(--navy);
 
@@ -283,7 +326,6 @@
   min-width: 42px;
 
   width: 42px;
-
   height: 42px;
 
   min-height: 42px;
@@ -295,14 +337,12 @@
   display: inline-flex;
 
   align-items: center;
-
   justify-content: center;
 }
 
 
 /* ============================================================
    LOGOUT BUTTON
-   Same as main website register button
    ============================================================ */
 
 .register-button {
@@ -337,7 +377,7 @@
     );
 
   box-shadow:
-    0 0 22px rgba(139, 92, 246, 0.30),
+    0 0 22px rgba(139, 92, 246, 0.3),
     0 0 40px rgba(236, 72, 153, 0.12);
 }
 
@@ -348,7 +388,6 @@
   min-width: 42px;
 
   width: 42px;
-
   height: 42px;
 
   min-height: 42px;
@@ -360,7 +399,6 @@
   display: inline-flex;
 
   align-items: center;
-
   justify-content: center;
 }
 
@@ -396,7 +434,6 @@
    ============================================================ */
 
 @media (max-width: 850px) {
-
   .navbar {
     padding: 0 4%;
   }
@@ -406,12 +443,10 @@
 
     margin-right: 20px;
   }
-
 }
 
 
 @media (max-width: 700px) {
-
   .navbar {
     min-height: 70px;
   }
@@ -437,12 +472,10 @@
   .organizer-layout-content {
     min-height: calc(100vh - 70px);
   }
-
 }
 
 
 @media (max-width: 580px) {
-
   .navbar {
     padding: 10px 4%;
   }
@@ -458,22 +491,25 @@
   .organizer-profile-button,
   .organizer-logout-button {
     width: 38px;
-
     height: 38px;
 
     min-width: 38px;
-
     min-height: 38px;
   }
 
+  .organizer-home-button {
+    min-height: 36px;
+
+    padding: 0 14px;
+
+    font-size: 11px !important;
+  }
 }
 
 
 @media (max-width: 480px) {
-
   .brand-symbol {
     width: 36px;
-
     height: 36px;
 
     font-size: 17px;
@@ -495,7 +531,6 @@
     gap: 10px;
 
     margin-left: 10px;
-
     margin-right: 10px;
   }
 
@@ -503,4 +538,13 @@
     font-size: 10px;
   }
 
+  .organizer-home-button {
+    min-height: 34px;
+
+    padding: 0 12px;
+
+    border-radius: 17px;
+
+    font-size: 10px !important;
+  }
 }

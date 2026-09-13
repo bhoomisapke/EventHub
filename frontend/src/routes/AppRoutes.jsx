@@ -19,7 +19,6 @@ import MyRegistrations from "../pages/student/MyRegistrations.jsx";
 import MyTickets from "../pages/student/MyTickets.jsx";
 import Profile from "../pages/student/Profile.jsx";
 import RegistrationForm from "../pages/student/RegistrationForm.jsx";
-// Public Pages
 
 // =====================================================
 // PUBLIC PAGES
@@ -37,8 +36,6 @@ import CreateEvent from "../pages/organizer/CreateEvent.jsx";
 import MyEvents from "../pages/organizer/MyEvents.jsx";
 import EditEvent from "../pages/organizer/EditEvent.jsx";
 import Participants from "../pages/organizer/Participants.jsx";
-
-// IMPORTANT: Organizer Profile
 import OrganizerProfile from "../pages/organizer/Profile.jsx";
 
 // =====================================================
@@ -47,16 +44,28 @@ import OrganizerProfile from "../pages/organizer/Profile.jsx";
 import ResetPassword from "../pages/auth/ResetPassword.jsx";
 
 
+// =====================================================
+// APP ROUTES
+// =====================================================
+
 const AppRoutes = () => {
   return (
     <Routes>
+
+      {/* =====================================================
+          PUBLIC EVENT REGISTRATION
+          ===================================================== */}
+
       <Route
-  path="/events/:id/register"
-  element={<RegistrationForm />}
-/>
+        path="/events/:id/register"
+        element={<RegistrationForm />}
+      />
+
+
       {/* =====================================================
           LANDING PAGE
           ===================================================== */}
+
       <Route
         path="/"
         element={<App />}
@@ -66,6 +75,7 @@ const AppRoutes = () => {
       {/* =====================================================
           AUTHENTICATION
           ===================================================== */}
+
       <Route
         path="/auth"
         element={<Auth />}
@@ -80,6 +90,7 @@ const AppRoutes = () => {
       {/* =====================================================
           PUBLIC PAGES
           ===================================================== */}
+
       <Route element={<PublicLayout />}>
 
         <Route
@@ -121,6 +132,7 @@ const AppRoutes = () => {
       {/* =====================================================
           STUDENT PAGES
           ===================================================== */}
+
       <Route
         path="/student"
         element={<StudentLayout />}
@@ -145,71 +157,128 @@ const AppRoutes = () => {
           path="profile"
           element={<Profile />}
         />
-        
+
         <Route
           path="register"
           element={<RegistrationForm />}
         />
+
         <Route
-          path="/student/registrations"
+          path="registrations"
           element={<MyRegistrations />}
         />
+
       </Route>
 
 
       {/* =====================================================
           ORGANIZER PAGES
           ===================================================== */}
+
       <Route
         path="/organizer"
         element={<OrganizerLayout />}
       >
 
-        {/* Organizer Dashboard */}
+        {/* =================================================
+            ORGANIZER DASHBOARD
+            ================================================= */}
+
         <Route
           path="dashboard"
           element={<OrganizerDashboard />}
         />
 
-        {/* Organizer Event Details */}
+
+        {/* =================================================
+            ORGANIZER EVENT DETAILS
+            ================================================= */}
+
         <Route
           path="events/:id"
           element={<OrganizerEventDetails />}
         />
 
-        {/* Create Event */}
+
+        {/* =================================================
+            CREATE EVENT
+            ================================================= */}
+
         <Route
           path="create-event"
           element={<CreateEvent />}
         />
 
-        {/* My Events */}
+
+        {/* =================================================
+            MY EVENTS
+            ================================================= */}
+
         <Route
           path="events"
           element={<MyEvents />}
         />
 
-        {/* Edit Event */}
+
+        {/* =================================================
+            EDIT EVENT
+            ================================================= */}
+
         <Route
           path="events/:id/edit"
           element={<EditEvent />}
         />
 
-        {/* Participants */}
+
+        {/* =================================================
+            ALL EVENT PARTICIPANTS
+            =================================================
+
+            URL:
+
+            /organizer/participants
+
+            This keeps your PREVIOUS functionality.
+
+            It should show participants from ALL events
+            created by the logged-in organizer.
+
+            ================================================= */}
+
         <Route
           path="participants"
           element={<Participants />}
         />
 
-        {/* Event Participants */}
+
+        {/* =================================================
+            EVENT-SPECIFIC PARTICIPANTS
+            =================================================
+
+            URL examples:
+
+            /organizer/events/1/participants
+            /organizer/events/2/participants
+            /organizer/events/3/participants
+
+            This is used by the Participants button
+            inside My Events.
+
+            It should show ONLY participants belonging
+            to the selected event.
+
+            ================================================= */}
+
         <Route
           path="events/:id/participants"
           element={<Participants />}
         />
 
+
         {/* =================================================
             ORGANIZER PROFILE
             ================================================= */}
+
         <Route
           path="profile"
           element={<OrganizerProfile />}
@@ -221,6 +290,7 @@ const AppRoutes = () => {
       {/* =====================================================
           ADMIN DASHBOARD
           ===================================================== */}
+
       <Route
         path="/admin/dashboard"
         element={
@@ -243,6 +313,7 @@ const AppRoutes = () => {
       {/* =====================================================
           404 PAGE
           ===================================================== */}
+
       <Route
         path="*"
         element={
@@ -257,7 +328,11 @@ const AppRoutes = () => {
             }}
           >
             <h1>404</h1>
-            <p>Page not found.</p>
+
+            <p>
+              Page not found.
+            </p>
+
           </div>
         }
       />
