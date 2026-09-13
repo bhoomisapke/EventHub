@@ -1,13 +1,19 @@
-/* =========================================================
-   EVENTHUB STUDENT DASHBOARD
-   MAIN WEBSITE VISUAL THEME
-========================================================= */
+/* ============================================================
+   EVENTHUB — STUDENT DASHBOARD
+   Clean replacement stylesheet
+   ------------------------------------------------------------
+   Theme:
+   Cream background + white surfaces + navy text
+   Purple / pink accents + dark EventHub contrast
+   ============================================================ */
+
+/* ============================================================
+   01. PAGE
+   ============================================================ */
 
 .student-page {
   min-height: 100vh;
-
   padding: 65px 5% 90px;
-
   overflow: hidden;
 
   background:
@@ -40,53 +46,62 @@
     sans-serif;
 }
 
-
-/* =========================================================
-   HERO
-========================================================= */
-
-.student-hero {
-  max-width: 1250px;
-
-  margin: 0 auto;
-
-  display: grid;
-
-  grid-template-columns: 1fr 0.85fr;
-
-  align-items: center;
-
-  gap: 70px;
-
-  min-height: 470px;
+.student-page *,
+.student-page *::before,
+.student-page *::after {
+  box-sizing: border-box;
 }
 
 
-/* =========================================================
-   HERO CONTENT
-========================================================= */
+/* ============================================================
+   02. HERO
+   ============================================================ */
+
+.student-hero {
+  max-width: 1250px;
+  min-height: 470px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(390px, 0.85fr);
+
+  align-items: center;
+  gap: 70px;
+}
+
+
+/* ============================================================
+   03. HERO CONTENT
+   ============================================================ */
 
 .student-hero-content {
   max-width: 650px;
 }
 
+.student-hero-content > p {
+  max-width: 570px;
+  margin: 0;
 
-/* =========================================================
-   STUDENT BADGE
-========================================================= */
+  color: #5B6478;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+
+/* ============================================================
+   04. STUDENT BADGE
+   ============================================================ */
 
 .student-badge {
   width: fit-content;
 
   display: flex;
   align-items: center;
-
   gap: 8px;
 
   padding: 8px 13px;
 
   border: 1px solid rgba(139, 92, 246, 0.20);
-
   border-radius: 999px;
 
   background:
@@ -99,18 +114,16 @@
   color: #6D28D9;
 
   font-size: 10px;
-
   font-weight: 800;
-
   letter-spacing: 1.5px;
 }
 
 .student-badge span {
   width: 7px;
   height: 7px;
+  flex-shrink: 0;
 
   border-radius: 50%;
-
   background: #EC4899;
 
   box-shadow:
@@ -118,9 +131,9 @@
 }
 
 
-/* =========================================================
-   HERO HEADING
-========================================================= */
+/* ============================================================
+   05. HERO HEADING
+   ============================================================ */
 
 .student-hero h1 {
   margin: 22px 0 20px;
@@ -128,11 +141,8 @@
   color: #0B1230;
 
   font-size: clamp(42px, 5vw, 68px);
-
   line-height: 0.98;
-
   letter-spacing: -3px;
-
   font-weight: 800;
 }
 
@@ -152,52 +162,45 @@
 }
 
 
-/* =========================================================
-   HERO PARAGRAPH
-========================================================= */
-
-.student-hero-content > p {
-  max-width: 570px;
-
-  color: #5B6478;
-
-  font-size: 14px;
-
-  line-height: 1.75;
-}
-
-
-/* =========================================================
-   HERO BUTTONS
-========================================================= */
+/* ============================================================
+   06. HERO BUTTONS
+   ============================================================ */
 
 .student-hero-actions {
   display: flex;
-
   align-items: center;
-
   gap: 12px;
 
   margin-top: 28px;
 }
 
-
-/* PRIMARY */
-
-.primary-student-button {
+.primary-student-button,
+.secondary-student-button {
   min-height: 43px;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   gap: 8px;
 
   padding: 0 19px;
 
-  border: 1px solid #0B1230;
-
   border-radius: 9px;
+
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+.primary-student-button {
+  border: 1px solid #0B1230;
 
   background:
     linear-gradient(
@@ -208,19 +211,8 @@
 
   color: #FFF8ED;
 
-  font-size: 12px;
-
-  font-weight: 700;
-
-  text-decoration: none;
-
   box-shadow:
     0 7px 20px rgba(11, 18, 48, 0.16);
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease;
 }
 
 .primary-student-button:hover {
@@ -241,39 +233,10 @@
     0 12px 28px rgba(109, 40, 217, 0.28);
 }
 
-
-/* SECONDARY */
-
 .secondary-student-button {
-  min-height: 43px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-
-  padding: 0 18px;
-
   border: 1px solid #CEC8D0;
-
-  border-radius: 9px;
-
   background: #FFF8ED;
-
   color: #0B1230;
-
-  font-size: 12px;
-
-  font-weight: 700;
-
-  text-decoration: none;
-
-  transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    color 0.25s ease,
-    box-shadow 0.25s ease;
 }
 
 .secondary-student-button:hover {
@@ -295,13 +258,12 @@
 }
 
 
-/* =========================================================
-   HERO FEATURES
-========================================================= */
+/* ============================================================
+   07. HERO FEATURES
+   ============================================================ */
 
 .student-hero-features {
   display: flex;
-
   gap: 30px;
 
   margin-top: 35px;
@@ -309,15 +271,14 @@
 
 .student-hero-features > div {
   display: flex;
-
   align-items: center;
-
   gap: 10px;
 }
 
 .feature-icon {
   width: 35px;
   height: 35px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
@@ -325,8 +286,7 @@
 
   border-radius: 10px;
 
-  transition:
-    transform 0.25s ease;
+  transition: transform 0.25s ease;
 }
 
 .student-hero-features > div:hover .feature-icon {
@@ -345,10 +305,10 @@
 
 .student-hero-features strong {
   display: block;
-
   color: #0B1230;
 
   font-size: 11px;
+  font-weight: 700;
 }
 
 .student-hero-features span {
@@ -362,13 +322,14 @@
 }
 
 
-/* =========================================================
-   HERO VISUAL
-========================================================= */
+/* ============================================================
+   08. HERO VISUAL AREA
+   ============================================================ */
+
 .student-hero-visual {
   position: relative;
 
-  min-height: 390px;
+  min-height: 430px;
 
   display: flex;
   align-items: center;
@@ -378,191 +339,239 @@
 }
 
 
-/* GLOW */
+/* ============================================================
+   09. SOFT GLOWS
+   ============================================================ */
 
 .hero-glow {
   position: absolute;
 
   border-radius: 50%;
 
-  filter: blur(45px);
+  pointer-events: none;
+  filter: blur(65px);
+
+  opacity: 0.32;
+
+  z-index: -1;
+}
+
+.glow-one {
+  width: 230px;
+  height: 230px;
+
+  top: 35px;
+  right: 35px;
+
+  background: rgba(139, 92, 246, 0.20);
+}
+
+.glow-two {
+  width: 190px;
+  height: 190px;
+
+  bottom: 25px;
+  left: 35px;
+
+  background: rgba(236, 72, 153, 0.14);
+}
+
+
+/* ============================================================
+   10. MAIN WHITE FLOATING WORKSPACE
+   ============================================================ */
+
+.student-preview-card {
+  position: relative;
+  z-index: 2;
+
+  width: min(525px, 90%);
+  min-height: 335px;
+
+  padding: 34px 32px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  border-radius: 30px;
+
+  background: #FFFFFF;
+
+  box-shadow:
+    0 28px 65px rgba(7, 9, 20, 0.13),
+    0 10px 30px rgba(139, 92, 246, 0.08);
+
+  transform:
+    perspective(1000px)
+    rotateY(-2deg)
+    rotateX(1deg);
+
+  animation: previewFloat 6s ease-in-out infinite;
+
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.student-preview-card::before {
+  content: "";
+
+  position: absolute;
+
+  width: 210px;
+  height: 210px;
+
+  top: -125px;
+  right: -85px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(139, 92, 246, 0.10),
+      transparent 70%
+    );
 
   pointer-events: none;
 }
 
-.glow-one {
-  width: 260px;
-  height: 260px;
-
-  background: rgba(139, 92, 246, 0.15);
-
-  top: 30px;
-  right: 10px;
-}
-
-.glow-two {
-  width: 220px;
-  height: 220px;
-
-  background: rgba(236, 72, 153, 0.12);
-
-  bottom: 10px;
-  left: 10px;
-}
-
-
-/* =========================================================
-   PREVIEW CARD
-========================================================= */
-
-.student-preview-card {
-  position: relative;
-
-  width: min(420px, 90%);
-
-  min-height: 270px;
-
-  padding: 22px;
-
-  overflow: hidden;
-
-  border-radius: 26px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #0B1230,
-      #111A46
-    );
-
-  border: 1px solid rgba(139, 92, 246, 0.45);
-
-  box-shadow:
-    0 25px 60px rgba(7, 9, 20, 0.24),
-    0 0 35px rgba(139, 92, 246, 0.12);
-
-  transform:
-    perspective(1000px)
-    rotateY(-3deg)
-    rotateX(2deg);
-
-  transition:
-    transform 0.35s ease,
-    box-shadow 0.35s ease;
-}
-
 .student-preview-card:hover {
-  transform:
-    perspective(1000px)
-    rotateY(0deg)
-    rotateX(0deg)
-    translateY(-5px);
+  animation-play-state: paused;
+
+  border-color: rgba(139, 92, 246, 0.30);
 
   box-shadow:
-    0 30px 70px rgba(7, 9, 20, 0.27),
-    0 0 45px rgba(139, 92, 246, 0.17);
+    0 32px 75px rgba(7, 9, 20, 0.17),
+    0 12px 34px rgba(139, 92, 246, 0.11);
+}
+
+@keyframes previewFloat {
+  0%,
+  100% {
+    transform:
+      perspective(1000px)
+      rotateY(-2deg)
+      rotateX(1deg)
+      translateY(0);
+  }
+
+  50% {
+    transform:
+      perspective(1000px)
+      rotateY(-2deg)
+      rotateX(1deg)
+      translateY(-9px);
+  }
 }
 
 
-/* =========================================================
-   PREVIEW TOP
-========================================================= */
+/* ============================================================
+   11. PREVIEW TOP
+   ============================================================ */
 
 .preview-top {
-  display: flex;
+  position: relative;
+  z-index: 1;
 
+  display: flex;
   align-items: center;
   justify-content: space-between;
+
+  margin-bottom: 30px;
+
+  color: #10152C;
+
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
-.preview-top strong {
-  color: #0B1230;
-
-  font-size: 14px;
-
-  letter-spacing: 1px;
-}
-
-.preview-top span {
-  display: flex;
-
+.preview-top > span {
+  display: inline-flex;
   align-items: center;
-
   gap: 6px;
 
-  color: #6D28D9;
+  color: #8B5CF6;
 
-  font-size: 8px;
-
+  font-size: 12px;
   font-weight: 800;
-
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
 }
 
 .preview-top i {
   width: 6px;
   height: 6px;
 
+  display: inline-block;
+
   border-radius: 50%;
 
   background: #EC4899;
 
   box-shadow:
-    0 0 10px rgba(236, 72, 153, 0.7);
+    0 0 10px rgba(236, 72, 153, 0.45);
 }
 
 
-/* =========================================================
-   PREVIEW CENTER
-========================================================= */
+/* ============================================================
+   12. PREVIEW CENTER
+   ============================================================ */
 
 .preview-center {
-  padding-top: 45px;
+  position: relative;
+  z-index: 1;
+
+  text-align: center;
 }
 
 .preview-center small {
-  color: #EC4899;
+  display: block;
 
-  font-size: 8px;
+  margin-bottom: 8px;
 
-  font-weight: 800;
+  color: #5B6478;
 
-  letter-spacing: 1.5px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 .preview-center h3 {
-  margin-top: 8px;
+  margin: 0;
 
-  color: #0B1230;
+  color: #10152C;
 
-  font-size: 28px;
-
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 800;
   letter-spacing: -1px;
 }
 
-/* =========================================================
-   PREVIEW STATS
-========================================================= */
+
+/* ============================================================
+   13. PREVIEW STATS
+   ============================================================ */
 
 .preview-stats {
   display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
 
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 10px;
-
-  margin-top: 28px;
+  margin-top: 27px;
 }
 
-.preview-stats div {
-  padding: 12px;
+.preview-stats > div {
+  min-width: 0;
 
-  border-radius: 11px;
+  padding: 14px 9px;
+
+  border: 1px solid rgba(139, 92, 246, 0.10);
+  border-radius: 15px;
 
   background: #F7F3EE;
 
-  border: 1px solid #E8E2EC;
+  text-align: center;
 
   transition:
     transform 0.25s ease,
@@ -570,13 +579,13 @@
     box-shadow 0.25s ease;
 }
 
-.preview-stats div:hover {
+.preview-stats > div:hover {
   transform: translateY(-3px);
 
-  border-color: rgba(139, 92, 246, 0.30);
+  border-color: rgba(139, 92, 246, 0.22);
 
   box-shadow:
-    0 8px 18px rgba(139, 92, 246, 0.08);
+    0 8px 20px rgba(139, 92, 246, 0.08);
 }
 
 .preview-stats span {
@@ -584,9 +593,9 @@
 
   color: #687185;
 
-  font-size: 7px;
-
-  letter-spacing: 0.8px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
 }
 
 .preview-stats strong {
@@ -596,168 +605,179 @@
 
   color: #0B1230;
 
-  font-size: 19px;
+  font-size: 21px;
+  line-height: 1;
+  font-weight: 800;
 }
 
-/* =========================================================
-   PREVIEW BOTTOM
-========================================================= */
+
+/* ============================================================
+   14. PREVIEW BOTTOM
+   ============================================================ */
 
 .preview-bottom {
-  display: flex;
-
-  justify-content: space-between;
-
-  margin-top: 24px;
-
-  padding-top: 14px;
-
-  border-top: 1px solid #ECEAF1;
-
-  color: #687185;
-
-  font-size: 8px;
-}
-
-.preview-bottom span {
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.preview-bottom span:hover {
-  color: #6D28D9;
-
-  transform: translateY(-1px);
-}
-
-
-/* =========================================================
-   FLOATING CARDS
-========================================================= */
-
-.floating-card {
-  position: absolute;
+  position: relative;
+  z-index: 1;
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
-  gap: 9px;
+  gap: 15px;
 
-  padding: 11px 14px;
+  margin-top: 27px;
+  padding-top: 17px;
 
-  border-radius: 12px;
+  border-top: 1px solid #ECEAF1;
+}
+
+.preview-bottom span {
+  color: #687185;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.preview-bottom span:nth-child(2) {
+  color: #6D28D9;
+  font-weight: 700;
+}
+
+.preview-bottom span:nth-child(3) {
+  color: #EC4899;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   15. FLOATING INFORMATION BOXES
+   ============================================================ */
+
+.floating-card {
+  position: absolute;
+  z-index: 5;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-width: 210px;
+
+  padding: 17px 20px;
+
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  border-radius: 18px;
 
   background: #FFFFFF;
 
-  border: 1px solid rgba(139, 92, 246, 0.20);
-
   box-shadow:
-    0 15px 30px rgba(11, 18, 48, 0.14),
-    0 5px 15px rgba(139, 92, 246, 0.07);
+    0 18px 42px rgba(16, 21, 44, 0.12),
+    0 6px 18px rgba(139, 92, 246, 0.07);
 
   transition:
-    transform 0.25s ease,
+    border-color 0.25s ease,
     box-shadow 0.25s ease;
 }
 
 .floating-card:hover {
-  transform: translateY(-6px);
+  animation-play-state: paused;
+
+  border-color: rgba(236, 72, 153, 0.30);
 
   box-shadow:
-    0 20px 38px rgba(11, 18, 48, 0.18),
-    0 0 20px rgba(139, 92, 246, 0.10);
+    0 24px 52px rgba(16, 21, 44, 0.16),
+    0 8px 22px rgba(236, 72, 153, 0.10);
 }
 
+.floating-card > div:last-child {
+  min-width: 0;
+}
+
+.floating-card strong {
+  display: inline;
+
+  color: #10152C;
+
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.floating-card small {
+  margin-left: 3px;
+
+  color: #5B6478;
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.floating-icon {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: rgba(139, 92, 246, 0.10);
+  color: #6D28D9;
+}
+
+.pink-floating {
+  background: rgba(236, 72, 153, 0.10);
+  color: #EC4899;
+}
+
+
+/* ============================================================
+   16. FLOATING BOX POSITIONS
+   ============================================================ */
+
 .floating-card-one {
-  top: 35px;
-  left: 0;
+  top: 25px;
+  left: -18px;
 
   animation:
     floatingCardOne 4s ease-in-out infinite;
 }
 
 .floating-card-two {
-  right: 0;
-  bottom: 35px;
+  right: -18px;
+  bottom: 28px;
 
   animation:
     floatingCardTwo 4.5s ease-in-out infinite;
 }
 
-
 @keyframes floatingCardOne {
-  0% {
-    transform: translateY(0);
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
   }
 
   50% {
-    transform: translateY(-8px);
-  }
-
-  100% {
-    transform: translateY(0);
+    transform: translate3d(0, -10px, 0);
   }
 }
-
 
 @keyframes floatingCardTwo {
-  0% {
-    transform: translateY(0);
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
   }
 
   50% {
-    transform: translateY(8px);
-  }
-
-  100% {
-    transform: translateY(0);
+    transform: translate3d(0, 10px, 0);
   }
 }
 
-.floating-icon {
-  width: 30px;
-  height: 30px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 9px;
-
-  background:
-    rgba(139, 92, 246, 0.17);
-
-  color: #8B5CF6;
-}
-
-.pink-floating {
-  background: rgba(236, 72, 153, 0.15);
-
-  color: #EC4899;
-}
-
-.floating-card strong {
-  display: block;
-
-  color: #0B1230;
-
-  font-size: 10px;
-}
-
-.floating-card small {
-  display: block;
-
-  margin-top: 2px;
-
-  color: #687185;
-
-  font-size: 8px;
-}
-
-/* =========================================================
-   STATS
-========================================================= */
+/* ============================================================
+   17. STATISTICS SECTION
+   ============================================================ */
 
 .student-stats {
   max-width: 1250px;
@@ -765,9 +785,7 @@
   margin: 45px auto 0;
 
   display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
   gap: 18px;
 }
@@ -776,20 +794,19 @@
   position: relative;
 
   display: flex;
-
   align-items: center;
-
   gap: 15px;
+
+  min-height: 96px;
 
   padding: 21px;
 
   overflow: hidden;
 
-  background: #FFFFFF;
-
   border: 1px solid #E4DFE5;
-
   border-radius: 18px;
+
+  background: #FFFFFF;
 
   box-shadow:
     0 10px 28px rgba(34, 41, 93, 0.06);
@@ -805,16 +822,17 @@
 
   position: absolute;
 
-  width: 100px;
-  height: 100px;
+  width: 105px;
+  height: 105px;
 
-  right: -30px;
-  bottom: -55px;
+  right: -35px;
+  bottom: -58px;
 
   border-radius: 50%;
 
-  background:
-    rgba(139, 92, 246, 0.07);
+  background: rgba(139, 92, 246, 0.07);
+
+  pointer-events: none;
 }
 
 .student-stat-card:hover {
@@ -827,19 +845,18 @@
 }
 
 
-/* =========================================================
-   STAT ICON
-========================================================= */
+/* ============================================================
+   18. STAT ICONS
+   ============================================================ */
 
 .stat-circle {
   width: 48px;
   height: 48px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
-
-  flex-shrink: 0;
 
   border-radius: 50%;
 }
@@ -860,9 +877,9 @@
 }
 
 
-/* =========================================================
-   STAT TEXT
-========================================================= */
+/* ============================================================
+   19. STAT TEXT
+   ============================================================ */
 
 .student-stat-card span {
   display: block;
@@ -870,9 +887,7 @@
   color: #687185;
 
   font-size: 8px;
-
   font-weight: 800;
-
   letter-spacing: 0.8px;
 }
 
@@ -884,14 +899,14 @@
   color: #0B1230;
 
   font-size: 26px;
-
   line-height: 1;
+  font-weight: 800;
 }
 
 .student-stat-card small {
   display: block;
 
-  margin-top: 4px;
+  margin-top: 5px;
 
   color: #8A92A5;
 
@@ -899,9 +914,9 @@
 }
 
 
-/* =========================================================
-   SECTIONS
-========================================================= */
+/* ============================================================
+   20. GENERAL SECTION
+   ============================================================ */
 
 .student-section {
   max-width: 1250px;
@@ -911,9 +926,7 @@
 
 .student-section-header {
   display: flex;
-
   align-items: flex-end;
-
   justify-content: space-between;
 
   gap: 20px;
@@ -922,51 +935,50 @@
 }
 
 .section-small-label {
+  display: block;
+
   color: #EC4899;
 
   font-size: 9px;
-
   font-weight: 800;
-
   letter-spacing: 1.6px;
 }
 
 .student-section-header h2 {
-  margin-top: 7px;
+  margin: 7px 0 0;
 
   color: #0B1230;
 
   font-size: 30px;
-
   line-height: 1.1;
-
+  font-weight: 800;
   letter-spacing: -1px;
 }
 
 .student-section-header p {
-  margin-top: 7px;
+  margin: 7px 0 0;
 
   color: #687185;
 
   font-size: 12px;
+  line-height: 1.5;
 }
 
 
-/* =========================================================
-   VIEW ALL
-========================================================= */
+/* ============================================================
+   21. VIEW ALL LINKS
+   ============================================================ */
 
 .view-all-link {
+  flex-shrink: 0;
+
   display: inline-flex;
-
   align-items: center;
-
   gap: 7px;
 
   color: #6D28D9;
 
   font-size: 11px;
-
   font-weight: 700;
 
   text-decoration: none;
@@ -978,37 +990,92 @@
 
 .view-all-link:hover {
   color: #EC4899;
-
   transform: translateX(3px);
 }
 
 
-/* =========================================================
-   EVENT GRID
-========================================================= */
+/* ============================================================
+   22. DASHBOARD EVENT GRID
+   ------------------------------------------------------------
+   The actual .event-card design belongs to the shared
+   EventCard component/global website stylesheet.
+   This file controls only its dashboard placement.
+   ============================================================ */
 
-.student-events-grid {
+.student-events-grid,
+.dashboard-events-grid,
+.events-grid {
   display: grid;
 
   grid-template-columns:
-    repeat(3, 1fr);
+    repeat(3, minmax(0, 1fr));
 
   gap: 22px;
 }
 
+.dashboard-events-grid {
+  margin-top: 0;
+}
 
-/* =========================================================
-   EVENT CARD
-========================================================= */
+/* Keep shared EventCard proportions consistent */
+.dashboard-events-grid .event-card {
+  width: 100%;
+  min-width: 0;
+}
+
+
+/* ============================================================
+   23. EVENT GRID STATES
+   ============================================================ */
+
+.dashboard-events-loading,
+.dashboard-events-empty,
+.dashboard-events-error {
+  grid-column: 1 / -1;
+
+  min-height: 180px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  border: 1px solid #E4DFE5;
+  border-radius: 18px;
+
+  background: #FFFFFF;
+
+  color: #687185;
+
+  text-align: center;
+
+  box-shadow:
+    0 10px 28px rgba(34, 41, 93, 0.05);
+}
+
+.dashboard-events-error {
+  color: #BE123C;
+  background: #FFF7F8;
+  border-color: rgba(225, 29, 72, 0.15);
+}
+
+
+/* ============================================================
+   24. LEGACY / OPTIONAL STUDENT EVENT CARD
+   ------------------------------------------------------------
+   Kept here so older Dashboard JSX does not break if it is
+   still using these classes. The shared EventCard should be
+   preferred for the real website event cards.
+   ============================================================ */
 
 .student-event-card {
   overflow: hidden;
 
-  background: #FFFFFF;
-
   border: 1px solid #E4DFE5;
-
   border-radius: 18px;
+
+  background: #FFFFFF;
 
   box-shadow:
     0 10px 28px rgba(34, 41, 93, 0.06);
@@ -1027,11 +1094,6 @@
   box-shadow:
     0 18px 38px rgba(34, 41, 93, 0.11);
 }
-
-
-/* =========================================================
-   EVENT IMAGE
-========================================================= */
 
 .student-event-image {
   position: relative;
@@ -1053,18 +1115,12 @@
 
   object-fit: cover;
 
-  transition:
-    transform 0.4s ease;
+  transition: transform 0.4s ease;
 }
 
 .student-event-card:hover .student-event-image img {
   transform: scale(1.04);
 }
-
-
-/* =========================================================
-   CATEGORY
-========================================================= */
 
 .event-tag {
   position: absolute;
@@ -1081,37 +1137,26 @@
   color: #6D28D9;
 
   font-size: 8px;
-
   font-weight: 800;
 }
-
-
-/* =========================================================
-   EVENT BODY
-========================================================= */
 
 .student-event-body {
   padding: 18px;
 }
 
 .student-event-body h3 {
+  margin: 0;
+
   color: #0B1230;
 
   font-size: 17px;
-
   line-height: 1.25;
-
+  font-weight: 800;
   letter-spacing: -0.4px;
 }
 
-
-/* =========================================================
-   EVENT INFORMATION
-========================================================= */
-
 .student-event-info {
   display: grid;
-
   gap: 7px;
 
   margin-top: 14px;
@@ -1119,9 +1164,7 @@
 
 .student-event-info div {
   display: flex;
-
   align-items: center;
-
   gap: 7px;
 
   color: #687185;
@@ -1131,26 +1174,17 @@
 
 .student-event-info svg {
   flex-shrink: 0;
-
   color: #8B5CF6;
 }
 
-
-/* =========================================================
-   EVENT FOOTER
-========================================================= */
-
 .student-event-footer {
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
 
   gap: 10px;
 
   margin-top: 16px;
-
   padding-top: 13px;
 
   border-top: 1px solid #ECEAF1;
@@ -1158,29 +1192,23 @@
 
 .dashboard-registration-status {
   display: inline-flex;
-
   align-items: center;
-
   gap: 5px;
 
   color: #27834D;
 
   font-size: 9px;
-
   font-weight: 700;
 }
 
 .student-event-footer > a {
   display: inline-flex;
-
   align-items: center;
-
   gap: 5px;
 
   color: #6D28D9;
 
   font-size: 9px;
-
   font-weight: 700;
 
   text-decoration: none;
@@ -1192,23 +1220,21 @@
 
 .student-event-footer > a:hover {
   color: #EC4899;
-
   transform: translateX(2px);
 }
 
 
-/* =========================================================
-   RECENT REGISTRATIONS
-========================================================= */
+/* ============================================================
+   25. RECENT REGISTRATIONS
+   ============================================================ */
 
 .registrations-card {
   overflow: hidden;
 
-  background: #FFFFFF;
-
   border: 1px solid #E4DFE5;
-
   border-radius: 18px;
+
+  background: #FFFFFF;
 
   box-shadow:
     0 10px 28px rgba(34, 41, 93, 0.06);
@@ -1218,7 +1244,7 @@
   display: grid;
 
   grid-template-columns:
-    auto 1fr auto auto;
+    auto minmax(0, 1fr) auto auto;
 
   align-items: center;
 
@@ -1241,13 +1267,14 @@
 }
 
 
-/* =========================================================
-   REGISTRATION ICON
-========================================================= */
+/* ============================================================
+   26. REGISTRATION ICON
+   ============================================================ */
 
 .registration-icon {
   width: 38px;
   height: 38px;
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
@@ -1262,21 +1289,30 @@
 
 .pink-registration {
   background: rgba(236, 72, 153, 0.10);
-
   color: #EC4899;
 }
 
 
-/* =========================================================
-   REGISTRATION DETAILS
-========================================================= */
+/* ============================================================
+   27. REGISTRATION DETAILS
+   ============================================================ */
+
+.registration-details {
+  min-width: 0;
+}
 
 .registration-details strong {
   display: block;
 
+  overflow: hidden;
+
   color: #0B1230;
 
   font-size: 11px;
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .registration-details span {
@@ -1290,11 +1326,13 @@
 }
 
 
-/* =========================================================
-   REGISTRATION STATUS
-========================================================= */
+/* ============================================================
+   28. REGISTRATION STATUS
+   ============================================================ */
 
 .registration-status {
+  width: fit-content;
+
   padding: 6px 9px;
 
   border-radius: 999px;
@@ -1304,26 +1342,22 @@
   color: #27834D;
 
   font-size: 8px;
-
   font-weight: 700;
 }
 
 
-/* =========================================================
-   REGISTRATION LINK
-========================================================= */
+/* ============================================================
+   29. REGISTRATION LINK
+   ============================================================ */
 
 .registration-row > a {
   display: inline-flex;
-
   align-items: center;
-
   gap: 5px;
 
   color: #6D28D9;
 
   font-size: 9px;
-
   font-weight: 700;
 
   text-decoration: none;
@@ -1335,34 +1369,31 @@
 
 .registration-row > a:hover {
   color: #EC4899;
-
   transform: translateX(2px);
 }
 
 
-/* =========================================================
-   BOTTOM CTA
-========================================================= */
+/* ============================================================
+   30. BOTTOM CTA
+   ============================================================ */
 
 .student-cta {
   max-width: 1250px;
 
-  margin: 70px auto 0;
+  position: relative;
 
+  margin: 70px auto 0;
   padding: 40px 45px;
 
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
 
   gap: 30px;
 
   overflow: hidden;
 
-  position: relative;
-
+  border: 1px solid #29335F;
   border-radius: 22px;
 
   background:
@@ -1371,8 +1402,6 @@
       #0B1230,
       #111A46
     );
-
-  border: 1px solid #29335F;
 
   box-shadow:
     0 20px 50px rgba(7, 9, 20, 0.15);
@@ -1397,11 +1426,12 @@
       rgba(236, 72, 153, 0.22),
       transparent 70%
     );
+
+  pointer-events: none;
 }
 
 .student-cta > div {
   position: relative;
-
   z-index: 1;
 }
 
@@ -1409,21 +1439,18 @@
   color: #F472B6;
 
   font-size: 9px;
-
   font-weight: 800;
-
   letter-spacing: 1.7px;
 }
 
 .student-cta h2 {
-  margin-top: 9px;
+  margin: 9px 0 0;
 
   color: #FFF8ED;
 
   font-size: 30px;
-
   line-height: 1.1;
-
+  font-weight: 800;
   letter-spacing: -1px;
 }
 
@@ -1432,26 +1459,24 @@
 }
 
 
-/* CTA BUTTON */
+/* ============================================================
+   31. CTA BUTTON
+   ============================================================ */
 
 .student-cta > a {
   position: relative;
-
   z-index: 1;
 
   min-height: 42px;
 
   display: inline-flex;
-
   align-items: center;
   justify-content: center;
-
   gap: 8px;
 
   padding: 0 18px;
 
   border: 1px solid rgba(236, 72, 153, 0.45);
-
   border-radius: 9px;
 
   background:
@@ -1461,10 +1486,9 @@
       #EC4899
     );
 
-  color: white;
+  color: #FFFFFF;
 
   font-size: 11px;
-
   font-weight: 700;
 
   text-decoration: none;
@@ -1474,7 +1498,8 @@
 
   transition:
     transform 0.25s ease,
-    box-shadow 0.25s ease;
+    box-shadow 0.25s ease,
+    background 0.25s ease;
 }
 
 .student-cta > a:hover {
@@ -1492,16 +1517,16 @@
 }
 
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+/* ============================================================
+   32. TABLET — 1050px
+   ============================================================ */
 
 @media (max-width: 1050px) {
-
   .student-hero {
     grid-template-columns: 1fr;
-
     gap: 35px;
+
+    min-height: auto;
   }
 
   .student-hero-content {
@@ -1509,19 +1534,58 @@
   }
 
   .student-hero-visual {
-    min-height: 420px;
+    min-height: 430px;
   }
 
-  .student-events-grid {
+  .student-events-grid,
+  .dashboard-events-grid,
+  .events-grid {
     grid-template-columns:
-      repeat(2, 1fr);
+      repeat(2, minmax(0, 1fr));
   }
 
+  .student-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 
-@media (max-width: 750px) {
+/* ============================================================
+   33. TABLET / MOBILE — 850px
+   ============================================================ */
 
+@media (max-width: 850px) {
+  .student-hero {
+    gap: 20px;
+  }
+
+  .student-hero-visual {
+    min-height: 410px;
+  }
+
+  .student-preview-card {
+    width: min(500px, 82%);
+  }
+
+  .floating-card-one {
+    left: 0;
+  }
+
+  .floating-card-two {
+    right: 0;
+  }
+
+  .student-section {
+    margin-top: 55px;
+  }
+}
+
+
+/* ============================================================
+   34. MOBILE — 750px
+   ============================================================ */
+
+@media (max-width: 750px) {
   .student-page {
     padding:
       45px 5% 70px;
@@ -1540,7 +1604,6 @@
 
   .student-hero-actions {
     flex-direction: column;
-
     align-items: stretch;
   }
 
@@ -1559,11 +1622,12 @@
 
   .student-section-header {
     align-items: flex-start;
-
     flex-direction: column;
   }
 
-  .student-events-grid {
+  .student-events-grid,
+  .dashboard-events-grid,
+  .events-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1571,133 +1635,206 @@
     padding: 32px 25px;
 
     flex-direction: column;
-
     align-items: flex-start;
   }
 
+  .student-cta > a {
+    width: 100%;
+  }
 }
 
 
-@media (max-width: 520px) {
+/* ============================================================
+   35. MOBILE HERO — 600px
+   ============================================================ */
 
+@media (max-width: 600px) {
   .student-hero-visual {
-    min-height: 350px;
+    min-height: 390px;
   }
 
-  /* =========================================================
-   PREVIEW CARD — FLOATING WHITE WINDOW
-========================================================= */
+  .student-preview-card {
+    width: 86%;
+    min-height: 315px;
 
-.student-preview-card {
-  position: relative;
+    padding: 28px 24px;
 
-  width: min(420px, 90%);
-
-  min-height: 270px;
-
-  padding: 22px;
-
-  overflow: hidden;
-
-  border-radius: 26px;
-
-  /* WHITE FLOATING WINDOW */
-  background: #FFFFFF;
-
-  border: 1px solid rgba(139, 92, 246, 0.18);
-
-  box-shadow:
-    0 25px 55px rgba(11, 18, 48, 0.16),
-    0 10px 25px rgba(139, 92, 246, 0.08);
-
-  transform:
-    perspective(1000px)
-    rotateY(-3deg)
-    rotateX(2deg);
-
-  /*
-     Gentle floating animation
-  */
-  animation: previewFloat 4.5s ease-in-out infinite;
-
-  transition:
-    transform 0.35s ease,
-    box-shadow 0.35s ease;
-}
-
-
-/* FLOATING ANIMATION */
-
-@keyframes previewFloat {
-  0% {
-    transform:
-      perspective(1000px)
-      rotateY(-3deg)
-      rotateX(2deg)
-      translateY(0);
+    border-radius: 27px;
   }
 
-  50% {
-    transform:
-      perspective(1000px)
-      rotateY(-3deg)
-      rotateX(2deg)
-      translateY(-10px);
+  .floating-card {
+    min-width: 185px;
+
+    padding: 15px 17px;
+
+    border-radius: 17px;
   }
-
-  100% {
-    transform:
-      perspective(1000px)
-      rotateY(-3deg)
-      rotateX(2deg)
-      translateY(0);
-  }
-}
-
-
-.student-preview-card:hover {
-  animation-play-state: paused;
-
-  transform:
-    perspective(1000px)
-    rotateY(0deg)
-    rotateX(0deg)
-    translateY(-8px);
-
-  box-shadow:
-    0 30px 70px rgba(11, 18, 48, 0.20),
-    0 0 40px rgba(139, 92, 246, 0.14);
-}
 
   .floating-card-one {
-    left: -5px;
+    top: 20px;
+    left: -2px;
   }
 
   .floating-card-two {
-    right: -5px;
+    right: -2px;
+    bottom: 20px;
   }
 
-  .preview-center {
-    padding-top: 30px;
+  .preview-center h3 {
+    font-size: 26px;
+  }
+}
+
+
+/* ============================================================
+   36. SMALL MOBILE — 520px
+   ============================================================ */
+
+@media (max-width: 520px) {
+  .student-page {
+    padding:
+      38px 4.5% 60px;
+  }
+
+  .student-hero-visual {
+    min-height: 355px;
+  }
+
+  .student-preview-card {
+    width: 88%;
+    min-height: 285px;
+
+    padding: 24px 18px;
+
+    border-radius: 25px;
+
+    transform:
+      perspective(900px)
+      rotateY(-1deg)
+      rotateX(1deg);
+  }
+
+  @keyframes previewFloat {
+    0%,
+    100% {
+      transform:
+        perspective(900px)
+        rotateY(-1deg)
+        rotateX(1deg)
+        translateY(0);
+    }
+
+    50% {
+      transform:
+        perspective(900px)
+        rotateY(-1deg)
+        rotateX(1deg)
+        translateY(-7px);
+    }
+  }
+
+  .preview-top {
+    margin-bottom: 23px;
+  }
+
+  .preview-top {
+    font-size: 13px;
+  }
+
+  .preview-top > span {
+    font-size: 10px;
+  }
+
+  .preview-center small {
+    font-size: 9px;
   }
 
   .preview-center h3 {
     font-size: 23px;
   }
 
-  .student-hero-features {
-    flex-direction: column;
+  .preview-stats {
+    gap: 7px;
+    margin-top: 21px;
+  }
+
+  .preview-stats > div {
+    padding: 11px 5px;
+    border-radius: 12px;
+  }
+
+  .preview-stats span {
+    font-size: 7px;
+  }
+
+  .preview-stats strong {
+    font-size: 17px;
+  }
+
+  .preview-bottom {
+    gap: 8px;
+    margin-top: 21px;
+    padding-top: 13px;
+  }
+
+  .preview-bottom span {
+    font-size: 9px;
+  }
+
+  .floating-card {
+    min-width: 155px;
+    padding: 12px 13px;
+
+    gap: 8px;
+    border-radius: 15px;
+  }
+
+  .floating-card strong {
+    font-size: 12px;
+  }
+
+  .floating-card small {
+    font-size: 9px;
+  }
+
+  .floating-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+
+  .floating-card-one {
+    top: 8px;
+    left: -3px;
+  }
+
+  .floating-card-two {
+    right: -3px;
+    bottom: 8px;
+  }
+
+  .student-section-header h2 {
+    font-size: 25px;
+  }
+
+  .student-stat-card {
+    padding: 18px;
+  }
+
+  .student-stat-card strong {
+    font-size: 24px;
   }
 
   .registration-row {
     grid-template-columns:
-      auto 1fr;
+      auto minmax(0, 1fr);
 
     gap: 10px;
   }
 
   .registration-status {
     grid-column: 2;
+
     width: fit-content;
   }
 
@@ -1708,5 +1845,68 @@
   .student-cta h2 {
     font-size: 25px;
   }
+}
 
+
+/* ============================================================
+   37. VERY SMALL MOBILE — 400px
+   ============================================================ */
+
+@media (max-width: 400px) {
+  .student-preview-card {
+    width: 90%;
+    padding: 22px 15px;
+  }
+
+  .floating-card {
+    min-width: 140px;
+    padding: 10px 11px;
+  }
+
+  .floating-card strong {
+    font-size: 11px;
+  }
+
+  .floating-card small {
+    font-size: 8px;
+  }
+
+  .floating-icon {
+    width: 29px;
+    height: 29px;
+  }
+
+  .preview-center h3 {
+    font-size: 21px;
+  }
+
+  .preview-bottom span {
+    font-size: 8px;
+  }
+}
+
+
+/* ============================================================
+   38. REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .student-preview-card,
+  .floating-card-one,
+  .floating-card-two {
+    animation: none;
+  }
+
+  .student-preview-card {
+    transform: none;
+  }
+
+  .student-preview-card:hover,
+  .student-stat-card:hover,
+  .student-event-card:hover,
+  .primary-student-button:hover,
+  .secondary-student-button:hover,
+  .student-cta > a:hover {
+    transform: none;
+  }
 }
