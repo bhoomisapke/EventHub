@@ -1,14 +1,23 @@
+
 from rest_framework import serializers
+
 from .models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
 
-    # Frontend field name -> backend field name
+    organizer_name = serializers.CharField(
+        source="organizer.name",
+        read_only=True
+    )
+
+    # Keep local image URL functionality
+    image_url = serializers.SerializerMethodField()
+
+    # GitHub fields
     organizerName = serializers.CharField(
-        source="organizer_name",
-        required=False,
-        allow_blank=True
+        source="organizer.name",
+        read_only=True
     )
 
     organizerMobile = serializers.CharField(
@@ -61,6 +70,7 @@ class EventSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "image",
+            "image_url",
             "category",
             "date",
             "time",
@@ -71,10 +81,15 @@ class EventSerializer(serializers.ModelSerializer):
             "minTeamSize",
             "maxTeamSize",
 
+            "organizer",
+            "organizer_name",
             "organizerName",
             "organizerMobile",
+
             "registrationFee",
             "registrationDeadline",
+
+            "registration_deadline",
             "status",
             "created_at",
             "updated_at",
@@ -82,6 +97,24 @@ class EventSerializer(serializers.ModelSerializer):
 
         read_only_fields = [
             "id",
+            "organizer",
+            "organizer_name",
+            "organizerName",
             "created_at",
             "updated_at",
+            "image_url",
         ]
+
+    def get_image_url(self, obj):
+        request = self.context.get("request")
+
+        if not obj.image:
+            return None
+
+        url = obj.image.url
+
+        if request:
+            return request.build_absolute_uri(url)
+
+        return url
+

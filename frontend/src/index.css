@@ -10316,3 +10316,70 @@ th {
 .create-event-page .create-event-header h1 {
   color: #6c4df6 !important;
 }
+
+
+
+
+
+
+
+
+.nav-link-button {
+  position: relative;
+
+  border: 0;
+  background: transparent;
+
+  color: #30384D;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  padding: 0;
+
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.nav-link-button::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  bottom: -8px;
+
+  width: 0;
+  height: 2px;
+
+  transform: translateX(-50%);
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--red),
+      var(--purple),
+      var(--pink)
+    );
+
+  box-shadow:
+    0 0 9px rgba(236, 72, 153, 0.30);
+
+  transition: width 0.25s ease;
+}
+
+.nav-link-button:hover {
+  color: var(--purple-dark);
+  transform: translateY(-1px);
+}
+
+.nav-link-button:hover::after {
+  width: 100%;
+}
+
+

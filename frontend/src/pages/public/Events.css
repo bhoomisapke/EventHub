@@ -1,0 +1,466 @@
+/* ============================================================
+   EVENTHUB EVENTS PAGE
+   ------------------------------------------------------------
+   IMPORTANT:
+   Main EventHub theme comes from index.css.
+   This file ONLY styles the Events page controls.
+============================================================ */
+
+
+/* ============================================================
+   SEARCH / VIEW AREA
+============================================================ */
+
+.events-page-tools {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-top: 35px;
+}
+
+
+/* ============================================================
+   SEARCH
+============================================================ */
+
+.events-page-search {
+  position: relative;
+
+  width: min(500px, 100%);
+
+  display: flex;
+
+  align-items: center;
+}
+
+.events-page-search > svg {
+  position: absolute;
+
+  left: 15px;
+
+  color: var(--purple);
+
+  pointer-events: none;
+}
+
+.events-page-search input {
+  width: 100%;
+
+  height: 42px;
+
+  padding:
+    0 42px;
+
+  border:
+    1px solid
+    var(--border-dark);
+
+  border-radius: 9px;
+
+  background:
+    rgba(11, 18, 48, 0.92);
+
+  color: var(--cream);
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  outline: none;
+
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.events-page-search input::placeholder {
+  color: #8790A5;
+}
+
+.events-page-search input:focus {
+  border-color:
+    var(--purple);
+
+  box-shadow:
+    0 0 20px
+    rgba(139, 92, 246, 0.15);
+}
+
+
+/* CLEAR SEARCH */
+
+.events-page-search > button {
+  position: absolute;
+
+  right: 10px;
+
+  width: 25px;
+  height: 25px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  color: var(--cream);
+
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   COUNT / VIEW
+============================================================ */
+
+.events-page-count {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+.events-page-count strong {
+  color: var(--navy);
+}
+
+
+/* ============================================================
+   GRID / LIST BUTTON
+============================================================ */
+
+.events-view-toggle {
+  display: flex;
+
+  align-items: center;
+
+  gap: 3px;
+
+  padding: 3px;
+
+  border:
+    1px solid
+    var(--border-dark);
+
+  border-radius: 9px;
+
+  background:
+    rgba(11, 18, 48, 0.92);
+}
+
+.events-view-toggle button {
+  width: 30px;
+  height: 28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  border-radius: 7px;
+
+  background: transparent;
+
+  color: var(--light-muted);
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+.events-view-toggle button:hover {
+  color: var(--white);
+}
+
+.events-view-toggle button.active {
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple-dark),
+      var(--purple),
+      var(--pink)
+    );
+
+  color: var(--white);
+
+  box-shadow:
+    0 0 18px
+    rgba(139, 92, 246, 0.28);
+}
+
+
+/* ============================================================
+   CATEGORY FILTERS
+============================================================ */
+
+.events-page-categories {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 18px;
+
+  padding-bottom: 4px;
+
+  overflow-x: auto;
+
+  scrollbar-width: none;
+}
+
+.events-page-categories::-webkit-scrollbar {
+  display: none;
+}
+
+.events-page-categories button {
+  flex-shrink: 0;
+
+  padding:
+    8px 13px;
+
+  border:
+    1px solid
+    var(--border-dark);
+
+  border-radius: 999px;
+
+  background:
+    rgba(11, 18, 48, 0.78);
+
+  color: var(--light-muted);
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    background 0.25s ease;
+}
+
+.events-page-categories button:hover {
+  transform: translateY(-2px);
+
+  color: var(--white);
+
+  border-color:
+    var(--purple);
+}
+
+.events-page-categories button.active {
+  background:
+    linear-gradient(
+      100deg,
+      var(--red),
+      var(--purple),
+      var(--pink)
+    );
+
+  color: var(--white);
+
+  border-color: transparent;
+
+  box-shadow:
+    0 7px 20px
+    rgba(109, 40, 217, 0.20);
+}
+
+
+/* ============================================================
+   SAVE BUTTON
+============================================================ */
+
+.event-save {
+  position: absolute;
+
+  top: 14px;
+
+  right: 48px;
+
+  z-index: 5;
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid
+    rgba(236, 72, 153, 0.35);
+
+  border-radius: 50%;
+
+  background:
+    rgba(7, 9, 20, 0.78);
+
+  color: var(--cream);
+
+  backdrop-filter:
+    blur(8px);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.event-save:hover {
+  transform: scale(1.08);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple),
+      var(--pink)
+    );
+
+  color: var(--white);
+
+  box-shadow:
+    0 0 18px
+    rgba(236, 72, 153, 0.25);
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.events-card-description {
+  margin-top: 12px;
+
+  color:
+    rgba(255, 248, 237, 0.68);
+
+  font-size: 10px;
+
+  line-height: 1.65;
+}
+
+
+/* ============================================================
+   LIST VIEW
+============================================================ */
+
+.events-list {
+  grid-template-columns: 1fr;
+}
+
+.events-list .event-card {
+  display: grid;
+
+  grid-template-columns:
+    360px 1fr;
+}
+
+.events-list .event-image {
+  height: 100%;
+
+  min-height: 250px;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+.events-empty {
+  padding:
+    90px 20px;
+
+  text-align: center;
+}
+
+.events-empty-icon {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 15px;
+
+  color: var(--purple);
+}
+
+.events-empty h3 {
+  color: var(--navy);
+
+  font-size: 25px;
+
+  margin-bottom: 8px;
+}
+
+.events-empty p {
+  color: var(--muted);
+
+  font-size: 12px;
+
+  margin-bottom: 20px;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 750px) {
+
+  .events-page-tools {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .events-page-search {
+    width: 100%;
+  }
+
+  .events-page-count {
+    justify-content: space-between;
+  }
+
+  .events-list .event-card {
+    display: block;
+  }
+
+  .events-list .event-image {
+    height: 220px;
+
+    min-height: 0;
+  }
+
+}
