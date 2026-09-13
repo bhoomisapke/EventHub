@@ -9,73 +9,6 @@ import SmoothScroll from "./components/SmoothScroll";
 import PageTransition from "./components/PageTransition";
 
 /* ============================================================
-   EVENTS DATA
-   ============================================================ */
-
-const events = [
-  {
-    title: "RoboTech Challenge 2026",
-    category: "ROBOTICS",
-    date: "18",
-    month: "SEP",
-    time: "10:00 AM",
-    venue: "Innovation Lab",
-    image:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    title: "CodeSprint Hackathon",
-    category: "HACKATHON",
-    date: "24",
-    month: "SEP",
-    time: "09:00 AM",
-    venue: "Computer Center",
-    image:
-      "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    title: "AI & Machine Learning",
-    category: "AI / ML",
-    date: "28",
-    month: "SEP",
-    time: "11:00 AM",
-    venue: "Seminar Hall",
-    image:
-      "https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    title: "Future Tech Workshop",
-    category: "TECHNOLOGY",
-    date: "03",
-    month: "OCT",
-    time: "10:30 AM",
-    venue: "Tech Auditorium",
-    image:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    title: "Project Exhibition",
-    category: "PROJECTS",
-    date: "09",
-    month: "OCT",
-    time: "12:00 PM",
-    venue: "Main Campus",
-    image:
-      "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    title: "Cyber Security Arena",
-    category: "CYBERSECURITY",
-    date: "15",
-    month: "OCT",
-    time: "09:30 AM",
-    venue: "Digital Lab",
-    image:
-      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=900&q=85",
-  },
-];
-
-/* ============================================================
    DASHBOARD DATA
    ============================================================ */
 
@@ -183,6 +116,60 @@ const features = [
    APP
    ============================================================ */
 
+const EVENTS_API_URL = "http://127.0.0.1:8000/api/events/";
+
+const getEventImage = (event) => {
+  const rawImage = event?.image_url || event?.image || "";
+
+  if (!rawImage) {
+    return "";
+  }
+
+  if (rawImage.startsWith("http://") || rawImage.startsWith("https://")) {
+    return rawImage;
+  }
+
+  return `http://127.0.0.1:8000${
+    rawImage.startsWith("/") ? rawImage : `/${rawImage}`
+  }`;
+};
+
+const parseEventDate = (dateValue) => {
+  if (!dateValue) {
+    return null;
+  }
+
+  const [year, month, day] = String(dateValue)
+    .slice(0, 10)
+    .split("-")
+    .map(Number);
+
+  if (!year || !month || !day) {
+    return null;
+  }
+
+  // Local date avoids the UTC date-shift problem with YYYY-MM-DD strings.
+  return new Date(year, month - 1, day);
+};
+
+const formatEventDate = (dateValue) => {
+  const date = parseEventDate(dateValue);
+
+  if (!date) {
+    return {
+      day: "--",
+      month: "---",
+    };
+  }
+
+  return {
+    day: String(date.getDate()).padStart(2, "0"),
+    month: date
+      .toLocaleString("en-US", { month: "short" })
+      .toUpperCase(),
+  };
+};
+
 function App() {
   const navigate = useNavigate();
 
@@ -201,6 +188,64 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(null);
+
+  /* ==========================================================
+     UPCOMING EVENTS FROM DJANGO
+     ========================================================== */
+
+  const [events, setEvents] = useState([]);
+  const [eventsLoading, setEventsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch(EVENTS_API_URL);
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data?.detail ||
+              data?.message ||
+              "Unable to load events."
+          );
+        }
+
+        const eventList = Array.isArray(data)
+          ? data
+          : data.results || [];
+
+       const upcomingEvents = eventList
+  .filter((event) => {
+    const status = String(event?.status || "").toLowerCase();
+
+    return status !== "cancelled" && status !== "inactive";
+  })
+  .sort((a, b) => {
+    const dateA = parseEventDate(a?.date);
+    const dateB = parseEventDate(b?.date);
+
+    if (!dateA && !dateB) return 0;
+    if (!dateA) return 1;
+    if (!dateB) return -1;
+
+    return dateA - dateB;
+  });
+
+setEvents(upcomingEvents);
+      } catch (error) {
+        console.error(
+          "Homepage events API error:",
+          error
+        );
+        setEvents([]);
+      } finally {
+        setEventsLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   /* ==========================================================
      SCROLL REVEAL + 3D SECTION STORY
@@ -1093,73 +1138,102 @@ function App() {
 
             <div className="events-grid">
 
-              {events.map((event, index) => (
+              {eventsLoading ? (
 
-                <article
-                  className="event-card reveal"
-                  key={event.title}
-                >
+                <div className="event-loading">
+                  Loading upcoming events...
+                </div>
 
-                  <div className="event-image">
+              ) : events.length === 0 ? (
 
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      loading="lazy"
-                    />
+                <div className="event-loading">
+                  No upcoming events available.
+                </div>
 
-                    <div className="image-overlay"></div>
+              ) : (
 
-                    <span className="event-category">
-                      {event.category}
-                    </span>
+                events.slice(0, 6).map((event, index) => {
 
-                    <span className="event-number">
-                      0{index + 1}
-                    </span>
+                  const formattedDate =
+                    formatEventDate(event?.date);
 
-                    <div className="event-date">
+                  return (
+                    <article
+                      className="event-card reveal show"
+                      key={event.id}
+                    >
 
-                      <strong>
-                        {event.date}
-                      </strong>
+                      <div className="event-image">
 
-                      <span>
-                        {event.month}
-                      </span>
+                        <img
+                          src={
+                            getEventImage(event) ||
+                            "/default-event.jpg"
+                          }
+                          alt={event.title || "Event"}
+                          loading="lazy"
+                        />
 
-                    </div>
+                        <div className="image-overlay"></div>
 
-                  </div>
+                        <span className="event-category">
+                          {event.category || "EVENT"}
+                        </span>
 
-                  <div className="event-info">
+                        <span className="event-number">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
 
-                    <h3>
-                      {event.title}
-                    </h3>
+                        <div className="event-date">
 
-                    <div className="event-details">
+                          <strong>
+                            {formattedDate.day}
+                          </strong>
 
-                      <span>
-                        ◷ {event.time}
-                      </span>
+                          <span>
+                            {formattedDate.month}
+                          </span>
 
-                      <span>
-                        ⌖ {event.venue}
-                      </span>
+                        </div>
 
-                    </div>
+                      </div>
 
-                    <button className="event-register">
-                      View Event
-                      <span>↗</span>
-                    </button>
+                      <div className="event-info">
 
-                  </div>
+                        <h3>
+                          {event.title}
+                        </h3>
 
-                </article>
+                        <div className="event-details">
 
-              ))}
+                          <span>
+                            ◷ {event.time || "Time TBA"}
+                          </span>
+
+                          <span>
+                            ⌖ {event.venue || event.location || "Venue TBA"}
+                          </span>
+
+                        </div>
+
+                        <button
+                          className="event-register"
+                          type="button"
+                          onClick={() =>
+                            navigate(`/event/${event.id}`)
+                          }
+                        >
+                          View Event
+                          <span>↗</span>
+                        </button>
+
+                      </div>
+
+                    </article>
+                  );
+                })
+
+              )}
 
             </div>
 
@@ -1581,7 +1655,7 @@ function App() {
                       {events.map((event) => (
 
                         <option
-                          key={event.title}
+                          key={event.id}
                           value={event.title}
                         >
                           {event.title}
