@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Notification from "../../components/Notification";
+import "./EditEvent.css";
 
 function EditEvent() {
   const { id } = useParams();
@@ -7,13 +9,46 @@ function EditEvent() {
 
   const [event, setEvent] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // FETCH EVENT
+  /* =========================================================
+     NOTIFICATION
+  ========================================================= */
+
+  const [notification, setNotification] = useState({
+    message: "",
+    type: "success",
+  });
+
+  const showNotification = (
+    message,
+    type = "success"
+  ) => {
+    setNotification({
+      message,
+      type,
+    });
+  };
+
+  const closeNotification = () => {
+    setNotification({
+      message: "",
+      type: "success",
+    });
+  };
+
+  /* =========================================================
+     FETCH EVENT
+  ========================================================= */
+
   useEffect(() => {
     const fetchEvent = async () => {
       try {
+        setLoading(true);
+
         const response = await fetch(
           `http://localhost:8000/api/events/${id}/`
         );
@@ -21,68 +56,164 @@ function EditEvent() {
         const data = await response.json();
 
         if (!response.ok) {
-          alert(data.message || "Failed to fetch event.");
+          console.error(
+            "Fetch event error:",
+            data
+          );
+
+          showNotification(
+            data.message ||
+              JSON.stringify(data) ||
+              "Failed to fetch event.",
+            "error"
+          );
+
           return;
         }
 
-        const fetchedEvent = data;
+        /* =====================================================
+           REGISTRATION FEE
+        ===================================================== */
 
         let registrationFee =
-          fetchedEvent.registrationFee ||
-          fetchedEvent.registration_fee ||
+          data.registrationFee ??
+          data.registration_fee ??
           "";
 
         let customFee = "";
 
-        // If database contains a custom numeric amount
+        const numericFee =
+          Number(registrationFee);
+
         if (
-          registrationFee !== "Free" &&
-          registrationFee !== "20" &&
-          registrationFee !== "50" &&
-          registrationFee !== "100"
+          registrationFee === null ||
+          registrationFee === undefined ||
+          registrationFee === ""
         ) {
-          customFee = registrationFee;
+          registrationFee = "";
+        } else if (numericFee === 0) {
+          registrationFee = "Free";
+        } else if (
+          numericFee === 20 ||
+          numericFee === 50 ||
+          numericFee === 100
+        ) {
+          registrationFee =
+            String(numericFee);
+        } else {
           registrationFee = "Custom";
+          customFee = String(numericFee);
         }
 
+        /* =====================================================
+           EXISTING IMAGE
+        ===================================================== */
+
+        const existingImage =
+          data.image || "";
+
+        let previewImage = "";
+
+        if (existingImage) {
+          if (
+            existingImage.startsWith(
+              "http://"
+            ) ||
+            existingImage.startsWith(
+              "https://"
+            ) ||
+            existingImage.startsWith(
+              "data:"
+            )
+          ) {
+            previewImage =
+              existingImage;
+          } else {
+            previewImage =
+              `http://localhost:8000${existingImage}`;
+          }
+        }
+
+        /* =====================================================
+           FORMAT EVENT DATA
+        ===================================================== */
+
         const formattedEvent = {
-          ...fetchedEvent,
+          ...data,
+
+          title: data.title || "",
+
+          category:
+            data.category || "",
+
+          date: data.date
+            ? String(data.date).slice(
+                0,
+                10
+              )
+            : "",
+
+          time: data.time
+            ? String(data.time).slice(
+                0,
+                5
+              )
+            : "",
+
+          venue: data.venue || "",
+
+          capacity:
+            data.capacity !== null &&
+            data.capacity !== undefined
+              ? data.capacity
+              : "",
 
           organizerName:
-            fetchedEvent.organizerName ||
-            fetchedEvent.organizer_name ||
+            data.organizerName ||
+            data.organizer_name ||
+            "",
+
+          organizerMobile:
+            data.organizerMobile ||
+            data.organizer_mobile ||
             "",
 
           registrationFee,
+
           customFee,
 
           registrationDeadline:
-            fetchedEvent.registrationDeadline ||
-            fetchedEvent.registration_deadline ||
+            data.registrationDeadline ||
+            data.registration_deadline ||
             "",
 
-          date: fetchedEvent.date
-            ? String(fetchedEvent.date).slice(0, 10)
-            : "",
+          description:
+            data.description || "",
 
-          time: fetchedEvent.time
-            ? String(fetchedEvent.time).slice(0, 5)
-            : "",
-
-          category: fetchedEvent.category || "",
-          capacity: fetchedEvent.capacity || "",
-          venue: fetchedEvent.venue || "",
-          description: fetchedEvent.description || "",
-          image: fetchedEvent.image || "",
+          image: existingImage,
         };
 
         setEvent(formattedEvent);
-        setImagePreview(formattedEvent.image);
-      } catch (error) {
-        console.error("Fetch event error:", error);
 
-        alert(
-          "Unable to connect to the backend. Make sure the backend server is running."
+        setImagePreview(
+          previewImage
+        );
+
+        /*
+          Existing image is NOT a File.
+          Only newly selected images go into imageFile.
+        */
+
+        setImageFile(null);
+      } catch (error) {
+        console.error(
+          "Fetch event error:",
+          error
+        );
+
+        showNotification(
+          "Unable to connect to the backend. Make sure the backend server is running.",
+          "error"
         );
       } finally {
         setLoading(false);
@@ -92,9 +223,15 @@ function EditEvent() {
     fetchEvent();
   }, [id]);
 
-  // HANDLE INPUT CHANGE
+  /* =========================================================
+     HANDLE INPUT CHANGE
+  ========================================================= */
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const {
+      name,
+      value,
+    } = e.target;
 
     setEvent((previous) => ({
       ...previous,
@@ -102,29 +239,93 @@ function EditEvent() {
     }));
   };
 
-  // HANDLE IMAGE CHANGE
+  /* =========================================================
+     HANDLE IMAGE CHANGE
+  ========================================================= */
+
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
+    const file =
+      e.target.files[0];
 
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
-    const reader = new FileReader();
+    /* =======================================================
+       CHECK IMAGE TYPE
+    ======================================================= */
 
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
+    const allowedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+    ];
 
-      setEvent((previous) => ({
-        ...previous,
-        image: reader.result,
-      }));
-    };
+    if (
+      !allowedTypes.includes(
+        file.type
+      )
+    ) {
+      showNotification(
+        "Please select a JPG, PNG or WEBP image.",
+        "error"
+      );
 
-    reader.readAsDataURL(file);
+      e.target.value = "";
+
+      return;
+    }
+
+    /* =======================================================
+       CHECK IMAGE SIZE
+    ======================================================= */
+
+    if (
+      file.size >
+      5 * 1024 * 1024
+    ) {
+      showNotification(
+        "Image size must be less than 5 MB.",
+        "error"
+      );
+
+      e.target.value = "";
+
+      return;
+    }
+
+    /* =======================================================
+       SAVE ACTUAL FILE
+    ======================================================= */
+
+    setImageFile(file);
+
+    /* =======================================================
+       CREATE IMAGE PREVIEW
+    ======================================================= */
+
+    const previewUrl =
+      URL.createObjectURL(file);
+
+    setImagePreview(
+      previewUrl
+    );
   };
 
-  // UPDATE EVENT
+  /* =========================================================
+     UPDATE EVENT
+  ========================================================= */
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!event) {
+      return;
+    }
+
+    /* =======================================================
+       REQUIRED FIELD VALIDATION
+    ======================================================= */
 
     if (
       !event.title ||
@@ -134,138 +335,532 @@ function EditEvent() {
       !event.capacity ||
       !event.registrationFee
     ) {
-      alert("Please fill in all required fields.");
+      showNotification(
+        "Please fill in all required fields.",
+        "error"
+      );
+
       return;
     }
 
+    /* =======================================================
+       CAPACITY VALIDATION
+    ======================================================= */
+
+    const capacityNumber =
+      Number(event.capacity);
+
     if (
-      event.registrationFee === "Custom" &&
-      (!event.customFee || Number(event.customFee) <= 0)
+      !Number.isInteger(
+        capacityNumber
+      ) ||
+      capacityNumber <= 0
     ) {
-      alert("Please enter a valid custom registration fee.");
+      showNotification(
+        "Please enter a valid maximum participant capacity.",
+        "error"
+      );
+
       return;
     }
+
+    /* =======================================================
+       CUSTOM FEE VALIDATION
+    ======================================================= */
+
+    if (
+      event.registrationFee ===
+        "Custom" &&
+      (!event.customFee ||
+        Number(event.customFee) <=
+          0)
+    ) {
+      showNotification(
+        "Please enter a valid custom registration fee.",
+        "error"
+      );
+
+      return;
+    }
+
+    /* =======================================================
+       DEADLINE VALIDATION
+    ======================================================= */
 
     if (
       event.registrationDeadline &&
-      event.registrationDeadline > event.date
+      event.registrationDeadline >
+        event.date
     ) {
-      alert("Registration deadline cannot be after the event date.");
+      showNotification(
+        "Registration deadline cannot be after the event date.",
+        "error"
+      );
+
       return;
     }
 
     try {
       setSaving(true);
 
-      const finalRegistrationFee =
-        event.registrationFee === "Custom"
-          ? event.customFee
-          : event.registrationFee;
+      /* =====================================================
+         REGISTRATION FEE
+      ===================================================== */
 
-      const response = await fetch(
-        `http://localhost:8000/api/events/${id}/`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: event.title,
-            category: event.category || "",
-            date: event.date,
-            time: event.time || "",
-            venue: event.venue,
-            organizerName: event.organizerName,
-            capacity: Number(event.capacity),
-            registrationFee: finalRegistrationFee,
-            registrationDeadline:
-              event.registrationDeadline || "",
-            description: event.description || "",
-            image: event.image || "",
-          }),
-        }
+      let finalRegistrationFee =
+        0;
+
+      if (
+        event.registrationFee ===
+        "Free"
+      ) {
+        finalRegistrationFee = 0;
+      } else if (
+        event.registrationFee ===
+        "Custom"
+      ) {
+        finalRegistrationFee =
+          Number(event.customFee);
+      } else {
+        finalRegistrationFee =
+          Number(
+            event.registrationFee
+          );
+      }
+
+      /* =====================================================
+         CREATE FORMDATA
+      ===================================================== */
+
+      const formData =
+        new FormData();
+
+      /* =====================================================
+         BASIC EVENT INFORMATION
+      ===================================================== */
+
+      formData.append(
+        "title",
+        event.title.trim()
       );
 
-      const data = await response.json();
+      formData.append(
+        "category",
+        event.category || ""
+      );
+
+      formData.append(
+        "date",
+        event.date
+      );
+
+      formData.append(
+        "time",
+        event.time || ""
+      );
+
+      formData.append(
+        "venue",
+        event.venue.trim()
+      );
+
+      formData.append(
+        "capacity",
+        String(capacityNumber)
+      );
+
+      formData.append(
+        "registrationFee",
+        String(
+          finalRegistrationFee
+        )
+      );
+
+      formData.append(
+        "description",
+        event.description || ""
+      );
+
+      /* =====================================================
+         ORGANIZER NAME
+      ===================================================== */
+
+      formData.append(
+        "organizerName",
+        event.organizerName.trim()
+      );
+
+      /* =====================================================
+         ORGANIZER MOBILE
+      ===================================================== */
+
+      if (
+        event.organizerMobile
+      ) {
+        formData.append(
+          "organizerMobile",
+          event.organizerMobile
+        );
+      }
+
+      /* =====================================================
+         REGISTRATION DEADLINE
+      ===================================================== */
+
+      if (
+        event.registrationDeadline
+      ) {
+        formData.append(
+          "registrationDeadline",
+          event.registrationDeadline
+        );
+      }
+
+      /* =====================================================
+         IMAGE
+      ===================================================== */
+
+      /*
+        Only append image when the user
+        selected a NEW image.
+
+        If no new image is selected,
+        backend keeps the existing image.
+      */
+
+      if (imageFile) {
+        formData.append(
+          "image",
+          imageFile
+        );
+      }
+
+      /* =====================================================
+         DEBUG
+      ===================================================== */
+
+      console.log(
+        "===================================="
+      );
+
+      console.log(
+        "Updating Event:",
+        id
+      );
+
+      console.log(
+        "HTTP Method:",
+        "PUT"
+      );
+
+      console.log(
+        "Image:",
+        imageFile
+          ? imageFile.name
+          : "Existing image kept"
+      );
+
+      console.log(
+        "Registration Fee:",
+        finalRegistrationFee
+      );
+
+      console.log(
+        "===================================="
+      );
+
+      /* =====================================================
+         SEND PUT REQUEST
+      ===================================================== */
+
+      const response =
+        await fetch(
+          `http://localhost:8000/api/events/${id}/`,
+          {
+            method: "PUT",
+            body: formData,
+          }
+        );
+
+      /* =====================================================
+         READ RESPONSE
+      ===================================================== */
+
+      let data = {};
+
+      try {
+        data =
+          await response.json();
+      } catch (error) {
+        console.error(
+          "Could not read backend response:",
+          error
+        );
+      }
+
+      console.log(
+        "Update Status:",
+        response.status
+      );
+
+      console.log(
+        "Update Response:",
+        data
+      );
+
+      /* =====================================================
+         BACKEND ERROR
+      ===================================================== */
 
       if (!response.ok) {
-        alert(data.message || "Failed to update event.");
+        console.error(
+          "Backend rejected update:",
+          data
+        );
+
+        let errorMessage =
+          "Failed to update event.";
+
+        if (data.message) {
+          errorMessage =
+            data.message;
+        } else if (data.detail) {
+          errorMessage =
+            data.detail;
+        } else if (
+          typeof data ===
+          "string"
+        ) {
+          errorMessage = data;
+        } else if (
+          data &&
+          typeof data ===
+            "object" &&
+          Object.keys(data)
+            .length > 0
+        ) {
+          errorMessage =
+            Object.entries(data)
+              .map(
+                ([
+                  field,
+                  errors,
+                ]) => {
+                  if (
+                    Array.isArray(
+                      errors
+                    )
+                  ) {
+                    return `${field}: ${errors.join(
+                      ", "
+                    )}`;
+                  }
+
+                  return `${field}: ${errors}`;
+                }
+              )
+              .join("\n");
+        }
+
+        showNotification(
+          `Failed to update event.\n\n${errorMessage}`,
+          "error"
+        );
+
         return;
       }
 
-      alert("Event updated successfully!");
+      /* =====================================================
+         SUCCESS
+      ===================================================== */
 
-      navigate("/organizer/events");
+      console.log(
+        "Event updated successfully:",
+        data
+      );
+
+      showNotification(
+        "Event updated successfully!",
+        "success"
+      );
+
+      /*
+        Give the website notification
+        time to appear before navigating.
+      */
+
+      setTimeout(() => {
+        navigate(
+          "/organizer/events"
+        );
+      }, 1200);
     } catch (error) {
-      console.error("Update event error:", error);
+      console.error(
+        "Update event error:",
+        error
+      );
 
-      alert(
-        "Unable to connect to the backend. Make sure the backend server is running."
+      showNotification(
+        "Unable to connect to the backend. Make sure the backend server is running.",
+        "error"
       );
     } finally {
       setSaving(false);
     }
   };
 
-  // LOADING
+  /* =========================================================
+     LOADING SCREEN
+  ========================================================= */
+
   if (loading) {
     return (
       <div className="organizer-page">
+
+        <Notification
+          message={
+            notification.message
+          }
+          type={
+            notification.type
+          }
+          onClose={
+            closeNotification
+          }
+        />
+
         <div className="empty-state">
-          <h2>Loading Event...</h2>
-          <p>Please wait while the event details are loaded.</p>
+
+          <h2>
+            Loading Event...
+          </h2>
+
+          <p>
+            Please wait while the
+            event details are loaded.
+          </p>
+
         </div>
+
       </div>
     );
   }
 
-  // EVENT NOT FOUND
+  /* =========================================================
+     EVENT NOT FOUND
+  ========================================================= */
+
   if (!event) {
     return (
       <div className="organizer-page">
+
+        <Notification
+          message={
+            notification.message
+          }
+          type={
+            notification.type
+          }
+          onClose={
+            closeNotification
+          }
+        />
+
         <div className="empty-state">
-          <h2>Event Not Found</h2>
+
+          <h2>
+            Event Not Found
+          </h2>
 
           <p>
-            The event you are looking for does not exist.
+            The event you are
+            looking for does not exist.
           </p>
 
           <button
+            type="button"
             className="primary-btn"
-            onClick={() => navigate("/organizer/events")}
+            onClick={() =>
+              navigate(
+                "/organizer/events"
+              )
+            }
           >
             Back to My Events
           </button>
+
         </div>
+
       </div>
     );
   }
+
+  /* =========================================================
+     PAGE
+  ========================================================= */
 
   return (
     <div className="organizer-page">
 
-      {/* PAGE HEADER */}
+      {/* =====================================================
+          WEBSITE NOTIFICATION
+      ===================================================== */}
+
+      <Notification
+        message={
+          notification.message
+        }
+        type={
+          notification.type
+        }
+        onClose={
+          closeNotification
+        }
+      />
+
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
+
       <div className="organizer-header">
+
         <div>
-          <h1>EDIT EVENT</h1>
+
+          <h1>
+            EDIT EVENT
+          </h1>
 
           <p className="page-subtitle">
             Update your event information.
           </p>
+
         </div>
+
       </div>
+
+      {/* =====================================================
+          FORM
+      ===================================================== */}
 
       <form
         className="event-form"
         onSubmit={handleSubmit}
       >
 
-        {/* EVENT IMAGE */}
+        {/* ===================================================
+            EVENT IMAGE
+        =================================================== */}
+
         <div className="form-section">
-          <h2>Event Image</h2>
+
+          <h2>
+            Event Image
+          </h2>
 
           <label className="image-upload">
+
             {imagePreview ? (
+
               <div className="image-preview-container">
 
                 <img
@@ -279,7 +874,9 @@ function EditEvent() {
                 </div>
 
               </div>
+
             ) : (
+
               <div className="upload-placeholder">
 
                 <span className="upload-icon">
@@ -295,41 +892,62 @@ function EditEvent() {
                 </small>
 
               </div>
+
             )}
 
             <input
               type="file"
               accept="image/png,image/jpeg,image/webp"
-              onChange={handleImageChange}
+              onChange={
+                handleImageChange
+              }
               hidden
             />
+
           </label>
+
         </div>
 
-        {/* EVENT INFORMATION */}
+        {/* ===================================================
+            EVENT INFORMATION
+        =================================================== */}
+
         <div className="form-section">
 
-          <h2>Event Information</h2>
+          <h2>
+            Event Information
+          </h2>
 
-          {/* EVENT TITLE */}
+          {/* =================================================
+              TITLE
+          ================================================= */}
+
           <div className="form-group">
 
             <label>
-              Event Title <span>*</span>
+              Event Title{" "}
+              <span>*</span>
             </label>
 
             <input
               type="text"
               name="title"
-              value={event.title || ""}
-              onChange={handleChange}
+              value={
+                event.title || ""
+              }
+              onChange={
+                handleChange
+              }
               placeholder="Enter event title"
               required
             />
 
           </div>
 
-          {/* CATEGORY + CAPACITY */}
+          {/* =================================================
+              CATEGORY + CAPACITY
+          ================================================= */}
+
           <div className="form-row">
 
             <div className="form-group">
@@ -340,8 +958,12 @@ function EditEvent() {
 
               <select
                 name="category"
-                value={event.category || ""}
-                onChange={handleChange}
+                value={
+                  event.category || ""
+                }
+                onChange={
+                  handleChange
+                }
               >
 
                 <option value="">
@@ -379,14 +1001,19 @@ function EditEvent() {
             <div className="form-group">
 
               <label>
-                Maximum Participants <span>*</span>
+                Maximum Participants{" "}
+                <span>*</span>
               </label>
 
               <input
                 type="number"
                 name="capacity"
-                value={event.capacity || ""}
-                onChange={handleChange}
+                value={
+                  event.capacity || ""
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="100"
                 min="1"
                 required
@@ -396,20 +1023,28 @@ function EditEvent() {
 
           </div>
 
-          {/* DATE + TIME */}
+          {/* =================================================
+              DATE + TIME
+          ================================================= */}
+
           <div className="form-row">
 
             <div className="form-group">
 
               <label>
-                Event Date <span>*</span>
+                Event Date{" "}
+                <span>*</span>
               </label>
 
               <input
                 type="date"
                 name="date"
-                value={event.date || ""}
-                onChange={handleChange}
+                value={
+                  event.date || ""
+                }
+                onChange={
+                  handleChange
+                }
                 required
               />
 
@@ -424,28 +1059,40 @@ function EditEvent() {
               <input
                 type="time"
                 name="time"
-                value={event.time || ""}
-                onChange={handleChange}
+                value={
+                  event.time || ""
+                }
+                onChange={
+                  handleChange
+                }
               />
 
             </div>
 
           </div>
 
-          {/* VENUE + ORGANIZER */}
+          {/* =================================================
+              VENUE + ORGANIZER
+          ================================================= */}
+
           <div className="form-row">
 
             <div className="form-group">
 
               <label>
-                Venue <span>*</span>
+                Venue{" "}
+                <span>*</span>
               </label>
 
               <input
                 type="text"
                 name="venue"
-                value={event.venue || ""}
-                onChange={handleChange}
+                value={
+                  event.venue || ""
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="Example: Seminar Hall"
                 required
               />
@@ -455,14 +1102,20 @@ function EditEvent() {
             <div className="form-group">
 
               <label>
-                Organizer Name <span>*</span>
+                Organizer Name{" "}
+                <span>*</span>
               </label>
 
               <input
                 type="text"
                 name="organizerName"
-                value={event.organizerName || ""}
-                onChange={handleChange}
+                value={
+                  event.organizerName ||
+                  ""
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="Enter organizer name"
                 required
               />
@@ -471,17 +1124,54 @@ function EditEvent() {
 
           </div>
 
-          {/* REGISTRATION FEE */}
+          {/* =================================================
+              ORGANIZER MOBILE
+          ================================================= */}
+
+          {event.organizerMobile !==
+            undefined && (
+            <div className="form-group">
+
+              <label>
+                Organizer Mobile
+              </label>
+
+              <input
+                type="tel"
+                name="organizerMobile"
+                value={
+                  event.organizerMobile ||
+                  ""
+                }
+                onChange={
+                  handleChange
+                }
+                placeholder="Enter mobile number"
+              />
+
+            </div>
+          )}
+
+          {/* =================================================
+              REGISTRATION FEE
+          ================================================= */}
+
           <div className="form-group">
 
             <label>
-              Registration Fee <span>*</span>
+              Registration Fee{" "}
+              <span>*</span>
             </label>
 
             <select
               name="registrationFee"
-              value={event.registrationFee || ""}
-              onChange={handleChange}
+              value={
+                event.registrationFee ||
+                ""
+              }
+              onChange={
+                handleChange
+              }
               required
             >
 
@@ -511,22 +1201,36 @@ function EditEvent() {
 
             </select>
 
-            {event.registrationFee === "Custom" && (
+            {/* CUSTOM FEE */}
+
+            {event.registrationFee ===
+              "Custom" && (
+
               <input
                 type="number"
                 name="customFee"
-                value={event.customFee || ""}
-                onChange={handleChange}
+                value={
+                  event.customFee || ""
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="Enter custom amount (₹)"
                 min="1"
                 required
-                style={{ marginTop: "12px" }}
+                style={{
+                  marginTop: "12px",
+                }}
               />
+
             )}
 
           </div>
 
-          {/* REGISTRATION DEADLINE */}
+          {/* =================================================
+              REGISTRATION DEADLINE
+          ================================================= */}
+
           <div className="form-group">
 
             <label>
@@ -536,18 +1240,30 @@ function EditEvent() {
             <input
               type="date"
               name="registrationDeadline"
-              value={event.registrationDeadline || ""}
-              onChange={handleChange}
-              max={event.date || undefined}
+              value={
+                event.registrationDeadline ||
+                ""
+              }
+              onChange={
+                handleChange
+              }
+              max={
+                event.date ||
+                undefined
+              }
             />
 
             <small className="form-help">
-              Last date for students to register for this event.
+              Last date for students
+              to register for this event.
             </small>
 
           </div>
 
-          {/* DESCRIPTION */}
+          {/* =================================================
+              DESCRIPTION
+          ================================================= */}
+
           <div className="form-group">
 
             <label>
@@ -556,8 +1272,12 @@ function EditEvent() {
 
             <textarea
               name="description"
-              value={event.description || ""}
-              onChange={handleChange}
+              value={
+                event.description || ""
+              }
+              onChange={
+                handleChange
+              }
               placeholder="Describe your event..."
               rows="5"
             />
@@ -566,14 +1286,19 @@ function EditEvent() {
 
         </div>
 
-        {/* ACTIONS */}
+        {/* =====================================================
+            FORM ACTIONS
+        ===================================================== */}
+
         <div className="form-actions">
 
           <button
             type="button"
             className="cancel-btn"
             onClick={() =>
-              navigate("/organizer/events")
+              navigate(
+                "/organizer/events"
+              )
             }
             disabled={saving}
           >
@@ -585,12 +1310,15 @@ function EditEvent() {
             className="primary-btn"
             disabled={saving}
           >
-            {saving ? "Saving..." : "Save Changes"}
+            {saving
+              ? "Saving..."
+              : "Save Changes"}
           </button>
 
         </div>
 
       </form>
+
     </div>
   );
 }

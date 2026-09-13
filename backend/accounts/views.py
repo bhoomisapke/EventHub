@@ -1,14 +1,26 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import (
+    urlsafe_base64_decode,
+    urlsafe_base64_encode,
+)
 
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .models import User
 from .serializers import RegisterSerializer, ProfileSerializer
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 
+
+# ============================================================
+# REGISTER
+# ============================================================
 
 class RegisterView(APIView):
 
@@ -26,27 +38,39 @@ class RegisterView(APIView):
                         "name": user.name,
                         "email": user.email,
                         "role": user.role,
-                    }
+                    },
                 },
-                status=status.HTTP_201_CREATED
+                status=status.HTTP_201_CREATED,
             )
 
         return Response(
             serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
+
+# ============================================================
+# LOGIN
+# ============================================================
 
 class LoginView(APIView):
 
     def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if not email or not password:
+            return Response(
+                {
+                    "message": "Email and password are required"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         user = authenticate(
             request,
             username=email,
-            password=password
+            password=password,
         )
 
         if user is None:
@@ -54,10 +78,12 @@ class LoginView(APIView):
                 {
                     "message": "Invalid email or password"
                 },
-                status=status.HTTP_401_UNAUTHORIZED
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
-        token, created = Token.objects.get_or_create(user=user)
+        token, created = Token.objects.get_or_create(
+            user=user
+        )
 
         return Response(
             {
@@ -68,42 +94,66 @@ class LoginView(APIView):
                     "name": user.name,
                     "email": user.email,
                     "role": user.role,
-                }
+                },
             },
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
 
 
+# ============================================================
+# LOGOUT
+# ============================================================
 
 class LogoutView(APIView):
+
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        request.user.auth_token.delete()
+
+        if hasattr(request.user, "auth_token"):
+            request.user.auth_token.delete()
 
         return Response(
-            {"message": "Logout successful"},
-            status=status.HTTP_200_OK
+            {
+                "message": "Logout successful"
+            },
+            status=status.HTTP_200_OK,
         )
 
+
+# ============================================================
+# CURRENT USER / PROFILE
+# ============================================================
+
 class MeView(APIView):
+
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    # --------------------------------------------------------
+    # GET PROFILE
+    # --------------------------------------------------------
+
     def get(self, request):
+
         serializer = ProfileSerializer(request.user)
 
         return Response(
             serializer.data,
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
 
+    # --------------------------------------------------------
+    # UPDATE PROFILE
+    # --------------------------------------------------------
+
     def patch(self, request):
+
         serializer = ProfileSerializer(
             request.user,
             data=request.data,
-            partial=True
+            partial=True,
         )
 
         if serializer.is_valid():
@@ -112,12 +162,205 @@ class MeView(APIView):
             return Response(
                 {
                     "message": "Profile updated successfully",
-                    "user": serializer.data
+                    "user": serializer.data,
                 },
-                status=status.HTTP_200_OK
+                status=status.HTTP_200_OK,
             )
 
         return Response(
             serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+# ============================================================
+# FORGOT PASSWORD
+# ============================================================
+
+class ForgotPasswordView(APIView):
+
+    def post(self, request):
+
+        email = request.data.get("email")
+
+        # ----------------------------------------------------
+        # CHECK EMAIL
+        # ----------------------------------------------------
+
+        if not email:
+            return Response(
+                {
+                    "message": "Email is required"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # ----------------------------------------------------
+        # FIND USER
+        # ----------------------------------------------------
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response(
+                {
+                    "message": "No account found with this email"
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # ----------------------------------------------------
+        # GENERATE UID
+        # ----------------------------------------------------
+
+        uid = urlsafe_base64_encode(
+            force_bytes(user.pk)
+        )
+
+        # ----------------------------------------------------
+        # GENERATE RESET TOKEN
+        # ----------------------------------------------------
+
+        token = default_token_generator.make_token(user)
+
+        # ----------------------------------------------------
+        # CREATE FRONTEND RESET LINK
+        # ----------------------------------------------------
+
+        reset_link = (
+            f"http://localhost:5173/"
+            f"reset-password/{uid}/{token}/"
+        )
+
+        # ----------------------------------------------------
+        # SEND EMAIL
+        # ----------------------------------------------------
+
+        send_mail(
+            subject="EventHub Password Reset",
+
+            message=f"""
+Hello {user.name},
+
+You requested to reset your EventHub password.
+
+Use the following link to reset your password:
+
+{reset_link}
+
+If you did not request this password reset,
+you can safely ignore this email.
+
+Thank you,
+EventHub Team
+""",
+
+            from_email=None,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+
+        return Response(
+            {
+                "message": (
+                    "Password reset link has been sent "
+                    "to your email"
+                )
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+# ============================================================
+# RESET PASSWORD
+# ============================================================
+
+class ResetPasswordView(APIView):
+
+    def post(self, request):
+
+        uid = request.data.get("uid")
+        token = request.data.get("token")
+        new_password = request.data.get("new_password")
+
+        # ----------------------------------------------------
+        # CHECK REQUIRED FIELDS
+        # ----------------------------------------------------
+
+        if not uid or not token or not new_password:
+            return Response(
+                {
+                    "message": (
+                        "UID, token and new password "
+                        "are required"
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # ----------------------------------------------------
+        # CHECK PASSWORD LENGTH
+        # ----------------------------------------------------
+
+        if len(new_password) < 8:
+            return Response(
+                {
+                    "message": (
+                        "Password must be at least 8 characters"
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # ----------------------------------------------------
+        # DECODE UID AND FIND USER
+        # ----------------------------------------------------
+
+        try:
+            user_id = force_str(
+                urlsafe_base64_decode(uid)
+            )
+
+            user = User.objects.get(pk=user_id)
+
+        except (
+            TypeError,
+            ValueError,
+            OverflowError,
+            User.DoesNotExist,
+        ):
+            return Response(
+                {
+                    "message": "Invalid reset link"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # ----------------------------------------------------
+        # CHECK RESET TOKEN
+        # ----------------------------------------------------
+
+        if not default_token_generator.check_token(
+            user,
+            token,
+        ):
+            return Response(
+                {
+                    "message": "Invalid or expired reset link"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # ----------------------------------------------------
+        # SET NEW PASSWORD
+        # ----------------------------------------------------
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response(
+            {
+                "message": "Password reset successfully"
+            },
+            status=status.HTTP_200_OK,
         )

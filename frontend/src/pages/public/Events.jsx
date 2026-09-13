@@ -1,151 +1,847 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Search, Grid, List, Sparkles } from 'lucide-react';
-import EventCard from '../../components/EventCard';
-import {eventsData } from '../../data/events';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import {
+  Search,
+  Grid,
+  List,
+  Sparkles,
+  LoaderCircle,
+  RefreshCw,
+  X,
+} from "lucide-react";
+
+import {
+  useSearchParams,
+} from "react-router-dom";
+
+import EventCard from "../../components/EventCard";
+
+
+const API_URL =
+  "http://127.0.0.1:8000/api/events/";
+
 
 const CATEGORIES = [
-  'All', 'Hackathon', 'Coding', 'AI & ML', 'Web Development', 
-  'Cyber Security', 'Robotics', 'IoT', 'Workshop', 'Tech Fest'
+  "All",
+  "Hackathon",
+  "Coding",
+  "AI & ML",
+  "Web Development",
+  "Cyber Security",
+  "Robotics",
+  "IoT",
+  "Workshop",
+  "Tech Fest",
 ];
 
-export default function Events() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [viewMode, setViewMode] = useState('grid');
-  const [savedIds, setSavedIds] = useState([]);
 
-  // Sync component state with URL query parameters (from Hero Search / Quick Filters)
+export default function Events() {
+
+  const [
+    searchParams,
+    setSearchParams,
+  ] = useSearchParams();
+
+
+  const [events, setEvents] =
+    useState([]);
+
+
+  const [searchTerm, setSearchTerm] =
+    useState("");
+
+
+  const [
+    selectedCategory,
+    setSelectedCategory,
+  ] = useState("All");
+
+
+  const [viewMode, setViewMode] =
+    useState("grid");
+
+
+  const [savedIds, setSavedIds] =
+    useState([]);
+
+
+  const [loading, setLoading] =
+    useState(true);
+
+
+  const [error, setError] =
+    useState("");
+
+
+  /* ==========================================================
+     GET TOKEN
+     ========================================================== */
+
+  const getToken = () => {
+
+    return (
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token")
+    );
+
+  };
+
+
+  /* ==========================================================
+     FETCH EVENTS FROM DJANGO
+     ========================================================== */
+
+  const fetchEvents = async () => {
+
+    setLoading(true);
+
+    setError("");
+
+    try {
+
+      const response =
+        await fetch(API_URL);
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          data?.detail ||
+          data?.message ||
+          "Unable to load events."
+        );
+
+      }
+
+
+      const eventList =
+        Array.isArray(data)
+          ? data
+          : data.results || [];
+
+
+      setEvents(
+        eventList
+      );
+
+    } catch (err) {
+
+      console.error(
+        "Events API error:",
+        err
+      );
+
+      setError(
+        err.message ||
+        "Unable to connect to EventHub."
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+
+  /* ==========================================================
+     INITIAL LOAD
+     ========================================================== */
+
   useEffect(() => {
-    const querySearch = searchParams.get('search') || '';
-    const queryCategory = searchParams.get('category') || 'All';
-    
-    setSearchTerm(querySearch);
-    
-    // Match partial category names from quick filters (e.g., "Music" or "Sports")
-    const matchedCategory = CATEGORIES.find(
-      cat => cat.toLowerCase() === queryCategory.toLowerCase()
-    ) || 'All';
-    
-    setSelectedCategory(matchedCategory);
+
+    fetchEvents();
+
+  }, []);
+
+
+  /* ==========================================================
+     READ URL FILTERS
+     ========================================================== */
+
+  useEffect(() => {
+
+    const search =
+      searchParams.get("search") ||
+      "";
+
+    const category =
+      searchParams.get("category") ||
+      "All";
+
+
+    setSearchTerm(search);
+
+
+    const matched =
+      CATEGORIES.find(
+        (item) =>
+          item.toLowerCase() ===
+          category.toLowerCase()
+      );
+
+
+    setSelectedCategory(
+      matched || "All"
+    );
+
   }, [searchParams]);
 
+
+  /* ==========================================================
+     SAVE EVENT
+     ========================================================== */
+
   const toggleSave = (id) => {
-    setSavedIds(prev => 
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+
+    setSavedIds(
+      (previous) => {
+
+        if (
+          previous.includes(id)
+        ) {
+
+          return previous.filter(
+            (item) => item !== id
+          );
+
+        }
+
+        return [
+          ...previous,
+          id,
+        ];
+
+      }
     );
+
   };
 
-  const filteredEvents = eventsData.filter(event => {
-    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          event.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || event.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+
+  /* ==========================================================
+     FILTER EVENTS
+     ========================================================== */
+
+  const filteredEvents =
+    useMemo(() => {
+
+      const search =
+        searchTerm
+          .trim()
+          .toLowerCase();
+
+
+      return events.filter(
+        (event) => {
+
+          const title =
+            event.title ||
+            "";
+
+          const description =
+            event.description ||
+            "";
+
+          const category =
+            event.category ||
+            "";
+
+
+          const matchesSearch =
+            title
+              .toLowerCase()
+              .includes(search) ||
+
+            description
+              .toLowerCase()
+              .includes(search);
+
+
+          const matchesCategory =
+            selectedCategory === "All" ||
+            category.toLowerCase() ===
+              selectedCategory.toLowerCase();
+
+
+          return (
+            matchesSearch &&
+            matchesCategory
+          );
+
+        }
+      );
+
+    }, [
+      events,
+      searchTerm,
+      selectedCategory,
+    ]);
+
+
+  /* ==========================================================
+     SEARCH
+     ========================================================== */
+
+  const handleSearch = (e) => {
+
+    const value =
+      e.target.value;
+
+
+    setSearchTerm(value);
+
+
+    const params =
+      new URLSearchParams(
+        searchParams
+      );
+
+
+    if (value.trim()) {
+
+      params.set(
+        "search",
+        value
+      );
+
+    } else {
+
+      params.delete(
+        "search"
+      );
+
+    }
+
+
+    setSearchParams(
+      params,
+      {
+        replace: true,
+      }
+    );
+
+  };
+
+
+  /* ==========================================================
+     CATEGORY
+     ========================================================== */
+
+  const handleCategory = (
+    category
+  ) => {
+
+    setSelectedCategory(
+      category
+    );
+
+
+    const params =
+      new URLSearchParams(
+        searchParams
+      );
+
+
+    if (
+      category !== "All"
+    ) {
+
+      params.set(
+        "category",
+        category
+      );
+
+    } else {
+
+      params.delete(
+        "category"
+      );
+
+    }
+
+
+    setSearchParams(
+      params,
+      {
+        replace: true,
+      }
+    );
+
+  };
+
+
+  /* ==========================================================
+     RESET
+     ========================================================== */
 
   const handleReset = () => {
-    setSearchTerm('');
-    setSelectedCategory('All');
+
+    setSearchTerm("");
+
+    setSelectedCategory(
+      "All"
+    );
+
     setSearchParams({});
+
   };
 
+
+  /* ==========================================================
+     UI
+     ========================================================== */
+
   return (
-    // Added pt-24 top padding so header content sits cleanly below fixed/sticky Navbar
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 space-y-8">
-      
-      {/* Header */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-extrabold text-white">Explore Technical Events</h1>
-        <p className="text-sm text-gray-400">Discover upcoming campus competitions, workshops, and flagship tech fests.</p>
-      </div>
 
-      {/* Controls Bar */}
-      <div className="glass-panel p-4 rounded-2xl space-y-4">
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
-          
-          {/* Search Input */}
-          <div className="relative w-full md:w-96">
-            <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input 
-              type="text"
-              placeholder="Search hackathons, workshops..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
-            />
-          </div>
+    <main className="eventhub">
 
-          {/* View Toggle & Count */}
-          <div className="flex items-center justify-between w-full md:w-auto gap-4">
-            <span className="text-xs text-gray-400">
-              Showing <strong className="text-white">{filteredEvents.length}</strong> events
-            </span>
-            <div className="flex bg-white/5 p-1 rounded-xl border border-white/10">
-              <button 
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'}`}
-                aria-label="Grid view"
-              >
-                <Grid size={16} />
-              </button>
-              <button 
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'}`}
-                aria-label="List view"
-              >
-                <List size={16} />
-              </button>
+      <section className="events-section section">
+
+        <div className="events-page-container">
+
+
+          {/* ==================================================
+              HEADER
+          ================================================== */}
+
+          <div className="events-header reveal">
+
+            <div>
+
+              <span className="blue-label">
+                03 / WHAT'S HAPPENING
+              </span>
+
+              <h2>
+
+                Explore
+
+                <br />
+
+                <span>
+                  events.
+                </span>
+
+              </h2>
+
+              <p>
+                Discover your next challenge,
+                workshop or opportunity.
+              </p>
+
             </div>
-          </div>
-        </div>
 
-        {/* Categories Horizontal Scroll */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none pt-2 border-t border-white/5">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
-                selectedCategory === cat 
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' 
-                  : 'glass-card text-gray-300 hover:text-white'
-              }`}
+
+            <div className="events-header-right">
+
+              <p>
+
+                Showing{" "}
+
+                <strong>
+                  {filteredEvents.length}
+                </strong>{" "}
+
+                events
+
+              </p>
+
+            </div>
+
+          </div>
+
+
+          {/* ==================================================
+              FILTER BAR
+          ================================================== */}
+
+          <section className="events-filter-panel reveal">
+
+
+            {/* SEARCH */}
+
+            <div className="events-filter-top">
+
+              <div className="events-search">
+
+                <Search
+                  size={18}
+                />
+
+                <input
+                  type="text"
+                  placeholder="Search events..."
+                  value={searchTerm}
+                  onChange={
+                    handleSearch
+                  }
+                />
+
+              </div>
+
+
+              {/* VIEW MODE */}
+
+              <div className="events-view-switch">
+
+                <button
+                  type="button"
+                  className={
+                    viewMode === "grid"
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() =>
+                    setViewMode("grid")
+                  }
+                  aria-label="Grid view"
+                >
+
+                  <Grid size={17} />
+
+                </button>
+
+
+                <button
+                  type="button"
+                  className={
+                    viewMode === "list"
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() =>
+                    setViewMode("list")
+                  }
+                  aria-label="List view"
+                >
+
+                  <List size={17} />
+
+                </button>
+
+              </div>
+
+            </div>
+
+
+            {/* CATEGORIES */}
+
+            <div className="events-categories">
+
+              {CATEGORIES.map(
+                (category) => (
+
+                  <button
+                    type="button"
+                    key={category}
+                    className={
+                      selectedCategory ===
+                      category
+                        ? "active"
+                        : ""
+                    }
+                    onClick={() =>
+                      handleCategory(
+                        category
+                      )
+                    }
+                  >
+
+                    {category}
+
+                  </button>
+
+                )
+              )}
+
+            </div>
+
+
+            {/* ACTIVE FILTER */}
+
+            {(searchTerm ||
+              selectedCategory !== "All") && (
+
+              <div className="active-filters">
+
+                {searchTerm && (
+
+                  <button
+                    type="button"
+                    onClick={() => {
+
+                      setSearchTerm("");
+
+                      const params =
+                        new URLSearchParams(
+                          searchParams
+                        );
+
+                      params.delete(
+                        "search"
+                      );
+
+                      setSearchParams(
+                        params,
+                        {
+                          replace: true,
+                        }
+                      );
+
+                    }}
+                  >
+
+                    Search: {searchTerm}
+
+                    <X size={13} />
+
+                  </button>
+
+                )}
+
+
+                {selectedCategory !==
+                  "All" && (
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleCategory(
+                        "All"
+                      )
+                    }
+                  >
+
+                    {selectedCategory}
+
+                    <X size={13} />
+
+                  </button>
+
+                )}
+
+
+                <button
+                  type="button"
+                  className="clear-all"
+                  onClick={
+                    handleReset
+                  }
+                >
+                  Clear all
+                </button>
+
+              </div>
+
+            )}
+
+          </section>
+
+
+          {/* ==================================================
+              LOADING
+          ================================================== */}
+
+          {loading && (
+
+            <section className="empty-events reveal">
+
+              <div className="empty-icon">
+
+                <LoaderCircle
+                  size={32}
+                  className="animate-spin"
+                />
+
+              </div>
+
+              <h2>
+                Loading events...
+              </h2>
+
+              <p>
+                Fetching the latest events from EventHub.
+              </p>
+
+            </section>
+
+          )}
+
+
+          {/* ==================================================
+              ERROR
+          ================================================== */}
+
+          {!loading &&
+            error && (
+
+            <section className="empty-events reveal">
+
+              <div className="empty-icon">
+
+                <Sparkles
+                  size={32}
+                />
+
+              </div>
+
+              <h2>
+                Unable to load events
+              </h2>
+
+              <p>
+                {error}
+              </p>
+
+              <button
+                className="reset-btn"
+                type="button"
+                onClick={
+                  fetchEvents
+                }
+              >
+
+                <RefreshCw
+                  size={15}
+                />
+
+                Try Again
+
+              </button>
+
+            </section>
+
+          )}
+
+
+          {/* ==================================================
+              EVENT GRID
+          ================================================== */}
+
+          {!loading &&
+            !error &&
+            filteredEvents.length > 0 && (
+
+            <section
+              className={
+                viewMode === "grid"
+                  ? "events-grid"
+                  : "events-list"
+              }
             >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </div>
 
-      {/* Events Display Grid / List */}
-      {filteredEvents.length > 0 ? (
-        <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-4'}>
-          {filteredEvents.map(event => (
-            <EventCard 
-              key={event.id} 
-              event={event} 
-              isSaved={savedIds.includes(event.id)} 
-              onToggleSave={toggleSave} 
-            />
-          ))}
+              {filteredEvents.map(
+                (event, index) => (
+
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    index={index}
+                    isSaved={
+                      savedIds.includes(
+                        event.id
+                      )
+                    }
+                    onToggleSave={
+                      toggleSave
+                    }
+                  />
+
+                )
+              )}
+
+            </section>
+
+          )}
+
+
+          {/* ==================================================
+              EMPTY DATABASE
+          ================================================== */}
+
+          {!loading &&
+            !error &&
+            events.length === 0 && (
+
+            <section className="empty-events reveal">
+
+              <div className="empty-icon">
+
+                <Sparkles
+                  size={32}
+                />
+
+              </div>
+
+              <h2>
+                No Events Yet
+              </h2>
+
+              <p>
+                No organizer has published an event yet.
+              </p>
+
+            </section>
+
+          )}
+
+
+          {/* ==================================================
+              NO SEARCH RESULTS
+          ================================================== */}
+
+          {!loading &&
+            !error &&
+            events.length > 0 &&
+            filteredEvents.length === 0 && (
+
+            <section className="empty-events reveal">
+
+              <div className="empty-icon">
+
+                <Sparkles
+                  size={32}
+                />
+
+              </div>
+
+              <h2>
+                No Events Found
+              </h2>
+
+              <p>
+                We couldn't find any events matching
+                your current filters.
+              </p>
+
+              <button
+                className="reset-btn"
+                type="button"
+                onClick={
+                  handleReset
+                }
+              >
+                Reset Filters
+              </button>
+
+            </section>
+
+          )}
+
         </div>
-      ) : (
-        /* Empty State */
-        <div className="glass-panel rounded-3xl p-12 text-center max-w-md mx-auto my-12 space-y-4">
-          <div className="p-4 bg-blue-600/20 text-blue-400 rounded-full w-fit mx-auto">
-            <Sparkles size={32} />
-          </div>
-          <h3 className="text-lg font-bold text-white">No Events Found</h3>
-          <p className="text-xs text-gray-400">Try adjusting your search terms or filter selections to find matching technical events.</p>
-          <button 
-            onClick={handleReset}
-            className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-xl text-xs font-semibold text-white transition-all shadow-md shadow-blue-600/30"
-          >
-            Reset Filters
-          </button>
-        </div>
-      )}
-    </div>
+
+      </section>
+
+    </main>
+
   );
 }

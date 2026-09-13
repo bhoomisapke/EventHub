@@ -1,9 +1,16 @@
 import React from "react";
-import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
+import {
+  Outlet,
+  Link,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+
 import {
   UserRound,
   LogOut,
 } from "lucide-react";
+
 import "./OrganizerLayout.css";
 
 function OrganizerLayout() {
@@ -12,7 +19,10 @@ function OrganizerLayout() {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/student/login");
+    sessionStorage.clear();
+
+    // Go back to the main EventHub website
+    navigate("/");
   };
 
   return (
@@ -93,12 +103,15 @@ function OrganizerLayout() {
           {/* PROFILE */}
 
           <Link
-            to="/organizer/dashboard"
+            to="/organizer/profile"
             className="login-button organizer-profile-button"
             aria-label="Profile"
             title="Profile"
           >
-            <UserRound size={19} strokeWidth={2} />
+            <UserRound
+              size={19}
+              strokeWidth={2}
+            />
           </Link>
 
 
@@ -111,7 +124,10 @@ function OrganizerLayout() {
             title="Logout"
             className="register-button organizer-logout-button"
           >
-            <LogOut size={19} strokeWidth={2} />
+            <LogOut
+              size={19}
+              strokeWidth={2}
+            />
           </button>
 
         </div>
