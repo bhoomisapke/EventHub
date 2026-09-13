@@ -132,6 +132,24 @@ function CreateEvent() {
 
   /*
   =========================================
+  GET AUTH TOKEN
+  =========================================
+  */
+
+  const getAuthToken = () => {
+    return (
+      localStorage.getItem("token") ||
+      localStorage.getItem("authToken") ||
+      localStorage.getItem("access_token") ||
+      sessionStorage.getItem("token") ||
+      sessionStorage.getItem("authToken") ||
+      sessionStorage.getItem("access_token") ||
+      ""
+    );
+  };
+
+  /*
+  =========================================
   FORM SUBMIT
   =========================================
   */
@@ -266,6 +284,23 @@ function CreateEvent() {
 
     /*
     =========================================
+    CHECK LOGIN TOKEN
+    =========================================
+    */
+
+    const token = getAuthToken();
+
+    if (!token) {
+      showNotification(
+        "You are not logged in. Please login again.",
+        "error"
+      );
+
+      return;
+    }
+
+    /*
+    =========================================
     SEND DATA TO BACKEND
     =========================================
     */
@@ -386,6 +421,15 @@ function CreateEvent() {
         "http://localhost:8000/api/events/",
         {
           method: "POST",
+
+          // IMPORTANT:
+          // Django REST Framework TokenAuthentication
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+
+          // Do NOT manually set Content-Type.
+          // Browser handles multipart/form-data boundary.
           body: formData,
         }
       );
@@ -404,6 +448,12 @@ function CreateEvent() {
         data = {};
       }
 
+      /*
+      =========================================
+      HANDLE ERROR
+      =========================================
+      */
+
       if (!response.ok) {
         console.error(
           "Create event response:",
@@ -421,7 +471,8 @@ function CreateEvent() {
           typeof data === "object" &&
           data !== null
         ) {
-          const firstError = Object.values(data)[0];
+          const firstError =
+            Object.values(data)[0];
 
           if (Array.isArray(firstError)) {
             errorMessage = firstError[0];
@@ -440,16 +491,16 @@ function CreateEvent() {
         return;
       }
 
+      /*
+      =========================================
+      SUCCESS
+      =========================================
+      */
+
       console.log(
         "Created event:",
         data
       );
-
-      /*
-      =========================================
-      SUCCESS MESSAGE
-      =========================================
-      */
 
       showNotification(
         "Event created successfully!",
@@ -529,7 +580,6 @@ function CreateEvent() {
 
         </div>
 
-
         {/* =========================================
             FORM
         ========================================= */}
@@ -564,7 +614,6 @@ function CreateEvent() {
               </div>
 
             </div>
-
 
             <label className="create-image-upload">
 
@@ -625,7 +674,6 @@ function CreateEvent() {
 
           </section>
 
-
           {/* =========================================
               EVENT INFORMATION
           ========================================= */}
@@ -652,10 +700,7 @@ function CreateEvent() {
 
             </div>
 
-
-            {/* =========================================
-                EVENT TITLE
-            ========================================= */}
+            {/* EVENT TITLE */}
 
             <div className="create-form-group">
 
@@ -674,10 +719,7 @@ function CreateEvent() {
 
             </div>
 
-
-            {/* =========================================
-                CATEGORY + CAPACITY
-            ========================================= */}
+            {/* CATEGORY + CAPACITY */}
 
             <div className="create-form-row">
 
@@ -725,7 +767,6 @@ function CreateEvent() {
 
               </div>
 
-
               <div className="create-form-group">
 
                 <label>
@@ -756,10 +797,7 @@ function CreateEvent() {
 
             </div>
 
-
-            {/* =========================================
-                PARTICIPATION TYPE
-            ========================================= */}
+            {/* PARTICIPATION TYPE */}
 
             <div className="create-form-group">
 
@@ -804,10 +842,7 @@ function CreateEvent() {
 
             </div>
 
-
-            {/* =========================================
-                GROUP TEAM SIZE
-            ========================================= */}
+            {/* GROUP TEAM SIZE */}
 
             {event.participationType === "group" && (
 
@@ -841,7 +876,6 @@ function CreateEvent() {
 
                 </div>
 
-
                 <div className="create-form-group">
 
                   <label>
@@ -873,10 +907,7 @@ function CreateEvent() {
 
             )}
 
-
-            {/* =========================================
-                DATE + TIME
-            ========================================= */}
+            {/* DATE + TIME */}
 
             <div className="create-form-row">
 
@@ -902,7 +933,6 @@ function CreateEvent() {
 
               </div>
 
-
               <div className="create-form-group">
 
                 <label>
@@ -926,10 +956,7 @@ function CreateEvent() {
 
             </div>
 
-
-            {/* =========================================
-                VENUE + ORGANIZER
-            ========================================= */}
+            {/* VENUE + ORGANIZER */}
 
             <div className="create-form-row">
 
@@ -956,7 +983,6 @@ function CreateEvent() {
 
               </div>
 
-
               <div className="create-form-group">
 
                 <label>
@@ -982,10 +1008,7 @@ function CreateEvent() {
 
             </div>
 
-
-            {/* =========================================
-                ORGANIZER MOBILE
-            ========================================= */}
+            {/* ORGANIZER MOBILE */}
 
             <div className="create-form-group">
 
@@ -1022,10 +1045,7 @@ function CreateEvent() {
 
             </div>
 
-
-            {/* =========================================
-                REGISTRATION FEE
-            ========================================= */}
+            {/* REGISTRATION FEE */}
 
             <div className="create-form-group">
 
@@ -1072,7 +1092,6 @@ function CreateEvent() {
 
               </div>
 
-
               {event.registrationFee === "Custom" && (
 
                 <input
@@ -1090,10 +1109,7 @@ function CreateEvent() {
 
             </div>
 
-
-            {/* =========================================
-                REGISTRATION DEADLINE
-            ========================================= */}
+            {/* REGISTRATION DEADLINE */}
 
             <div className="create-form-group">
 
@@ -1121,10 +1137,7 @@ function CreateEvent() {
 
             </div>
 
-
-            {/* =========================================
-                DESCRIPTION
-            ========================================= */}
+            {/* DESCRIPTION */}
 
             <div className="create-form-group">
 
@@ -1149,7 +1162,6 @@ function CreateEvent() {
             </div>
 
           </section>
-
 
           {/* =========================================
               ACTIONS
