@@ -1,7 +1,8 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
-
+from rest_framework.authentication import TokenAuthentication
+from tickets.services import create_ticket
 from .models import Registration
 from .serializers import RegistrationSerializer
 
@@ -9,6 +10,7 @@ from .serializers import RegistrationSerializer
 class RegistrationCreateView(generics.CreateAPIView):
     serializer_class = RegistrationSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def perform_create(self, serializer):
         student = self.request.user
@@ -30,11 +32,15 @@ class RegistrationCreateView(generics.CreateAPIView):
                 {"detail": "You are already registered for this event."}
             )
 
-        serializer.save(student=student)
+        registration = serializer.save(student=student)
+
+        # Automatically create ticket
+        create_ticket(registration)
 
 
 class MyRegistrationsView(generics.ListAPIView):
     serializer_class = RegistrationSerializer
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):

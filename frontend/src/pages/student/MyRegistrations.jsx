@@ -19,6 +19,9 @@ const MyRegistrations = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // ==================================================
+  // FETCH MY REGISTRATIONS
+  // ==================================================
   useEffect(() => {
     fetchMyRegistrations();
   }, []);
@@ -58,7 +61,11 @@ const MyRegistrations = () => {
 
       const data = await response.json();
 
-      setRegistrations(Array.isArray(data) ? data : data.results || []);
+      setRegistrations(
+        Array.isArray(data)
+          ? data
+          : data.results || []
+      );
     } catch (err) {
       console.error("Registration fetch error:", err);
       setError("Unable to load your registrations.");
@@ -67,7 +74,9 @@ const MyRegistrations = () => {
     }
   };
 
-  // Format backend date: 2026-09-15 → 15 September 2026
+  // ==================================================
+  // FORMAT DATE
+  // ==================================================
   const formatDate = (dateString) => {
     if (!dateString) return "Date not available";
 
@@ -84,14 +93,22 @@ const MyRegistrations = () => {
     });
   };
 
-  // Format backend time: 10:00:00 → 10:00 AM
+  // ==================================================
+  // FORMAT TIME
+  // ==================================================
   const formatTime = (timeString) => {
     if (!timeString) return "Time not available";
 
     const [hours, minutes] = timeString.split(":");
 
     const date = new Date();
-    date.setHours(Number(hours), Number(minutes), 0, 0);
+
+    date.setHours(
+      Number(hours),
+      Number(minutes),
+      0,
+      0
+    );
 
     return date.toLocaleTimeString("en-US", {
       hour: "numeric",
@@ -100,6 +117,9 @@ const MyRegistrations = () => {
     });
   };
 
+  // ==================================================
+  // STATUS CLASS
+  // ==================================================
   const getStatusClass = (status) => {
     if (status?.toLowerCase() === "cancelled") {
       return "cancelled-badge";
@@ -108,6 +128,9 @@ const MyRegistrations = () => {
     return "confirmed-badge";
   };
 
+  // ==================================================
+  // STATUS ICON
+  // ==================================================
   const getStatusIcon = (status) => {
     if (status?.toLowerCase() === "cancelled") {
       return <XCircle size={13} />;
@@ -116,23 +139,35 @@ const MyRegistrations = () => {
     return <CheckCircle2 size={13} />;
   };
 
+  // ==================================================
+  // COUNTS
+  // ==================================================
   const confirmedCount = registrations.filter(
     (registration) =>
       registration.status?.toLowerCase() === "confirmed"
   ).length;
 
   const today = new Date();
+
   today.setHours(0, 0, 0, 0);
 
-  const upcomingCount = registrations.filter((registration) => {
-    if (!registration.event_date) return false;
+  const upcomingCount = registrations.filter(
+    (registration) => {
+      if (!registration.event_date) return false;
 
-    const eventDate = new Date(registration.event_date);
-    eventDate.setHours(0, 0, 0, 0);
+      const eventDate = new Date(
+        registration.event_date
+      );
 
-    return eventDate >= today;
-  }).length;
+      eventDate.setHours(0, 0, 0, 0);
 
+      return eventDate >= today;
+    }
+  ).length;
+
+  // ==================================================
+  // MAIN
+  // ==================================================
   return (
     <div className="registrations-page">
 
@@ -148,8 +183,9 @@ const MyRegistrations = () => {
           <h1>My Registrations</h1>
 
           <p>
-            Manage all the events you have registered for
-            and keep track of your upcoming experiences.
+            Manage all the events you have registered
+            for and keep track of your upcoming
+            experiences.
           </p>
         </div>
 
@@ -217,130 +253,238 @@ const MyRegistrations = () => {
       <section className="registration-list-section">
 
         <div className="registration-list-heading">
+
           <div>
             <span>EVENTS YOU JOINED</span>
             <h2>Registered Events</h2>
           </div>
+
         </div>
 
 
+        {/* LOADING */}
+
         {loading && (
           <div className="registration-empty-state">
+
             <CalendarDays size={30} />
-            <h3>Loading your registrations...</h3>
-            <p>Please wait while we fetch your events.</p>
+
+            <h3>
+              Loading your registrations...
+            </h3>
+
+            <p>
+              Please wait while we fetch your events.
+            </p>
+
           </div>
         )}
 
+
+        {/* ERROR */}
 
         {!loading && error && (
           <div className="registration-empty-state">
+
             <XCircle size={30} />
-            <h3>Unable to load registrations</h3>
+
+            <h3>
+              Unable to load registrations
+            </h3>
+
             <p>{error}</p>
+
           </div>
         )}
 
 
-        {!loading && !error && registrations.length === 0 && (
-          <div className="registration-empty-state">
-            <CalendarDays size={30} />
-            <h3>No registrations yet</h3>
-            <p>
-              You haven't registered for any events yet.
-            </p>
+        {/* EMPTY */}
 
-            <Link to="/events" className="browse-registration-btn">
-              Explore Events
-              <ArrowRight size={16} />
-            </Link>
-          </div>
-        )}
+        {!loading &&
+          !error &&
+          registrations.length === 0 && (
 
+            <div className="registration-empty-state">
 
-        {!loading && !error && registrations.length > 0 && (
-          <div className="registration-list">
+              <CalendarDays size={30} />
 
-            {registrations.map((registration) => (
+              <h3>
+                No registrations yet
+              </h3>
 
-              <article
-                className="registration-item"
-                key={registration.id}
+              <p>
+                You haven't registered for any
+                events yet.
+              </p>
+
+              <Link
+                to="/events"
+                className="browse-registration-btn"
               >
+                Explore Events
+                <ArrowRight size={16} />
+              </Link>
 
-                {/* Image */}
-
-                <div className="registration-image">
-
-                  <div className="registration-image-placeholder">
-                    <Ticket size={32} />
-                  </div>
-
-                  <span>
-                    Event
-                  </span>
-
-                </div>
+            </div>
+          )}
 
 
-                {/* Details */}
+        {/* REGISTRATION CARDS */}
 
-                <div className="registration-event-details">
+        {!loading &&
+          !error &&
+          registrations.length > 0 && (
 
-                  <h3>
-                    {registration.event_title}
-                  </h3>
+            <div className="registration-list">
 
-                  <div className="registration-detail-row">
+              {registrations.map(
+                (registration) => (
 
-                    <div>
-                      <CalendarDays size={15} />
-                      {formatDate(registration.event_date)}
-                    </div>
-
-                    <div>
-                      <Clock size={15} />
-                      {formatTime(registration.event_time)}
-                    </div>
-
-                  </div>
-
-                  <div className="registration-location">
-
-                    <MapPin size={15} />
-
-                    {registration.event_venue || "Venue not available"}
-
-                  </div>
-
-                </div>
-
-
-                {/* Status */}
-
-                <div className="registration-status-area">
-
-                  <span className={getStatusClass(registration.status)}>
-                    {getStatusIcon(registration.status)}
-                    {registration.status || "Confirmed"}
-                  </span>
-
-                  <Link
-                    to="/student/tickets"
-                    className="ticket-button"
+                  <article
+                    className="registration-item"
+                    key={registration.id}
                   >
-                    View Ticket
-                    <ArrowRight size={14} />
-                  </Link>
 
-                </div>
+                    {/* ================= IMAGE ================= */}
 
-              </article>
+                   {/* Image */}
 
-            ))}
+                  <div className="registration-image">
 
-          </div>
-        )}
+                    {registration.event_image ? (
+                      <img
+                        src={registration.event_image}
+                        alt={registration.event_title || "Event"}
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+
+                          const placeholder =
+                            e.currentTarget.nextElementSibling;
+
+                          if (placeholder) {
+                            placeholder.style.display = "flex";
+                          }
+                        }}
+                      />
+                    ) : null}
+
+                    <div
+                      className="registration-image-placeholder"
+                      style={{
+                        display: registration.event_image
+                          ? "none"
+                          : "flex",
+                      }}
+                    >
+                      <Ticket size={32} />
+                    </div>
+
+                    <span>
+                      Event
+                    </span>
+
+                  </div>
+
+                    {/* ================= DETAILS ================= */}
+
+                    <div className="registration-event-details">
+
+                      <div className="registration-event-top">
+
+                        <div>
+
+                          <span className="event-mini-label">
+                            REGISTERED EVENT
+                          </span>
+
+                          <h3>
+                            {registration.event_title ||
+                              "Event"}
+                          </h3>
+
+                        </div>
+
+                        <div className="registration-mini-ticket">
+                          <Ticket size={13} />
+                          EventHub
+                        </div>
+
+                      </div>
+
+
+                      <div className="registration-detail-row">
+
+                        <div>
+                          <CalendarDays size={15} />
+
+                          {formatDate(
+                            registration.event_date
+                          )}
+                        </div>
+
+                        <div>
+                          <Clock size={15} />
+
+                          {formatTime(
+                            registration.event_time
+                          )}
+                        </div>
+
+                      </div>
+
+
+                      <div className="registration-location">
+
+                        <MapPin size={15} />
+
+                        {registration.event_venue ||
+                          "Venue not available"}
+
+                      </div>
+
+                    </div>
+
+
+                    {/* ================= STATUS ================= */}
+
+                    <div className="registration-status-area">
+
+                      <span
+                        className={getStatusClass(
+                          registration.status
+                        )}
+                      >
+
+                        {getStatusIcon(
+                          registration.status
+                        )}
+
+                        {registration.status ||
+                          "Confirmed"}
+
+                      </span>
+
+
+                      <Link
+                        to="/student/tickets"
+                        className="ticket-button"
+                      >
+
+                        View Ticket
+
+                        <ArrowRight size={14} />
+
+                      </Link>
+
+                    </div>
+
+                  </article>
+
+                )
+              )}
+
+            </div>
+          )}
 
       </section>
 
@@ -354,17 +498,24 @@ const MyRegistrations = () => {
         </div>
 
         <div>
-          <h3>Looking for more events?</h3>
+
+          <h3>
+            Looking for more events?
+          </h3>
 
           <p>
-            Discover workshops, competitions, seminars,
-            cultural events and more.
+            Discover workshops, competitions,
+            seminars, cultural events and more.
           </p>
+
         </div>
 
         <Link to="/events">
+
           Explore Events
+
           <ArrowRight size={15} />
+
         </Link>
 
       </section>

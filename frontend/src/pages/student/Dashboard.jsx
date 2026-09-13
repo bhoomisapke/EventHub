@@ -1,6 +1,6 @@
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import EventCard from "../../components/EventCard";
 import {
   CalendarDays,
   Ticket,
@@ -14,43 +14,86 @@ import {
 
 import "./Dashboard.css";
 
-const myUpcomingRegistrations = [
-  {
-    id: 1,
-    title: "Tech Innovation Summit 2026",
-    category: "Technology",
-    date: "15 September 2026",
-    time: "10:00 AM",
-    location: "Main Auditorium",
-    status: "Confirmed",
-    image:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    id: 2,
-    title: "Web Development Workshop",
-    category: "Workshop",
-    date: "20 September 2026",
-    time: "11:30 AM",
-    location: "Computer Lab 2",
-    status: "Confirmed",
-    image:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    id: 3,
-    title: "Robotics & AI Expo",
-    category: "Robotics",
-    date: "25 September 2026",
-    time: "9:30 AM",
-    location: "Innovation Hall",
-    status: "Confirmed",
-    image:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80",
-  },
-];
+// const myUpcomingRegistrations = [
+//   {
+//     id: 1,
+//     title: "Tech Innovation Summit 2026",
+//     category: "Technology",
+//     date: "15 September 2026",
+//     time: "10:00 AM",
+//     location: "Main Auditorium",
+//     status: "Confirmed",
+//     image:
+//       "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=900&q=80",
+//   },
+//   {
+//     id: 2,
+//     title: "Web Development Workshop",
+//     category: "Workshop",
+//     date: "20 September 2026",
+//     time: "11:30 AM",
+//     location: "Computer Lab 2",
+//     status: "Confirmed",
+//     image:
+//       "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
+//   },
+//   {
+//     id: 3,
+//     title: "Robotics & AI Expo",
+//     category: "Robotics",
+//     date: "25 September 2026",
+//     time: "9:30 AM",
+//     location: "Innovation Hall",
+//     status: "Confirmed",
+//     image:
+//       "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80",
+//   },
+// ];
 
 const Dashboard = () => {
+  
+  const API_URL = "http://127.0.0.1:8000";
+
+  const [events, setEvents] = useState([]);
+  const [eventsLoading, setEventsLoading] = useState(true);
+  const [eventsError, setEventsError] = useState("");
+
+  useEffect(() => {
+    const fetchDashboardEvents = async () => {
+      try {
+        setEventsLoading(true);
+
+        const response = await fetch(
+          `${API_URL}/api/events/`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data?.detail ||
+            data?.message ||
+            "Unable to load events."
+          );
+        }
+
+        const eventList = Array.isArray(data)
+          ? data
+          : data.results || [];
+
+        setEvents(eventList);
+      } catch (error) {
+        console.error("Dashboard events error:", error);
+        setEventsError("Unable to load events.");
+      } finally {
+        setEventsLoading(false);
+      }
+    };
+
+    fetchDashboardEvents();
+  }, []);
+
+
   return (
     <div className="student-page">
 
@@ -284,72 +327,15 @@ const Dashboard = () => {
 
         </div>
 
-        <div className="student-events-grid">
-
-          {myUpcomingRegistrations.map((event) => (
-
-            <article
-              className="student-event-card"
-              key={event.id}
-            >
-
-              <div className="student-event-image">
-
-                <img
-                  src={event.image}
-                  alt={event.title}
-                />
-
-                <span className="event-tag">
-                  {event.category}
-                </span>
-
-              </div>
-
-              <div className="student-event-body">
-
-                <h3>{event.title}</h3>
-
-                <div className="student-event-info">
-
-                  <div>
-                    <CalendarDays size={14} />
-                    <span>{event.date}</span>
-                  </div>
-
-                  <div>
-                    <Clock size={14} />
-                    <span>{event.time}</span>
-                  </div>
-
-                  <div>
-                    <MapPin size={14} />
-                    <span>{event.location}</span>
-                  </div>
-
-                </div>
-
-                <div className="student-event-footer">
-
-                  <span className="dashboard-registration-status">
-                    <CheckCircle2 size={14} />
-                    {event.status}
-                  </span>
-
-                  <Link to="/student/tickets">
-                    View Ticket
-                    <ArrowRight size={14} />
-                  </Link>
-
-                </div>
-
-              </div>
-
-            </article>
-
-          ))}
-
-        </div>
+        <div className="events-grid dashboard-events-grid">
+        {events.slice(0, 3).map((event, index) => (
+          <EventCard
+            key={event.id}
+            event={event}
+            index={index}
+          />
+        ))}
+      </div>
 
       </section>
 

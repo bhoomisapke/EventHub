@@ -18,6 +18,8 @@ import Dashboard from "../pages/student/Dashboard.jsx";
 import MyRegistrations from "../pages/student/MyRegistrations.jsx";
 import MyTickets from "../pages/student/MyTickets.jsx";
 import Profile from "../pages/student/Profile.jsx";
+import RegistrationForm from "../pages/student/RegistrationForm.jsx";
+// Public Pages
 
 // =====================================================
 // PUBLIC PAGES
@@ -48,7 +50,10 @@ import ResetPassword from "../pages/auth/ResetPassword.jsx";
 const AppRoutes = () => {
   return (
     <Routes>
-
+      <Route
+  path="/events/:id/register"
+  element={<RegistrationForm />}
+/>
       {/* =====================================================
           LANDING PAGE
           ===================================================== */}
@@ -127,8 +132,8 @@ const AppRoutes = () => {
         />
 
         <Route
-          path="registrations"
-          element={<MyRegistrations />}
+          path="events/:id/register"
+          element={<RegistrationForm />}
         />
 
         <Route
@@ -140,7 +145,15 @@ const AppRoutes = () => {
           path="profile"
           element={<Profile />}
         />
-
+        
+        <Route
+          path="register"
+          element={<RegistrationForm />}
+        />
+        <Route
+          path="/student/registrations"
+          element={<MyRegistrations />}
+        />
       </Route>
 
 

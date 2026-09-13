@@ -130,7 +130,46 @@ const StudentLayout = () => {
       window.location.href = "/";
     }
   };
+useEffect(() => {
+  const updateProfile = async () => {
+    const token =
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token");
 
+    if (!token) return;
+
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/auth/me/",
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+
+        setUser(data);
+
+        const storage = localStorage.getItem("token")
+          ? localStorage
+          : sessionStorage;
+
+        storage.setItem("user", JSON.stringify(data));
+      }
+    } catch (error) {
+      console.error("Failed to refresh profile:", error);
+    }
+  };
+
+  window.addEventListener("profileUpdated", updateProfile);
+
+  return () => {
+    window.removeEventListener("profileUpdated", updateProfile);
+  };
+}, []);
   return (
     <div className="student-layout">
 
