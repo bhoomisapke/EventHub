@@ -4,30 +4,46 @@ import { Routes, Route } from "react-router-dom";
 import App from "../App.jsx";
 import Auth from "../pages/auth/Auth.jsx";
 
-// Layouts
+// =====================================================
+// LAYOUTS
+// =====================================================
 import StudentLayout from "../layouts/StudentLayout.jsx";
 import PublicLayout from "../layouts/PublicLayout.jsx";
 import OrganizerLayout from "../layouts/OrganizerLayout.jsx";
 
-// Student Pages
+// =====================================================
+// STUDENT PAGES
+// =====================================================
 import Dashboard from "../pages/student/Dashboard.jsx";
 import MyRegistrations from "../pages/student/MyRegistrations.jsx";
 import MyTickets from "../pages/student/MyTickets.jsx";
 import Profile from "../pages/student/Profile.jsx";
 
-// Public Pages
+// =====================================================
+// PUBLIC PAGES
+// =====================================================
 import Categories from "../pages/public/Categories.jsx";
 import EventDetails from "../pages/public/EventDetails.jsx";
 import Events from "../pages/public/Events.jsx";
 
-// Organizer Pages
+// =====================================================
+// ORGANIZER PAGES
+// =====================================================
 import OrganizerDashboard from "../pages/organizer/Dashboard.jsx";
 import OrganizerEventDetails from "../pages/organizer/OrganizerEventDetails.jsx";
 import CreateEvent from "../pages/organizer/CreateEvent.jsx";
 import MyEvents from "../pages/organizer/MyEvents.jsx";
 import EditEvent from "../pages/organizer/EditEvent.jsx";
 import Participants from "../pages/organizer/Participants.jsx";
+
+// IMPORTANT: Organizer Profile
+import OrganizerProfile from "../pages/organizer/Profile.jsx";
+
+// =====================================================
+// AUTH
+// =====================================================
 import ResetPassword from "../pages/auth/ResetPassword.jsx";
+
 
 const AppRoutes = () => {
   return (
@@ -36,17 +52,25 @@ const AppRoutes = () => {
       {/* =====================================================
           LANDING PAGE
           ===================================================== */}
-      <Route path="/" element={<App />} />
+      <Route
+        path="/"
+        element={<App />}
+      />
+
 
       {/* =====================================================
           AUTHENTICATION
           ===================================================== */}
-      <Route path="/auth" element={<Auth />} />
+      <Route
+        path="/auth"
+        element={<Auth />}
+      />
 
       <Route
-  path="/reset-password/:uid/:token"
-  element={<ResetPassword />}
-/>
+        path="/reset-password/:uid/:token"
+        element={<ResetPassword />}
+      />
+
 
       {/* =====================================================
           PUBLIC PAGES
@@ -63,14 +87,11 @@ const AppRoutes = () => {
           element={<EventDetails />}
         />
 
-        {/* Events Page */}
-      <Route
-  path="/events"
-  element={<Events />}
+        <Route
+          path="/events"
+          element={<Events />}
+        />
 
-/>
-
-        {/* About Page */}
         <Route
           path="/about"
           element={
@@ -80,7 +101,6 @@ const AppRoutes = () => {
           }
         />
 
-        {/* Contact Page */}
         <Route
           path="/contact"
           element={
@@ -91,6 +111,7 @@ const AppRoutes = () => {
         />
 
       </Route>
+
 
       {/* =====================================================
           STUDENT PAGES
@@ -122,10 +143,10 @@ const AppRoutes = () => {
 
       </Route>
 
+
       {/* =====================================================
           ORGANIZER PAGES
           ===================================================== */}
-
       <Route
         path="/organizer"
         element={<OrganizerLayout />}
@@ -173,7 +194,16 @@ const AppRoutes = () => {
           element={<Participants />}
         />
 
+        {/* =================================================
+            ORGANIZER PROFILE
+            ================================================= */}
+        <Route
+          path="profile"
+          element={<OrganizerProfile />}
+        />
+
       </Route>
+
 
       {/* =====================================================
           ADMIN DASHBOARD
@@ -196,8 +226,9 @@ const AppRoutes = () => {
         }
       />
 
+
       {/* =====================================================
-          404 - PAGE NOT FOUND
+          404 PAGE
           ===================================================== */}
       <Route
         path="*"
