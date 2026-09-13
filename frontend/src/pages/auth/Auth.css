@@ -2507,3 +2507,57 @@
 .eventhub-auth .auth-select-wrapper {
   position: relative;
 }
+
+
+
+/* ============================================================
+   ROLE CARD — FINAL MERGE FIX
+   ============================================================ */
+
+.eventhub-auth .role-card {
+  background: rgba(255, 255, 255, 0.045);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.eventhub-auth .role-card .role-content strong {
+  color: #ffffff;
+}
+
+.eventhub-auth .role-card .role-content small {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Selected role */
+.eventhub-auth .role-card.selected {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.18),
+      rgba(236, 72, 153, 0.06)
+    );
+  border-color: rgba(139, 92, 246, 0.8);
+  color: #ffffff;
+}
+
+/* Selected Organizer */
+.eventhub-auth .role-card.selected.organizer {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(236, 72, 153, 0.16),
+      rgba(139, 92, 246, 0.08)
+    );
+  border-color: rgba(236, 72, 153, 0.8);
+  color: #ffffff;
+}
+
+.eventhub-auth .role-card.selected.organizer
+  .role-content strong {
+  color: #ffffff;
+}
+
+.eventhub-auth .role-card.selected.organizer
+  .role-content small {
+  color: rgba(255, 255, 255, 0.4);
+}
