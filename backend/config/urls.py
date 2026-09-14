@@ -9,12 +9,7 @@ urlpatterns = [
     path("api/events/", include("events.urls")),
     path("api/auth/", include("accounts.urls")),
     path("api/registrations/", include("registrations.urls")),
-<<<<<<< HEAD
     path("api/feedback/", include("feedback.urls")),
-=======
-
-    path("api/tickets/", include("tickets.urls")),
->>>>>>> 7731be11c0b916f46fbf9fd0b31a8315110d5fd2
 ]
 
 if settings.DEBUG:
