@@ -22,8 +22,11 @@ function MyEvents() {
     type: "success",
   });
 
-  // Event ID waiting for delete confirmation
   const [deleteEventId, setDeleteEventId] = useState(null);
+
+  /* =========================================================
+     NOTIFICATION
+  ========================================================= */
 
   const showNotification = (message, type = "success") => {
     setNotification({
@@ -39,28 +42,83 @@ function MyEvents() {
     });
   };
 
-  // =========================================
-  // FETCH EVENTS
-  // =========================================
+  /* =========================================================
+     GET AUTH TOKEN
+  ========================================================= */
+
+  const getToken = () => {
+    return (
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token") ||
+      ""
+    );
+  };
+
+  /* =========================================================
+     FETCH ORGANIZER EVENTS
+  ========================================================= */
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8000/api/events/"
-        );
+        const token = getToken();
 
-        const data = await response.json();
-
-        if (!response.ok) {
+        if (!token) {
           showNotification(
-            data.message || "Failed to fetch events.",
+            "Your login session was not found. Please login again.",
             "error"
           );
           return;
         }
 
-        setEvents(data);
+        const response = await fetch(
+          "http://localhost:8000/api/events/my/",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Token ${token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        console.log("My Events Status:", response.status);
+        console.log("My Events Response:", data);
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            showNotification(
+              "Authentication failed. Please login again.",
+              "error"
+            );
+            return;
+          }
+
+          if (response.status === 403) {
+            showNotification(
+              "Only organizers can view their events.",
+              "error"
+            );
+            return;
+          }
+
+          showNotification(
+            data.detail ||
+              data.message ||
+              "Failed to fetch events.",
+            "error"
+          );
+
+          return;
+        }
+
+        setEvents(
+          Array.isArray(data)
+            ? data
+            : data.results || []
+        );
       } catch (error) {
         console.error("Fetch events error:", error);
 
@@ -74,61 +132,117 @@ function MyEvents() {
     fetchEvents();
   }, []);
 
-  // =========================================
-  // OPEN DELETE CONFIRMATION
-  // =========================================
+  /* =========================================================
+     OPEN DELETE CONFIRMATION
+  ========================================================= */
 
   const handleDelete = (id) => {
     setDeleteEventId(id);
   };
 
-  // =========================================
-  // CONFIRM DELETE
-  // =========================================
+  /* =========================================================
+     CONFIRM DELETE
+  ========================================================= */
 
   const confirmDelete = async () => {
-    if (!deleteEventId) return;
+    if (!deleteEventId) {
+      return;
+    }
 
     const id = deleteEventId;
 
-    // Close custom confirmation popup
     setDeleteEventId(null);
 
     try {
+      const token = getToken();
+
+      if (!token) {
+        showNotification(
+          "Your login session has expired. Please login again.",
+          "error"
+        );
+        return;
+      }
+
       const response = await fetch(
         `http://localhost:8000/api/events/${id}/`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Token ${token}`,
+            Accept: "application/json",
+          },
         }
       );
 
-      if (!response.ok) {
-        let errorMessage = "Failed to delete event.";
+      console.log(
+        "Delete Event Status:",
+        response.status
+      );
 
-        try {
-          const data = await response.json();
-          errorMessage = data.message || errorMessage;
-        } catch {
-          // No JSON response from backend
-        }
+      if (response.ok) {
+        setEvents((previousEvents) =>
+          previousEvents.filter(
+            (event) => event.id !== id
+          )
+        );
 
-        showNotification(errorMessage, "error");
+        showNotification(
+          "Event deleted successfully.",
+          "success"
+        );
+
         return;
       }
 
-      // Remove deleted event from UI
-      setEvents((previousEvents) =>
-        previousEvents.filter(
-          (event) => event.id !== id
-        )
+      let data = {};
+
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+
+      console.error(
+        "Delete event rejected:",
+        data
       );
 
+      if (response.status === 401) {
+        showNotification(
+          "Authentication failed. Please login again.",
+          "error"
+        );
+        return;
+      }
+
+      if (response.status === 403) {
+        showNotification(
+          "You do not have permission to delete this event.",
+          "error"
+        );
+        return;
+      }
+
+      if (response.status === 404) {
+        showNotification(
+          "Event not found.",
+          "error"
+        );
+        return;
+      }
+
       showNotification(
-        "Event deleted successfully.",
-        "success"
+        data.detail ||
+          data.message ||
+          "Failed to delete event.",
+        "error"
       );
     } catch (error) {
-      console.error("Delete event error:", error);
+      console.error(
+        "Delete event error:",
+        error
+      );
 
       showNotification(
         "Unable to connect to the backend.",
@@ -137,20 +251,24 @@ function MyEvents() {
     }
   };
 
-  // =========================================
-  // CANCEL DELETE
-  // =========================================
+  /* =========================================================
+     CANCEL DELETE
+  ========================================================= */
 
   const cancelDelete = () => {
     setDeleteEventId(null);
   };
 
+  /* =========================================================
+     PAGE
+  ========================================================= */
+
   return (
     <div className="my-events-page">
 
-      {/* =========================================
-          CUSTOM NOTIFICATION
-      ========================================= */}
+      {/* =====================================================
+          NOTIFICATION
+      ===================================================== */}
 
       <Notification
         message={notification.message}
@@ -158,9 +276,9 @@ function MyEvents() {
         onClose={closeNotification}
       />
 
-      {/* =========================================
-          CUSTOM DELETE CONFIRMATION
-      ========================================= */}
+      {/* =====================================================
+          DELETE CONFIRMATION
+      ===================================================== */}
 
       {deleteEventId && (
         <div className="delete-confirm-overlay">
@@ -206,23 +324,23 @@ function MyEvents() {
         </div>
       )}
 
-      {/* =========================================
+      {/* =====================================================
           BACKGROUND GLOW
-      ========================================= */}
+      ===================================================== */}
 
       <div className="my-events-glow glow-one"></div>
 
       <div className="my-events-glow glow-two"></div>
 
-      {/* =========================================
+      {/* =====================================================
           MAIN CONTAINER
-      ========================================= */}
+      ===================================================== */}
 
       <div className="my-events-container">
 
-        {/* =======================================
+        {/* ===================================================
             TOP SECTION
-        ======================================= */}
+        =================================================== */}
 
         <div className="my-events-top">
 
@@ -243,8 +361,6 @@ function MyEvents() {
 
           </div>
 
-          {/* CREATE EVENT BUTTON */}
-
           <Link
             to="/organizer/create-event"
             className="my-events-create-button"
@@ -255,9 +371,9 @@ function MyEvents() {
 
         </div>
 
-        {/* =======================================
+        {/* ===================================================
             EVENT COUNT
-        ======================================= */}
+        =================================================== */}
 
         {events.length > 0 && (
           <div className="my-events-summary">
@@ -281,9 +397,9 @@ function MyEvents() {
           </div>
         )}
 
-        {/* =======================================
+        {/* ===================================================
             EMPTY STATE
-        ======================================= */}
+        =================================================== */}
 
         {events.length === 0 ? (
 
@@ -310,9 +426,9 @@ function MyEvents() {
 
         ) : (
 
-          /* =====================================
+          /* =================================================
              EVENTS GRID
-          ===================================== */
+          ================================================= */
 
           <div className="my-events-grid">
 
@@ -333,22 +449,41 @@ function MyEvents() {
                     )
                   : 0;
 
+              /* =============================================
+                 IMAGE URL
+              ============================================= */
+
+              let imageUrl = "";
+
+              if (event.image) {
+                if (
+                  event.image.startsWith("http://") ||
+                  event.image.startsWith("https://") ||
+                  event.image.startsWith("data:")
+                ) {
+                  imageUrl = event.image;
+                } else {
+                  imageUrl =
+                    `http://localhost:8000${event.image}`;
+                }
+              }
+
               return (
                 <article
                   className="my-event-card"
                   key={event.id}
                 >
 
-                  {/* =================================
+                  {/* =========================================
                       EVENT IMAGE
-                  ================================= */}
+                  ========================================= */}
 
                   <div className="my-event-image">
 
-                    {event.image ? (
+                    {imageUrl ? (
 
                       <img
-                        src={event.image}
+                        src={imageUrl}
                         alt={event.title}
                       />
 
@@ -374,9 +509,9 @@ function MyEvents() {
 
                   </div>
 
-                  {/* =================================
+                  {/* =========================================
                       EVENT CONTENT
-                  ================================= */}
+                  ========================================= */}
 
                   <div className="my-event-content">
 
@@ -384,7 +519,9 @@ function MyEvents() {
                       {event.title}
                     </h2>
 
-                    {/* EVENT INFORMATION */}
+                    {/* =======================================
+                        EVENT INFORMATION
+                    ======================================= */}
 
                     <div className="my-event-info">
 
@@ -459,9 +596,9 @@ function MyEvents() {
 
                     </div>
 
-                    {/* =================================
+                    {/* =======================================
                         REGISTRATION
-                    ================================= */}
+                    ======================================= */}
 
                     <div className="my-event-registration">
 
@@ -478,19 +615,15 @@ function MyEvents() {
                         </div>
 
                         <strong>
-
                           {participants}
-
                           {capacity
                             ? ` / ${capacity}`
                             : ""}
-
                         </strong>
 
                       </div>
 
                       {capacity > 0 && (
-
                         <div className="registration-progress">
 
                           <span
@@ -500,14 +633,13 @@ function MyEvents() {
                           />
 
                         </div>
-
                       )}
 
                     </div>
 
-                    {/* =================================
+                    {/* =======================================
                         ACTION BUTTONS
-                    ================================= */}
+                    ======================================= */}
 
                     <div className="my-event-actions">
 

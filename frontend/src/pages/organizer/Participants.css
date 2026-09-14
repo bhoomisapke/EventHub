@@ -1,12 +1,13 @@
-/* =========================================
+/* =========================================================
    PARTICIPANTS PAGE
-========================================= */
+========================================================= */
 
 .participants-page {
   position: relative;
   min-height: calc(100vh - 76px);
   overflow: hidden;
   padding: 52px 5% 80px;
+
   background:
     radial-gradient(
       circle at 8% 12%,
@@ -22,9 +23,9 @@
 }
 
 
-/* =========================================
+/* =========================================================
    DECORATIVE GLOW
-========================================= */
+========================================================= */
 
 .participants-glow {
   position: absolute;
@@ -38,7 +39,7 @@
   height: 300px;
   top: 80px;
   left: -180px;
-  background: rgba(109, 40, 217, 0.10);
+  background: rgba(109, 40, 217, 0.1);
 }
 
 .participants-glow-two {
@@ -50,27 +51,30 @@
 }
 
 
-/* =========================================
+/* =========================================================
    CONTAINER
-========================================= */
+========================================================= */
 
 .participants-container {
   position: relative;
   z-index: 2;
+
   width: 100%;
   max-width: 1400px;
+
   margin: 0 auto;
 }
 
 
-/* =========================================
+/* =========================================================
    PAGE HEADER
-========================================= */
+========================================================= */
 
 .participants-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+
   margin-bottom: 32px;
 }
 
@@ -82,8 +86,11 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
+
   margin-bottom: 12px;
+
   color: #6d28d9;
+
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.8px;
@@ -95,7 +102,9 @@
 
 .participants-heading h1 {
   margin: 0;
+
   color: #0b1230;
+
   font-size: clamp(38px, 5vw, 58px);
   line-height: 1;
   letter-spacing: -2.5px;
@@ -109,43 +118,59 @@
     #8b5cf6,
     #ec4899
   );
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .participants-heading p {
-  margin: 16px 0 0;
   max-width: 620px;
+
+  margin: 16px 0 0;
+
   color: #697184;
+
   font-size: 14px;
   line-height: 1.7;
 }
 
 
-/* =========================================
+/* =========================================================
    STATISTICS
-========================================= */
+========================================================= */
 
 .participants-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+
   gap: 18px;
+
   margin-bottom: 28px;
 }
 
 .participant-stat-card {
   position: relative;
+
   display: flex;
   align-items: center;
+
   gap: 16px;
+
   padding: 22px;
+
   overflow: hidden;
+
   border: 1px solid rgba(221, 216, 225, 0.9);
   border-radius: 16px;
+
   background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 10px 30px rgba(11, 18, 48, 0.06);
+
+  box-shadow:
+    0 10px 30px rgba(11, 18, 48, 0.06);
+
   backdrop-filter: blur(12px);
+
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
@@ -154,25 +179,33 @@
 
 .participant-stat-card::before {
   content: "";
+
   position: absolute;
   top: 0;
   left: 0;
+
   width: 100%;
   height: 3px;
+
   background: linear-gradient(
     90deg,
     #0b1230,
     #6d28d9,
     #ec4899
   );
+
   opacity: 0;
+
   transition: opacity 0.25s ease;
 }
 
 .participant-stat-card:hover {
   transform: translateY(-4px);
+
   border-color: rgba(139, 92, 246, 0.28);
-  box-shadow: 0 18px 38px rgba(11, 18, 48, 0.10);
+
+  box-shadow:
+    0 18px 38px rgba(11, 18, 48, 0.1);
 }
 
 .participant-stat-card:hover::before {
@@ -182,27 +215,34 @@
 .participant-stat-icon {
   width: 50px;
   height: 50px;
+
   flex-shrink: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   border-radius: 13px;
+
   color: #6d28d9;
+
   background: linear-gradient(
     135deg,
     rgba(109, 40, 217, 0.11),
-    rgba(236, 72, 153, 0.10)
+    rgba(236, 72, 153, 0.1)
   );
 }
 
 .participant-stat-content {
   display: flex;
   flex-direction: column;
+
   gap: 4px;
 }
 
 .participant-stat-content span {
   color: #697184;
+
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.4px;
@@ -210,61 +250,88 @@
 
 .participant-stat-content strong {
   color: #0b1230;
+
   font-size: 27px;
   line-height: 1;
+  font-weight: 800;
 }
 
 
-/* =========================================
+/* =========================================================
    MAIN CARD
-========================================= */
+========================================================= */
 
 .participants-card {
   overflow: hidden;
+
   border: 1px solid rgba(221, 216, 225, 0.9);
   border-radius: 20px;
+
   background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 18px 50px rgba(11, 18, 48, 0.08);
+
+  box-shadow:
+    0 18px 50px rgba(11, 18, 48, 0.08);
+
   backdrop-filter: blur(14px);
 }
 
 
-/* =========================================
+/* =========================================================
    CARD HEADER
-========================================= */
+========================================================= */
 
 .participants-card-header {
+  min-height: 120px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
   padding: 28px 30px;
+
   border-bottom: 1px solid #ece8ed;
 }
 
 .participants-card-title {
   display: flex;
   align-items: center;
+
   gap: 15px;
 }
 
 .participants-card-icon {
   width: 46px;
   height: 46px;
+
   flex-shrink: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   border-radius: 12px;
+
   color: #ffffff;
+
   background: linear-gradient(
     135deg,
     #0b1230,
     #6d28d9
   );
-  box-shadow: 0 8px 20px rgba(109, 40, 217, 0.20);
+
+  box-shadow:
+    0 8px 20px rgba(109, 40, 217, 0.2);
 }
 
 .participants-section-label {
   display: block;
+
   margin-bottom: 4px;
+
   color: #8b5cf6;
+
   font-size: 9px;
   font-weight: 800;
   letter-spacing: 1.4px;
@@ -272,7 +339,9 @@
 
 .participants-card-title h2 {
   margin: 0;
+
   color: #17172b;
+
   font-size: 21px;
   font-weight: 800;
   letter-spacing: -0.5px;
@@ -280,24 +349,244 @@
 
 .participants-card-title p {
   margin: 5px 0 0;
+
   color: #7a8191;
+
   font-size: 12px;
 }
 
 
-/* =========================================
+/* =========================================================
+   REFRESH BUTTON
+========================================================= */
+
+.participants-refresh-btn {
+  min-width: 105px;
+  height: 40px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 15px;
+
+  border: 1px solid rgba(109, 40, 217, 0.18);
+  border-radius: 10px;
+
+  color: #ffffff;
+
+  background: linear-gradient(
+    135deg,
+    #4c1d95,
+    #7c3aed
+  );
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 7px 18px rgba(109, 40, 217, 0.2);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.participants-refresh-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 24px rgba(109, 40, 217, 0.3);
+}
+
+.participants-refresh-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.participants-refresh-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   LOADING SPINNER
+========================================================= */
+
+.participants-spinner {
+  animation: participants-spin 0.9s linear infinite;
+}
+
+@keyframes participants-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
+
+.participants-error {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  min-height: 90px;
+
+  padding: 20px 30px;
+
+  border-bottom: 1px solid #fee2e2;
+
+  background: #fff7f7;
+}
+
+.participants-error > svg {
+  flex-shrink: 0;
+
+  color: #dc2626;
+}
+
+.participants-error div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.participants-error strong {
+  color: #991b1b;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.participants-error span {
+  color: #b45353;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   LOADING STATE
+========================================================= */
+
+.participants-loading {
+  min-height: 280px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  padding: 50px 30px;
+}
+
+.participants-loading .participants-spinner {
+  color: #6d28d9;
+}
+
+.participants-loading p {
+  margin: 0;
+
+  color: #7a8191;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.participants-empty {
+  min-height: 280px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 50px 30px;
+
+  text-align: center;
+}
+
+.participants-empty-icon {
+  width: 68px;
+  height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 17px;
+
+  color: #6d28d9;
+
+  border: 1px solid rgba(109, 40, 217, 0.12);
+  border-radius: 18px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(109, 40, 217, 0.08),
+    rgba(236, 72, 153, 0.08)
+  );
+}
+
+.participants-empty h3 {
+  margin: 0 0 7px;
+
+  color: #17172b;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.participants-empty p {
+  max-width: 500px;
+
+  margin: 0;
+
+  color: #7a8191;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
    TABLE
-========================================= */
+========================================================= */
 
 .participants-table-wrapper {
   width: 100%;
+
   overflow-x: auto;
 }
 
 .participants-table {
   width: 100%;
-  border-collapse: collapse;
   min-width: 900px;
+
+  border-collapse: collapse;
 }
 
 .participants-table thead {
@@ -306,20 +595,29 @@
 
 .participants-table th {
   padding: 16px 24px;
+
   text-align: left;
+
   color: #697184;
+
   font-size: 10px;
   font-weight: 800;
+
   letter-spacing: 1px;
   text-transform: uppercase;
+
   white-space: nowrap;
 }
 
 .participants-table td {
   padding: 18px 24px;
+
   border-top: 1px solid #eeeaf0;
+
   color: #454b5c;
+
   font-size: 13px;
+
   vertical-align: middle;
 }
 
@@ -334,130 +632,191 @@
 }
 
 
-/* =========================================
+/* =========================================================
    PARTICIPANT
-========================================= */
+========================================================= */
 
 .participant-name {
   display: flex;
   align-items: center;
+
   gap: 12px;
+
   min-width: 190px;
 }
 
 .participant-avatar {
   width: 42px;
   height: 42px;
+
   flex-shrink: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   border-radius: 50%;
+
   color: #ffffff;
+
   background: linear-gradient(
     135deg,
     #0b1230,
     #6d28d9,
     #ec4899
   );
+
   font-size: 14px;
   font-weight: 800;
-  box-shadow: 0 6px 16px rgba(109, 40, 217, 0.18);
+
+  box-shadow:
+    0 6px 16px rgba(109, 40, 217, 0.18);
 }
 
 .participant-person {
   display: flex;
   flex-direction: column;
+
   gap: 3px;
 }
 
 .participant-person strong {
   color: #17172b;
+
   font-size: 13px;
   font-weight: 800;
 }
 
 .participant-person span {
   color: #969cab;
+
   font-size: 10px;
   font-weight: 600;
 }
 
 
-/* =========================================
+/* =========================================================
    EMAIL
-========================================= */
+========================================================= */
+
+.participant-email-wrapper {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  min-width: 190px;
+}
+
+.participant-email-wrapper svg {
+  flex-shrink: 0;
+
+  color: #8b5cf6;
+}
 
 .participant-email {
   color: #697184;
+
   font-size: 12px;
 }
 
 
-/* =========================================
+/* =========================================================
    EVENT
-========================================= */
+========================================================= */
 
 .participant-event {
   display: flex;
   align-items: center;
+
   gap: 7px;
+
   max-width: 230px;
+
   color: #30384d;
+
   font-size: 12px;
   font-weight: 650;
 }
 
 .participant-event svg {
   flex-shrink: 0;
+
   color: #8b5cf6;
 }
 
 
-/* =========================================
+/* =========================================================
    DATE
-========================================= */
+========================================================= */
 
 .participant-date {
   color: #697184;
+
   font-size: 12px;
+
   white-space: nowrap;
 }
 
 
-/* =========================================
+/* =========================================================
    STATUS
-========================================= */
+========================================================= */
 
 .participant-status {
   display: inline-flex;
   align-items: center;
+
   gap: 7px;
+
   padding: 7px 11px;
+
   border: 1px solid rgba(109, 40, 217, 0.12);
   border-radius: 999px;
+
   color: #6d28d9;
+
   background: rgba(109, 40, 217, 0.07);
+
   font-size: 10px;
   font-weight: 800;
+
   white-space: nowrap;
 }
 
 .status-dot {
   width: 6px;
   height: 6px;
+
   border-radius: 50%;
+
   background: #8b5cf6;
-  box-shadow: 0 0 8px rgba(139, 92, 246, 0.55);
+
+  box-shadow:
+    0 0 8px rgba(139, 92, 246, 0.55);
+}
+
+.participant-status-cancelled {
+  color: #b91c1c;
+
+  background: rgba(239, 68, 68, 0.07);
+
+  border-color: rgba(239, 68, 68, 0.15);
+}
+
+.participant-status-cancelled .status-dot {
+  background: #ef4444;
+
+  box-shadow:
+    0 0 8px rgba(239, 68, 68, 0.4);
 }
 
 
-/* =========================================
+/* =========================================================
    RESPONSIVE
-========================================= */
+========================================================= */
 
 @media (max-width: 900px) {
-
   .participants-page {
     padding: 40px 4% 60px;
   }
@@ -471,7 +830,14 @@
   }
 
   .participants-card-header {
+    align-items: flex-start;
+    flex-direction: column;
+
     padding: 24px;
+  }
+
+  .participants-refresh-btn {
+    align-self: flex-start;
   }
 
   .participants-table th,
@@ -483,13 +849,13 @@
 
 
 @media (max-width: 600px) {
-
   .participants-page {
     padding: 32px 18px 50px;
   }
 
   .participants-heading h1 {
     font-size: 38px;
+
     letter-spacing: -1.5px;
   }
 
@@ -499,6 +865,14 @@
 
   .participant-stat-card {
     padding: 18px;
+  }
+
+  .participants-card {
+    border-radius: 17px;
+  }
+
+  .participants-card-header {
+    padding: 22px 18px;
   }
 
   .participants-card-title {
@@ -513,4 +887,7 @@
     line-height: 1.5;
   }
 
+  .participants-empty {
+    padding: 40px 20px;
+  }
 }
