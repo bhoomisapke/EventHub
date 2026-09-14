@@ -1910,3 +1910,44 @@
     transform: none;
   }
 }
+.dashboard-home-action {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+}
+.go-home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 38px;
+  padding: 0 16px;
+
+  border: 1px solid #0B1230;
+  border-radius: 9px;
+
+  background: #0B1230;
+  color: #FFF8ED;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.go-home-btn:hover {
+  transform: translateY(-2px);
+
+  background: linear-gradient(
+    135deg,
+    #6D28D9,
+    #EC4899
+  );
+
+  box-shadow: 0 8px 20px rgba(109, 40, 217, 0.20);
+}
