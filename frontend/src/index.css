@@ -2342,7 +2342,65 @@ a {
 
   font-size: 9px;
 }
+.event-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+  color: #AAB4C8;
+  font-size: 9px;
+}
+.event-description-wrapper {
+  margin-top: 10px;
+}
 
+.event-description {
+  margin: 0;
+  color: #AAB4C8;
+  font-size: 10px;
+  line-height: 1.5;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.event-view-more {
+  display: inline-block;
+  margin-top: 6px;
+
+  color: var(--pink-light);
+  font-size: 10px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.event-view-more:hover {
+  color: var(--pink);
+  text-decoration: underline;
+}
+.event-extra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 12px;
+}
+
+.event-extra span {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.event-register {
+  width: 100%;
+  margin-top: 20px;
+  padding: 11px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .event-register {
   width: 100%;
 
@@ -2390,7 +2448,34 @@ a {
 
   font-size: 14px;
 }
+.event-register {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
 
+.event-register span {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.event-register span:last-child {
+  margin-left: auto;
+}
+.event-extra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 12px;
+}
+
+.event-extra span {
+  display: inline-block;
+  white-space: nowrap;
+}
 
 /* ============================================================
    11. VIDEO EXPERIENCE

@@ -301,13 +301,21 @@ const EventCard = ({
 
 
         {description && (
+          <div className="event-description-wrapper">
+            <p className="event-description">
+              {description}
+            </p>
 
-          <p className="event-description">
-            {description}
-          </p>
-
+            {description.length > 120 && (
+              <Link
+                to={`/event/${id}`}
+                className="event-view-more"
+              >
+                View More
+              </Link>
+            )}
+          </div>
         )}
-
 
         <div className="event-details">
 
