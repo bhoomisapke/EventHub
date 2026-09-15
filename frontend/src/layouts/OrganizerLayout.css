@@ -202,7 +202,20 @@
   width: 100%;
 }
 
+/* ============================================================
+   FEEDBACK NAVIGATION
+   Text only - no icon
+   ============================================================ */
 
+.nav-menu a.feedback-nav-button {
+  position: relative;
+  color: #30384d;
+  text-decoration: none;
+}
+
+.nav-menu a.feedback-nav-button:hover {
+  color: var(--purple-dark);
+}
 /* ============================================================
    HOME BUTTON
    Beside Participants
