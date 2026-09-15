@@ -1,20 +1,9 @@
-from django.contrib import admin
-from django.urls import include, path
-from django.conf import settings
-from django.conf.urls.static import static
+from django.urls import path
+
+from .views import FeedbackCreateView, MyFeedbackView
+
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-
-    path("api/events/", include("events.urls")),
-    path("api/auth/", include("accounts.urls")),
-    path("api/registrations/", include("registrations.urls")),
-    path("api/feedback/", include("feedback.urls")),
-    path("api/tickets/", include("tickets.urls")),
+    path("", FeedbackCreateView.as_view(), name="feedback-create"),
+    path("my/", MyFeedbackView.as_view(), name="my-feedback"),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT
-    )

@@ -51,7 +51,7 @@ import "./Dashboard.css";
 // ];
 
 const Dashboard = () => {
-  
+
   const API_URL = "http://127.0.0.1:8000";
 
   const [events, setEvents] = useState([]);
@@ -76,7 +76,7 @@ const Dashboard = () => {
             "Unable to load events."
           );
         }
-
+        
         const eventList = Array.isArray(data)
           ? data
           : data.results || [];
@@ -96,17 +96,16 @@ const Dashboard = () => {
 
   return (
     <div className="student-page">
-
+      
       {/* ================= HERO ================= */}
       <section className="student-hero">
 
         <div className="student-hero-content">
-
-          <div className="student-badge">
+    
+           <div className="student-badge">
             <span></span>
             STUDENT
           </div>
-
           <h1>
             Discover the
             <br />

@@ -697,3 +697,24 @@
   }
 
 }
+/* ================= HOME NAV BUTTON ================= */
+
+.student-nav-home {
+  padding: 12px 24px !important;
+  border-radius: 28px !important;
+
+  background: #F1E8FF !important;
+  color: #6D28D9 !important;
+
+  text-decoration: none !important;
+}
+
+.student-nav-home:hover {
+  background: #E7D7FF !important;
+  color: #5B21B6 !important;
+}
+
+.student-nav-home.active {
+  background: #F1E8FF !important;
+  color: #6D28D9 !important;
+}
