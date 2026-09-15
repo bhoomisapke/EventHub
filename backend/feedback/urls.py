@@ -1,9 +1,6 @@
 from django.urls import path
 
-from .views import (
-    FeedbackCreateView,
-    MyFeedbackView,
-)
+from .views import FeedbackCreateView, MyFeedbackView
 
 
 urlpatterns = [
