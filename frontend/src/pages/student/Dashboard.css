@@ -1920,24 +1920,27 @@
   align-items: center;
   justify-content: center;
 
-  min-height: 38px;
-  padding: 0 16px;
+  min-width: 94px;
+  height: 50px;
+  padding: 0 24px;
 
-  border: 1px solid #0B1230;
-  border-radius: 9px;
+  border: 1px solid #E5D7FF;
+  border-radius: 28px;
 
-  background: #0B1230;
-  color: #FFF8ED;
+  background: #F1E8FF;
+  color: #6D28D9;
 
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
 
   cursor: pointer;
+  transition: all 0.25s ease;
+}
 
-  transition:
-    transform 0.25s ease,
-    background 0.25s ease,
-    box-shadow 0.25s ease;
+.go-home-btn:hover {
+  background: #E7D7FF;
+  color: #5B21B6;
+  transform: translateY(-1px);
 }
 
 .go-home-btn:hover {

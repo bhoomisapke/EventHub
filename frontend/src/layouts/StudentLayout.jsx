@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   CalendarDays,
   Ticket,
-  Bookmark,
   UserRound,
   LogOut,
   Menu,
@@ -45,9 +44,9 @@ const StudentLayout = () => {
       icon: Ticket,
     },
     {
-      name: "Saved Events",
-      path: "/student/saved",
-      icon: Bookmark,
+      name: "Home",
+      path: "/",
+      icon: null,
     },
   ];
 
@@ -130,46 +129,50 @@ const StudentLayout = () => {
       window.location.href = "/";
     }
   };
-useEffect(() => {
-  const updateProfile = async () => {
-    const token =
-      localStorage.getItem("token") ||
-      sessionStorage.getItem("token");
 
-    if (!token) return;
+  // ================= REFRESH PROFILE =================
 
-    try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/auth/me/",
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
+  useEffect(() => {
+    const updateProfile = async () => {
+      const token =
+        localStorage.getItem("token") ||
+        sessionStorage.getItem("token");
+
+      if (!token) return;
+
+      try {
+        const response = await fetch(
+          `${API_URL}/api/auth/me/`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+
+          setUser(data);
+
+          const storage = localStorage.getItem("token")
+            ? localStorage
+            : sessionStorage;
+
+          storage.setItem("user", JSON.stringify(data));
         }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-
-        setUser(data);
-
-        const storage = localStorage.getItem("token")
-          ? localStorage
-          : sessionStorage;
-
-        storage.setItem("user", JSON.stringify(data));
+      } catch (error) {
+        console.error("Failed to refresh profile:", error);
       }
-    } catch (error) {
-      console.error("Failed to refresh profile:", error);
-    }
-  };
+    };
 
-  window.addEventListener("profileUpdated", updateProfile);
+    window.addEventListener("profileUpdated", updateProfile);
 
-  return () => {
-    window.removeEventListener("profileUpdated", updateProfile);
-  };
-}, []);
+    return () => {
+      window.removeEventListener("profileUpdated", updateProfile);
+    };
+  }, []);
+
   return (
     <div className="student-layout">
 
@@ -211,13 +214,18 @@ useEffect(() => {
               <NavLink
                 key={item.name}
                 to={item.path}
+                end={item.path === "/"}
                 className={({ isActive }) =>
                   `student-nav-link ${
                     isActive ? "active" : ""
+                  } ${
+                    item.name === "Home"
+                      ? "student-nav-home"
+                      : ""
                   }`
                 }
               >
-                <Icon size={16} />
+                {Icon && <Icon size={16} />}
                 <span>{item.name}</span>
               </NavLink>
             );
@@ -296,6 +304,7 @@ useEffect(() => {
               <NavLink
                 key={item.name}
                 to={item.path}
+                end={item.path === "/"}
                 onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
                   `student-mobile-link ${
@@ -303,7 +312,7 @@ useEffect(() => {
                   }`
                 }
               >
-                <Icon size={17} />
+                {Icon && <Icon size={17} />}
                 {item.name}
               </NavLink>
             );

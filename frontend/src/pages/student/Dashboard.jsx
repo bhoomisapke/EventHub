@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link ,useNavigate} from "react-router-dom";
+import { Link } from "react-router-dom";
 import EventCard from "../../components/EventCard";
 import {
   CalendarDays,
@@ -51,7 +51,7 @@ import "./Dashboard.css";
 // ];
 
 const Dashboard = () => {
-  const navigate = useNavigate();
+
   const API_URL = "http://127.0.0.1:8000";
 
   const [events, setEvents] = useState([]);
@@ -96,15 +96,7 @@ const Dashboard = () => {
 
   return (
     <div className="student-page">
-      <div className="dashboard-home-action">
-      <button
-        type="button"
-        className="go-home-btn"
-        onClick={() => navigate("/")}
-      >
-        Go to Home
-      </button>
-    </div>
+      
       {/* ================= HERO ================= */}
       <section className="student-hero">
 
