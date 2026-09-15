@@ -102,6 +102,20 @@ function OrganizerLayout() {
           </Link>
 
 
+          {/* FEEDBACK - TEXT ONLY */}
+
+          <Link
+            to="/organizer/feedback"
+            className={
+              location.pathname === "/organizer/feedback"
+                ? "organizer-active"
+                : ""
+            }
+          >
+            Feedback
+          </Link>
+
+
           {/* HOME */}
 
           <Link

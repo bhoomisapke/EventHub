@@ -37,6 +37,7 @@ import MyEvents from "../pages/organizer/MyEvents.jsx";
 import EditEvent from "../pages/organizer/EditEvent.jsx";
 import Participants from "../pages/organizer/Participants.jsx";
 import OrganizerProfile from "../pages/organizer/Profile.jsx";
+import Feedback from "../pages/organizer/Feedback";
 
 // =====================================================
 // AUTH
@@ -274,7 +275,10 @@ const AppRoutes = () => {
           element={<Participants />}
         />
 
-
+        <Route
+          path="feedback"
+          element={<Feedback />}
+        />
         {/* =================================================
             ORGANIZER PROFILE
             ================================================= */}
