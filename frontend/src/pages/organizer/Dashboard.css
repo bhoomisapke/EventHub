@@ -2631,20 +2631,4 @@
   .organizer-dashboard-page {
     scroll-behavior: auto;
   }
-<<<<<<< HEAD
-
-  .student-preview-card:hover,
-  .student-stat-card:hover,
-  .student-event-card:hover,
-  .primary-student-button:hover,
-  .secondary-student-button:hover,
-  .student-cta > a:hover {
-    transform: none;
-  }
 }
-
-
-
-=======
-}
->>>>>>> 6f865caf5680867d96ba4eef95d93ad6ee61e4d8
