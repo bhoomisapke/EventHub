@@ -192,12 +192,14 @@ function formatTime(timeValue) {
 }
 
 /* ============================================================
-   PARTICIPANTS
+   PARTICIPANTS / REGISTRATIONS
 ============================================================ */
 
 function getParticipants(event) {
   return Number(
-    event?.participants ??
+    event?.registration_count ??
+      event?.registrationCount ??
+      event?.participants ??
       event?.participantCount ??
       event?.registeredParticipants ??
       event?.registrations_count ??
@@ -300,19 +302,6 @@ export default function Dashboard() {
         setLoading(true);
         setError("");
 
-        /*
-          IMPORTANT:
-
-          This endpoint returns events belonging to the
-          currently logged-in organizer.
-
-          Backend:
-          GET /api/events/my/
-
-          Authentication:
-          Authorization: Token <token>
-        */
-
         const data = await apiRequest(
           `${API_BASE}/api/events/my/`
         );
@@ -351,9 +340,11 @@ export default function Dashboard() {
 
     if (!token) {
       setEvents([]);
+
       setError(
         "You are not logged in. Please login again."
       );
+
       setLoading(false);
 
       return;
@@ -644,7 +635,6 @@ export default function Dashboard() {
               </div>
 
               <div>
-
                 <strong>
                   Create Event
                 </strong>
@@ -652,7 +642,6 @@ export default function Dashboard() {
                 <small>
                   Build your next experience
                 </small>
-
               </div>
 
             </div>
@@ -664,7 +653,6 @@ export default function Dashboard() {
               </div>
 
               <div>
-
                 <strong>
                   {statistics.totalParticipants}
                 </strong>
@@ -672,7 +660,6 @@ export default function Dashboard() {
                 <small>
                   Total participants
                 </small>
-
               </div>
 
             </div>
@@ -785,7 +772,7 @@ export default function Dashboard() {
 
           {/* ===================================================
               LOADING
-          ==================================================== */}
+          =================================================== */}
 
           {loading ? (
 
@@ -897,7 +884,6 @@ export default function Dashboard() {
                     event.registrationDeadline;
 
                   return (
-
                     <article
                       className="eventhub-dashboard-event-card"
                       key={event.id}
@@ -936,16 +922,20 @@ export default function Dashboard() {
                         <div className="eventhub-event-image-overlay" />
 
                         <div className="eventhub-event-category">
+
                           {String(
                             event.category ||
                               "EVENT"
                           ).toUpperCase()}
+
                         </div>
 
                         <div className="eventhub-event-number">
+
                           {String(
                             index + 1
                           ).padStart(2, "0")}
+
                         </div>
 
                         <div className="eventhub-event-date">
@@ -1037,13 +1027,11 @@ export default function Dashboard() {
                             </span>
 
                             <strong>
-
                               {participants}
 
                               {capacity > 0
                                 ? ` / ${capacity}`
                                 : ""}
-
                             </strong>
 
                           </div>
@@ -1114,7 +1102,6 @@ export default function Dashboard() {
                       </div>
 
                     </article>
-
                   );
                 }
               )}
@@ -1283,9 +1270,7 @@ export default function Dashboard() {
                     >
 
                       <div className="activity-dot">
-
                         <CheckCircle2 size={14} />
-
                       </div>
 
                       <div>
@@ -1296,7 +1281,6 @@ export default function Dashboard() {
                         </strong>
 
                         <p>
-
                           Event is currently{" "}
 
                           <span>
@@ -1370,7 +1354,6 @@ export default function Dashboard() {
                     event.registrationDeadline;
 
                   return (
-
                     <Link
                       to={`/organizer/events/${event.id}/edit`}
                       className="deadline-item"
@@ -1378,9 +1361,7 @@ export default function Dashboard() {
                     >
 
                       <div className="deadline-icon">
-
                         <Timer size={17} />
-
                       </div>
 
                       <div className="deadline-content">
@@ -1402,7 +1383,6 @@ export default function Dashboard() {
                       <ArrowRight size={16} />
 
                     </Link>
-
                   );
                 }
               )}
