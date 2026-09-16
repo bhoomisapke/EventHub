@@ -1,4 +1,3 @@
-
 from rest_framework import serializers
 
 from .models import Event
@@ -10,6 +9,9 @@ class EventSerializer(serializers.ModelSerializer):
         source="organizer.name",
         read_only=True
     )
+
+    # Registration count
+    registration_count = serializers.SerializerMethodField()
 
     # Keep local image URL functionality
     image_url = serializers.SerializerMethodField()
@@ -77,6 +79,8 @@ class EventSerializer(serializers.ModelSerializer):
             "venue",
             "capacity",
 
+            "registration_count",
+
             "participationType",
             "minTeamSize",
             "maxTeamSize",
@@ -100,10 +104,16 @@ class EventSerializer(serializers.ModelSerializer):
             "organizer",
             "organizer_name",
             "organizerName",
+            "registration_count",
             "created_at",
             "updated_at",
             "image_url",
         ]
+
+    def get_registration_count(self, obj):
+        return obj.registrations.filter(
+            status="confirmed"
+        ).count()
 
     def get_image_url(self, obj):
         request = self.context.get("request")
@@ -117,4 +127,3 @@ class EventSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(url)
 
         return url
-

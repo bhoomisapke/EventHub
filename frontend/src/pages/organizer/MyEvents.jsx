@@ -434,8 +434,12 @@ function MyEvents() {
 
             {events.map((event) => {
 
+              /* =================================================
+                 REGISTRATION COUNT
+              ================================================= */
+
               const participants =
-                event.participants || 0;
+                Number(event.registration_count) || 0;
 
               const capacity = event.capacity
                 ? Number(event.capacity)
