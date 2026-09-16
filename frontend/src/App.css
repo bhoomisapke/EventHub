@@ -188,44 +188,50 @@
 
 .video-wrapper {
   position: relative;
-  width: 100%;
-  max-width: 1150px;
+  width: min(900px, 88vw);
   aspect-ratio: 16 / 9;
-  margin: 0 auto;
+  margin: 34px auto 0;
   overflow: hidden;
-  border-radius: 28px;
+  border-radius: 22px;
   background: #070914;
-  box-shadow: 0 24px 60px rgba(16, 21, 44, 0.16);
+  box-shadow: 0 22px 55px rgba(16, 21, 44, 0.18);
 }
+
+/* Main video */
 
 .eventhub-main-video {
   width: 100%;
   height: 100%;
   display: block;
 
-  /* IMPORTANT: show the complete video */
   object-fit: contain;
 
   background: #070914;
-  border-radius: 28px;
+  border-radius: 22px;
 }
-/* Dark gradient over video so text remains readable */
+
+/* Dark gradient only on the left side.
+   It keeps the EventHub text readable without
+   making the whole video dark. */
 
 .video-wrapper::after {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(
-      90deg,
-      rgba(7, 9, 20, 0.72) 0%,
-      rgba(7, 9, 20, 0.32) 45%,
-      rgba(7, 9, 20, 0.08) 100%
-    );
+
+  background: linear-gradient(
+    90deg,
+    rgba(7, 9, 20, 0.68) 0%,
+    rgba(7, 9, 20, 0.30) 32%,
+    rgba(7, 9, 20, 0.08) 58%,
+    transparent 78%
+  );
+
   pointer-events: none;
+  z-index: 1;
 }
 
-/* Text placed above video */
+/* Text over video */
 
 .video-overlay {
   position: absolute;
@@ -233,108 +239,132 @@
   bottom: 0;
   z-index: 2;
 
-  padding: 28px 36px;
+  padding: 26px 30px;
+
   pointer-events: none;
 }
 
 .video-overlay > div {
-  max-width: 420px;
+  max-width: 330px;
 }
 
 .video-overlay span {
   display: inline-block;
-  margin-bottom: 18px;
+  margin-bottom: 13px;
 
   color: #f472b6;
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
 }
 
 .video-overlay h3 {
   margin: 0;
+
   color: #ffffff;
-  font-size: 52px;
-  line-height: 0.95;
+  font-size: 42px;
+  line-height: 0.94;
   font-weight: 800;
-  letter-spacing: -2px;
-  text-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+  letter-spacing: -1.8px;
+
+  text-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.55);
 }
 
-/* Video note */
+/* Description below video */
 
 .video-note {
-  margin-top: 18px;
+  max-width: 700px;
+  margin: 16px auto 0;
+
   color: #7d87a5;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.6;
+
   text-align: center;
 }
+
+
+/* =========================================
+   TABLET
+   ========================================= */
+
 @media (max-width: 768px) {
+
   .video-wrapper {
-    height: 420px;
-    border-radius: 22px;
+    width: 92vw;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    margin-top: 28px;
   }
 
   .eventhub-main-video {
-    border-radius: 22px;
+    border-radius: 18px;
   }
 
   .video-overlay {
-    padding: 32px;
-    align-items: flex-end;
-    padding-bottom: 42px;
+    padding: 20px;
   }
 
-  .video-overlay h3 {
-    font-size: 48px;
-    letter-spacing: -2px;
+  .video-overlay > div {
+    max-width: 250px;
   }
 
   .video-overlay span {
-    font-size: 9px;
-    letter-spacing: 1.5px;
+    font-size: 7px;
+    letter-spacing: 1.2px;
+    margin-bottom: 9px;
+  }
+
+  .video-overlay h3 {
+    font-size: 30px;
+    letter-spacing: -1px;
+  }
+
+  .video-note {
+    width: 90%;
+    font-size: 10px;
   }
 }
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
 
 @media (max-width: 480px) {
-  .video-wrapper {
-  width: 85%;
-  max-width: 1000px;
-}
 
-  .video-overlay {
-    padding: 24px;
-    padding-bottom: 30px;
-  }
-
-  .video-overlay h3 {
-    font-size: 40px;
-  }
-}
-@media (max-width: 768px) {
   .video-wrapper {
-    width: 94%;
+    width: 94vw;
     aspect-ratio: 16 / 9;
-    border-radius: 20px;
+    border-radius: 15px;
   }
 
   .eventhub-main-video {
-    border-radius: 20px;
+    border-radius: 15px;
   }
 
   .video-overlay {
-    padding: 18px 20px;
+    padding: 15px;
+  }
+
+  .video-overlay > div {
+    max-width: 190px;
   }
 
   .video-overlay span {
-    font-size: 8px;
+    font-size: 6px;
     letter-spacing: 1px;
+    margin-bottom: 6px;
   }
 
   .video-overlay h3 {
-    font-size: 32px;
-    letter-spacing: -1px;
+    font-size: 23px;
+    letter-spacing: -0.7px;
+  }
+
+  .video-note {
+    font-size: 9px;
   }
 }

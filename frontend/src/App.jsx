@@ -1308,65 +1308,54 @@ setEvents(upcomingEvents);
 
           </section>
 
-          {/* ==================================================
-              VIDEO EXPERIENCE
-          ================================================== */}
+{/* ==================================================
+    VIDEO EXPERIENCE
+================================================== */}
+<section className="experience-section section">
 
-          <section className="experience-section section">
-            <div className="experience-header reveal">
-              <span className="blue-label">
-                04 / EXPERIENCE WHAT'S NEXT
-              </span>
+  <div className="experience-header reveal">
+    <span className="blue-label">
+      04 / EXPERIENCE WHAT'S NEXT
+    </span>
 
-              <h2>
-                The future of
-                <br />
-                <span>campus events.</span>
-              </h2>
+    <h2>
+      The future of
+      <br />
+      <span>campus events.</span>
+    </h2>
 
-              <p>
-                Get a glimpse of the energy,
-                technology and creativity behind
-                the next generation of college events.
-              </p>
-            </div>
-
-           <div className="video-wrapper reveal">
-  <video
-    className="eventhub-main-video"
-    loop
-    playsInline
-    controls
-    preload="metadata"
-  >
-    <source
-      src="/videos/eventhub-campus.mp4"
-      type="video/mp4"
-    />
-
-    Your browser does not support the video tag.
-  </video>
-
-  <div className="video-overlay">
-    <div>
-      <span>EVENTHUB VISUAL EXPERIENCE</span>
-
-      <h3>
-        Imagine.
-        <br />
-        Build.
-        <br />
-        Experience.
-      </h3>
-    </div>
+    <p>
+      Get a glimpse of the energy,
+      technology and creativity behind
+      the next generation of college events.
+    </p>
   </div>
-</div>
 
-            <p className="video-note">
-              Discover the energy, creativity and technology
-              behind the future of campus events.
-            </p>
-          </section>
+  <div className="video-wrapper reveal">
+
+    <video
+      className="eventhub-main-video"
+      controls
+      playsInline
+      preload="auto"
+      controlsList="nodownload"
+    >
+      <source
+        src="/videos/eventhub.mp4"
+        type="video/mp4"
+      />
+
+      Your browser does not support the video tag.
+    </video>
+
+  </div>
+
+  <p className="video-note">
+    Discover the energy, creativity and technology
+    behind the future of campus events.
+  </p>
+
+</section>
 
           {/* ==================================================
               CATEGORIES
