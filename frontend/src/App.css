@@ -182,3 +182,159 @@
     border-right-color: var(--border);
   }
 }
+/* =========================================
+   EVENTHUB CAMPUS VIDEO
+   ========================================= */
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1150px;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 28px;
+  background: #070914;
+  box-shadow: 0 24px 60px rgba(16, 21, 44, 0.16);
+}
+
+.eventhub-main-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+
+  /* IMPORTANT: show the complete video */
+  object-fit: contain;
+
+  background: #070914;
+  border-radius: 28px;
+}
+/* Dark gradient over video so text remains readable */
+
+.video-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7, 9, 20, 0.72) 0%,
+      rgba(7, 9, 20, 0.32) 45%,
+      rgba(7, 9, 20, 0.08) 100%
+    );
+  pointer-events: none;
+}
+
+/* Text placed above video */
+
+.video-overlay {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+
+  padding: 28px 36px;
+  pointer-events: none;
+}
+
+.video-overlay > div {
+  max-width: 420px;
+}
+
+.video-overlay span {
+  display: inline-block;
+  margin-bottom: 18px;
+
+  color: #f472b6;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.video-overlay h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 52px;
+  line-height: 0.95;
+  font-weight: 800;
+  letter-spacing: -2px;
+  text-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Video note */
+
+.video-note {
+  margin-top: 18px;
+  color: #7d87a5;
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+}
+@media (max-width: 768px) {
+  .video-wrapper {
+    height: 420px;
+    border-radius: 22px;
+  }
+
+  .eventhub-main-video {
+    border-radius: 22px;
+  }
+
+  .video-overlay {
+    padding: 32px;
+    align-items: flex-end;
+    padding-bottom: 42px;
+  }
+
+  .video-overlay h3 {
+    font-size: 48px;
+    letter-spacing: -2px;
+  }
+
+  .video-overlay span {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-wrapper {
+  width: 85%;
+  max-width: 1000px;
+}
+
+  .video-overlay {
+    padding: 24px;
+    padding-bottom: 30px;
+  }
+
+  .video-overlay h3 {
+    font-size: 40px;
+  }
+}
+@media (max-width: 768px) {
+  .video-wrapper {
+    width: 94%;
+    aspect-ratio: 16 / 9;
+    border-radius: 20px;
+  }
+
+  .eventhub-main-video {
+    border-radius: 20px;
+  }
+
+  .video-overlay {
+    padding: 18px 20px;
+  }
+
+  .video-overlay span {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .video-overlay h3 {
+    font-size: 32px;
+    letter-spacing: -1px;
+  }
+}

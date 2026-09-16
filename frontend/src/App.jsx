@@ -1313,9 +1313,7 @@ setEvents(upcomingEvents);
           ================================================== */}
 
           <section className="experience-section section">
-
             <div className="experience-header reveal">
-
               <span className="blue-label">
                 04 / EXPERIENCE WHAT'S NEXT
               </span>
@@ -1323,9 +1321,7 @@ setEvents(upcomingEvents);
               <h2>
                 The future of
                 <br />
-                <span>
-                  campus events.
-                </span>
+                <span>campus events.</span>
               </h2>
 
               <p>
@@ -1333,81 +1329,43 @@ setEvents(upcomingEvents);
                 technology and creativity behind
                 the next generation of college events.
               </p>
-
             </div>
 
-            <div className="video-wrapper reveal">
+           <div className="video-wrapper reveal">
+  <video
+    className="eventhub-main-video"
+    loop
+    playsInline
+    controls
+    preload="metadata"
+  >
+    <source
+      src="/videos/eventhub-campus.mp4"
+      type="video/mp4"
+    />
 
-              <div className="video-background">
+    Your browser does not support the video tag.
+  </video>
 
-                <div className="video-grid"></div>
+  <div className="video-overlay">
+    <div>
+      <span>EVENTHUB VISUAL EXPERIENCE</span>
 
-                <div className="video-core">
-
-                  <div className="video-ring ring-1"></div>
-                  <div className="video-ring ring-2"></div>
-                  <div className="video-ring ring-3"></div>
-
-                  <div className="video-core-text">
-
-                    <small>
-                      EVENT
-                    </small>
-
-                    <strong>
-                      2026
-                    </strong>
-
-                    <span>
-                      TECH EXPERIENCE
-                    </span>
-
-                  </div>
-
-                </div>
-
-                <div className="video-code code-one">
-                  &lt;EVENT_HUB /&gt;
-                </div>
-
-                <div className="video-code code-two">
-                  AI + CODE + ROBOTICS
-                </div>
-
-                <div className="video-code code-three">
-                  CONNECT();
-                </div>
-
-              </div>
-
-              <div className="video-overlay">
-
-                <div>
-
-                  <span>
-                    EVENTHUB VISUAL EXPERIENCE
-                  </span>
-
-                  <h3>
-                    Imagine.
-                    <br />
-                    Build.
-                    <br />
-                    Experience.
-                  </h3>
-
-                </div>
-
-              </div>
-
-            </div>
+      <h3>
+        Imagine.
+        <br />
+        Build.
+        <br />
+        Experience.
+      </h3>
+    </div>
+  </div>
+</div>
 
             <p className="video-note">
-              * The animated visual above is a
-              3D-style event showcase. You can replace
-              it later with your own MP4 event video.
+              Discover the energy, creativity and technology
+              behind the future of campus events.
             </p>
-
           </section>
 
           {/* ==================================================
