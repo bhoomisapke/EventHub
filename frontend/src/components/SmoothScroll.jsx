@@ -6,7 +6,7 @@ function SmoothScroll() {
     const lenis = new Lenis({
       duration: 1.2,
       smoothWheel: true,
-      touchMultiplier: 1.5
+      touchMultiplier: 1.5,
     });
 
     function raf(time) {
@@ -14,9 +14,10 @@ function SmoothScroll() {
       requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    const animationFrame = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(animationFrame);
       lenis.destroy();
     };
   }, []);
