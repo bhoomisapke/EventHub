@@ -21,7 +21,46 @@ class Registration(models.Model):
         related_name="registrations"
     )
 
-    registration_date = models.DateTimeField(auto_now_add=True)
+    # Details entered at the time of registration.
+    # These are kept separately from the student's profile.
+    name = models.CharField(
+        max_length=150,
+        blank=True,
+        default=""
+    )
+
+    email = models.EmailField(
+        blank=True,
+        default=""
+    )
+
+    phone = models.CharField(
+        max_length=20,
+        blank=True,
+        default=""
+    )
+
+    student_number = models.CharField(
+        max_length=50,
+        blank=True,
+        default=""
+    )
+
+    department = models.CharField(
+        max_length=100,
+        blank=True,
+        default=""
+    )
+
+    year = models.CharField(
+        max_length=50,
+        blank=True,
+        default=""
+    )
+
+    registration_date = models.DateTimeField(
+        auto_now_add=True
+    )
 
     status = models.CharField(
         max_length=20,
@@ -36,7 +75,8 @@ class Registration(models.Model):
                 name="unique_student_event_registration"
             )
         ]
+
         ordering = ["-registration_date"]
 
     def __str__(self):
-        return f"{self.student.email} - {self.event.title}"
+        return f"{self.name or self.student.email} - {self.event.title}"

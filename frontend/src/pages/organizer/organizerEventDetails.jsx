@@ -16,6 +16,9 @@ import {
   AlertCircle,
   X,
   Maximize2,
+  Award,
+  Loader2,
+  ShieldCheck,
 } from "lucide-react";
 
 import "./OrganizerEventDetails.css";
@@ -23,6 +26,8 @@ import "./OrganizerEventDetails.css";
 function OrganizerEventDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const API_URL = "http://localhost:8000";
 
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -38,7 +43,24 @@ function OrganizerEventDetails() {
      DESCRIPTION
   ============================================================ */
 
-  const [showFullDescription, setShowFullDescription] = useState(false);
+  const [showFullDescription, setShowFullDescription] =
+    useState(false);
+
+  /* ============================================================
+     CERTIFICATE STATES
+  ============================================================ */
+
+  const [showCertificateConfirm, setShowCertificateConfirm] =
+    useState(false);
+
+  const [generatingCertificates, setGeneratingCertificates] =
+    useState(false);
+
+  const [certificateResult, setCertificateResult] =
+    useState(null);
+
+  const [certificateError, setCertificateError] =
+    useState("");
 
   /* ============================================================
      FETCH EVENT
@@ -51,7 +73,7 @@ function OrganizerEventDetails() {
         setError("");
 
         const response = await fetch(
-          `http://localhost:8000/api/events/${id}/`
+          `${API_URL}/api/events/${id}/`
         );
 
         if (!response.ok) {
@@ -123,10 +145,10 @@ function OrganizerEventDetails() {
     }
 
     if (image.startsWith("/")) {
-      return `http://localhost:8000${image}`;
+      return `${API_URL}${image}`;
     }
 
-    return `http://localhost:8000/${image}`;
+    return `${API_URL}/${image}`;
   };
 
   /* ============================================================
@@ -182,6 +204,153 @@ function OrganizerEventDetails() {
   };
 
   /* ============================================================
+     CERTIFICATE ELIGIBILITY
+  ============================================================ */
+
+  const isEventCompleted = () => {
+    if (!event?.date) {
+      return false;
+    }
+
+    const eventDate = new Date(event.date);
+    const today = new Date();
+
+    eventDate.setHours(23, 59, 59, 999);
+    today.setHours(0, 0, 0, 0);
+
+    return eventDate < today;
+  };
+
+  /* ============================================================
+     OPEN CERTIFICATE CONFIRMATION
+  ============================================================ */
+
+  const openCertificateConfirmation = () => {
+    setCertificateError("");
+    setCertificateResult(null);
+
+    if (!isEventCompleted()) {
+      setCertificateError(
+        "Certificates can only be generated after the event is completed."
+      );
+      return;
+    }
+
+    setShowCertificateConfirm(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  /* ============================================================
+     CLOSE CERTIFICATE CONFIRMATION
+  ============================================================ */
+
+  const closeCertificateConfirmation = () => {
+    if (generatingCertificates) {
+      return;
+    }
+
+    setShowCertificateConfirm(false);
+    document.body.style.overflow = "";
+  };
+
+  /* ============================================================
+     GENERATE CERTIFICATES
+  ============================================================ */
+
+  const generateCertificates = async () => {
+    if (generatingCertificates) {
+      return;
+    }
+
+    const token =
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token");
+
+    if (!token) {
+      setCertificateError(
+        "Your session has expired. Please login again."
+      );
+      return;
+    }
+
+    try {
+      setGeneratingCertificates(true);
+      setCertificateError("");
+      setCertificateResult(null);
+
+      const response = await fetch(
+        `${API_URL}/api/certificates/events/${event.id}/generate/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      let data = {};
+
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+
+      if (response.status === 401) {
+        setCertificateError(
+          "Your session has expired. Please login again."
+        );
+        return;
+      }
+
+      if (response.status === 403) {
+        setCertificateError(
+          data.detail ||
+            "You are not allowed to generate certificates for this event."
+        );
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          data.detail ||
+            data.message ||
+            "Unable to generate certificates."
+        );
+      }
+
+      setCertificateResult({
+        generated: Number(data.generated || 0),
+        alreadyGenerated: Number(
+          data.already_generated || 0
+        ),
+        totalEligible: Number(
+          data.total_eligible || 0
+        ),
+        message:
+          data.message ||
+          "Certificate generation completed.",
+      });
+
+      setShowCertificateConfirm(false);
+    } catch (err) {
+      console.error(
+        "Certificate generation error:",
+        err
+      );
+
+      setCertificateError(
+        err.message ||
+          "Unable to generate certificates. Please try again."
+      );
+    } finally {
+      setGeneratingCertificates(false);
+      document.body.style.overflow = "";
+    }
+  };
+
+  /* ============================================================
      LOADING
   ============================================================ */
 
@@ -214,7 +383,8 @@ function OrganizerEventDetails() {
           </h2>
 
           <p>
-            {error || "The requested event could not be found."}
+            {error ||
+              "The requested event could not be found."}
           </p>
 
           <Link
@@ -281,15 +451,15 @@ function OrganizerEventDetails() {
   const minTeamSize =
     Number(
       event.minTeamSize ??
-      event.min_team_size ??
-      1
+        event.min_team_size ??
+        1
     );
 
   const maxTeamSize =
     Number(
       event.maxTeamSize ??
-      event.max_team_size ??
-      1
+        event.max_team_size ??
+        1
     );
 
   const isGroupEvent =
@@ -316,7 +486,8 @@ function OrganizerEventDetails() {
   const descriptionLimit = 55;
 
   const isLongDescription =
-    fullDescription.length > descriptionLimit;
+    fullDescription.length >
+    descriptionLimit;
 
   const shortDescription =
     isLongDescription
@@ -330,6 +501,9 @@ function OrganizerEventDetails() {
     showFullDescription
       ? fullDescription
       : shortDescription;
+
+  const eventCompleted =
+    isEventCompleted();
 
   /* ============================================================
      PAGE
@@ -389,8 +563,6 @@ function OrganizerEventDetails() {
               }}
             />
 
-            {/* IMAGE HOVER */}
-
             <div className="event-image-hover">
 
               <div className="event-image-view-button">
@@ -405,8 +577,6 @@ function OrganizerEventDetails() {
 
             </div>
 
-            {/* CATEGORY */}
-
             <div className="hero-category">
 
               <Tag size={14} />
@@ -414,8 +584,6 @@ function OrganizerEventDetails() {
               {event.category || "General"}
 
             </div>
-
-            {/* STATUS */}
 
             <div
               className={`hero-status ${status}`}
@@ -494,15 +662,12 @@ function OrganizerEventDetails() {
               {displayedDescription}
             </p>
 
-            {/* READ MORE */}
-
             {isLongDescription && (
               <button
                 type="button"
                 className="description-toggle-button"
                 onClick={(e) => {
                   e.stopPropagation();
-
                   toggleDescription();
                 }}
               >
@@ -511,8 +676,6 @@ function OrganizerEventDetails() {
                   : "Read More"}
               </button>
             )}
-
-            {/* 55 CHARACTER MESSAGE */}
 
             {!showFullDescription &&
               isLongDescription && (
@@ -549,190 +712,129 @@ function OrganizerEventDetails() {
 
           <div className="event-information-card">
 
-            {/* DATE */}
-
             <div className="information-item">
 
               <div className="information-icon purple">
-
                 <CalendarDays size={19} />
-
               </div>
 
               <div>
-
-                <span>
-                  Date
-                </span>
+                <span>Date</span>
 
                 <strong>
                   {formatDate(event.date)}
                 </strong>
-
               </div>
 
             </div>
-
-            {/* TIME */}
 
             <div className="information-item">
 
               <div className="information-icon pink">
-
                 <Clock3 size={19} />
-
               </div>
 
               <div>
-
-                <span>
-                  Time
-                </span>
+                <span>Time</span>
 
                 <strong>
-                  {event.time || "Not specified"}
+                  {event.time ||
+                    "Not specified"}
                 </strong>
-
               </div>
 
             </div>
-
-            {/* VENUE */}
 
             <div className="information-item">
 
               <div className="information-icon blue">
-
                 <MapPin size={19} />
-
               </div>
 
               <div>
-
-                <span>
-                  Venue
-                </span>
+                <span>Venue</span>
 
                 <strong>
-                  {event.venue || "Not specified"}
+                  {event.venue ||
+                    "Not specified"}
                 </strong>
-
               </div>
 
             </div>
-
-            {/* CATEGORY */}
 
             <div className="information-item">
 
               <div className="information-icon violet">
-
                 <Tag size={19} />
-
               </div>
 
               <div>
-
-                <span>
-                  Category
-                </span>
+                <span>Category</span>
 
                 <strong>
-                  {event.category || "General"}
+                  {event.category ||
+                    "General"}
                 </strong>
-
               </div>
 
             </div>
-
-            {/* CAPACITY */}
 
             <div className="information-item">
 
               <div className="information-icon pink">
-
                 <Users size={19} />
-
               </div>
 
               <div>
-
-                <span>
-                  Capacity
-                </span>
+                <span>Capacity</span>
 
                 <strong>
-                  {capacity || "Unlimited"}
+                  {capacity ||
+                    "Unlimited"}
                 </strong>
-
               </div>
 
             </div>
-
-            {/* =================================================
-                PARTICIPATION TYPE
-            ================================================= */}
 
             <div className="information-item">
 
               <div className="information-icon violet">
-
                 <Users size={19} />
-
               </div>
 
               <div>
-
-                <span>
-                  Participation
-                </span>
+                <span>Participation</span>
 
                 <strong>
                   {participationLabel}
                 </strong>
-
               </div>
 
             </div>
-
-            {/* =================================================
-                TEAM SIZE
-            ================================================= */}
 
             <div className="information-item">
 
               <div className="information-icon purple">
-
                 <Users size={19} />
-
               </div>
 
               <div>
-
-                <span>
-                  Team Size
-                </span>
+                <span>Team Size</span>
 
                 <strong>
                   {teamSizeLabel}
                 </strong>
-
               </div>
 
             </div>
 
-            {/* REGISTRATION FEE */}
-
             <div className="information-item">
 
               <div className="information-icon green">
-
                 <IndianRupee size={19} />
-
               </div>
 
               <div>
-
                 <span>
                   Registration Fee
                 </span>
@@ -741,9 +843,10 @@ function OrganizerEventDetails() {
                   ₹{" "}
                   {Number(
                     registrationFee
-                  ).toLocaleString("en-IN")}
+                  ).toLocaleString(
+                    "en-IN"
+                  )}
                 </strong>
-
               </div>
 
             </div>
@@ -927,7 +1030,353 @@ function OrganizerEventDetails() {
         </section>
 
         {/* ====================================================
-            REGISTER BUTTON
+            CERTIFICATE GENERATION
+        ==================================================== */}
+
+        <section
+          className="details-section"
+          style={{
+            marginTop: "28px",
+          }}
+        >
+
+          <div className="section-title-row">
+
+            <div className="section-title-left">
+
+              <Award size={19} />
+
+              <h2>
+                Certificates
+              </h2>
+
+            </div>
+
+            <div className="section-title-line"></div>
+
+          </div>
+
+          <div
+            style={{
+              position: "relative",
+              overflow: "hidden",
+              padding: "24px",
+              borderRadius: "20px",
+              border: "1px solid #E9DDFB",
+              background:
+                "linear-gradient(135deg, #FFFFFF 0%, #F8F1FF 55%, #FFF1F7 100%)",
+              boxShadow:
+                "0 10px 30px rgba(109, 40, 217, 0.08)",
+            }}
+          >
+
+            {/* Decorative glow */}
+
+            <div
+              style={{
+                position: "absolute",
+                width: "120px",
+                height: "120px",
+                right: "-45px",
+                top: "-50px",
+                borderRadius: "50%",
+                background:
+                  "rgba(236, 72, 153, 0.10)",
+                pointerEvents: "none",
+              }}
+            />
+
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "17px",
+              }}
+            >
+
+              <div
+                style={{
+                  flexShrink: 0,
+                  width: "46px",
+                  height: "46px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "14px",
+                  background:
+                    "linear-gradient(135deg, #6D28D9, #EC4899)",
+                  color: "#FFFFFF",
+                  boxShadow:
+                    "0 8px 18px rgba(109, 40, 217, 0.22)",
+                }}
+              >
+                <Award size={22} />
+              </div>
+
+              <div style={{ flex: 1 }}>
+
+                <h3
+                  style={{
+                    margin: "0 0 7px",
+                    color: "#10152C",
+                    fontSize: "16px",
+                    fontWeight: 800,
+                  }}
+                >
+                  Generate Participation Certificates
+                </h3>
+
+                <p
+                  style={{
+                    margin: "0",
+                    color: "#6B7280",
+                    fontSize: "12px",
+                    lineHeight: 1.6,
+                    maxWidth: "650px",
+                  }}
+                >
+                  Generate an EventHub certificate
+                  automatically for every confirmed
+                  participant of this event after the
+                  event has been completed.
+                </p>
+
+              </div>
+
+            </div>
+
+            {/* Certificate result */}
+
+            {certificateResult && (
+              <div
+                style={{
+                  position: "relative",
+                  marginTop: "20px",
+                  padding: "15px 17px",
+                  borderRadius: "14px",
+                  border:
+                    "1px solid #BBF7D0",
+                  background: "#F0FDF4",
+                }}
+              >
+
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "9px",
+                    color: "#166534",
+                    fontSize: "13px",
+                    fontWeight: 800,
+                    marginBottom: "9px",
+                  }}
+                >
+
+                  <CheckCircle2 size={17} />
+
+                  Certificates Generated
+
+                </div>
+
+                <p
+                  style={{
+                    margin: "0",
+                    color: "#166534",
+                    fontSize: "11px",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  {certificateResult.generated} new certificate
+                  {certificateResult.generated !== 1
+                    ? "s"
+                    : ""}{" "}
+                  generated successfully.
+                </p>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "8px",
+                    marginTop: "12px",
+                  }}
+                >
+
+                  <span
+                    style={{
+                      padding: "6px 10px",
+                      borderRadius: "20px",
+                      background: "#DCFCE7",
+                      color: "#166534",
+                      fontSize: "10px",
+                      fontWeight: 700,
+                    }}
+                  >
+                    Generated:{" "}
+                    {certificateResult.generated}
+                  </span>
+
+                  <span
+                    style={{
+                      padding: "6px 10px",
+                      borderRadius: "20px",
+                      background: "#F3E8FF",
+                      color: "#6D28D9",
+                      fontSize: "10px",
+                      fontWeight: 700,
+                    }}
+                  >
+                    Already Generated:{" "}
+                    {certificateResult.alreadyGenerated}
+                  </span>
+
+                  <span
+                    style={{
+                      padding: "6px 10px",
+                      borderRadius: "20px",
+                      background: "#FCE7F3",
+                      color: "#BE185D",
+                      fontSize: "10px",
+                      fontWeight: 700,
+                    }}
+                  >
+                    Eligible:{" "}
+                    {certificateResult.totalEligible}
+                  </span>
+
+                </div>
+
+              </div>
+            )}
+
+            {/* Certificate error */}
+
+            {certificateError && (
+              <div
+                style={{
+                  position: "relative",
+                  marginTop: "18px",
+                  padding: "13px 15px",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "9px",
+                  borderRadius: "13px",
+                  border:
+                    "1px solid #FECACA",
+                  background: "#FEF2F2",
+                  color: "#B91C1C",
+                  fontSize: "11px",
+                  lineHeight: 1.5,
+                }}
+              >
+
+                <AlertCircle
+                  size={16}
+                  style={{
+                    flexShrink: 0,
+                    marginTop: "1px",
+                  }}
+                />
+
+                <span>
+                  {certificateError}
+                </span>
+
+              </div>
+            )}
+
+            {/* Certificate action */}
+
+            {!certificateResult && (
+              <div
+                style={{
+                  position: "relative",
+                  marginTop: "21px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "15px",
+                  flexWrap: "wrap",
+                }}
+              >
+
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "7px",
+                    color: eventCompleted
+                      ? "#166534"
+                      : "#7C3AED",
+                    fontSize: "10px",
+                    fontWeight: 700,
+                  }}
+                >
+
+                  <ShieldCheck size={15} />
+
+                  {eventCompleted
+                    ? "Event completed — certificates available"
+                    : "Certificates unlock after the event"}
+
+                </div>
+
+                <button
+                  type="button"
+                  onClick={
+                    openCertificateConfirmation
+                  }
+                  disabled={!eventCompleted}
+                  style={{
+                    border: "none",
+                    outline: "none",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    minHeight: "42px",
+                    padding: "0 18px",
+                    borderRadius: "12px",
+                    background: eventCompleted
+                      ? "linear-gradient(135deg, #6D28D9, #EC4899)"
+                      : "#E5E7EB",
+                    color: eventCompleted
+                      ? "#FFFFFF"
+                      : "#9CA3AF",
+                    fontSize: "11px",
+                    fontWeight: 800,
+                    cursor: eventCompleted
+                      ? "pointer"
+                      : "not-allowed",
+                    boxShadow: eventCompleted
+                      ? "0 8px 18px rgba(109, 40, 217, 0.20)"
+                      : "none",
+                    transition:
+                      "transform 0.2s ease, box-shadow 0.2s ease",
+                  }}
+                  title={
+                    eventCompleted
+                      ? "Generate certificates"
+                      : "Available after event completion"
+                  }
+                >
+
+                  <Award size={16} />
+
+                  Generate Certificates
+
+                </button>
+
+              </div>
+            )}
+
+          </div>
+
+        </section>
+
+        {/* ====================================================
+            ORGANIZER ACTION
         ==================================================== */}
 
         <div className="register-event-wrapper">
@@ -1003,6 +1452,348 @@ function OrganizerEventDetails() {
                   "/images/event-placeholder.jpg";
               }}
             />
+
+          </div>
+
+        </div>
+
+      )}
+
+      {/* ======================================================
+          CERTIFICATE CONFIRMATION MODAL
+      ====================================================== */}
+
+      {showCertificateConfirm && (
+
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+            background:
+              "rgba(8, 10, 28, 0.62)",
+            backdropFilter: "blur(7px)",
+          }}
+          onClick={closeCertificateConfirmation}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="certificate-confirm-title"
+        >
+
+          <div
+            style={{
+              width: "min(430px, 94vw)",
+              overflow: "hidden",
+              borderRadius: "22px",
+              background: "#FFFFFF",
+              boxShadow:
+                "0 25px 70px rgba(16, 21, 44, 0.30)",
+            }}
+            onClick={(e) =>
+              e.stopPropagation()
+            }
+          >
+
+            {/* Modal header */}
+
+            <div
+              style={{
+                position: "relative",
+                padding: "24px 24px 20px",
+                background:
+                  "linear-gradient(135deg, #F5EEFF, #FFF0F7)",
+                borderBottom:
+                  "1px solid #EEE5F8",
+              }}
+            >
+
+              <button
+                type="button"
+                onClick={
+                  closeCertificateConfirmation
+                }
+                disabled={
+                  generatingCertificates
+                }
+                style={{
+                  position: "absolute",
+                  top: "14px",
+                  right: "14px",
+                  width: "32px",
+                  height: "32px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  border: "none",
+                  borderRadius: "50%",
+                  background: "#FFFFFF",
+                  color: "#6B7280",
+                  cursor: generatingCertificates
+                    ? "not-allowed"
+                    : "pointer",
+                }}
+              >
+
+                <X size={17} />
+
+              </button>
+
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "15px",
+                  background:
+                    "linear-gradient(135deg, #6D28D9, #EC4899)",
+                  color: "#FFFFFF",
+                  marginBottom: "14px",
+                }}
+              >
+
+                <Award size={23} />
+
+              </div>
+
+              <h2
+                id="certificate-confirm-title"
+                style={{
+                  margin: "0 0 7px",
+                  color: "#10152C",
+                  fontSize: "19px",
+                  fontWeight: 800,
+                }}
+              >
+                Generate Certificates?
+              </h2>
+
+              <p
+                style={{
+                  margin: 0,
+                  color: "#6B7280",
+                  fontSize: "12px",
+                  lineHeight: 1.6,
+                }}
+              >
+                This will generate EventHub
+                participation certificates for all
+                confirmed participants of this event.
+              </p>
+
+            </div>
+
+            {/* Modal content */}
+
+            <div
+              style={{
+                padding: "20px 24px 24px",
+              }}
+            >
+
+              <div
+                style={{
+                  padding: "14px",
+                  borderRadius: "14px",
+                  background: "#F8F7FC",
+                  border:
+                    "1px solid #ECE8F5",
+                  marginBottom: "19px",
+                }}
+              >
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent:
+                      "space-between",
+                    gap: "15px",
+                    marginBottom: "9px",
+                  }}
+                >
+
+                  <span
+                    style={{
+                      color: "#7C8195",
+                      fontSize: "10px",
+                      fontWeight: 700,
+                    }}
+                  >
+                    EVENT
+                  </span>
+
+                  <span
+                    style={{
+                      color: "#10152C",
+                      fontSize: "11px",
+                      fontWeight: 800,
+                      textAlign: "right",
+                    }}
+                  >
+                    {event.title}
+                  </span>
+
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent:
+                      "space-between",
+                    gap: "15px",
+                  }}
+                >
+
+                  <span
+                    style={{
+                      color: "#7C8195",
+                      fontSize: "10px",
+                      fontWeight: 700,
+                    }}
+                  >
+                    PARTICIPANTS
+                  </span>
+
+                  <span
+                    style={{
+                      color: "#6D28D9",
+                      fontSize: "12px",
+                      fontWeight: 800,
+                    }}
+                  >
+                    {participants}
+                  </span>
+
+                </div>
+
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "9px",
+                  alignItems: "flex-start",
+                  marginBottom: "20px",
+                  color: "#6B7280",
+                  fontSize: "10px",
+                  lineHeight: 1.5,
+                }}
+              >
+
+                <ShieldCheck
+                  size={15}
+                  style={{
+                    flexShrink: 0,
+                    color: "#6D28D9",
+                  }}
+                />
+
+                <span>
+                  Certificates will be generated only
+                  for confirmed, non-cancelled
+                  registrations. Existing certificates
+                  will not be duplicated.
+                </span>
+
+              </div>
+
+              {/* Buttons */}
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                }}
+              >
+
+                <button
+                  type="button"
+                  onClick={
+                    closeCertificateConfirmation
+                  }
+                  disabled={
+                    generatingCertificates
+                  }
+                  style={{
+                    flex: 1,
+                    minHeight: "43px",
+                    border:
+                      "1px solid #E5E7EB",
+                    borderRadius: "11px",
+                    background: "#FFFFFF",
+                    color: "#4B5563",
+                    fontSize: "11px",
+                    fontWeight: 800,
+                    cursor:
+                      generatingCertificates
+                        ? "not-allowed"
+                        : "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  onClick={
+                    generateCertificates
+                  }
+                  disabled={
+                    generatingCertificates
+                  }
+                  style={{
+                    flex: 1.3,
+                    minHeight: "43px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent:
+                      "center",
+                    gap: "8px",
+                    border: "none",
+                    borderRadius: "11px",
+                    background:
+                      "linear-gradient(135deg, #6D28D9, #EC4899)",
+                    color: "#FFFFFF",
+                    fontSize: "11px",
+                    fontWeight: 800,
+                    cursor:
+                      generatingCertificates
+                        ? "not-allowed"
+                        : "pointer",
+                    opacity:
+                      generatingCertificates
+                        ? 0.75
+                        : 1,
+                  }}
+                >
+
+                  {generatingCertificates ? (
+                    <>
+                      <Loader2
+                        size={16}
+                        className="certificate-spinner"
+                      />
+
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <Award size={16} />
+
+                      Generate
+                    </>
+                  )}
+
+                </button>
+
+              </div>
+
+            </div>
 
           </div>
 

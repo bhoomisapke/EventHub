@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "registrations",
     "tickets",
     "feedback",
+    "certificates",
 ]
 
 

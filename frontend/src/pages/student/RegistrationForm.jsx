@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -21,6 +22,15 @@ const RegistrationForm = () => {
   const [event, setEvent] = useState(null);
   const [student, setStudent] = useState(null);
 
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    student_id: "",
+    department: "",
+    year: "",
+  });
+
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
@@ -36,6 +46,15 @@ const RegistrationForm = () => {
       localStorage.getItem("token") ||
       sessionStorage.getItem("token")
     );
+  };
+
+  /* ============================================================
+     SAFE STRING
+     Prevents .trim() errors when a value is undefined/null
+  ============================================================ */
+
+  const safeTrim = (value) => {
+    return String(value ?? "").trim();
   };
 
   /* ============================================================
@@ -79,13 +98,19 @@ const RegistrationForm = () => {
            EVENT RESPONSE
         -------------------------------------------------------- */
 
-        const eventData = await eventResponse.json();
+        let eventData;
+
+        try {
+          eventData = await eventResponse.json();
+        } catch {
+          throw new Error("Invalid response received while loading event.");
+        }
 
         if (!eventResponse.ok) {
           throw new Error(
             eventData?.detail ||
-            eventData?.message ||
-            "Unable to load event."
+              eventData?.message ||
+              "Unable to load event."
           );
         }
 
@@ -93,24 +118,71 @@ const RegistrationForm = () => {
            STUDENT RESPONSE
         -------------------------------------------------------- */
 
-        const studentData = await studentResponse.json();
+        let studentData;
+
+        try {
+          studentData = await studentResponse.json();
+        } catch {
+          throw new Error(
+            "Invalid response received while loading student information."
+          );
+        }
 
         if (!studentResponse.ok) {
           throw new Error(
             studentData?.detail ||
-            studentData?.message ||
-            "Unable to load student information."
+              studentData?.message ||
+              "Unable to load student information."
           );
         }
 
         setEvent(eventData);
         setStudent(studentData);
 
+        /* --------------------------------------------------------
+           PREFILL FORM
+
+           Different backend field names are supported where
+           possible, so undefined values will not break the form.
+        -------------------------------------------------------- */
+
+        setFormData({
+          name: String(
+            studentData?.name ??
+              studentData?.full_name ??
+              ""
+          ),
+
+          email: String(
+            studentData?.email ?? ""
+          ),
+
+          phone: String(
+            studentData?.phone ??
+              studentData?.phone_number ??
+              ""
+          ),
+
+          student_id: String(
+            studentData?.student_id ??
+              studentData?.student_number ??
+              ""
+          ),
+
+          department: String(
+            studentData?.department ?? ""
+          ),
+
+          year: String(
+            studentData?.year ?? ""
+          ),
+        });
       } catch (err) {
         console.error("Registration page error:", err);
+
         setError(
-          err.message ||
-          "Unable to load registration information."
+          err?.message ||
+            "Unable to load registration information."
         );
       } finally {
         setLoading(false);
@@ -119,6 +191,19 @@ const RegistrationForm = () => {
 
     loadRegistrationData();
   }, [id]);
+
+  /* ============================================================
+     HANDLE INPUT CHANGE
+  ============================================================ */
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value ?? "",
+    }));
+  };
 
   /* ============================================================
      FORMAT DATE
@@ -132,7 +217,7 @@ const RegistrationForm = () => {
     const date = new Date(dateValue);
 
     if (Number.isNaN(date.getTime())) {
-      return dateValue;
+      return String(dateValue);
     }
 
     return date.toLocaleDateString("en-IN", {
@@ -151,13 +236,15 @@ const RegistrationForm = () => {
       return "Not specified";
     }
 
-    const [hours, minutes] = timeValue.split(":");
+    const timeString = String(timeValue);
+
+    const [hours, minutes] = timeString.split(":");
 
     const date = new Date();
 
     date.setHours(
-      Number(hours),
-      Number(minutes),
+      Number(hours) || 0,
+      Number(minutes) || 0,
       0,
       0
     );
@@ -188,6 +275,64 @@ const RegistrationForm = () => {
       return;
     }
 
+    /* ----------------------------------------------------------
+       CLEAN FORM DATA SAFELY
+
+       safeTrim() guarantees that .trim() is never called on
+       undefined or null.
+    ---------------------------------------------------------- */
+
+    const registrationData = {
+      event: event.id,
+
+      name: safeTrim(formData.name),
+      email: safeTrim(formData.email),
+      phone: safeTrim(formData.phone),
+
+      /* IMPORTANT:
+         Your form uses student_id, so submission also uses
+         student_id instead of student_number.
+      */
+      student_id: safeTrim(formData.student_id),
+
+      department: safeTrim(formData.department),
+      year: safeTrim(formData.year),
+    };
+
+    /* ----------------------------------------------------------
+       BASIC FRONTEND VALIDATION
+    ---------------------------------------------------------- */
+
+    if (!registrationData.name) {
+      setError("Please enter your full name.");
+      return;
+    }
+
+    if (!registrationData.email) {
+      setError("Please enter your email address.");
+      return;
+    }
+
+    if (!registrationData.phone) {
+      setError("Please enter your phone number.");
+      return;
+    }
+
+    if (!registrationData.student_id) {
+      setError("Please enter your student ID.");
+      return;
+    }
+
+    if (!registrationData.department) {
+      setError("Please enter your department.");
+      return;
+    }
+
+    if (!registrationData.year) {
+      setError("Please enter your year.");
+      return;
+    }
+
     try {
       setSubmitting(true);
       setError("");
@@ -202,22 +347,30 @@ const RegistrationForm = () => {
             "Content-Type": "application/json",
           },
 
-          /*
-             The backend gets the student automatically
-             from the authentication token.
-
-             Only the event ID needs to be sent.
-          */
-
-          body: JSON.stringify({
-            event: event.id,
-          }),
+          body: JSON.stringify(registrationData),
         }
       );
 
-      const data = await response.json();
+      /* --------------------------------------------------------
+         RESPONSE
+      -------------------------------------------------------- */
 
+      let data = {};
+
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+
+      /* --------------------------------------------------------
+         BACKEND ERROR
+      -------------------------------------------------------- */
+      
+      console.log("Registration API status:", response.status);
+      console.log("Registration API response:", data);
       if (!response.ok) {
+        
         let message = "Registration failed.";
 
         if (data?.detail) {
@@ -227,10 +380,28 @@ const RegistrationForm = () => {
               : "Unable to complete registration.";
         } else if (data?.event?.[0]) {
           message = data.event[0];
+        } else if (data?.name?.[0]) {
+          message = data.name[0];
+        } else if (data?.email?.[0]) {
+          message = data.email[0];
+        } else if (data?.phone?.[0]) {
+          message = data.phone[0];
+        } else if (data?.student_id?.[0]) {
+          message = data.student_id[0];
+        } else if (data?.student_number?.[0]) {
+          message = data.student_number[0];
+        } else if (data?.department?.[0]) {
+          message = data.department[0];
+        } else if (data?.year?.[0]) {
+          message = data.year[0];
         }
 
         throw new Error(message);
       }
+
+      /* --------------------------------------------------------
+         SUCCESS
+      -------------------------------------------------------- */
 
       console.log("Registration successful:", data);
 
@@ -239,13 +410,12 @@ const RegistrationForm = () => {
       setTimeout(() => {
         navigate("/student/registrations");
       }, 1200);
-
     } catch (err) {
       console.error("Registration error:", err);
 
       setError(
-        err.message ||
-        "Unable to register for this event."
+        err?.message ||
+          "Unable to register for this event."
       );
     } finally {
       setSubmitting(false);
@@ -279,7 +449,6 @@ const RegistrationForm = () => {
     return (
       <div className="registration-form-page">
         <div className="registration-error-card">
-
           <h2>
             Unable to Open Registration
           </h2>
@@ -291,7 +460,6 @@ const RegistrationForm = () => {
           >
             Browse Events
           </button>
-
         </div>
       </div>
     );
@@ -304,9 +472,7 @@ const RegistrationForm = () => {
   if (success) {
     return (
       <div className="registration-form-page">
-
         <div className="registration-success-card">
-
           <CheckCircle2 size={52} />
 
           <h2>
@@ -325,9 +491,7 @@ const RegistrationForm = () => {
           <span>
             Redirecting to My Registrations...
           </span>
-
         </div>
-
       </div>
     );
   }
@@ -344,21 +508,19 @@ const RegistrationForm = () => {
       ======================================================== */}
 
       <button
+        type="button"
         className="registration-back-btn"
         onClick={() => navigate(-1)}
       >
         <ArrowLeft size={17} />
-
         Back to Event
       </button>
-
 
       {/* ========================================================
           HEADER
       ======================================================== */}
 
       <div className="registration-form-header">
-
         <span>
           EVENT REGISTRATION
         </span>
@@ -368,28 +530,29 @@ const RegistrationForm = () => {
         </h1>
 
         <p>
-          Confirm your details and register for this
+          Enter your details and register for this
           college event.
         </p>
-
       </div>
 
-
       {/* ========================================================
-          EVENT SUMMARY
+          SELECTED EVENT
       ======================================================== */}
 
       <div className="registration-event-card">
 
         <div className="registration-event-image">
-
           {event?.image ? (
             <img
               src={event.image}
               alt={event?.title || "Event"}
               onError={(e) => {
                 e.currentTarget.style.display = "none";
-                e.currentTarget.nextElementSibling.style.display = "flex";
+
+                if (e.currentTarget.nextElementSibling) {
+                  e.currentTarget.nextElementSibling.style.display =
+                    "flex";
+                }
               }}
             />
           ) : null}
@@ -402,17 +565,15 @@ const RegistrationForm = () => {
           >
             <CalendarDays size={30} />
           </div>
-
         </div>
 
         <div className="registration-event-info">
-
           <span>
             SELECTED EVENT
           </span>
 
           <h2>
-            {event?.title}
+            {event?.title || "Event"}
           </h2>
 
           <div className="registration-event-meta">
@@ -420,7 +581,6 @@ const RegistrationForm = () => {
             {event?.date && (
               <div>
                 <CalendarDays size={15} />
-
                 {formatDate(event.date)}
               </div>
             )}
@@ -428,7 +588,6 @@ const RegistrationForm = () => {
             {event?.time && (
               <div>
                 <Clock size={15} />
-
                 {formatTime(event.time)}
               </div>
             )}
@@ -436,17 +595,13 @@ const RegistrationForm = () => {
             {event?.venue && (
               <div>
                 <MapPin size={15} />
-
                 {event.venue}
               </div>
             )}
 
           </div>
-
         </div>
-
       </div>
-
 
       {/* ========================================================
           FORM
@@ -460,125 +615,142 @@ const RegistrationForm = () => {
         {/* FORM TITLE */}
 
         <div className="registration-form-title">
-
           <UserRound size={20} />
 
           <div>
-
             <span>
               STUDENT DETAILS
             </span>
 
             <h2>
-              Confirm Your Information
+              Enter Your Information
             </h2>
-
           </div>
-
         </div>
 
-
         {/* ======================================================
-            NAME
+            FULL NAME
         ====================================================== */}
 
         <div className="registration-input-group">
-
-          <label>
+          <label htmlFor="registration-name">
             Full Name
           </label>
 
           <input
+            id="registration-name"
             type="text"
-            value={student?.name || ""}
-            placeholder="Your full name"
-            readOnly
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Enter your full name"
           />
-
         </div>
-
 
         {/* ======================================================
             EMAIL
         ====================================================== */}
 
         <div className="registration-input-group">
-
-          <label>
+          <label htmlFor="registration-email">
             Email Address
           </label>
 
           <input
+            id="registration-email"
             type="email"
-            value={student?.email || ""}
-            placeholder="Your email address"
-            readOnly
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Enter your email address"
           />
-
         </div>
-
 
         {/* ======================================================
             PHONE
         ====================================================== */}
 
         <div className="registration-input-group">
-
-          <label>
+          <label htmlFor="registration-phone">
             Phone Number
           </label>
 
           <input
-            type="text"
-            value={student?.phone || ""}
-            placeholder="Phone number not added"
-            readOnly
+            id="registration-phone"
+            type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            placeholder="Enter your phone number"
           />
-
         </div>
-
 
         {/* ======================================================
-            EXTRA STUDENT INFORMATION
+            STUDENT ID
         ====================================================== */}
 
-        <div className="registration-student-info">
+        <div className="registration-input-group">
+          <label htmlFor="registration-student-id">
+            Student ID
+          </label>
 
-          {student?.student_id && (
-            <div>
-              <span>Student ID</span>
-              <strong>{student.student_id}</strong>
-            </div>
-          )}
-
-          {student?.department && (
-            <div>
-              <span>Department</span>
-              <strong>{student.department}</strong>
-            </div>
-          )}
-
-          {student?.year && (
-            <div>
-              <span>Year</span>
-              <strong>{student.year}</strong>
-            </div>
-          )}
-
+          <input
+            id="registration-student-id"
+            type="text"
+            name="student_id"
+            value={formData.student_id}
+            onChange={handleChange}
+            placeholder="Enter your student ID"
+          />
         </div>
 
+        {/* ======================================================
+            DEPARTMENT
+        ====================================================== */}
+
+        <div className="registration-input-group">
+          <label htmlFor="registration-department">
+            Department
+          </label>
+
+          <input
+            id="registration-department"
+            type="text"
+            name="department"
+            value={formData.department}
+            onChange={handleChange}
+            placeholder="Enter your department"
+          />
+        </div>
+
+        {/* ======================================================
+            YEAR
+        ====================================================== */}
+
+        <div className="registration-input-group">
+          <label htmlFor="registration-year">
+            Year
+          </label>
+
+          <input
+            id="registration-year"
+            type="text"
+            name="year"
+            value={formData.year}
+            onChange={handleChange}
+            placeholder="Enter your year"
+          />
+        </div>
 
         {/* ======================================================
             INFORMATION MESSAGE
         ====================================================== */}
 
         <div className="registration-confirmation-note">
-
-          Your registered account information will be used
-          for this event registration.
-
+          Your information is prefilled from your profile.
+          You can edit the details before confirming your
+          registration.
         </div>
-
 
         {/* ======================================================
             ERROR
@@ -590,7 +762,6 @@ const RegistrationForm = () => {
           </div>
         )}
 
-
         {/* ======================================================
             SUBMIT
         ====================================================== */}
@@ -600,15 +771,12 @@ const RegistrationForm = () => {
           className="registration-submit-btn"
           disabled={submitting}
         >
-
           {submitting
             ? "Registering..."
             : "Confirm Registration"}
-
         </button>
 
       </form>
-
     </div>
   );
 };

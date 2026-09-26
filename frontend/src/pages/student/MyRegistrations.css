@@ -1,27 +1,19 @@
 /* =========================================================
    EVENTHUB - MY REGISTRATIONS
-   DARK NAVY / PURPLE / PINK EVENT THEME
+   REGISTRATION ACTIVITY PAGE
+   SAME EVENTHUB THEME - DISTINCT FROM MY TICKETS
    ========================================================= */
 
 * {
   box-sizing: border-box;
 }
 
-
-/* =========================================================
-   PAGE
-   ========================================================= */
-
 .registrations-page {
   min-height: calc(100vh - 78px);
-
   padding: 45px 42px 70px;
-
   background: #F7F3EE;
-
   color: #10152C;
 }
-
 
 /* =========================================================
    HEADER
@@ -31,210 +23,151 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-
   gap: 30px;
-
   margin-bottom: 30px;
 }
 
-.registration-label {
+.registration-label,
+.event-mini-label,
+.bottom-label,
+.cancel-modal-label {
   display: block;
-
-  margin-bottom: 8px;
-
-  color: #6D28D9;
-
-  font-size: 9px;
   font-weight: 900;
-
   letter-spacing: 1.8px;
+}
+
+.registration-label {
+  margin-bottom: 8px;
+  color: #6D28D9;
+  font-size: 9px;
 }
 
 .registrations-header h1 {
   margin: 0;
-
   color: #10152C;
-
   font-size: 38px;
-
+  font-weight: 850;
   letter-spacing: -1.3px;
 }
 
 .registrations-header p {
-  max-width: 600px;
-
+  max-width: 640px;
   margin: 10px 0 0;
-
   color: #5B6478;
-
   font-size: 13px;
-
   line-height: 1.7;
 }
 
-
-/* =========================================================
-   BROWSE BUTTON
-   ========================================================= */
-
 .browse-registration-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-
+  justify-content: center;
   gap: 8px;
-
   padding: 13px 18px;
-
-  border: none;
+  border: 0;
   border-radius: 12px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8B5CF6,
-      #EC4899
-    );
-
-  color: white;
-
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
+  color: #FFFFFF;
   text-decoration: none;
-
   font-size: 11px;
   font-weight: 900;
-
   white-space: nowrap;
-
-  box-shadow:
-    0 10px 25px rgba(
-      112,
-      49,
-      211,
-      0.20
-    );
-
-  transition: 0.2s ease;
+  box-shadow: 0 10px 25px rgba(112, 49, 211, 0.20);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .browse-registration-btn:hover {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 14px 30px rgba(
-      112,
-      49,
-      211,
-      0.28
-    );
+  box-shadow: 0 14px 30px rgba(112, 49, 211, 0.28);
 }
-
 
 /* =========================================================
    SUMMARY
+   Four compact cards make this page feel like activity
+   management rather than a ticket/pass page.
    ========================================================= */
 
 .registration-summary {
   display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 20px;
-
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
   margin-bottom: 42px;
 }
 
 .registration-summary-card {
   display: flex;
   align-items: center;
-
-  gap: 16px;
-
-  padding: 22px;
-
+  gap: 14px;
+  min-height: 108px;
+  padding: 18px;
   border: 1px solid #E5E0EC;
-
-  border-radius: 19px;
-
+  border-radius: 18px;
   background: #FFFFFF;
-
-  box-shadow:
-    0 7px 25px rgba(
-      40,
-      30,
-      70,
-      0.05
-    );
-
-  transition: 0.2s ease;
+  box-shadow: 0 7px 25px rgba(40, 30, 70, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .registration-summary-card:hover {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 12px 30px rgba(
-      40,
-      30,
-      70,
-      0.08
-    );
+  box-shadow: 0 12px 30px rgba(40, 30, 70, 0.08);
 }
 
 .summary-icon {
-  width: 50px;
-  height: 50px;
-
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-
   flex-shrink: 0;
-
   border-radius: 14px;
 }
 
 .purple-summary {
   background: #EEEAF4;
-
   color: #6D28D9;
 }
 
 .green-summary {
   background: #E8F8EF;
-
   color: #31915B;
 }
 
 .blue-summary {
   background: #EAF0FF;
-
   color: #536ED9;
+}
+
+.pink-summary {
+  background: #FCE8F2;
+  color: #C23C79;
 }
 
 .registration-summary-card span {
   display: block;
-
-  color: #5B6478;
-
-  font-size: 8px;
+  color: #697287;
+  font-size: 7.5px;
   font-weight: 900;
-
   letter-spacing: 1px;
 }
 
 .registration-summary-card strong {
   display: block;
-
   margin-top: 3px;
-
   color: #10152C;
-
-  font-size: 27px;
+  font-size: 25px;
+  line-height: 1.1;
 }
 
+.registration-summary-card small {
+  display: block;
+  margin-top: 5px;
+  color: #8790A2;
+  font-size: 8px;
+  font-weight: 600;
+}
 
 /* =========================================================
-   SECTION
+   SECTION HEADING
    ========================================================= */
 
 .registration-list-section {
@@ -242,557 +175,540 @@
 }
 
 .registration-list-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
   margin-bottom: 18px;
 }
 
-.registration-list-heading span {
-  color: #6D28D9;
-
+.registration-list-heading > div > span {
+  color: #EC4899;
   font-size: 9px;
   font-weight: 900;
-
   letter-spacing: 1.6px;
 }
 
 .registration-list-heading h2 {
   margin: 6px 0 0;
-
   color: #10152C;
-
   font-size: 25px;
+  font-weight: 850;
 }
 
+.activity-count {
+  padding: 7px 11px;
+  border: 1px solid #DDD4EF;
+  border-radius: 999px;
+  background: #FFFFFF;
+  color: #6D28D9;
+  font-size: 8px;
+  font-weight: 900;
+}
 
 /* =========================================================
-   LIST
+   REGISTRATION LIST
    ========================================================= */
 
 .registration-list {
   display: flex;
   flex-direction: column;
-
-  gap: 16px;
+  gap: 15px;
 }
 
-
 /* =========================================================
-   DARK REGISTRATION CARD
+   REGISTRATION CARD
+   Distinctive layout:
+   date rail + image + information grid + action panel.
    ========================================================= */
 
 .registration-item {
   position: relative;
-
   display: grid;
-
-  grid-template-columns:
-    190px
-    minmax(0, 1fr)
-    auto;
-
-  align-items: center;
-
-  gap: 22px;
-
-  min-height: 150px;
-
-  padding: 15px;
-
+  grid-template-columns: 66px 205px minmax(0, 1fr) 180px;
+  align-items: stretch;
+  gap: 18px;
+  min-height: 165px;
+  padding: 12px;
   overflow: hidden;
-
-  border: 1px solid
-    rgba(139, 92, 246, 0.25);
-
+  border: 1px solid #E2DDEB;
   border-radius: 20px;
-
-  background:
-    radial-gradient(
-      circle at 88% 120%,
-      rgba(139, 92, 246, 0.22),
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 100% 0%,
-      rgba(236, 72, 153, 0.10),
-      transparent 30%
-    ),
-    linear-gradient(
-      135deg,
-      #0B1230,
-      #111A3A 55%,
-      #17133C
-    );
-
-  box-shadow:
-    0 14px 35px
-    rgba(12, 18, 48, 0.20);
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease;
+  background: #FFFFFF;
+  box-shadow: 0 10px 30px rgba(34, 25, 58, 0.07);
+  transition: transform 0.22s ease, box-shadow 0.22s ease,
+    border-color 0.22s ease;
 }
-
-
-/* Decorative glow */
 
 .registration-item::after {
   content: "";
-
   position: absolute;
-
   width: 180px;
   height: 180px;
-
-  right: -85px;
-  bottom: -115px;
-
+  right: -95px;
+  bottom: -105px;
   border-radius: 50%;
-
-  background:
-    rgba(139, 92, 246, 0.15);
-
+  background: rgba(139, 92, 246, 0.07);
   pointer-events: none;
 }
 
 .registration-item:hover {
   transform: translateY(-3px);
-
-  border-color:
-    rgba(139, 92, 246, 0.55);
-
-  box-shadow:
-    0 20px 45px
-    rgba(12, 18, 48, 0.28);
+  border-color: rgba(139, 92, 246, 0.30);
+  box-shadow: 0 17px 38px rgba(34, 25, 58, 0.11);
 }
 
+/* =========================================================
+   DATE RAIL
+   ========================================================= */
+
+.registration-date-rail {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  min-height: 135px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #F0EAFF, #F9F5FF);
+  color: #6D28D9;
+  text-align: center;
+}
+
+.registration-date-rail::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  bottom: 13px;
+  left: 0;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #8B5CF6, #EC4899);
+}
+
+.registration-date-rail span {
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.registration-date-rail strong {
+  margin-top: 5px;
+  color: #10152C;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.registration-date-rail small {
+  margin-top: 5px;
+  color: #7A718E;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
 
 /* =========================================================
-   IMAGE
+   EVENT IMAGE
    ========================================================= */
 
 .registration-image {
   position: relative;
-
-  width: 190px;
-  height: 120px;
-
+  width: 205px;
+  height: 141px;
+  align-self: center;
   overflow: hidden;
-
-  border-radius: 14px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #17204B,
-      #29145C
-    );
+  border-radius: 15px;
+  background: linear-gradient(135deg, #17204B, #29145C);
+  box-shadow: 0 7px 18px rgba(15, 18, 50, 0.13);
 }
 
 .registration-image img {
   width: 100%;
   height: 100%;
-
   display: block;
-
   object-fit: cover;
-
-  transition:
-    transform 0.35s ease;
+  transition: transform 0.35s ease;
 }
 
-.registration-item:hover
-.registration-image img {
-  transform: scale(1.05);
+.registration-item:hover .registration-image img {
+  transform: scale(1.04);
 }
-
-
-/* Image overlay */
 
 .registration-image::after {
   content: "";
-
   position: absolute;
   inset: 0;
-
-  background:
-    linear-gradient(
-      to right,
-      rgba(8, 13, 38, 0.05),
-      rgba(8, 13, 38, 0.35)
-    );
-
+  background: linear-gradient(
+    135deg,
+    rgba(8, 13, 38, 0.02),
+    rgba(8, 13, 38, 0.34)
+  );
   pointer-events: none;
 }
-
-
-/* Placeholder */
 
 .registration-image-placeholder {
   width: 100%;
   height: 100%;
-
   align-items: center;
   justify-content: center;
-
   color: #A78BFA;
-
   background:
     radial-gradient(
-      circle,
+      circle at center,
       rgba(139, 92, 246, 0.30),
       transparent 60%
     ),
     #111A3A;
 }
 
-
-/* Event badge */
-
-.registration-image span {
+.registration-image > span {
   position: absolute;
-
   top: 9px;
   left: 9px;
-
   z-index: 3;
-
   padding: 5px 9px;
-
-  border: 1px solid
-    rgba(255, 255, 255, 0.14);
-
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 999px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8B5CF6,
-      #EC4899
-    );
-
-  color: white;
-
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
+  color: #FFFFFF;
   font-size: 7px;
   font-weight: 900;
-
   letter-spacing: 0.8px;
-
-  box-shadow:
-    0 5px 15px
-    rgba(139, 92, 246, 0.30);
+  box-shadow: 0 5px 15px rgba(139, 92, 246, 0.25);
 }
 
-
 /* =========================================================
-   EVENT DETAILS
+   EVENT INFORMATION
    ========================================================= */
 
 .registration-event-details {
   position: relative;
-
   z-index: 2;
-
   min-width: 0;
-
-  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px 0;
 }
 
 .registration-event-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-
-  gap: 15px;
-
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
 .event-mini-label {
-  display: block;
-
-  margin-bottom: 5px;
-
-  color: #A78BFA;
-
-  font-size: 6px;
-  font-weight: 900;
-
-  letter-spacing: 1.2px;
+  margin-bottom: 6px;
+  color: #8B5CF6;
+  font-size: 7px;
+  letter-spacing: 1.3px;
 }
 
 .registration-event-details h3 {
-  max-width: 430px;
-
+  max-width: 560px;
   margin: 0;
-
   overflow: hidden;
-
-  color: #FFFFFF;
-
-  font-size: 19px;
-  font-weight: 800;
-
+  color: #10152C;
+  font-size: 21px;
+  font-weight: 850;
+  line-height: 1.25;
   text-overflow: ellipsis;
-
   white-space: nowrap;
 }
 
+.registration-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
 
-/* Small EventHub badge */
-
-.registration-mini-ticket {
+.registration-info-pill {
+  min-width: 0;
   display: flex;
   align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border: 1px solid #ECE7F1;
+  border-radius: 11px;
+  background: #FBF9FD;
+}
 
-  gap: 5px;
-
+.registration-info-pill > svg {
   flex-shrink: 0;
-
-  padding: 6px 9px;
-
-  border: 1px solid
-    rgba(139, 92, 246, 0.30);
-
-  border-radius: 50px;
-
-  background:
-    rgba(139, 92, 246, 0.13);
-
-  color: #C4B5FD;
-
-  font-size: 7px;
-  font-weight: 800;
+  color: #8B5CF6;
 }
 
-
-/* =========================================================
-   DATE + TIME
-   ========================================================= */
-
-.registration-detail-row {
-  display: flex;
-  flex-wrap: wrap;
-
-  gap: 15px 24px;
-
-  margin-bottom: 10px;
+.registration-info-pill div {
+  min-width: 0;
 }
 
-.registration-detail-row div,
-.registration-location {
-  display: flex;
-  align-items: center;
+.registration-info-pill span {
+  display: block;
+  margin-bottom: 3px;
+  color: #969BAA;
+  font-size: 6.5px;
+  font-weight: 900;
+  letter-spacing: 0.9px;
+}
 
-  gap: 7px;
-
-  color: #CBD2E5;
-
+.registration-info-pill strong {
+  display: block;
+  overflow: hidden;
+  color: #4C556B;
   font-size: 9px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.registration-detail-row svg,
-.registration-location svg {
-  flex-shrink: 0;
-
-  color: #A78BFA;
+.location-pill {
+  grid-column: 1 / -1;
 }
-
 
 /* =========================================================
-   LOCATION
-   ========================================================= */
-
-.registration-location {
-  color: #AEB7CF;
-}
-
-
-/* =========================================================
-   STATUS + TICKET
+   STATUS + ACTIONS
    ========================================================= */
 
 .registration-status-area {
   position: relative;
-
   z-index: 3;
-
+  min-width: 0;
   display: flex;
   flex-direction: column;
-
-  align-items: flex-end;
-
-  gap: 17px;
-
-  padding-right: 10px;
+  align-items: stretch;
+  justify-content: center;
+  gap: 11px;
+  padding: 12px 7px 12px 12px;
+  border-left: 1px dashed #E3DDEC;
 }
 
-
-/* Confirmed */
-
-.confirmed-badge {
-  display: flex;
+.confirmed-badge,
+.cancelled-badge {
+  display: inline-flex;
   align-items: center;
-
+  justify-content: center;
+  align-self: flex-end;
   gap: 5px;
-
-  padding: 6px 10px;
-
-  border: 1px solid
-    rgba(52, 211, 153, 0.20);
-
+  padding: 7px 11px;
   border-radius: 999px;
-
-  background:
-    rgba(16, 185, 129, 0.13);
-
-  color: #6EE7B7;
-
   font-size: 8px;
   font-weight: 900;
-
   text-transform: capitalize;
+}
+
+.confirmed-badge {
+  border: 1px solid rgba(52, 211, 153, 0.20);
+  background: rgba(16, 185, 129, 0.09);
+  color: #23834E;
 }
 
 .confirmed-badge svg {
-  color: #34D399;
+  color: #22A866;
 }
 
-
-/* Cancelled */
-
 .cancelled-badge {
-  display: flex;
-  align-items: center;
-
-  gap: 5px;
-
-  padding: 6px 10px;
-
-  border: 1px solid
-    rgba(248, 113, 113, 0.20);
-
-  border-radius: 999px;
-
-  background:
-    rgba(239, 68, 68, 0.13);
-
-  color: #FCA5A5;
-
-  font-size: 8px;
-  font-weight: 900;
-
-  text-transform: capitalize;
+  border: 1px solid rgba(239, 68, 68, 0.20);
+  background: rgba(239, 68, 68, 0.07);
+  color: #C24141;
 }
 
 .cancelled-badge svg {
-  color: #F87171;
+  color: #E05252;
 }
 
+.registration-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+}
 
-/* =========================================================
-   VIEW TICKET
-   ========================================================= */
-
-.ticket-button {
+.ticket-button,
+.cancel-registration-button {
+  width: 100%;
   display: flex;
   align-items: center;
-
+  justify-content: center;
   gap: 6px;
-
-  padding: 10px 14px;
-
   border-radius: 10px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8B5CF6,
-      #EC4899
-    );
-
-  color: white;
-
-  text-decoration: none;
-
   font-size: 9px;
   font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease, border-color 0.2s ease;
+}
 
-  box-shadow:
-    0 7px 18px
-    rgba(139, 92, 246, 0.25);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+.ticket-button {
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
+  color: #FFFFFF;
+  text-decoration: none;
+  box-shadow: 0 7px 18px rgba(139, 92, 246, 0.20);
 }
 
 .ticket-button:hover {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 11px 24px
-    rgba(139, 92, 246, 0.38);
+  box-shadow: 0 10px 24px rgba(139, 92, 246, 0.32);
 }
 
+.cancel-registration-button {
+  padding: 9px 10px;
+  border: 1px solid rgba(220, 80, 80, 0.25);
+  background: #FFFFFF;
+  color: #C84B4B;
+}
 
-/* =========================================================
-   EMPTY / LOADING
-   ========================================================= */
+.cancel-registration-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: #FFF5F5;
+  border-color: rgba(220, 80, 80, 0.45);
+}
 
-.registration-empty-state {
+.cancel-registration-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.cancelled-note {
   display: flex;
-  flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
-  min-height: 230px;
-
-  padding: 35px;
-
-  border: 1px solid
-    rgba(139, 92, 246, 0.20);
-
-  border-radius: 20px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #0B1230,
-      #111A3A
-    );
-
-  color: white;
-
+  gap: 7px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: #FAF6F6;
+  color: #8C7373;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1.4;
   text-align: center;
-
-  box-shadow:
-    0 14px 35px
-    rgba(12, 18, 48, 0.18);
 }
 
-.registration-empty-state > svg {
-  margin-bottom: 10px;
+.cancelled-note svg {
+  flex-shrink: 0;
+  color: #C96A6A;
+}
 
+/* =========================================================
+   CANCELLED CARD
+   ========================================================= */
+
+.registration-item.is-cancelled {
+  border-color: #E8E0E0;
+  background: linear-gradient(135deg, #FFFFFF, #FCF9F9);
+}
+
+.registration-item.is-cancelled .registration-date-rail {
+  background: #F6F0F0;
+  color: #9A7777;
+}
+
+.registration-item.is-cancelled .registration-date-rail::before {
+  background: #D7C7C7;
+}
+
+.registration-item.is-cancelled .registration-image {
+  filter: grayscale(25%);
+  opacity: 0.78;
+}
+
+.registration-item.is-cancelled .registration-event-details h3 {
+  color: #5B6478;
+}
+
+/* =========================================================
+   LOADING / ERROR / EMPTY
+   ========================================================= */
+
+.registration-message {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 35px;
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  border-radius: 20px;
+  text-align: center;
+}
+
+.loading-message {
+  background: linear-gradient(135deg, #0B1230, #111A3A);
+  color: #FFFFFF;
+  box-shadow: 0 14px 35px rgba(12, 18, 48, 0.15);
+}
+
+.error-message {
+  background: #FFF9F9;
+  color: #10152C;
+  border-color: rgba(220, 80, 80, 0.20);
+}
+
+.empty-message {
+  background: linear-gradient(135deg, #EEEAF4, #FFF8ED);
+}
+
+.message-icon {
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 11px;
+  border-radius: 16px;
+  background: rgba(139, 92, 246, 0.12);
+  color: #8B5CF6;
+}
+
+.loading-icon {
+  background: rgba(167, 139, 250, 0.12);
   color: #A78BFA;
 }
 
-.registration-empty-state h3 {
+.loading-icon svg {
+  animation: registration-spin 1s linear infinite;
+}
+
+.registration-message > svg {
+  margin-bottom: 11px;
+  color: #C84B4B;
+}
+
+.registration-message h3 {
   margin: 0;
-
-  color: white;
-
+  color: #10152C;
   font-size: 17px;
 }
 
-.registration-empty-state p {
-  margin: 7px 0 18px;
-
-  color: #AEB7CF;
-
-  font-size: 10px;
+.loading-message h3 {
+  color: #FFFFFF;
 }
 
+.registration-message p {
+  max-width: 450px;
+  margin: 7px 0 18px;
+  color: #5B6478;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.loading-message p {
+  color: #AEB7CF;
+}
+
+.retry-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 15px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
+  color: #FFFFFF;
+  font-size: 9px;
+  font-weight: 900;
+  cursor: pointer;
+}
 
 /* =========================================================
    BOTTOM CTA
@@ -800,161 +716,308 @@
 
 .registration-bottom {
   position: relative;
-
   display: flex;
   align-items: center;
-
   gap: 15px;
-
   overflow: hidden;
-
   padding: 25px;
-
-  border: 1px solid
-    rgba(139, 92, 246, 0.25);
-
+  border: 1px solid rgba(139, 92, 246, 0.20);
   border-radius: 20px;
+  background: linear-gradient(135deg, #EEEAF4, #FFF8ED);
+}
 
-  background:
-    linear-gradient(
-      135deg,
-      #EEEAF4,
-      #FFF8ED
-    );
+.registration-bottom::after {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  right: -70px;
+  top: -80px;
+  border-radius: 50%;
+  background: rgba(236, 72, 153, 0.08);
+  pointer-events: none;
 }
 
 .registration-bottom-icon {
   width: 48px;
   height: 48px;
-
   flex-shrink: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 14px;
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
+  color: #FFFFFF;
+  box-shadow: 0 7px 20px rgba(139, 92, 246, 0.22);
+}
 
-  background:
-    linear-gradient(
-      135deg,
-      #8B5CF6,
-      #EC4899
-    );
-
-  color: white;
-
-  box-shadow:
-    0 7px 20px
-    rgba(139, 92, 246, 0.22);
+.bottom-label {
+  margin-bottom: 4px;
+  color: #8B5CF6;
+  font-size: 7px;
 }
 
 .registration-bottom h3 {
   margin: 0;
-
   color: #10152C;
-
   font-size: 14px;
 }
 
 .registration-bottom p {
   margin: 5px 0 0;
-
   color: #5B6478;
-
   font-size: 10px;
 }
 
 .registration-bottom a {
-  display: flex;
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
   align-items: center;
-
   gap: 6px;
-
   margin-left: auto;
-
   padding: 11px 16px;
-
   border-radius: 10px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8B5CF6,
-      #EC4899
-    );
-
-  color: white;
-
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
+  color: #FFFFFF;
   text-decoration: none;
-
   font-size: 9px;
   font-weight: 900;
-
-  box-shadow:
-    0 7px 18px
-    rgba(139, 92, 246, 0.20);
+  box-shadow: 0 7px 18px rgba(139, 92, 246, 0.20);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.registration-bottom a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(139, 92, 246, 0.30);
+}
 
 /* =========================================================
-   RESPONSIVE
+   CANCEL CONFIRMATION MODAL
    ========================================================= */
 
-@media (max-width: 1000px) {
-
-  .registration-item {
-    grid-template-columns:
-      165px
-      minmax(0, 1fr)
-      auto;
-
-    gap: 17px;
-  }
-
-  .registration-image {
-    width: 165px;
-  }
-
+.cancel-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(7, 9, 20, 0.48);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
 }
 
+.cancel-modal {
+  width: min(450px, 100%);
+  padding: 28px;
+  border: 1px solid rgba(139, 92, 246, 0.16);
+  border-radius: 22px;
+  background: #FFFFFF;
+  box-shadow: 0 25px 80px rgba(7, 9, 20, 0.22);
+  animation: cancel-modal-in 0.2s ease-out;
+}
 
-@media (max-width: 900px) {
+.cancel-modal-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 13px;
+  border-radius: 14px;
+  background: #FFF0F0;
+  color: #C84B4B;
+}
 
-  .registrations-page {
-    padding: 30px 25px 50px;
+.cancel-modal-label {
+  color: #C84B4B;
+  font-size: 8px;
+}
+
+.cancel-modal h3 {
+  margin: 7px 0 8px;
+  color: #10152C;
+  font-size: 22px;
+  font-weight: 850;
+}
+
+.cancel-modal p {
+  margin: 0;
+  color: #5B6478;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.cancel-modal p strong {
+  color: #10152C;
+}
+
+.cancel-modal-event {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 16px;
+  padding: 11px 12px;
+  border: 1px solid #ECE7F1;
+  border-radius: 11px;
+  background: #FBF9FD;
+  color: #5B6478;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.cancel-modal-event svg {
+  color: #8B5CF6;
+}
+
+.cancel-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.keep-registration-button,
+.confirm-cancel-button {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.keep-registration-button {
+  border: 1px solid #DDD6E7;
+  background: #FFFFFF;
+  color: #4C556B;
+}
+
+.keep-registration-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: #F8F5FC;
+}
+
+.confirm-cancel-button {
+  border: 0;
+  background: linear-gradient(135deg, #C84B4B, #E11D48);
+  color: #FFFFFF;
+  box-shadow: 0 8px 20px rgba(200, 75, 75, 0.20);
+}
+
+.confirm-cancel-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 11px 25px rgba(200, 75, 75, 0.28);
+}
+
+.keep-registration-button:disabled,
+.confirm-cancel-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.button-spinner {
+  animation: registration-spin 0.9s linear infinite;
+}
+
+@keyframes registration-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cancel-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
   }
 
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE - 1150px
+   ========================================================= */
+
+@media (max-width: 1150px) {
   .registration-item {
-    grid-template-columns:
-      150px
-      minmax(0, 1fr);
+    grid-template-columns: 60px 185px minmax(0, 1fr) 160px;
+    gap: 14px;
   }
 
   .registration-image {
-    width: 150px;
+    width: 185px;
+  }
+
+  .registration-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE - 950px
+   ========================================================= */
+
+@media (max-width: 950px) {
+  .registrations-page {
+    padding: 34px 25px 55px;
+  }
+
+  .registration-item {
+    grid-template-columns: 60px 175px minmax(0, 1fr);
+  }
+
+  .registration-image {
+    width: 175px;
   }
 
   .registration-status-area {
-    grid-column: 2;
-
+    grid-column: 2 / -1;
     flex-direction: row;
-
     align-items: center;
     justify-content: space-between;
-
-    padding-right: 0;
+    border-left: 0;
+    border-top: 1px dashed #E3DDEC;
+    padding: 12px 4px 2px;
   }
 
+  .confirmed-badge,
+  .cancelled-badge {
+    align-self: center;
+  }
+
+  .registration-actions {
+    flex-direction: row;
+    width: auto;
+    margin-left: auto;
+  }
+
+  .ticket-button,
+  .cancel-registration-button {
+    width: auto;
+  }
 }
 
+/* =========================================================
+   RESPONSIVE - 700px
+   ========================================================= */
 
 @media (max-width: 700px) {
-
   .registrations-header {
     align-items: flex-start;
-
     flex-direction: column;
+    gap: 18px;
   }
 
   .browse-registration-btn {
@@ -962,16 +1025,51 @@
   }
 
   .registration-summary {
-    grid-template-columns: 1fr;
-
+    grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
 
+  .registration-item {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .registration-image {
+    width: 100%;
+    height: 150px;
+  }
+
+  .registration-date-rail {
+    min-height: 150px;
+  }
+
+  .registration-event-details {
+    padding: 8px 2px;
+  }
+
+  .registration-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .location-pill {
+    grid-column: auto;
+  }
+
+  .registration-status-area {
+    grid-column: 1 / -1;
+  }
+
+  .registration-list-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
+/* =========================================================
+   RESPONSIVE - 560px
+   ========================================================= */
 
-@media (max-width: 650px) {
-
+@media (max-width: 560px) {
   .registrations-page {
     padding: 28px 18px 45px;
   }
@@ -980,67 +1078,81 @@
     font-size: 34px;
   }
 
+  .registration-summary {
+    grid-template-columns: 1fr;
+  }
+
   .registration-item {
     grid-template-columns: 1fr;
-
-    gap: 0;
-
     padding: 12px;
   }
 
+  .registration-date-rail {
+    min-height: 62px;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 0 14px;
+  }
+
+  .registration-date-rail::before {
+    top: 0;
+    bottom: 0;
+  }
+
+  .registration-date-rail strong {
+    margin-top: 0;
+    font-size: 23px;
+  }
+
+  .registration-date-rail small {
+    margin-top: 0;
+  }
+
   .registration-image {
-    width: 100%;
-    height: 175px;
-
-    margin-bottom: 4px;
-  }
-
-  .registration-event-details {
-    padding: 17px 6px;
-  }
-
-  .registration-event-top {
-    align-items: flex-start;
+    height: 185px;
   }
 
   .registration-event-details h3 {
-    max-width: 100%;
-
     font-size: 18px;
-
     white-space: normal;
   }
 
-  .registration-mini-ticket {
-    display: none;
+  .registration-status-area {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
   }
 
-  .registration-status-area {
-    grid-column: auto;
+  .confirmed-badge,
+  .cancelled-badge {
+    align-self: flex-start;
+  }
 
-    flex-direction: row;
+  .registration-actions {
+    width: 100%;
+  }
 
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 4px 6px 7px;
+  .ticket-button,
+  .cancel-registration-button {
+    width: 100%;
   }
 
   .registration-bottom {
     align-items: flex-start;
-
     flex-direction: column;
   }
 
   .registration-bottom a {
     margin-left: 0;
   }
-
 }
 
+/* =========================================================
+   RESPONSIVE - 430px
+   ========================================================= */
 
 @media (max-width: 430px) {
-
   .registrations-page {
     padding: 24px 14px 40px;
   }
@@ -1050,7 +1162,8 @@
   }
 
   .registration-summary-card {
-    padding: 17px;
+    min-height: 96px;
+    padding: 16px;
   }
 
   .summary-icon {
@@ -1058,87 +1171,19 @@
     height: 44px;
   }
 
-  .registration-detail-row {
-    flex-direction: column;
-
-    gap: 8px;
+  .registration-info-pill {
+    padding: 9px;
   }
 
   .registration-bottom {
     padding: 20px;
   }
 
-}
-.registration-image {
-  position: relative;
+  .cancel-modal {
+    padding: 23px;
+  }
 
-  width: 190px;
-  height: 120px;
-
-  overflow: hidden;
-
-  border-radius: 14px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #17204B,
-      #29145C
-    );
-}
-
-.registration-image img {
-  width: 100%;
-  height: 100%;
-
-  display: block;
-
-  object-fit: cover;
-}
-
-.registration-image-placeholder {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  color: #A78BFA;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(139, 92, 246, 0.30),
-      transparent 60%
-    ),
-    #111A3A;
-}
-
-.registration-image span {
-  position: absolute;
-
-  top: 9px;
-  left: 9px;
-
-  z-index: 3;
-
-  padding: 5px 9px;
-
-  border-radius: 999px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8B5CF6,
-      #EC4899
-    );
-
-  color: white;
-
-  font-size: 7px;
-  font-weight: 900;
-
-  letter-spacing: 0.8px;
+  .cancel-modal-actions {
+    grid-template-columns: 1fr;
+  }
 }

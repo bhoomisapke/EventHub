@@ -7,21 +7,16 @@
   box-sizing: border-box;
 }
 
-
 /* =========================================================
    PAGE
    ========================================================= */
 
 .registration-form-page {
   min-height: calc(100vh - 70px);
-
   padding: 35px 42px 70px;
-
   background: #F7F3EE;
-
   color: #10152C;
 }
-
 
 /* =========================================================
    BACK BUTTON
@@ -30,36 +25,29 @@
 .registration-back-btn {
   display: inline-flex;
   align-items: center;
-
   gap: 7px;
 
   margin-bottom: 25px;
-
   padding: 9px 14px;
 
   border: 1px solid #DCD7E5;
   border-radius: 9px;
 
   background: #FFFFFF;
-
   color: #10152C;
 
   font-size: 11px;
   font-weight: 700;
 
   cursor: pointer;
-
   transition: 0.2s ease;
 }
 
 .registration-back-btn:hover {
   border-color: #8B5CF6;
-
   color: #6D28D9;
-
   transform: translateX(-2px);
 }
-
 
 /* =========================================================
    HEADER
@@ -67,8 +55,7 @@
 
 .registration-form-header {
   max-width: 850px;
-
-  margin-bottom: 28px;
+  margin: 0 auto 28px;
 }
 
 .registration-form-header > span {
@@ -101,10 +88,8 @@
   color: #5B6478;
 
   font-size: 13px;
-
   line-height: 1.6;
 }
-
 
 /* =========================================================
    MAIN WIDTH
@@ -113,13 +98,11 @@
 .registration-event-card,
 .registration-form-card {
   width: 100%;
-
   max-width: 1050px;
 
   margin-left: auto;
   margin-right: auto;
 }
-
 
 /* =========================================================
    SELECTED EVENT CARD
@@ -136,14 +119,11 @@
   min-height: 155px;
 
   margin-bottom: 20px;
-
   padding: 18px;
 
   overflow: hidden;
 
-  border: 1px solid
-    rgba(139, 92, 246, 0.30);
-
+  border: 1px solid rgba(139, 92, 246, 0.30);
   border-radius: 20px;
 
   background:
@@ -165,12 +145,12 @@
     );
 
   box-shadow:
-    0 15px 38px
-    rgba(12, 18, 48, 0.22);
+    0 15px 38px rgba(12, 18, 48, 0.22);
 }
 
-
-/* Decorative glow */
+/* =========================================================
+   DECORATIVE GLOW
+   ========================================================= */
 
 .registration-event-card::after {
   content: "";
@@ -185,12 +165,10 @@
 
   border-radius: 50%;
 
-  background:
-    rgba(139, 92, 246, 0.15);
+  background: rgba(139, 92, 246, 0.15);
 
   pointer-events: none;
 }
-
 
 /* =========================================================
    EVENT IMAGE
@@ -217,10 +195,10 @@
 }
 
 .registration-event-image img {
+  display: block;
+
   width: 100%;
   height: 100%;
-
-  display: block;
 
   object-fit: cover;
 
@@ -232,8 +210,9 @@
   transform: scale(1.05);
 }
 
-
-/* Image placeholder */
+/* =========================================================
+   IMAGE PLACEHOLDER
+   ========================================================= */
 
 .registration-event-image-placeholder {
   width: 100%;
@@ -253,7 +232,6 @@
     #111A3A;
 }
 
-
 /* =========================================================
    EVENT INFORMATION
    ========================================================= */
@@ -264,7 +242,6 @@
   z-index: 2;
 
   flex: 1;
-
   min-width: 0;
 }
 
@@ -292,7 +269,6 @@
   letter-spacing: -0.4px;
 }
 
-
 /* =========================================================
    EVENT META
    ========================================================= */
@@ -319,10 +295,8 @@
 
 .registration-event-meta svg {
   color: #A78BFA;
-
   flex-shrink: 0;
 }
-
 
 /* =========================================================
    FORM CARD
@@ -333,18 +307,14 @@
 
   padding: 30px;
 
-  border: 1px solid
-    #E3DEE9;
-
+  border: 1px solid #E3DEE9;
   border-radius: 20px;
 
   background: #FFFFFF;
 
   box-shadow:
-    0 12px 38px
-    rgba(40, 30, 70, 0.08);
+    0 12px 38px rgba(40, 30, 70, 0.08);
 }
-
 
 /* =========================================================
    FORM TITLE
@@ -357,7 +327,6 @@
   gap: 12px;
 
   margin-bottom: 25px;
-
   padding-bottom: 20px;
 
   border-bottom: 1px solid #ECE8F0;
@@ -383,8 +352,7 @@
   color: #FFFFFF;
 
   box-shadow:
-    0 8px 20px
-    rgba(139, 92, 246, 0.22);
+    0 8px 20px rgba(139, 92, 246, 0.22);
 }
 
 .registration-form-title span {
@@ -409,7 +377,6 @@
 
   letter-spacing: -0.4px;
 }
-
 
 /* =========================================================
    INPUT GROUP
@@ -447,11 +414,9 @@
   outline: none;
 
   background: #F9F7FB;
-
   color: #10152C;
 
   font-family: inherit;
-
   font-size: 11px;
 
   transition:
@@ -460,81 +425,33 @@
     background 0.2s ease;
 }
 
+.registration-input-group input::placeholder {
+  color: #9AA1B2;
+}
+
+.registration-input-group input:hover {
+  border-color: #C9C1D8;
+}
+
 .registration-input-group input:focus {
   border-color: #8B5CF6;
 
   background: #FFFFFF;
 
   box-shadow:
-    0 0 0 3px
-    rgba(139, 92, 246, 0.10);
+    0 0 0 3px rgba(139, 92, 246, 0.10);
 }
-
-.registration-input-group input[readonly] {
-  cursor: default;
-}
-
-
-/* =========================================================
-   EXTRA STUDENT INFORMATION
-   ========================================================= */
-
-.registration-student-info {
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  gap: 12px;
-
-  margin: 22px 0;
-}
-
-.registration-student-info > div {
-  padding: 14px;
-
-  border: 1px solid #E7E2EC;
-
-  border-radius: 12px;
-
-  background: #F8F6FA;
-}
-
-.registration-student-info span {
-  display: block;
-
-  margin-bottom: 5px;
-
-  color: #777F91;
-
-  font-size: 7px;
-  font-weight: 900;
-
-  letter-spacing: 1px;
-
-  text-transform: uppercase;
-}
-
-.registration-student-info strong {
-  display: block;
-
-  color: #10152C;
-
-  font-size: 11px;
-}
-
 
 /* =========================================================
    CONFIRMATION NOTE
    ========================================================= */
 
 .registration-confirmation-note {
-  margin: 18px 0;
+  margin: 22px 0 18px;
 
   padding: 13px 15px;
 
   border-left: 3px solid #8B5CF6;
-
   border-radius: 8px;
 
   background: #F3EFF9;
@@ -542,10 +459,8 @@
   color: #5B6478;
 
   font-size: 9px;
-
   line-height: 1.5;
 }
-
 
 /* =========================================================
    ERROR
@@ -556,9 +471,7 @@
 
   padding: 11px 14px;
 
-  border: 1px solid
-    rgba(239, 68, 68, 0.20);
-
+  border: 1px solid rgba(239, 68, 68, 0.20);
   border-radius: 9px;
 
   background: #FEF2F2;
@@ -568,7 +481,6 @@
   font-size: 10px;
   font-weight: 700;
 }
-
 
 /* =========================================================
    SUBMIT BUTTON
@@ -582,7 +494,6 @@
   margin-top: 8px;
 
   border: none;
-
   border-radius: 11px;
 
   background:
@@ -602,8 +513,7 @@
   cursor: pointer;
 
   box-shadow:
-    0 10px 25px
-    rgba(139, 92, 246, 0.23);
+    0 10px 25px rgba(139, 92, 246, 0.23);
 
   transition:
     transform 0.2s ease,
@@ -615,16 +525,13 @@
   transform: translateY(-2px);
 
   box-shadow:
-    0 14px 30px
-    rgba(139, 92, 246, 0.32);
+    0 14px 30px rgba(139, 92, 246, 0.32);
 }
 
 .registration-submit-btn:disabled {
   opacity: 0.65;
-
   cursor: not-allowed;
 }
-
 
 /* =========================================================
    SUCCESS CARD
@@ -637,9 +544,7 @@
 
   padding: 45px 35px;
 
-  border: 1px solid
-    rgba(139, 92, 246, 0.25);
-
+  border: 1px solid rgba(139, 92, 246, 0.25);
   border-radius: 22px;
 
   background:
@@ -654,13 +559,11 @@
   text-align: center;
 
   box-shadow:
-    0 20px 50px
-    rgba(12, 18, 48, 0.25);
+    0 20px 50px rgba(12, 18, 48, 0.25);
 }
 
 .registration-success-card > svg {
   margin-bottom: 15px;
-
   color: #34D399;
 }
 
@@ -676,7 +579,6 @@
   color: #CBD2E5;
 
   font-size: 11px;
-
   line-height: 1.6;
 }
 
@@ -694,7 +596,6 @@
   font-size: 9px;
 }
 
-
 /* =========================================================
    ERROR CARD
    ========================================================= */
@@ -706,9 +607,7 @@
 
   padding: 35px;
 
-  border: 1px solid
-    rgba(239, 68, 68, 0.20);
-
+  border: 1px solid rgba(239, 68, 68, 0.20);
   border-radius: 20px;
 
   background: #FFFFFF;
@@ -716,8 +615,7 @@
   text-align: center;
 
   box-shadow:
-    0 15px 40px
-    rgba(40, 30, 70, 0.10);
+    0 15px 40px rgba(40, 30, 70, 0.10);
 }
 
 .registration-error-card h2 {
@@ -757,7 +655,6 @@
   cursor: pointer;
 }
 
-
 /* =========================================================
    RESPONSIVE - TABLET
    ========================================================= */
@@ -780,9 +677,7 @@
   .registration-input-group {
     grid-template-columns: 130px 1fr;
   }
-
 }
-
 
 /* =========================================================
    RESPONSIVE - MOBILE
@@ -847,12 +742,14 @@
     margin-bottom: 15px;
   }
 
-  .registration-student-info {
-    grid-template-columns: 1fr;
+  .registration-input-group label {
+    font-size: 10px;
   }
 
+  .registration-input-group input {
+    min-height: 45px;
+  }
 }
-
 
 /* =========================================================
    SMALL MOBILE
@@ -879,5 +776,4 @@
   .registration-form-title h2 {
     font-size: 19px;
   }
-
 }

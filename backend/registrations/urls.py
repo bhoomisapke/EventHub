@@ -3,77 +3,76 @@ from django.urls import path
 from .views import (
     RegistrationCreateView,
     MyRegistrationsView,
+    RegistrationDetailView,
+    CancelRegistrationView,
     OrganizerParticipantsView,
 )
 
 
 urlpatterns = [
 
-    # =====================================================
-    # STUDENT REGISTRATION
-    # =====================================================
-    #
-    # POST
-    # /api/registrations/
-    #
-    # =====================================================
+    # ========================================================
+    # CREATE REGISTRATION
+    # ========================================================
 
     path(
         "",
         RegistrationCreateView.as_view(),
-        name="registration-create",
+        name="registration-create"
     ),
 
 
-    # =====================================================
-    # STUDENT'S OWN REGISTRATIONS
-    # =====================================================
-    #
-    # GET
-    # /api/registrations/my/
-    #
-    # =====================================================
+    # ========================================================
+    # LOGGED-IN STUDENT REGISTRATIONS
+    # ========================================================
 
     path(
         "my/",
         MyRegistrationsView.as_view(),
-        name="my-registrations",
+        name="my-registrations"
     ),
 
 
-    # =====================================================
-    # ALL ORGANIZER PARTICIPANTS
-    # =====================================================
-    #
-    # GET
-    # /api/registrations/organizer/
-    #
-    # Shows participants from ALL events
-    # created by the logged-in organizer.
-    #
-    # =====================================================
+    # ========================================================
+    # ORGANIZER - ALL PARTICIPANTS
+    # ========================================================
 
     path(
         "organizer/",
         OrganizerParticipantsView.as_view(),
-        name="organizer-participants",
+        name="organizer-participants"
     ),
 
 
-    # =====================================================
-    # EVENT-SPECIFIC PARTICIPANTS
-    # =====================================================
-    #
-    # GET
-    # /api/registrations/organizer/1/
-    #
-    # Shows ONLY participants registered for Event 1.
-    #
-    # =====================================================
+    # ========================================================
+    # ORGANIZER - PARTICIPANTS FOR ONE EVENT
+    # ========================================================
 
     path(
         "organizer/<int:event_id>/",
         OrganizerParticipantsView.as_view(),
-        name="organizer-event-participants",
+        name="organizer-event-participants"
+    ),
+
+
+    # ========================================================
+    # SINGLE REGISTRATION
+    # ========================================================
+
+    path(
+        "<int:pk>/",
+        RegistrationDetailView.as_view(),
+        name="registration-detail"
+    ),
+
+
+    # ========================================================
+    # CANCEL REGISTRATION
+    # ========================================================
+
+    path(
+        "<int:pk>/cancel/",
+        CancelRegistrationView.as_view(),
+        name="registration-cancel"
     ),
 ]

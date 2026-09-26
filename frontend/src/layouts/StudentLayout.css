@@ -1,14 +1,11 @@
 /* ============================================================
-   EVENTHUB STUDENT NAVBAR
-   MATCHES LANDING PAGE NAVBAR
+   EVENTHUB STUDENT LAYOUT
+   MATCHES ORGANIZER NAVBAR
    ============================================================ */
 
-/* ---------- GLOBAL NAVBAR FONT ---------- */
-
-.student-layout,
-.student-navbar,
-.student-navbar button,
-.student-navbar a {
+.student-layout {
+  min-height: 100vh;
+  background: #f7f3ee;
   font-family:
     Inter,
     ui-sans-serif,
@@ -24,7 +21,7 @@
    STUDENT NAVBAR
    ============================================================ */
 
-.student-navbar {
+.student-layout .navbar {
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -34,7 +31,6 @@
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
 
   padding: 0 5%;
 
@@ -43,33 +39,36 @@
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 
-  border-bottom: 1px solid rgba(221, 216, 225, 0.90);
+  border-bottom: 1px solid rgba(221, 216, 225, 0.9);
 
   box-shadow:
     0 8px 30px rgba(11, 18, 48, 0.07);
+
+  box-sizing: border-box;
 }
 
 
 /* ============================================================
-   EVENTHUB BRAND / LOGO
+   EVENTHUB BRAND
    ============================================================ */
 
-.student-brand {
+.student-layout .brand {
   display: flex;
   align-items: center;
+
   gap: 11px;
 
-  color: #0B1230;
-
-  flex-shrink: 0;
+  color: #0b1230;
 
   text-decoration: none;
+
+  flex-shrink: 0;
 }
 
 
-/* Purple/Navy EventHub square */
+/* Logo square */
 
-.student-brand-symbol {
+.student-layout .brand-symbol {
   width: 39px;
   height: 39px;
 
@@ -82,11 +81,11 @@
   background:
     linear-gradient(
       135deg,
-      #0B1230,
-      #6D28D9
+      #0b1230,
+      #6d28d9
     );
 
-  color: #FFF8ED;
+  color: #fff8ed;
 
   box-shadow:
     0 0 18px rgba(109, 40, 217, 0.25);
@@ -99,10 +98,10 @@
 
 /* EventHub text */
 
-.student-brand strong {
+.student-layout .brand strong {
   display: block;
 
-  color: #0B1230;
+  color: #0b1230;
 
   font-size: 20px;
   line-height: 1;
@@ -113,16 +112,16 @@
 }
 
 
-/* Hub = Pink */
+/* Hub */
 
-.student-brand strong span {
-  color: #EC4899;
+.student-layout .brand strong span {
+  color: #ec4899;
 }
 
 
-/* COLLEGE EVENTS */
+/* College Events */
 
-.student-brand small {
+.student-layout .brand small {
   display: block;
 
   margin-top: 4px;
@@ -139,10 +138,10 @@
 
 
 /* ============================================================
-   STUDENT NAVIGATION
+   NAVIGATION
    ============================================================ */
 
-.student-nav {
+.student-layout .nav-menu {
   display: flex;
   align-items: center;
 
@@ -153,18 +152,17 @@
 }
 
 
-/* Individual links */
+/* Normal navigation links */
 
-.student-nav-link {
+.student-layout .nav-menu a {
   position: relative;
 
   display: inline-flex;
   align-items: center;
-  gap: 6px;
 
   padding: 5px 0;
 
-  color: #30384D;
+  color: #30384d;
 
   background: transparent;
 
@@ -181,9 +179,9 @@
 }
 
 
-/* Thin gradient line */
+/* Underline */
 
-.student-nav-link::after {
+.student-layout .nav-menu a:not(.student-home-button)::after {
   content: "";
 
   position: absolute;
@@ -201,13 +199,13 @@
   background:
     linear-gradient(
       90deg,
-      #E11D48,
-      #8B5CF6,
-      #EC4899
+      #e11d48,
+      #8b5cf6,
+      #ec4899
     );
 
   box-shadow:
-    0 0 9px rgba(236, 72, 153, 0.30);
+    0 0 9px rgba(236, 72, 153, 0.3);
 
   transition: width 0.25s ease;
 }
@@ -215,8 +213,8 @@
 
 /* Hover */
 
-.student-nav-link:hover {
-  color: #6D28D9;
+.student-layout .nav-menu a:hover {
+  color: #6d28d9;
 
   transform: translateY(-1px);
 }
@@ -224,30 +222,61 @@
 
 /* Hover underline */
 
-.student-nav-link:hover::after {
+.student-layout .nav-menu a:not(.student-home-button):hover::after {
   width: 100%;
 }
 
 
 /* Active */
 
-.student-nav-link.active {
-  color: #6D28D9;
+.student-layout .nav-menu a.student-active {
+  color: #6d28d9;
 }
 
 
 /* Active underline */
 
-.student-nav-link.active::after {
+.student-layout .nav-menu a.student-active::after {
   width: 100%;
 }
 
 
 /* ============================================================
-   RIGHT SIDE
+   HOME BUTTON
    ============================================================ */
 
-.student-nav-right {
+.student-layout .student-home-button {
+  padding: 12px 24px !important;
+
+  border-radius: 28px !important;
+
+  background: #f1e8ff !important;
+
+  color: #6d28d9 !important;
+
+  text-decoration: none !important;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease !important;
+}
+
+
+.student-layout .student-home-button:hover {
+  background: #e7d7ff !important;
+
+  color: #5b21b6 !important;
+
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   RIGHT SIDE BUTTONS
+   ============================================================ */
+
+.student-layout .nav-buttons {
   display: flex;
   align-items: center;
 
@@ -258,112 +287,30 @@
 
 
 /* ============================================================
-   PROFILE
+   PROFILE BUTTON
    ============================================================ */
 
-.student-profile {
+.student-layout .student-profile-button {
+  width: 42px;
+  height: 42px;
+
   display: flex;
   align-items: center;
+  justify-content: center;
 
-  gap: 9px;
+  padding: 0;
 
-  padding: 5px 10px;
+  border-radius: 12px;
 
-  border-radius: 9px;
+  background: #fff8ed;
 
-  color: #0B1230;
+  border: 1px solid #cec8d0;
+
+  color: #0b1230;
 
   text-decoration: none;
 
-  transition:
-    background 0.25s ease,
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-
-.student-profile:hover {
-  background: #FFF8ED;
-
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 0 18px rgba(109, 40, 217, 0.10);
-}
-
-
-/* Profile icon */
-
-.student-avatar {
-  width: 34px;
-  height: 34px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 10px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #0B1230,
-      #6D28D9
-    );
-
-  color: #FFF8ED;
-
-  box-shadow:
-    0 0 15px rgba(109, 40, 217, 0.18);
-}
-
-
-/* Profile text */
-
-.student-profile-text strong {
-  display: block;
-
-  color: #0B1230;
-
-  font-size: 11px;
-  font-weight: 750;
-
-  line-height: 1.1;
-}
-
-
-.student-profile-text small {
-  display: block;
-
-  margin-top: 3px;
-
-  color: #697184;
-
-  font-size: 9px;
-
-  line-height: 1.1;
-}
-
-
-/* ============================================================
-   LOGOUT BUTTON
-   ============================================================ */
-
-.student-logout {
-  width: 40px;
-  height: 40px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 9px;
-
-  background: #FFF8ED;
-
-  border: 1px solid #CEC8D0;
-
-  color: #0B1230;
+  box-sizing: border-box;
 
   transition:
     transform 0.25s ease,
@@ -374,195 +321,94 @@
 }
 
 
-.student-logout:hover {
+.student-layout .student-profile-button:hover {
   transform: translateY(-2px);
 
-  border-color: #8B5CF6;
+  border-color: #8b5cf6;
 
-  color: #6D28D9;
+  color: #6d28d9;
 
-  background: #FFFFFF;
+  background: #ffffff;
 
   box-shadow:
     0 0 18px rgba(109, 40, 217, 0.18);
 }
 
 
+.student-layout .student-profile-button svg {
+  width: 19px;
+  height: 19px;
+
+  display: block;
+
+  stroke: currentColor;
+}
+
+
 /* ============================================================
-   MOBILE MENU BUTTON
+   LOGOUT BUTTON
    ============================================================ */
 
-.student-menu-button {
-  display: none;
+.student-layout .student-logout-button {
+  width: 42px;
+  height: 42px;
 
-  width: 40px;
-  height: 40px;
-
+  display: flex;
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #CEC8D0;
+  padding: 0;
 
-  border-radius: 9px;
+  border-radius: 12px;
 
-  background: #FFF8ED;
+  background: #fff8ed;
 
-  color: #0B1230;
+  border: 1px solid #cec8d0;
+
+  color: #0b1230;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
 
   transition:
     transform 0.25s ease,
+    box-shadow 0.25s ease,
     border-color 0.25s ease,
     color 0.25s ease,
-    box-shadow 0.25s ease;
+    background 0.25s ease;
 }
 
 
-.student-menu-button:hover {
+.student-layout .student-logout-button:hover {
   transform: translateY(-2px);
 
-  border-color: #8B5CF6;
+  border-color: #8b5cf6;
 
-  color: #6D28D9;
+  color: #6d28d9;
 
-  box-shadow:
-    0 0 18px rgba(109, 40, 217, 0.16);
-}
-
-
-/* ============================================================
-   MOBILE DROPDOWN
-   ============================================================ */
-
-.student-mobile-menu {
-  position: absolute;
-
-  top: 76px;
-  left: 0;
-  right: 0;
-
-  z-index: 999;
-
-  display: flex;
-  flex-direction: column;
-
-  padding: 14px 5% 18px;
-
-  background:
-    rgba(247, 243, 238, 0.98);
-
-  border-bottom: 1px solid #DDD8E1;
+  background: #ffffff;
 
   box-shadow:
-    0 15px 35px rgba(11, 18, 48, 0.10);
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+    0 0 18px rgba(109, 40, 217, 0.18);
 }
 
 
-/* Mobile links */
+.student-layout .student-logout-button svg {
+  width: 19px;
+  height: 19px;
 
-.student-mobile-link {
-  position: relative;
+  display: block;
 
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-
-  padding: 13px 4px;
-
-  color: #30384D;
-
-  font-size: 13px;
-  font-weight: 600;
-
-  text-decoration: none;
-
-  border-bottom: 1px solid rgba(221, 216, 225, 0.55);
-
-  transition:
-    color 0.25s ease,
-    padding-left 0.25s ease;
-}
-
-
-.student-mobile-link:hover {
-  color: #6D28D9;
-
-  padding-left: 8px;
-}
-
-
-.student-mobile-link.active {
-  color: #6D28D9;
-}
-
-
-/* Mobile active indicator */
-
-.student-mobile-link.active::before {
-  content: "";
-
-  width: 3px;
-  height: 18px;
-
-  border-radius: 999px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #E11D48,
-      #8B5CF6,
-      #EC4899
-    );
+  stroke: currentColor;
 }
 
 
 /* ============================================================
-   MOBILE LOGOUT
+   STUDENT MAIN CONTENT
    ============================================================ */
 
-.student-mobile-logout {
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-
-  margin-top: 8px;
-
-  padding: 13px 4px;
-
-  border: 0;
-
-  background: transparent;
-
-  color: #BE123C;
-
-  font-size: 13px;
-  font-weight: 700;
-
-  text-align: left;
-
-  transition:
-    color 0.25s ease,
-    padding-left 0.25s ease;
-}
-
-
-.student-mobile-logout:hover {
-  color: #E11D48;
-
-  padding-left: 8px;
-}
-
-
-/* ============================================================
-   STUDENT MAIN BACKGROUND
-   Matches EventHub landing page
-   ============================================================ */
-
-.student-main {
+.student-layout-content {
   min-height: calc(100vh - 76px);
 
   background:
@@ -581,84 +427,67 @@
       rgba(37, 99, 235, 0.06),
       transparent 35%
     ),
-    #F7F3EE;
+    #f7f3ee;
 }
 
 
 /* ============================================================
-   RESPONSIVE NAVBAR
+   RESPONSIVE
    ============================================================ */
 
-@media (max-width: 1050px) {
+@media (max-width: 1100px) {
 
-  .student-nav {
+  .student-layout .nav-menu {
     gap: 20px;
 
     margin-right: 20px;
   }
 
-  .student-nav-link {
+  .student-layout .nav-menu a {
     font-size: 12px;
   }
-
-  .student-profile-text {
-    display: none;
-  }
-
 }
 
 
 @media (max-width: 850px) {
 
-  .student-navbar {
+  .student-layout .navbar {
     min-height: 70px;
 
     padding: 0 5%;
   }
 
-  .student-nav {
+  .student-layout .nav-menu {
     display: none;
   }
 
-  .student-profile {
-    display: none;
+  .student-layout .student-profile-button {
+    width: 40px;
+    height: 40px;
   }
 
-  .student-menu-button {
-    display: flex;
+  .student-layout .student-logout-button {
+    width: 40px;
+    height: 40px;
   }
 
-  .student-mobile-menu {
-    top: 70px;
+  .student-layout-content {
+    min-height: calc(100vh - 70px);
   }
-
 }
 
 
 @media (max-width: 500px) {
 
-  .student-navbar {
+  .student-layout .navbar {
     padding: 0 18px;
   }
 
-  .student-brand {
+  .student-layout .brand {
     gap: 9px;
   }
-.student-brand-name {
-  font-family: "Inter", "Segoe UI", sans-serif !important;
-  font-size: 24px !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.9px !important;
-  line-height: 1 !important;
-  color: #10152c !important;
-}
 
-.student-brand-hub {
-  color: #ec4899 !important;
-  font-weight: 700 !important;
-}
-
-  .student-brand-symbol {
+  .student-layout .brand-symbol {
     width: 36px;
     height: 36px;
 
@@ -666,55 +495,26 @@
 
     font-size: 17px;
   }
-.student-brand strong {
-  display: block;
-  font-size: 20px;
-  line-height: 1;
-  letter-spacing: -0.5px;
-}
 
-.student-brand strong span {
-  color: #ec4899;
-}
-
-.student-brand small {
-  display: block;
-  margin-top: 4px;
-  color: #697184;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-}
-
-  .student-logout {
-    width: 36px;
-    height: 36px;
+  .student-layout .brand strong {
+    font-size: 20px;
   }
 
-  .student-menu-button {
-    width: 36px;
-    height: 36px;
+  .student-layout .brand small {
+    font-size: 8px;
   }
 
-}
-/* ================= HOME NAV BUTTON ================= */
+  .student-layout .student-profile-button,
+  .student-layout .student-logout-button {
+    width: 36px;
+    height: 36px;
 
-.student-nav-home {
-  padding: 12px 24px !important;
-  border-radius: 28px !important;
+    border-radius: 9px;
+  }
 
-  background: #F1E8FF !important;
-  color: #6D28D9 !important;
-
-  text-decoration: none !important;
-}
-
-.student-nav-home:hover {
-  background: #E7D7FF !important;
-  color: #5B21B6 !important;
-}
-
-.student-nav-home.active {
-  background: #F1E8FF !important;
-  color: #6D28D9 !important;
+  .student-layout .student-profile-button svg,
+  .student-layout .student-logout-button svg {
+    width: 17px;
+    height: 17px;
+  }
 }

@@ -17,6 +17,7 @@ import OrganizerLayout from "../layouts/OrganizerLayout.jsx";
 import Dashboard from "../pages/student/Dashboard.jsx";
 import MyRegistrations from "../pages/student/MyRegistrations.jsx";
 import MyTickets from "../pages/student/MyTickets.jsx";
+import MyCertificates from "../pages/student/MyCertificates.jsx";
 import Profile from "../pages/student/Profile.jsx";
 import RegistrationForm from "../pages/student/RegistrationForm.jsx";
 
@@ -147,6 +148,11 @@ const AppRoutes = () => {
         <Route
           path="events/:id/register"
           element={<RegistrationForm />}
+        />
+        
+        <Route
+          path="certificates"
+          element={<MyCertificates />}
         />
 
         <Route

@@ -2362,6 +2362,7 @@ a {
 
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   overflow: hidden;
 }
@@ -8108,6 +8109,7 @@ th {
 
 .clean-hero-content h1 span {
   background: linear-gradient(90deg, #6646e8, #f04fae);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

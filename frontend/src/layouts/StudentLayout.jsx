@@ -1,56 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, Outlet, Link } from "react-router-dom";
 import {
-  LayoutDashboard,
-  CalendarDays,
-  Ticket,
+  Outlet,
+  Link,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+
+import {
   UserRound,
   LogOut,
-  Menu,
-  X,
 } from "lucide-react";
 
 import "./StudentLayout.css";
 
 const API_URL = "http://127.0.0.1:8000";
 
-const StudentLayout = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+function StudentLayout() {
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [user, setUser] = useState({
     name: "Student",
     email: "",
   });
 
-  const navItems = [
-    {
-      name: "Dashboard",
-      path: "/student/dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      name: "Events",
-      path: "/events",
-      icon: CalendarDays,
-    },
-    {
-      name: "My Registrations",
-      path: "/student/registrations",
-      icon: Ticket,
-    },
-    {
-      name: "My Tickets",
-      path: "/student/tickets",
-      icon: Ticket,
-    },
-    {
-      name: "Home",
-      path: "/",
-      icon: null,
-    },
-  ];
-
-  // ================= GET LOGGED-IN USER =================
+  // ==================================================
+  // GET LOGGED-IN USER
+  // ==================================================
 
   useEffect(() => {
     fetchUser();
@@ -61,9 +37,7 @@ const StudentLayout = () => {
       localStorage.getItem("token") ||
       sessionStorage.getItem("token");
 
-    if (!token) {
-      return;
-    }
+    if (!token) return;
 
     try {
       const response = await fetch(
@@ -77,15 +51,12 @@ const StudentLayout = () => {
         }
       );
 
-      if (!response.ok) {
-        return;
-      }
+      if (!response.ok) return;
 
       const data = await response.json();
 
       setUser(data);
 
-      // Keep stored user information synchronized
       const storage = localStorage.getItem("token")
         ? localStorage
         : sessionStorage;
@@ -97,40 +68,9 @@ const StudentLayout = () => {
     }
   };
 
-  // ================= LOGOUT =================
-
-  const handleLogout = async () => {
-    const token =
-      localStorage.getItem("token") ||
-      sessionStorage.getItem("token");
-
-    try {
-      if (token) {
-        await fetch(
-          `${API_URL}/api/auth/logout/`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Token ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      }
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("user");
-
-      window.location.href = "/";
-    }
-  };
-
-  // ================= REFRESH PROFILE =================
+  // ==================================================
+  // REFRESH PROFILE
+  // ==================================================
 
   useEffect(() => {
     const updateProfile = async () => {
@@ -159,35 +99,92 @@ const StudentLayout = () => {
             ? localStorage
             : sessionStorage;
 
-          storage.setItem("user", JSON.stringify(data));
+          storage.setItem(
+            "user",
+            JSON.stringify(data)
+          );
         }
       } catch (error) {
-        console.error("Failed to refresh profile:", error);
+        console.error(
+          "Failed to refresh profile:",
+          error
+        );
       }
     };
 
-    window.addEventListener("profileUpdated", updateProfile);
+    window.addEventListener(
+      "profileUpdated",
+      updateProfile
+    );
 
     return () => {
-      window.removeEventListener("profileUpdated", updateProfile);
+      window.removeEventListener(
+        "profileUpdated",
+        updateProfile
+      );
     };
   }, []);
+
+  // ==================================================
+  // LOGOUT
+  // ==================================================
+
+  const handleLogout = async () => {
+    const token =
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token");
+
+    try {
+      if (token) {
+        await fetch(
+          `${API_URL}/api/auth/logout/`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Token ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("user");
+
+      navigate("/");
+    }
+  };
+
+  // ==================================================
+  // ACTIVE LINK
+  // ==================================================
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
 
   return (
     <div className="student-layout">
 
-      {/* ================= TOP NAVBAR ================= */}
+      {/* ==================================================
+          NAVBAR
+      ================================================== */}
 
-      <header className="student-navbar">
+      <header className="navbar">
 
-        {/* Logo */}
+        {/* BRAND LOGO */}
 
         <Link
           to="/student/dashboard"
-          className="student-brand"
+          className="brand"
         >
-          <div className="student-brand-symbol">
-            ✦
+          <div className="brand-symbol">
+            <span>✦</span>
           </div>
 
           <div>
@@ -202,87 +199,133 @@ const StudentLayout = () => {
         </Link>
 
 
-        {/* Desktop Navigation */}
+        {/* ==================================================
+            NAVIGATION
+            Same structure as OrganizerLayout
+            ================================================== */}
 
-        <nav className="student-nav">
+        <nav className="nav-menu">
 
-          {navItems.map((item) => {
+          {/* DASHBOARD */}
 
-            const Icon = item.icon;
+          <Link
+            to="/student/dashboard"
+            className={
+              isActive("/student/dashboard")
+                ? "student-active"
+                : ""
+            }
+          >
+            Dashboard
+          </Link>
 
-            return (
-              <NavLink
-                key={item.name}
-                to={item.path}
-                end={item.path === "/"}
-                className={({ isActive }) =>
-                  `student-nav-link ${
-                    isActive ? "active" : ""
-                  } ${
-                    item.name === "Home"
-                      ? "student-nav-home"
-                      : ""
-                  }`
-                }
-              >
-                {Icon && <Icon size={16} />}
-                <span>{item.name}</span>
-              </NavLink>
-            );
 
-          })}
+          {/* EVENTS */}
+
+          <Link
+            to="/events"
+            className={
+              isActive("/events")
+                ? "student-active"
+                : ""
+            }
+          >
+            Events
+          </Link>
+
+
+          {/* MY REGISTRATIONS */}
+
+          <Link
+            to="/student/registrations"
+            className={
+              isActive("/student/registrations")
+                ? "student-active"
+                : ""
+            }
+          >
+            My Registrations
+          </Link>
+
+
+          {/* MY TICKETS */}
+
+          <Link
+            to="/student/tickets"
+            className={
+              isActive("/student/tickets")
+                ? "student-active"
+                : ""
+            }
+          >
+            My Tickets
+          </Link>
+
+
+          {/* MY CERTIFICATES */}
+
+          <Link
+            to="/student/certificates"
+            className={
+              isActive("/student/certificates")
+                ? "student-active"
+                : ""
+            }
+          >
+            My Certificates
+          </Link>
+
+
+          {/* HOME */}
+
+          <Link
+            to="/"
+            className="student-home-button"
+          >
+            Home
+          </Link>
 
         </nav>
 
 
-        {/* Right Side */}
+        {/* ==================================================
+            RIGHT SIDE BUTTONS
+            ================================================== */}
 
-        <div className="student-nav-right">
+        <div className="nav-buttons">
+
+          {/* PROFILE */}
 
           <Link
             to="/student/profile"
-            className="student-profile"
+            className="login-button student-profile-button"
+            aria-label="Profile"
+            title={
+              user.name
+                ? `${user.name}'s Profile`
+                : "Profile"
+            }
           >
-
-            <div className="student-avatar">
-              <UserRound size={17} />
-            </div>
-
-            <div className="student-profile-text">
-
-              <strong>
-                {user.name || "Student"}
-              </strong>
-
-              <small>
-                My Profile
-              </small>
-
-            </div>
-
+            <UserRound
+              size={19}
+              strokeWidth={2}
+            />
           </Link>
 
 
+          {/* LOGOUT */}
+
           <button
-            className="student-logout"
-            title="Logout"
+            type="button"
             onClick={handleLogout}
+            aria-label="Logout"
+            title="Logout"
+            className="register-button student-logout-button"
           >
-            <LogOut size={17} />
-          </button>
-
-
-          {/* Mobile menu button */}
-
-          <button
-            className="student-menu-button"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? (
-              <X size={21} />
-            ) : (
-              <Menu size={21} />
-            )}
+            <LogOut
+              size={19}
+              strokeWidth={2}
+            />
           </button>
 
         </div>
@@ -290,67 +333,16 @@ const StudentLayout = () => {
       </header>
 
 
-      {/* ================= MOBILE MENU ================= */}
+      {/* ==================================================
+          PAGE CONTENT
+      ================================================== */}
 
-      {menuOpen && (
-
-        <div className="student-mobile-menu">
-
-          {navItems.map((item) => {
-
-            const Icon = item.icon;
-
-            return (
-              <NavLink
-                key={item.name}
-                to={item.path}
-                end={item.path === "/"}
-                onClick={() => setMenuOpen(false)}
-                className={({ isActive }) =>
-                  `student-mobile-link ${
-                    isActive ? "active" : ""
-                  }`
-                }
-              >
-                {Icon && <Icon size={17} />}
-                {item.name}
-              </NavLink>
-            );
-
-          })}
-
-
-          <NavLink
-            to="/student/profile"
-            onClick={() => setMenuOpen(false)}
-            className="student-mobile-link"
-          >
-            <UserRound size={17} />
-            Profile
-          </NavLink>
-
-
-          <button
-            className="student-mobile-logout"
-            onClick={handleLogout}
-          >
-            <LogOut size={17} />
-            Logout
-          </button>
-
-        </div>
-
-      )}
-
-
-      {/* ================= PAGE CONTENT ================= */}
-
-      <main className="student-main">
+      <main className="student-layout-content">
         <Outlet />
       </main>
 
     </div>
   );
-};
+}
 
 export default StudentLayout;

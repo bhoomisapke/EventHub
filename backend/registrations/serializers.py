@@ -4,12 +4,6 @@ from .models import Registration
 
 class RegistrationSerializer(serializers.ModelSerializer):
 
-    student_name = serializers.SerializerMethodField()
-    student_email = serializers.EmailField(
-        source="student.email",
-        read_only=True
-    )
-
     event_title = serializers.CharField(
         source="event.title",
         read_only=True
@@ -29,39 +23,31 @@ class RegistrationSerializer(serializers.ModelSerializer):
         source="event.venue",
         read_only=True
     )
-
-    event_image = serializers.ImageField(
-        source="event.image",
-        read_only=True
+    student_id = serializers.CharField(
+        source="student_number",
+        required=False,
+        allow_blank=True
     )
-
-    def get_student_name(self, obj):
-        student = obj.student
-
-        full_name = student.get_full_name()
-
-        if full_name:
-            return full_name
-
-        return student.email
 
     class Meta:
         model = Registration
 
         fields = [
             "id",
-
             "student",
-            "student_name",
-            "student_email",
-
             "event",
 
             "event_title",
             "event_date",
             "event_time",
             "event_venue",
-            "event_image",
+
+            "name",
+            "email",
+            "phone",
+            "student_id",
+            "department",
+            "year",
 
             "registration_date",
             "status",
@@ -70,14 +56,28 @@ class RegistrationSerializer(serializers.ModelSerializer):
         read_only_fields = [
             "id",
             "student",
-            "student_name",
-            "student_email",
-            "registration_date",
-            "status",
-
             "event_title",
             "event_date",
             "event_time",
             "event_venue",
-            "event_image",
+            "registration_date",
+            "status",
         ]
+
+    def validate_email(self, value):
+        return value.strip().lower()
+
+    def validate_name(self, value):
+        return value.strip()
+
+    def validate_phone(self, value):
+        return value.strip()
+
+    def validate_student_number(self, value):
+        return value.strip()
+
+    def validate_department(self, value):
+        return value.strip()
+
+    def validate_year(self, value):
+        return value.strip()

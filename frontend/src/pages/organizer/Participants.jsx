@@ -98,12 +98,19 @@ function Participants() {
       }
 
       if (!response.ok) {
-        throw new Error(
-          data.detail ||
-            data.message ||
-            "Failed to load participants."
-        );
-      }
+  console.error("Participants API failed:", {
+    status: response.status,
+    statusText: response.statusText,
+    data,
+    endpoint,
+  });
+
+  throw new Error(
+    data.detail ||
+      data.message ||
+      `Failed to load participants. HTTP ${response.status}`
+  );
+}
 
       // =================================================
       // SAVE PARTICIPANTS
