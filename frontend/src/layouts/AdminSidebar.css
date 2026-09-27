@@ -1,0 +1,297 @@
+.admin-sidebar {
+  position: fixed;
+  left: 0;
+  top: 76px;
+  bottom: 0;
+
+  width: 260px;
+
+  display: flex;
+  flex-direction: column;
+
+  background:
+    radial-gradient(
+      circle at 20% 0%,
+      rgba(139, 92, 246, 0.16),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      #0b1230 0%,
+      #080d22 55%,
+      #070914 100%
+    );
+
+  border-right: 1px solid rgba(139, 92, 246, 0.15);
+
+  z-index: 90;
+
+  overflow: hidden;
+
+  transition: width 0.3s ease;
+}
+
+/* COLLAPSED SIDEBAR */
+
+.admin-sidebar.admin-sidebar-collapsed {
+  width: 80px;
+}
+
+
+/* SIDEBAR NAV */
+
+.admin-sidebar-nav {
+  flex: 1;
+
+  padding: 32px 16px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+/* MAIN MENU TITLE */
+
+.admin-nav-title {
+  margin: 0 0 16px 14px;
+
+  color: #64748b;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+
+  white-space: nowrap;
+}
+
+.admin-sidebar-collapsed .admin-nav-title {
+  text-align: center;
+  margin-left: 0;
+
+  font-size: 0;
+}
+
+.admin-sidebar-collapsed .admin-nav-title::after {
+  content: "•••";
+
+  font-size: 12px;
+
+  color: #64748b;
+}
+
+
+/* MENU LIST */
+
+.admin-menu-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+
+/* MENU ITEM */
+
+.admin-menu-item {
+  position: relative;
+
+  width: 100%;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 0 16px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: transparent;
+
+  color: #cbd5e1;
+
+  text-decoration: none;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 650;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.2s ease;
+}
+
+
+/* ICON */
+
+.admin-menu-icon {
+  flex-shrink: 0;
+}
+
+
+/* HOVER */
+
+.admin-menu-item:hover {
+  color: #ffffff;
+
+  background: rgba(139, 92, 246, 0.12);
+
+  transform: translateX(2px);
+}
+
+
+/* ACTIVE */
+
+.admin-menu-item.active {
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6d28d9,
+      #7c3aed,
+      #8b5cf6
+    );
+
+  box-shadow:
+    0 8px 22px rgba(109, 40, 217, 0.28);
+}
+
+
+/* ACTIVE LEFT LINE */
+
+.admin-menu-item.active::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+
+  width: 4px;
+
+  border-radius: 0 5px 5px 0;
+
+  background: #f9a8d4;
+}
+
+
+/* BUTTON RESET */
+
+.admin-menu-button {
+  appearance: none;
+  text-align: left;
+}
+
+
+/* BACK TO WEBSITE */
+
+.admin-menu-button:hover {
+  color: #ffffff;
+
+  background: rgba(255, 255, 255, 0.07);
+}
+
+
+/* LOGOUT */
+
+.admin-menu-item.logout {
+  margin-top: 4px;
+}
+
+.admin-menu-item.logout:hover {
+  color: #fda4af;
+
+  background: rgba(225, 29, 72, 0.12);
+}
+
+
+/* COLLAPSED */
+
+.admin-sidebar-collapsed .admin-menu-item {
+  justify-content: center;
+
+  padding: 0;
+
+  gap: 0;
+}
+
+.admin-sidebar-collapsed .admin-menu-item span {
+  display: none;
+}
+
+.admin-sidebar-collapsed .admin-menu-item:hover {
+  transform: translateY(-1px);
+}
+
+
+/* SCROLLBAR */
+
+.admin-sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.35);
+
+  border-radius: 10px;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.6);
+}
+
+
+/* TABLET */
+
+@media (max-width: 900px) {
+  .admin-sidebar {
+    top: 76px;
+
+    width: 240px;
+  }
+
+  .admin-sidebar.admin-sidebar-collapsed {
+    width: 76px;
+  }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+  .admin-sidebar {
+    top: 68px;
+
+    width: 260px;
+
+    transform: translateX(-100%);
+
+    box-shadow:
+      8px 0 30px rgba(15, 23, 42, 0.18);
+  }
+
+  .admin-sidebar.admin-sidebar-collapsed {
+    width: 260px;
+
+    transform: translateX(-100%);
+  }
+
+  .admin-sidebar:not(.admin-sidebar-collapsed) {
+    transform: translateX(0);
+  }
+}

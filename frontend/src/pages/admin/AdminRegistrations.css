@@ -1,0 +1,648 @@
+/* =========================================
+   ADMIN REGISTRATIONS PAGE
+   ========================================= */
+
+.admin-registrations-page {
+  min-height: calc(100vh - 76px);
+  padding: 42px 62px 60px;
+  background:
+    radial-gradient(circle at 8% 5%, rgba(139, 92, 246, 0.10), transparent 28%),
+    radial-gradient(circle at 92% 15%, rgba(236, 72, 153, 0.08), transparent 25%),
+    #f7f3ee;
+  color: #10152c;
+}
+
+
+/* =========================================
+   PAGE HEADER
+   ========================================= */
+
+.admin-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 32px;
+}
+
+.admin-page-label {
+  display: inline-block;
+  margin-bottom: 9px;
+  color: #7c3aed;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.admin-page-header h1 {
+  margin: 0;
+  color: #111344;
+  font-size: clamp(38px, 5vw, 58px);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -1.8px;
+}
+
+.admin-page-header p {
+  margin: 14px 0 0;
+  color: #687083;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+
+/* =========================================
+   TOTAL REGISTRATIONS CARD
+   ========================================= */
+
+.admin-registration-count {
+  min-width: 210px;
+  padding: 22px 25px;
+  border-radius: 20px;
+  background: linear-gradient(
+    135deg,
+    #0b1230 0%,
+    #241653 55%,
+    #6d28d9 100%
+  );
+  color: #ffffff;
+  box-shadow: 0 16px 35px rgba(11, 18, 48, 0.18);
+}
+
+.admin-registration-count strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.admin-registration-count span {
+  display: block;
+  color: #e9d5ff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   SEARCH + FILTER
+   ========================================= */
+
+.admin-registration-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.admin-registration-search {
+  position: relative;
+  flex: 1;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border: 1px solid #e3dfe5;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+  transition: 0.2s ease;
+}
+
+.admin-registration-search:focus-within {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.10);
+}
+
+.admin-registration-search span {
+  margin-right: 12px;
+  color: #7c3aed;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.admin-registration-search input {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #111344;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.admin-registration-search input::placeholder {
+  color: #9aa0ad;
+}
+
+.admin-registration-filter {
+  width: 180px;
+  height: 62px;
+  padding: 0 16px;
+  border: 1px solid #e3dfe5;
+  border-radius: 16px;
+  outline: none;
+  background: #ffffff;
+  color: #111344;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+}
+
+.admin-registration-filter:focus {
+  border-color: #8b5cf6;
+}
+
+
+/* =========================================
+   MAIN REGISTRATION CARD
+   ========================================= */
+
+.admin-registrations-card {
+  overflow: hidden;
+  border: 1px solid #e5e0e7;
+  border-radius: 21px;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.07);
+}
+
+.admin-registrations-card-header {
+  padding: 27px 30px;
+  border-bottom: 1px solid #eeeaf0;
+  background: #ffffff;
+}
+
+.admin-registrations-card-header h2 {
+  margin: 0;
+  color: #111344;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.admin-registrations-card-header p {
+  margin: 6px 0 0;
+  color: #7b8190;
+  font-size: 13px;
+}
+
+
+/* =========================================
+   TABLE
+   ========================================= */
+
+.admin-registrations-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  padding: 22px;
+}
+
+.admin-registrations-table {
+  width: 100%;
+  min-width: 950px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #0b1230;
+  color: #ffffff;
+}
+
+
+/* TABLE HEADER - FIXED */
+
+.admin-registrations-table thead {
+  background: linear-gradient(
+    90deg,
+    #111a46 0%,
+    #32146b 50%,
+    #6d28d9 100%
+  ) !important;
+}
+
+.admin-registrations-table thead tr {
+  background: transparent !important;
+}
+
+.admin-registrations-table thead th {
+  padding: 17px 16px;
+  background: transparent !important;
+  color: #ffffff !important;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+
+/* TABLE BODY */
+
+.admin-registrations-table td {
+  padding: 17px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e8eaf1;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.admin-registrations-table tbody tr {
+  background: #10183b;
+  transition: background 0.2s ease;
+}
+
+.admin-registrations-table tbody tr:nth-child(even) {
+  background: #0d1535;
+}
+
+.admin-registrations-table tbody tr:hover {
+  background: #182252;
+}
+
+
+/* =========================================
+   REGISTRATION ID
+   ========================================= */
+
+.registration-id {
+  color: #c4b5fd;
+  font-weight: 800;
+}
+
+
+/* =========================================
+   STUDENT
+   ========================================= */
+
+.registration-student {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-avatar {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #ec4899
+  );
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.registration-student strong {
+  color: #ffffff;
+  font-size: 13px;
+}
+
+
+/* =========================================
+   EMAIL + EVENT
+   ========================================= */
+
+.registration-email {
+  color: #cbd5e1;
+}
+
+.registration-event {
+  color: #f5d0fe;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   STATUS
+   ========================================= */
+
+.registration-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.status-confirmed {
+  background: rgba(139, 92, 246, 0.18);
+  border: 1px solid rgba(167, 139, 250, 0.35);
+  color: #d8b4fe;
+}
+
+.status-cancelled {
+  background: rgba(225, 29, 72, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.30);
+  color: #fda4af;
+}
+
+
+/* =========================================
+   CANCEL BUTTON
+   ========================================= */
+
+.registration-cancel-btn {
+  padding: 8px 15px;
+  border: 1px solid rgba(244, 63, 94, 0.45);
+  border-radius: 9px;
+  background: rgba(225, 29, 72, 0.15);
+  color: #fda4af;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.registration-cancel-btn:hover {
+  background: #e11d48;
+  border-color: #e11d48;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.registration-cancel-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.registration-cancelled-text {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   EMPTY STATE
+   ========================================= */
+
+.admin-registrations-empty {
+  padding: 75px 25px;
+  text-align: center;
+  background: #ffffff;
+}
+
+.empty-icon {
+  width: 65px;
+  height: 65px;
+  margin: 0 auto 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: #f3e8ff;
+  font-size: 28px;
+}
+
+.admin-registrations-empty h3 {
+  margin: 0;
+  color: #111344;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.admin-registrations-empty p {
+  max-width: 450px;
+  margin: 9px auto 0;
+  color: #7b8190;
+  font-size: 14px;
+}
+
+
+/* =========================================
+   LOADING
+   ========================================= */
+
+.admin-registrations-loading {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6d28d9;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 1100px) {
+  .admin-registrations-page {
+    padding: 35px 35px 50px;
+  }
+
+  .admin-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-registration-count {
+    width: 100%;
+  }
+}
+
+@media (max-width: 750px) {
+  .admin-registrations-page {
+    padding: 28px 20px 40px;
+  }
+
+  .admin-page-header h1 {
+    font-size: 40px;
+  }
+
+  .admin-registration-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-registration-filter {
+    width: 100%;
+  }
+
+  .admin-registrations-table-wrapper {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 500px) {
+  .admin-registrations-page {
+    padding: 24px 14px 35px;
+  }
+
+  .admin-page-header h1 {
+    font-size: 34px;
+  }
+
+  .admin-registration-count {
+    min-width: 0;
+  }
+
+  .admin-registrations-card-header {
+    padding: 22px 18px;
+  }
+}
+/* =========================================
+   WEBSITE TOAST NOTIFICATION
+   Add this at the bottom of AdminRegistrations.css
+   ========================================= */
+
+.admin-website-notification {
+  position: fixed;
+  top: 95px;
+  right: 30px;
+  z-index: 99999;
+
+  min-width: 340px;
+  max-width: 430px;
+
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  padding: 15px 17px;
+
+  background: #ffffff;
+  border-radius: 15px;
+
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.18),
+    0 5px 15px rgba(15, 23, 42, 0.08);
+
+  animation: adminNotificationSlide 0.3s ease;
+}
+
+/* SUCCESS */
+
+.notification-success {
+  border-left: 5px solid #7c3aed;
+}
+
+/* ERROR */
+
+.notification-error {
+  border-left: 5px solid #e11d48;
+}
+
+/* ICON */
+
+.notification-icon {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.notification-success .notification-icon {
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #ec4899
+  );
+}
+
+.notification-error .notification-icon {
+  background: #e11d48;
+}
+
+/* CONTENT */
+
+.notification-content {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.notification-content strong {
+  color: #111344;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.notification-content span {
+  color: #687083;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* CLOSE BUTTON */
+
+.notification-close {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #7b8190;
+
+  font-size: 22px;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.notification-close:hover {
+  background: #f3f0f6;
+  color: #111344;
+}
+
+/* ANIMATION */
+
+@keyframes adminNotificationSlide {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .admin-website-notification {
+    top: 85px;
+    left: 15px;
+    right: 15px;
+
+    min-width: 0;
+    max-width: none;
+  }
+}
