@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
+    "channels",
 
     # EventHub apps
     "accounts",
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     "tickets",
     "feedback",
     "certificates",
+    "adminpanel",
 ]
 
 
@@ -112,10 +114,13 @@ TEMPLATES = [
 
 
 # ============================================================
-# WSGI
+# WSGI / ASGI
 # ============================================================
 
 WSGI_APPLICATION = "config.wsgi.application"
+
+# Django Channels / WebSocket configuration
+ASGI_APPLICATION = "config.asgi.application"
 
 
 # ============================================================
@@ -131,6 +136,23 @@ DATABASES = {
         "HOST": os.getenv("MYSQL_HOST", "127.0.0.1"),
         "PORT": os.getenv("MYSQL_PORT", "3307"),
     }
+}
+
+
+# ============================================================
+# DJANGO CHANNELS
+# ============================================================
+
+# In-memory channel layer.
+#
+# This is suitable for your current local development setup.
+# Later, if the project is deployed with multiple server processes,
+# Redis can be added as the channel layer.
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
 }
 
 

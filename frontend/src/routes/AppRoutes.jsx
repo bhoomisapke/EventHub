@@ -7,13 +7,16 @@ import Auth from "../pages/auth/Auth.jsx";
 // =====================================================
 // LAYOUTS
 // =====================================================
+
 import StudentLayout from "../layouts/StudentLayout.jsx";
 import PublicLayout from "../layouts/PublicLayout.jsx";
 import OrganizerLayout from "../layouts/OrganizerLayout.jsx";
+import AdminLayout from "../layouts/AdminLayout.jsx";
 
 // =====================================================
 // STUDENT PAGES
 // =====================================================
+
 import Dashboard from "../pages/student/Dashboard.jsx";
 import MyRegistrations from "../pages/student/MyRegistrations.jsx";
 import MyTickets from "../pages/student/MyTickets.jsx";
@@ -24,6 +27,7 @@ import RegistrationForm from "../pages/student/RegistrationForm.jsx";
 // =====================================================
 // PUBLIC PAGES
 // =====================================================
+
 import Categories from "../pages/public/Categories.jsx";
 import EventDetails from "../pages/public/EventDetails.jsx";
 import Events from "../pages/public/Events.jsx";
@@ -31,6 +35,7 @@ import Events from "../pages/public/Events.jsx";
 // =====================================================
 // ORGANIZER PAGES
 // =====================================================
+
 import OrganizerDashboard from "../pages/organizer/Dashboard.jsx";
 import OrganizerEventDetails from "../pages/organizer/OrganizerEventDetails.jsx";
 import CreateEvent from "../pages/organizer/CreateEvent.jsx";
@@ -38,13 +43,47 @@ import MyEvents from "../pages/organizer/MyEvents.jsx";
 import EditEvent from "../pages/organizer/EditEvent.jsx";
 import Participants from "../pages/organizer/Participants.jsx";
 import OrganizerProfile from "../pages/organizer/Profile.jsx";
-import Feedback from "../pages/organizer/Feedback";
+import Feedback from "../pages/organizer/Feedback.jsx";
 
 // =====================================================
 // AUTH
 // =====================================================
+
 import ResetPassword from "../pages/auth/ResetPassword.jsx";
 
+// =====================================================
+// ADMIN PAGES
+// =====================================================
+
+import AdminDashboard from "../pages/admin/AdminDashboard.jsx";
+import AdminUsers from "../pages/admin/AdminUsers.jsx";
+import AdminEvents from "../pages/admin/AdminEvents.jsx";
+import AdminRegistrations from "../pages/admin/AdminRegistrations.jsx";
+
+// =====================================================
+// 404 PAGE
+// =====================================================
+
+const NotFound = () => {
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+        gap: "10px",
+      }}
+    >
+      <h1>404</h1>
+
+      <p>
+        Page not found.
+      </p>
+    </div>
+  );
+};
 
 // =====================================================
 // APP ROUTES
@@ -63,7 +102,6 @@ const AppRoutes = () => {
         element={<RegistrationForm />}
       />
 
-
       {/* =====================================================
           LANDING PAGE
           ===================================================== */}
@@ -72,7 +110,6 @@ const AppRoutes = () => {
         path="/"
         element={<App />}
       />
-
 
       {/* =====================================================
           AUTHENTICATION
@@ -87,7 +124,6 @@ const AppRoutes = () => {
         path="/reset-password/:uid/:token"
         element={<ResetPassword />}
       />
-
 
       {/* =====================================================
           PUBLIC PAGES
@@ -130,7 +166,6 @@ const AppRoutes = () => {
 
       </Route>
 
-
       {/* =====================================================
           STUDENT PAGES
           ===================================================== */}
@@ -140,35 +175,49 @@ const AppRoutes = () => {
         element={<StudentLayout />}
       >
 
+        {/* Student Dashboard */}
+
         <Route
           path="dashboard"
           element={<Dashboard />}
         />
 
+        {/* Event Registration */}
+
         <Route
           path="events/:id/register"
           element={<RegistrationForm />}
         />
-        
+
+        {/* Certificates */}
+
         <Route
           path="certificates"
           element={<MyCertificates />}
         />
+
+        {/* Tickets */}
 
         <Route
           path="tickets"
           element={<MyTickets />}
         />
 
+        {/* Profile */}
+
         <Route
           path="profile"
           element={<Profile />}
         />
 
+        {/* Registration Form */}
+
         <Route
           path="register"
           element={<RegistrationForm />}
         />
+
+        {/* My Registrations */}
 
         <Route
           path="registrations"
@@ -176,7 +225,6 @@ const AppRoutes = () => {
         />
 
       </Route>
-
 
       {/* =====================================================
           ORGANIZER PAGES
@@ -196,7 +244,6 @@ const AppRoutes = () => {
           element={<OrganizerDashboard />}
         />
 
-
         {/* =================================================
             ORGANIZER EVENT DETAILS
             ================================================= */}
@@ -205,7 +252,6 @@ const AppRoutes = () => {
           path="events/:id"
           element={<OrganizerEventDetails />}
         />
-
 
         {/* =================================================
             CREATE EVENT
@@ -216,7 +262,6 @@ const AppRoutes = () => {
           element={<CreateEvent />}
         />
 
-
         {/* =================================================
             MY EVENTS
             ================================================= */}
@@ -225,7 +270,6 @@ const AppRoutes = () => {
           path="events"
           element={<MyEvents />}
         />
-
 
         {/* =================================================
             EDIT EVENT
@@ -236,20 +280,8 @@ const AppRoutes = () => {
           element={<EditEvent />}
         />
 
-
         {/* =================================================
             ALL EVENT PARTICIPANTS
-            =================================================
-
-            URL:
-
-            /organizer/participants
-
-            This keeps your PREVIOUS functionality.
-
-            It should show participants from ALL events
-            created by the logged-in organizer.
-
             ================================================= */}
 
         <Route
@@ -257,23 +289,8 @@ const AppRoutes = () => {
           element={<Participants />}
         />
 
-
         {/* =================================================
             EVENT-SPECIFIC PARTICIPANTS
-            =================================================
-
-            URL examples:
-
-            /organizer/events/1/participants
-            /organizer/events/2/participants
-            /organizer/events/3/participants
-
-            This is used by the Participants button
-            inside My Events.
-
-            It should show ONLY participants belonging
-            to the selected event.
-
             ================================================= */}
 
         <Route
@@ -281,10 +298,15 @@ const AppRoutes = () => {
           element={<Participants />}
         />
 
+        {/* =================================================
+            ORGANIZER FEEDBACK
+            ================================================= */}
+
         <Route
           path="feedback"
           element={<Feedback />}
         />
+
         {/* =================================================
             ORGANIZER PROFILE
             ================================================= */}
@@ -296,29 +318,56 @@ const AppRoutes = () => {
 
       </Route>
 
-
       {/* =====================================================
-          ADMIN DASHBOARD
+          ADMIN PANEL
           ===================================================== */}
 
       <Route
-        path="/admin/dashboard"
-        element={
-          <div
-            style={{
-              minHeight: "100vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              gap: "10px",
-            }}
-          >
-            <h1>Admin Dashboard</h1>
-          </div>
-        }
-      />
+        path="/admin"
+        element={<AdminLayout />}
+      >
 
+        {/* =================================================
+            ADMIN DASHBOARD
+            URL: /admin/dashboard
+            ================================================= */}
+
+        <Route
+          path="dashboard"
+          element={<AdminDashboard />}
+        />
+
+        {/* =================================================
+            ADMIN USERS
+            URL: /admin/users
+            ================================================= */}
+
+        <Route
+          path="users"
+          element={<AdminUsers />}
+        />
+
+        {/* =================================================
+            ADMIN EVENTS
+            URL: /admin/events
+            ================================================= */}
+
+        <Route
+          path="events"
+          element={<AdminEvents />}
+        />
+
+        {/* =================================================
+            ADMIN REGISTRATIONS
+            URL: /admin/registrations
+            ================================================= */}
+
+        <Route
+          path="registrations"
+          element={<AdminRegistrations />}
+        />
+
+      </Route>
 
       {/* =====================================================
           404 PAGE
@@ -326,25 +375,7 @@ const AppRoutes = () => {
 
       <Route
         path="*"
-        element={
-          <div
-            style={{
-              minHeight: "100vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              gap: "10px",
-            }}
-          >
-            <h1>404</h1>
-
-            <p>
-              Page not found.
-            </p>
-
-          </div>
-        }
+        element={<NotFound />}
       />
 
     </Routes>
