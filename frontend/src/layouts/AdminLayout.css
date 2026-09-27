@@ -17,7 +17,6 @@
   top: 0;
   left: 0;
   right: 0;
-
   z-index: 1000;
 
   width: 100%;
@@ -25,9 +24,8 @@
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
 
-  padding: 0 5%;
+  padding: 0 28px 0 12px;
 
   background: rgba(247, 243, 238, 0.94);
 
@@ -40,6 +38,8 @@
     0 8px 30px rgba(11, 18, 48, 0.07);
 
   box-sizing: border-box;
+
+  gap: 20px;
 }
 
 
@@ -50,7 +50,10 @@
 .admin-navbar-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+
+  gap: 9px;
+
+  flex-shrink: 0;
 }
 
 
@@ -65,6 +68,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  flex-shrink: 0;
 
   border-radius: 50%;
   border: 1px solid #cec8d0;
@@ -84,11 +89,8 @@
 
 .admin-menu-toggle:hover {
   transform: translateY(-2px);
-
   color: #6d28d9;
-
   border-color: #8b5cf6;
-
   background: #f1e9ff;
 
   box-shadow:
@@ -98,16 +100,18 @@
 
 /* ============================================================
    EVENTHUB BRAND
-   SAME AS ORGANIZER
 ============================================================ */
 
 .admin-navbar-brand {
   display: flex;
   align-items: center;
 
-  gap: 11px;
+  gap: 7px;
 
   text-decoration: none;
+
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -116,14 +120,19 @@
 ============================================================ */
 
 .admin-brand-symbol {
-  width: 39px;
-  height: 39px;
+  width: 34px;
+  height: 34px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 11px;
+  flex-shrink: 0;
+
+  margin: 0;
+  padding: 0;
+
+  border-radius: 9px;
 
   background:
     linear-gradient(
@@ -135,9 +144,18 @@
   color: #fff8ed;
 
   box-shadow:
-    0 0 18px rgba(109, 40, 217, 0.25);
+    0 0 14px rgba(109, 40, 217, 0.22);
 
-  font-size: 19px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.admin-brand-symbol span {
+  margin: 0;
+  padding: 0;
+
+  font-size: 16px;
+  line-height: 1;
 }
 
 
@@ -145,32 +163,160 @@
    BRAND TEXT
 ============================================================ */
 
+.admin-brand-text {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+
+  margin: 0;
+  padding: 0;
+}
+
+
+/* EVENTHUB */
+
 .admin-brand-text strong {
   display: block;
 
+  margin: 0;
+  padding: 0;
+
   color: #0b1230;
 
-  font-size: 20px;
+  font-size: 18px;
+
   line-height: 1;
 
   letter-spacing: -0.5px;
+
+  font-weight: 800;
 }
 
 .admin-brand-text strong span {
   color: #ec4899;
 }
 
+
+/* COLLEGE EVENTS */
+
 .admin-brand-text small {
   display: block;
 
-  margin-top: 4px;
+  margin: 0;
+  padding: 0;
 
   color: #697184;
 
-  font-size: 8px;
+  font-size: 7px;
+
+  line-height: 1;
+
   font-weight: 700;
 
-  letter-spacing: 1.5px;
+  letter-spacing: 1.25px;
+}
+
+
+/* ============================================================
+   SEARCH BAR
+============================================================ */
+
+.admin-search-bar {
+  width: 360px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  margin-left: 18px;
+
+  padding: 0 15px;
+
+  box-sizing: border-box;
+
+  background: #fbf9f6;
+
+  border: 1px solid #d8d2ce;
+
+  border-radius: 23px;
+
+  color: #6d28d9;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-search-bar:focus-within {
+  background: #ffffff;
+
+  border-color: #8b5cf6;
+
+  box-shadow:
+    0 0 0 3px rgba(139, 92, 246, 0.08);
+}
+
+.admin-search-bar > svg {
+  flex-shrink: 0;
+
+  color: #6d28d9;
+}
+
+.admin-search-bar input {
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #10152c;
+
+  font-size: 13px;
+
+  font-family: inherit;
+}
+
+.admin-search-bar input::placeholder {
+  color: #92909a;
+}
+
+
+/* CLEAR SEARCH */
+
+.admin-search-clear {
+  width: 25px;
+  height: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #8b8791;
+
+  cursor: pointer;
+}
+
+.admin-search-clear:hover {
+  background: #eee8f8;
+  color: #6d28d9;
 }
 
 
@@ -183,6 +329,10 @@
   align-items: center;
 
   gap: 9px;
+
+  margin-left: auto;
+
+  flex-shrink: 0;
 }
 
 
@@ -234,7 +384,6 @@
 
 .admin-notification-btn:hover {
   border-color: #8b5cf6;
-
   color: #6d28d9;
 
   background: #f1e9ff;
@@ -358,6 +507,7 @@
   color: #8b5cf6;
 
   font-size: 9px;
+
   font-weight: 800;
 
   letter-spacing: 1.5px;
@@ -641,13 +791,11 @@
       rgba(139, 92, 246, 0.08),
       transparent 28%
     ),
-
     radial-gradient(
       circle at 90% 20%,
       rgba(236, 72, 153, 0.06),
       transparent 25%
     ),
-
     #f7f3ee;
 }
 
@@ -656,12 +804,17 @@
    RESPONSIVE
 ============================================================ */
 
-@media (max-width: 850px) {
+@media (max-width: 1050px) {
 
   .admin-top-navbar {
-    padding: 0 4%;
+    padding-left: 10px;
+    padding-right: 20px;
   }
 
+  .admin-search-bar {
+    width: 290px;
+    margin-left: 12px;
+  }
 }
 
 
@@ -669,30 +822,19 @@
    TABLET / SMALL SCREEN
 ============================================================ */
 
-@media (max-width: 700px) {
+@media (max-width: 850px) {
 
   .admin-top-navbar {
-    min-height: 70px;
+    gap: 12px;
   }
 
-  .admin-brand-text strong {
-    font-size: 18px;
+  .admin-search-bar {
+    flex: 1;
+
+    min-width: 180px;
+
+    width: auto;
   }
-
-  .admin-brand-text small {
-    font-size: 7px;
-  }
-
-  .admin-content-wrapper {
-    padding-top: 70px;
-
-    margin-left: 0 !important;
-  }
-
-  .admin-main-content {
-    min-height: calc(100vh - 70px);
-  }
-
 }
 
 
@@ -700,21 +842,12 @@
    MOBILE
 ============================================================ */
 
-@media (max-width: 580px) {
+@media (max-width: 700px) {
 
   .admin-top-navbar {
-    padding: 10px 4%;
-  }
+    min-height: 70px;
 
-  .admin-brand-symbol {
-    width: 36px;
-    height: 36px;
-
-    font-size: 17px;
-  }
-
-  .admin-navbar-left {
-    gap: 10px;
+    padding: 0 10px;
   }
 
   .admin-brand-text strong {
@@ -722,7 +855,16 @@
   }
 
   .admin-brand-text small {
-    display: none;
+    font-size: 6px;
+  }
+
+  .admin-brand-symbol {
+    width: 32px;
+    height: 32px;
+  }
+
+  .admin-brand-symbol span {
+    font-size: 15px;
   }
 
   .admin-menu-toggle,
@@ -734,6 +876,79 @@
     min-height: 38px;
   }
 
+  .admin-search-bar {
+    height: 38px;
+
+    margin-left: 5px;
+
+    padding: 0 11px;
+  }
+
+  .admin-search-bar input {
+    font-size: 12px;
+  }
+
+  .admin-content-wrapper {
+    padding-top: 70px;
+
+    margin-left: 0 !important;
+  }
+
+  .admin-main-content {
+    min-height: calc(100vh - 70px);
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 580px) {
+
+  .admin-top-navbar {
+    padding: 9px 8px;
+
+    gap: 8px;
+  }
+
+  .admin-navbar-left {
+    gap: 6px;
+  }
+
+  .admin-brand-text strong {
+    font-size: 16px;
+  }
+
+  .admin-brand-text small {
+    display: none;
+  }
+
+  .admin-brand-symbol {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 9px;
+  }
+
+  .admin-menu-toggle,
+  .admin-notification-btn {
+    width: 36px;
+    height: 36px;
+
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .admin-search-bar {
+    flex: 1;
+
+    min-width: 0;
+
+    width: auto;
+
+    margin-left: 3px;
+  }
 }
 
 
@@ -743,22 +958,32 @@
 
 @media (max-width: 480px) {
 
-  .admin-brand-symbol {
-    width: 36px;
-    height: 36px;
-
-    font-size: 17px;
+  .admin-navbar-brand {
+    gap: 5px;
   }
 
-  .admin-navbar-brand {
-    gap: 8px;
+  .admin-brand-symbol {
+    width: 30px;
+    height: 30px;
+  }
+
+  .admin-brand-symbol span {
+    font-size: 14px;
   }
 
   .admin-brand-text strong {
-    font-size: 17px;
+    font-size: 15px;
   }
 
-  /* Notification dropdown on mobile */
+  .admin-search-bar {
+    height: 36px;
+
+    padding: 0 10px;
+  }
+
+  .admin-search-bar input {
+    font-size: 11px;
+  }
 
   .admin-notification-dropdown {
     position: fixed;
@@ -772,5 +997,4 @@
 
     max-width: none;
   }
-
 }

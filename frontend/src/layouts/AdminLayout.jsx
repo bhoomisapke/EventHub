@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import {
   Bell,
   Menu,
+  Search,
   CalendarDays,
   UserRound,
   ClipboardList,
@@ -15,6 +16,9 @@ import "./AdminLayout.css";
 function AdminLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+
+  // Search bar
+  const [searchValue, setSearchValue] = useState("");
 
   // Real-time notifications from Django
   const [notifications, setNotifications] = useState([]);
@@ -108,7 +112,8 @@ function AdminLayout() {
               new Date().toISOString(),
 
             is_read:
-              incomingNotification.is_read || false,
+              incomingNotification.is_read ||
+              false,
           };
 
           if (!isMounted) return;
@@ -377,6 +382,42 @@ function AdminLayout() {
             </div>
 
           </div>
+
+        </div>
+
+
+        {/* ==================================================
+            SEARCH BAR
+        ================================================== */}
+
+        <div className="admin-search-bar">
+
+          <Search
+            size={18}
+            strokeWidth={2}
+          />
+
+          <input
+            type="text"
+            value={searchValue}
+            onChange={(event) =>
+              setSearchValue(event.target.value)
+            }
+            placeholder="Search anything..."
+            aria-label="Search anything"
+          />
+
+          {searchValue && (
+            <button
+              type="button"
+              className="admin-search-clear"
+              onClick={() => setSearchValue("")}
+              aria-label="Clear search"
+              title="Clear search"
+            >
+              <X size={15} />
+            </button>
+          )}
 
         </div>
 
