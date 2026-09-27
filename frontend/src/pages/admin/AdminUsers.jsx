@@ -3,7 +3,6 @@ import {
   Search,
   UserRound,
   ShieldCheck,
-  MoreVertical,
   UserX,
   UserCheck,
   X,
@@ -574,6 +573,8 @@ function AdminUsers() {
 
                         <div className="admin-user-actions">
 
+                          {/* ONLY ACTIVATE / DEACTIVATE BUTTON */}
+
                           <button
                             type="button"
                             title={
@@ -600,14 +601,6 @@ function AdminUsers() {
                               <UserCheck size={17} />
                             )}
 
-                          </button>
-
-                          <button
-                            type="button"
-                            className="admin-action-more"
-                            title="More options"
-                          >
-                            <MoreVertical size={17} />
                           </button>
 
                         </div>
