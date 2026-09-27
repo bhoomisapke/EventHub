@@ -39,15 +39,11 @@ function AdminSidebar({ collapsed }) {
       icon: ClipboardList,
     },
     {
-      label: "Tickets",
-      path: "/admin/tickets",
+      label: "Categories",
+      path: "/admin/Categories",
       icon: Ticket,
     },
-    {
-      label: "Payments",
-      path: "/admin/payments",
-      icon: CreditCard,
-    },
+   
     {
       label: "Reports",
       path: "/admin/reports",
