@@ -47,44 +47,7 @@ const dashboardData = {
    CATEGORIES
    ============================================================ */
 
-const categories = [
-  {
-    symbol: "⌁",
-    title: "Technology",
-    description:
-      "Explore technology and innovation events.",
-  },
-  {
-    symbol: "✦",
-    title: "Cultural",
-    description:
-      "Discover creative and cultural events.",
-  },
-  {
-    symbol: "◈",
-    title: "Sports",
-    description:
-      "Participate in exciting sports events.",
-  },
-  {
-    symbol: "⚡",
-    title: "Workshop",
-    description:
-      "Learn practical skills through workshops.",
-  },
-  {
-    symbol: "◉",
-    title: "Competition",
-    description:
-      "Challenge yourself and compete with others.",
-  },
-  {
-    symbol: "✧",
-    title: "Seminar",
-    description:
-      "Learn from experts and industry speakers.",
-  },
-];
+
 /* ============================================================
    FEATURE DATA
    ============================================================ */
@@ -116,7 +79,8 @@ const features = [
    ============================================================ */
 
 const EVENTS_API_URL = "http://127.0.0.1:8000/api/events/";
-
+const CATEGORIES_API_URL =
+  "http://127.0.0.1:8000/api/events/categories/public/";
 const getEventImage = (event) => {
   const rawImage = event?.image_url || event?.image || "";
 
@@ -200,6 +164,8 @@ const [likedThings, setLikedThings] =
 
   const [events, setEvents] = useState([]);
   const [eventsLoading, setEventsLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+const [categoriesLoading, setCategoriesLoading] = useState(true);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -251,6 +217,41 @@ setEvents(upcomingEvents);
 
     fetchEvents();
   }, []);
+
+  useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(CATEGORIES_API_URL);
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data?.detail ||
+            data?.message ||
+            "Unable to load categories."
+        );
+      }
+
+      const categoryList = Array.isArray(data)
+        ? data
+        : data.results || [];
+
+      setCategories(categoryList);
+    } catch (error) {
+      console.error(
+        "Homepage categories API error:",
+        error
+      );
+
+      setCategories([]);
+    } finally {
+      setCategoriesLoading(false);
+    }
+  };
+
+  fetchCategories();
+}, []);
 
   /* ==========================================================
      SCROLL REVEAL + 3D SECTION STORY
@@ -580,39 +581,88 @@ setEvents(upcomingEvents);
 
             <div className="nav-buttons">
 
-              {isLoggedIn ? (
-                <>
-                  <button type="button" onClick={handleProfile} aria-label="Profile" title="Profile" className="login-button" style={{ minWidth: 42, width: 42, height: 42, padding: 0, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-                    <UserRound size={19} strokeWidth={2} />
-                  </button>
+  {isLoggedIn ? (
+  <>
+    <button
+      type="button"
+      onClick={handleProfile}
+      aria-label="Profile"
+      title="Profile"
+      className="login-button"
+      style={{
+        minWidth: 42,
+        width: 42,
+        height: 42,
+        padding: 0,
+        borderRadius: "50%",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <UserRound size={19} strokeWidth={2} />
+    </button>
 
-                  <button type="button" onClick={handleLogout} aria-label="Logout" title="Logout" className="register-button" style={{ minWidth: 42, width: 42, height: 42, padding: 0, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-                    <LogOut size={19} strokeWidth={2} />
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    className="login-button"
-                    onClick={() =>
-                      navigate("/auth")
-                    }
-                  >
-                    Student Login
-                  </button>
+    <button
+      type="button"
+      onClick={handleLogout}
+      aria-label="Logout"
+      title="Logout"
+      className="register-button"
+      style={{
+        minWidth: 42,
+        width: 42,
+        height: 42,
+        padding: 0,
+        borderRadius: "50%",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <LogOut size={19} strokeWidth={2} />
+    </button>
+  </>
+) : (
+  <>
+    {/* LOGIN */}
+    <button
+      type="button"
+      className="login-button"
+      onClick={() => {
+        closeMenu();
+        navigate("/login");
+      }}
+    >
+      Login
+    </button>
 
-                  <button
-                    className="register-button"
-                    onClick={() =>
-                      navigate("/auth")
-                    }
-                  >
-                    Register
-                  </button>
-                </>
-              )}
+    {/* REGISTER */}
+    <button
+      type="button"
+      className="register-button"
+      onClick={() => {
+        closeMenu();
+        navigate("/register");
+      }}
+    >
+      Register
+    </button>
+  </>
+)}
+  {/* ADMIN ACCESS */}
+  <button
+    type="button"
+    className="login-button"
+    onClick={() => {
+      closeMenu();
+      navigate("/admin-login");
+    }}
+  >
+    Admin
+  </button>
 
-            </div>
+</div>
 
           </header>
 
@@ -1398,9 +1448,9 @@ setEvents(upcomingEvents);
   tabIndex={0}
 >
 
-                  <div className="category-symbol">
-                    {category.symbol}
-                  </div>
+                 <div className="category-symbol">
+                  {category.icon ? category.icon : "✦"}
+                </div>
 
                   <h3>
                     {category.title}

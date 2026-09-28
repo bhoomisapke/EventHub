@@ -59,6 +59,8 @@ import AdminDashboard from "../pages/admin/AdminDashboard.jsx";
 import AdminUsers from "../pages/admin/AdminUsers.jsx";
 import AdminEvents from "../pages/admin/AdminEvents.jsx";
 import AdminRegistrations from "../pages/admin/AdminRegistrations.jsx";
+import AdminCategories from "../pages/admin/Categories.jsx";
+import AdminLogin from "../pages/admin/AdminLogin.jsx";
 
 // =====================================================
 // 404 PAGE
@@ -115,11 +117,25 @@ const AppRoutes = () => {
           AUTHENTICATION
           ===================================================== */}
 
+      {/* LOGIN PAGE */}
+      <Route
+        path="/login"
+        element={<Auth />}
+      />
+
+      {/* REGISTER PAGE */}
+      <Route
+        path="/register"
+        element={<Auth />}
+      />
+
+      {/* OLD AUTH URL - KEPT FOR COMPATIBILITY */}
       <Route
         path="/auth"
         element={<Auth />}
       />
 
+      {/* PASSWORD RESET */}
       <Route
         path="/reset-password/:uid/:token"
         element={<ResetPassword />}
@@ -131,21 +147,25 @@ const AppRoutes = () => {
 
       <Route element={<PublicLayout />}>
 
+        {/* Public Categories */}
         <Route
           path="/categories"
           element={<Categories />}
         />
 
+        {/* Event Details */}
         <Route
           path="/event/:id"
           element={<EventDetails />}
         />
 
+        {/* All Events */}
         <Route
           path="/events"
           element={<Events />}
         />
 
+        {/* About */}
         <Route
           path="/about"
           element={
@@ -155,6 +175,7 @@ const AppRoutes = () => {
           }
         />
 
+        {/* Contact */}
         <Route
           path="/contact"
           element={
@@ -176,49 +197,42 @@ const AppRoutes = () => {
       >
 
         {/* Student Dashboard */}
-
         <Route
           path="dashboard"
           element={<Dashboard />}
         />
 
         {/* Event Registration */}
-
         <Route
           path="events/:id/register"
           element={<RegistrationForm />}
         />
 
         {/* Certificates */}
-
         <Route
           path="certificates"
           element={<MyCertificates />}
         />
 
         {/* Tickets */}
-
         <Route
           path="tickets"
           element={<MyTickets />}
         />
 
         {/* Profile */}
-
         <Route
           path="profile"
           element={<Profile />}
         />
 
         {/* Registration Form */}
-
         <Route
           path="register"
           element={<RegistrationForm />}
         />
 
         {/* My Registrations */}
-
         <Route
           path="registrations"
           element={<MyRegistrations />}
@@ -235,82 +249,55 @@ const AppRoutes = () => {
         element={<OrganizerLayout />}
       >
 
-        {/* =================================================
-            ORGANIZER DASHBOARD
-            ================================================= */}
-
+        {/* Organizer Dashboard */}
         <Route
           path="dashboard"
           element={<OrganizerDashboard />}
         />
 
-        {/* =================================================
-            ORGANIZER EVENT DETAILS
-            ================================================= */}
-
+        {/* Organizer Event Details */}
         <Route
           path="events/:id"
           element={<OrganizerEventDetails />}
         />
 
-        {/* =================================================
-            CREATE EVENT
-            ================================================= */}
-
+        {/* Create Event */}
         <Route
           path="create-event"
           element={<CreateEvent />}
         />
 
-        {/* =================================================
-            MY EVENTS
-            ================================================= */}
-
+        {/* My Events */}
         <Route
           path="events"
           element={<MyEvents />}
         />
 
-        {/* =================================================
-            EDIT EVENT
-            ================================================= */}
-
+        {/* Edit Event */}
         <Route
           path="events/:id/edit"
           element={<EditEvent />}
         />
 
-        {/* =================================================
-            ALL EVENT PARTICIPANTS
-            ================================================= */}
-
+        {/* All Participants */}
         <Route
           path="participants"
           element={<Participants />}
         />
 
-        {/* =================================================
-            EVENT-SPECIFIC PARTICIPANTS
-            ================================================= */}
-
+        {/* Event-specific Participants */}
         <Route
           path="events/:id/participants"
           element={<Participants />}
         />
 
-        {/* =================================================
-            ORGANIZER FEEDBACK
-            ================================================= */}
-
+        {/* Organizer Feedback */}
         <Route
           path="feedback"
           element={<Feedback />}
         />
 
-        {/* =================================================
-            ORGANIZER PROFILE
-            ================================================= */}
-
+        {/* Organizer Profile */}
         <Route
           path="profile"
           element={<OrganizerProfile />}
@@ -327,47 +314,46 @@ const AppRoutes = () => {
         element={<AdminLayout />}
       >
 
-        {/* =================================================
-            ADMIN DASHBOARD
-            URL: /admin/dashboard
-            ================================================= */}
-
+        {/* Admin Dashboard */}
         <Route
           path="dashboard"
           element={<AdminDashboard />}
         />
 
-        {/* =================================================
-            ADMIN USERS
-            URL: /admin/users
-            ================================================= */}
-
+        {/* Admin Users */}
         <Route
           path="users"
           element={<AdminUsers />}
         />
 
-        {/* =================================================
-            ADMIN EVENTS
-            URL: /admin/events
-            ================================================= */}
-
+        {/* Admin Events */}
         <Route
           path="events"
           element={<AdminEvents />}
         />
 
-        {/* =================================================
-            ADMIN REGISTRATIONS
-            URL: /admin/registrations
-            ================================================= */}
-
+        {/* Admin Registrations */}
         <Route
           path="registrations"
           element={<AdminRegistrations />}
         />
 
+        {/* Admin Categories */}
+        <Route
+          path="categories"
+          element={<AdminCategories />}
+        />
+
       </Route>
+
+      {/* =====================================================
+          ADMIN LOGIN
+          ===================================================== */}
+
+      <Route
+        path="/admin-login"
+        element={<AdminLogin />}
+      />
 
       {/* =====================================================
           404 PAGE

@@ -40,20 +40,12 @@ function AdminSidebar({ collapsed }) {
     },
     {
       label: "Categories",
-      path: "/admin/Categories",
+      path: "/admin/categories",
       icon: Ticket,
     },
    
-    {
-      label: "Reports",
-      path: "/admin/reports",
-      icon: BarChart3,
-    },
-    {
-      label: "Settings",
-      path: "/admin/settings",
-      icon: Settings,
-    },
+    
+   
   ];
 
   const handleLogout = () => {

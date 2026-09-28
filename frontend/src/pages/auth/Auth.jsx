@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
 import "./Auth.css";
 
 /* =========================================================
@@ -246,12 +254,48 @@ function InputField({
 
 function Auth() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  /* =======================================================
+     URL → MODE
+
+     /login    = Login
+     /register = Register
+     /auth     = Login
+  ======================================================= */
+
+  const getModeFromPath = () => {
+    if (location.pathname === "/register") {
+      return "register";
+    }
+
+    return "login";
+  };
+
+  const [mode, setMode] = useState(getModeFromPath);
+
+  /* =======================================================
+     KEEP MODE SYNCHRONIZED WITH URL
+  ======================================================= */
+
+  useEffect(() => {
+    const urlMode = getModeFromPath();
+
+    setMode(urlMode);
+
+    setErrors({});
+    setTouched({});
+    setStatus("");
+    setSuccess(false);
+    setLoading(false);
+    setShowForgotPassword(false);
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+  }, [location.pathname]);
 
   /* =======================================================
      STATE
   ======================================================= */
-
-  const [mode, setMode] = useState("login");
 
   const [role, setRole] = useState("student");
 
@@ -310,6 +354,7 @@ function Auth() {
 
   const changeMode = (newMode) => {
     setMode(newMode);
+
     setErrors({});
     setTouched({});
     setStatus("");
@@ -318,6 +363,12 @@ function Auth() {
     setShowPassword(false);
     setShowConfirmPassword(false);
     setShowForgotPassword(false);
+
+    if (newMode === "register") {
+      navigate("/register");
+    } else {
+      navigate("/login");
+    }
   };
 
   /* =======================================================
@@ -359,7 +410,9 @@ function Auth() {
     if (!form.email.trim()) {
       newErrors.email = "Email address is required.";
     } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        form.email.trim()
+      )
     ) {
       newErrors.email = "Enter a valid email address.";
     }
@@ -393,19 +446,24 @@ function Auth() {
       if (!form.confirmPassword) {
         newErrors.confirmPassword =
           "Please confirm your password.";
-      } else if (form.password !== form.confirmPassword) {
-        newErrors.confirmPassword = "Passwords do not match.";
+      } else if (
+        form.password !== form.confirmPassword
+      ) {
+        newErrors.confirmPassword =
+          "Passwords do not match.";
       }
 
       /* STUDENT */
 
       if (role === "student") {
         if (!form.college.trim()) {
-          newErrors.college = "College name is required.";
+          newErrors.college =
+            "College name is required.";
         }
 
         if (!form.year.trim()) {
-          newErrors.year = "Please select your year.";
+          newErrors.year =
+            "Please select your year.";
         }
       }
 
@@ -413,15 +471,20 @@ function Auth() {
 
       if (role === "organizer") {
         if (!form.organization.trim()) {
-          newErrors.organization = "Organization is required.";
+          newErrors.organization =
+            "Organization is required.";
         }
 
         if (!form.phone.trim()) {
-          newErrors.phone = "Phone number is required.";
+          newErrors.phone =
+            "Phone number is required.";
         } else if (
-          !/^[+]?[0-9\s()-]{10,15}$/.test(form.phone.trim())
+          !/^[+]?[0-9\s()-]{10,15}$/.test(
+            form.phone.trim()
+          )
         ) {
-          newErrors.phone = "Enter a valid phone number.";
+          newErrors.phone =
+            "Enter a valid phone number.";
         }
       }
     }
@@ -492,7 +555,10 @@ function Auth() {
         "Password reset link has been sent. Check your email."
       );
     } catch (error) {
-      console.error("Forgot password error:", error);
+      console.error(
+        "Forgot password error:",
+        error
+      );
 
       setLoading(false);
       setSuccess(false);
@@ -519,16 +585,20 @@ function Auth() {
       confirmPassword: mode === "register",
 
       college:
-        mode === "register" && role === "student",
+        mode === "register" &&
+        role === "student",
 
       year:
-        mode === "register" && role === "student",
+        mode === "register" &&
+        role === "student",
 
       organization:
-        mode === "register" && role === "organizer",
+        mode === "register" &&
+        role === "organizer",
 
       phone:
-        mode === "register" && role === "organizer",
+        mode === "register" &&
+        role === "organizer",
     };
 
     setTouched(allTouched);
@@ -683,7 +753,8 @@ function Auth() {
       if (!response.ok) {
         setLoading(false);
 
-        let errorMessage = "Registration failed.";
+        let errorMessage =
+          "Registration failed.";
 
         if (data.email) {
           errorMessage = data.email[0];
@@ -709,13 +780,17 @@ function Auth() {
       setLoading(false);
       setSuccess(true);
 
-      setStatus("Account created successfully!");
+      setStatus(
+        "Account created successfully!"
+      );
 
       setTimeout(() => {
         setSuccess(false);
         setStatus("");
 
         setMode("login");
+
+        navigate("/login");
 
         setForm({
           ...initialForm,
@@ -727,7 +802,10 @@ function Auth() {
         setErrors({});
       }, 1200);
     } catch (error) {
-      console.error("Authentication error:", error);
+      console.error(
+        "Authentication error:",
+        error
+      );
 
       setLoading(false);
       setSuccess(false);
@@ -970,6 +1048,7 @@ function Auth() {
                 ? "Sign in and continue discovering amazing college events."
                 : "Join students and organizers creating memorable campus experiences."}
             </p>
+
           </div>
 
           {/* =================================================
@@ -1072,9 +1151,11 @@ function Auth() {
                   ← Back to Login
                 </button>
               </div>
+
             </form>
           ) : (
             <>
+
               {/* =================================================
                   LOGIN / REGISTER TABS
               ================================================= */}
@@ -1116,6 +1197,7 @@ function Auth() {
                       : ""
                   }`}
                 />
+
               </div>
 
               {/* =================================================
@@ -1199,6 +1281,7 @@ function Auth() {
                       </b>
                     )}
                   </button>
+
                 </div>
               </div>
 
@@ -1289,10 +1372,12 @@ function Auth() {
                               )
                             }
                             onBlur={() =>
-                              setTouched((prev) => ({
-                                ...prev,
-                                year: true,
-                              }))
+                              setTouched(
+                                (prev) => ({
+                                  ...prev,
+                                  year: true,
+                                })
+                              )
                             }
                             className={`auth-input auth-select ${
                               errors.year &&
@@ -1325,6 +1410,7 @@ function Auth() {
                               Final Year
                             </option>
                           </select>
+
                         </div>
 
                         {errors.year &&
@@ -1333,7 +1419,9 @@ function Auth() {
                               {errors.year}
                             </p>
                           )}
+
                       </div>
+
                     </div>
                   )}
 
@@ -1468,6 +1556,7 @@ function Auth() {
                     >
                       Forgot password?
                     </button>
+
                   </div>
                 )}
 
@@ -1540,13 +1629,14 @@ function Auth() {
 
                   <button
                     type="button"
-                    onClick={() =>
-                      changeMode(
+                    onClick={() => {
+                      const nextMode =
                         mode === "login"
                           ? "register"
-                          : "login"
-                      )
-                    }
+                          : "login";
+
+                      changeMode(nextMode);
+                    }}
                   >
                     {mode === "login"
                       ? "Create account"
@@ -1557,6 +1647,7 @@ function Auth() {
                 <span />
 
               </div>
+
             </>
           )}
 

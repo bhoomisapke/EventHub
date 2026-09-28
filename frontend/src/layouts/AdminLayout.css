@@ -7,6 +7,7 @@
   background: #f7f3ee;
 }
 
+
 /* ============================================================
    ADMIN NAVBAR
 ============================================================ */
@@ -17,16 +18,18 @@
   left: 0;
   right: 0;
   z-index: 1000;
+
   width: 100%;
   min-height: 76px;
 
   display: flex;
   align-items: center;
 
-  /* NO LEFT SPACE */
+  /* No left space */
   padding: 0 5% 0 0;
 
   background: rgba(247, 243, 238, 0.94);
+
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 
@@ -36,8 +39,10 @@
     0 8px 30px rgba(11, 18, 48, 0.07);
 
   box-sizing: border-box;
+
   gap: 20px;
 }
+
 
 /* ============================================================
    LEFT SIDE
@@ -46,9 +51,12 @@
 .admin-navbar-left {
   display: flex;
   align-items: center;
+
   gap: 11px;
+
   flex-shrink: 0;
 }
+
 
 /* ============================================================
    HAMBURGER
@@ -82,13 +90,17 @@
 
 .admin-menu-toggle:hover {
   transform: translateY(-2px);
+
   color: #6d28d9;
+
   border-color: #8b5cf6;
+
   background: #f1e9ff;
 
   box-shadow:
     0 0 18px rgba(109, 40, 217, 0.18);
 }
+
 
 /* ============================================================
    EVENTHUB BRAND
@@ -97,14 +109,17 @@
 .admin-navbar-brand {
   display: flex;
   align-items: center;
+
   gap: 11px;
 
   text-decoration: none;
+
   margin: 0;
   padding: 0;
 
   flex-shrink: 0;
 }
+
 
 /* ============================================================
    BRAND SYMBOL
@@ -149,6 +164,7 @@
   line-height: 1;
 }
 
+
 /* ============================================================
    BRAND TEXT
 ============================================================ */
@@ -163,7 +179,10 @@
   padding: 0;
 }
 
-/* EVENTHUB */
+
+/* ============================================================
+   EVENTHUB TEXT
+============================================================ */
 
 .admin-brand-text strong {
   display: block;
@@ -177,6 +196,7 @@
   line-height: 1;
 
   letter-spacing: -0.5px;
+
   font-weight: 800;
 }
 
@@ -184,7 +204,10 @@
   color: #ec4899;
 }
 
-/* COLLEGE EVENTS */
+
+/* ============================================================
+   COLLEGE EVENTS
+============================================================ */
 
 .admin-brand-text small {
   display: block;
@@ -198,8 +221,10 @@
   line-height: 1;
 
   font-weight: 700;
+
   letter-spacing: 1.5px;
 }
+
 
 /* ============================================================
    SEARCH BAR
@@ -222,6 +247,7 @@
   background: rgba(255, 248, 237, 0.72);
 
   border: 1px solid #cec8d0;
+
   border-radius: 20px;
 
   color: #6d28d9;
@@ -243,6 +269,7 @@
 
 .admin-search-bar > svg {
   flex-shrink: 0;
+
   color: #6d28d9;
 }
 
@@ -257,9 +284,11 @@
   outline: none;
 
   background: transparent;
+
   color: #10152c;
 
   font-size: 13px;
+
   font-family: inherit;
 }
 
@@ -267,7 +296,10 @@
   color: #92909a;
 }
 
-/* CLEAR SEARCH */
+
+/* ============================================================
+   CLEAR SEARCH
+============================================================ */
 
 .admin-search-clear {
   width: 25px;
@@ -282,18 +314,26 @@
   padding: 0;
 
   border: none;
+
   border-radius: 50%;
 
   background: transparent;
+
   color: #8b8791;
 
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .admin-search-clear:hover {
   background: #eee8f8;
+
   color: #6d28d9;
 }
+
 
 /* ============================================================
    RIGHT SIDE
@@ -310,6 +350,7 @@
   flex-shrink: 0;
 }
 
+
 /* ============================================================
    NOTIFICATION WRAPPER
 ============================================================ */
@@ -317,6 +358,7 @@
 .admin-notification-wrapper {
   position: relative;
 }
+
 
 /* ============================================================
    NOTIFICATION BUTTON
@@ -357,7 +399,9 @@
 
 .admin-notification-btn:hover {
   border-color: #8b5cf6;
+
   color: #6d28d9;
+
   background: #f1e9ff;
 
   transform: translateY(-2px);
@@ -368,12 +412,15 @@
 
 .admin-notification-btn.notification-active {
   border-color: #8b5cf6;
+
   background: #f1e9ff;
+
   color: #6d28d9;
 
   box-shadow:
     0 0 18px rgba(109, 40, 217, 0.15);
 }
+
 
 /* ============================================================
    NOTIFICATION DOT
@@ -395,6 +442,7 @@
   border: 2px solid #fff8ed;
 }
 
+
 /* ============================================================
    NOTIFICATION DROPDOWN
 ============================================================ */
@@ -411,6 +459,7 @@
   overflow: hidden;
 
   border: 1px solid #ddd8e1;
+
   border-radius: 18px;
 
   background: #ffffff;
@@ -425,14 +474,19 @@
 @keyframes notificationDropdownIn {
   from {
     opacity: 0;
-    transform: translateY(-8px);
+
+    transform:
+      translateY(-8px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+
+    transform:
+      translateY(0);
   }
 }
+
 
 /* ============================================================
    NOTIFICATION HEADER
@@ -463,6 +517,7 @@
   color: #8b5cf6;
 
   font-size: 9px;
+
   font-weight: 800;
 
   letter-spacing: 1.5px;
@@ -474,8 +529,10 @@
   color: #0b1230;
 
   font-size: 20px;
+
   font-weight: 800;
 }
+
 
 /* ============================================================
    NOTIFICATION CLOSE BUTTON
@@ -490,21 +547,29 @@
   justify-content: center;
 
   border: 1px solid #ddd8e1;
+
   border-radius: 9px;
 
   background: #ffffff;
+
   color: #0b1230;
 
   cursor: pointer;
 
-  transition: 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .admin-notification-close:hover {
   border-color: #8b5cf6;
+
   background: #f1e9ff;
+
   color: #6d28d9;
 }
+
 
 /* ============================================================
    NOTIFICATION LIST
@@ -512,8 +577,10 @@
 
 .admin-notification-list {
   max-height: 390px;
+
   overflow-y: auto;
 }
+
 
 /* ============================================================
    NOTIFICATION ITEM
@@ -540,6 +607,7 @@
   border-bottom: none;
 }
 
+
 /* ============================================================
    NOTIFICATION ICON
 ============================================================ */
@@ -557,26 +625,33 @@
   border-radius: 11px;
 }
 
+
 /* REGISTRATION */
 
 .admin-notification-icon.registration {
   background: #f1e9ff;
+
   color: #6d28d9;
 }
+
 
 /* EVENT */
 
 .admin-notification-icon.event {
   background: #fce7f3;
+
   color: #db2777;
 }
+
 
 /* USER */
 
 .admin-notification-icon.user {
   background: #eeeaf4;
+
   color: #0b1230;
 }
+
 
 /* ============================================================
    NOTIFICATION CONTENT
@@ -584,6 +659,7 @@
 
 .admin-notification-content {
   min-width: 0;
+
   flex: 1;
 }
 
@@ -595,6 +671,7 @@
   color: #0b1230;
 
   font-size: 13px;
+
   font-weight: 800;
 }
 
@@ -604,6 +681,7 @@
   color: #697184;
 
   font-size: 12px;
+
   line-height: 1.45;
 }
 
@@ -611,8 +689,10 @@
   color: #9a9eaa;
 
   font-size: 10px;
+
   font-weight: 600;
 }
+
 
 /* ============================================================
    NO NOTIFICATIONS
@@ -646,6 +726,7 @@
   font-size: 12px;
 }
 
+
 /* ============================================================
    NOTIFICATION FOOTER
 ============================================================ */
@@ -668,14 +749,19 @@
   color: #6d28d9;
 
   font-size: 12px;
+
   font-weight: 800;
 
   cursor: pointer;
+
+  transition:
+    color 0.2s ease;
 }
 
 .admin-notification-footer button:hover {
   color: #ec4899;
 }
+
 
 /* ============================================================
    CONTENT WRAPPER
@@ -690,12 +776,14 @@
     margin-left 0.25s ease;
 }
 
+
 /* SIDEBAR OPEN */
 
 .admin-layout.sidebar-expanded
 .admin-content-wrapper {
   margin-left: 250px;
 }
+
 
 /* SIDEBAR COLLAPSED */
 
@@ -704,12 +792,14 @@
   margin-left: 76px;
 }
 
+
 /* ============================================================
    MAIN CONTENT
 ============================================================ */
 
 .admin-main-content {
-  min-height: calc(100vh - 76px);
+  min-height:
+    calc(100vh - 76px);
 
   background:
     radial-gradient(
@@ -717,57 +807,90 @@
       rgba(139, 92, 246, 0.08),
       transparent 28%
     ),
+
     radial-gradient(
       circle at 90% 20%,
       rgba(236, 72, 153, 0.06),
       transparent 25%
     ),
+
     #f7f3ee;
 }
+
+
+/* ============================================================
+   ADMIN AUTH LOADING SPINNER
+============================================================ */
+
+@keyframes adminAuthSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 
 /* ============================================================
    RESPONSIVE
 ============================================================ */
 
 @media (max-width: 1050px) {
+
   .admin-top-navbar {
-    /* KEEP HAMBURGER AT LEFT */
+    /* Keep hamburger at left */
+
     padding-left: 0;
+
     padding-right: 5%;
   }
 
   .admin-search-bar {
     width: 290px;
+
     margin-left: 12px;
   }
 }
+
 
 /* ============================================================
    TABLET
 ============================================================ */
 
 @media (max-width: 850px) {
+
   .admin-top-navbar {
     gap: 12px;
   }
 
   .admin-search-bar {
     flex: 1;
+
     min-width: 180px;
+
     width: auto;
   }
 }
+
 
 /* ============================================================
    MOBILE
 ============================================================ */
 
 @media (max-width: 700px) {
+
   .admin-top-navbar {
     min-height: 70px;
 
-    /* SMALL RIGHT SPACE, ZERO LEFT SPACE */
-    padding: 0 10px 0 0;
+    /* Small right space, zero left space */
+
+    padding:
+      0
+      10px
+      0
+      0;
   }
 
   .admin-brand-symbol {
@@ -794,26 +917,36 @@
 
   .admin-search-bar {
     height: 38px;
+
     margin-left: 5px;
   }
 
   .admin-content-wrapper {
     padding-top: 70px;
+
     margin-left: 0 !important;
   }
 
   .admin-main-content {
-    min-height: calc(100vh - 70px);
+    min-height:
+      calc(100vh - 70px);
   }
 }
+
 
 /* ============================================================
    SMALL MOBILE
 ============================================================ */
 
 @media (max-width: 580px) {
+
   .admin-top-navbar {
-    padding: 8px 8px 8px 0;
+    padding:
+      8px
+      8px
+      8px
+      0;
+
     gap: 8px;
   }
 
@@ -845,6 +978,7 @@
 
   .admin-search-bar {
     flex: 1;
+
     min-width: 0;
 
     width: auto;
@@ -853,11 +987,13 @@
   }
 }
 
+
 /* ============================================================
    VERY SMALL MOBILE
 ============================================================ */
 
 @media (max-width: 480px) {
+
   .admin-navbar-brand {
     gap: 6px;
   }
@@ -877,7 +1013,10 @@
 
   .admin-search-bar {
     height: 36px;
-    padding: 0 10px;
+
+    padding:
+      0
+      10px;
   }
 
   .admin-search-bar input {
@@ -888,10 +1027,12 @@
     position: fixed;
 
     top: 70px;
+
     right: 16px;
     left: 16px;
 
     width: auto;
+
     max-width: none;
   }
 }
