@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import (
+    CertificateConfigurationView,
     GenerateEventCertificatesView,
     MyCertificatesView,
     CertificateDetailView,
@@ -10,6 +11,8 @@ from .views import (
 
 
 urlpatterns = [
+
+    # Student certificates
     path(
         "my/",
         MyCertificatesView.as_view(),
@@ -34,6 +37,14 @@ urlpatterns = [
         name="certificate-download-pdf",
     ),
 
+    # Organizer certificate customization
+    path(
+        "events/<int:event_id>/configuration/",
+        CertificateConfigurationView.as_view(),
+        name="certificate-configuration",
+    ),
+
+    # Organizer certificate generation
     path(
         "events/<int:event_id>/generate/",
         GenerateEventCertificatesView.as_view(),

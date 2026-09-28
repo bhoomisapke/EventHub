@@ -160,6 +160,7 @@ const EventCard = ({
     description,
     capacity,
     attendees,
+    registration_count,
     registered,
   } = event;
 
@@ -177,9 +178,10 @@ const EventCard = ({
 
 
   const registeredCount =
-    registered ??
-    attendees ??
-    0;
+  event.registration_count ??
+  registered ??
+  attendees ??
+  0;
 
 
   const handleSave = (e) => {

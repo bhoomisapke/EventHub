@@ -57,7 +57,8 @@ const Dashboard = () => {
   const [events, setEvents] = useState([]);
   const [eventsLoading, setEventsLoading] = useState(true);
   const [eventsError, setEventsError] = useState("");
-
+  const [registrations, setRegistrations] = useState([]);
+  const [registrationsLoading, setRegistrationsLoading] = useState(true);
   useEffect(() => {
     const fetchDashboardEvents = async () => {
       try {
@@ -92,7 +93,133 @@ const Dashboard = () => {
 
     fetchDashboardEvents();
   }, []);
+useEffect(() => {
+  const fetchMyRegistrations = async () => {
+    const token =
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token");
 
+    if (!token) {
+      setRegistrations([]);
+      setRegistrationsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_URL}/api/registrations/my/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Unable to load registrations.");
+      }
+const data = await response.json();
+
+const registrationList = Array.isArray(data)
+  ? data
+  : data.results || [];
+
+// Only active registrations
+const confirmedRegistrations = registrationList.filter(
+  (registration) =>
+    String(registration.status || "").toLowerCase() === "confirmed"
+);
+
+// Fetch event data so cards can use poster/image
+let eventList = [];
+
+try {
+  const eventsResponse = await fetch(
+    `${API_URL}/api/events/`
+  );
+
+  if (eventsResponse.ok) {
+    const eventsData = await eventsResponse.json();
+
+    eventList = Array.isArray(eventsData)
+      ? eventsData
+      : eventsData.results || [];
+  }
+} catch (eventError) {
+  console.error(
+    "Could not fetch event details:",
+    eventError
+  );
+}
+
+// Enrich registrations with event information
+const enrichedRegistrations = confirmedRegistrations.map(
+  (registration) => {
+
+    const eventId =
+      typeof registration.event === "object"
+        ? registration.event?.id
+        : registration.event;
+
+    const matchingEvent = eventList.find(
+      (event) =>
+        Number(event.id) === Number(eventId)
+    );
+
+    return {
+      ...registration,
+
+      eventData: matchingEvent || null,
+
+      event_title:
+        registration.event_title ||
+        registration.event?.title ||
+        matchingEvent?.title ||
+        "Event",
+
+      event_date:
+        registration.event_date ||
+        registration.event?.date ||
+        matchingEvent?.date ||
+        "",
+
+      event_time:
+        registration.event_time ||
+        registration.event?.time ||
+        matchingEvent?.time ||
+        "",
+
+      event_venue:
+        registration.event_venue ||
+        registration.event?.venue ||
+        matchingEvent?.venue ||
+        "",
+
+      event_image:
+        registration.event_image ||
+        registration.event_image_url ||
+        registration.image_url ||
+        registration.image ||
+        matchingEvent?.image_url ||
+        matchingEvent?.image ||
+        "",
+    };
+  }
+);
+
+setRegistrations(enrichedRegistrations);
+    } catch (error) {
+      console.error("Dashboard registrations error:", error);
+      setRegistrations([]);
+    } finally {
+      setRegistrationsLoading(false);
+    }
+  };
+
+  fetchMyRegistrations();
+}, []);
 
   return (
     <div className="student-page">
@@ -296,148 +423,165 @@ const Dashboard = () => {
         </div>
 
       </section>
+{/* ================= RECENT REGISTRATIONS ================= */}
+<section className="student-section">
 
-      {/* ================= MY UPCOMING REGISTRATIONS ================= */}
-      <section className="student-section">
+  <div className="student-section-header">
 
-        <div className="student-section-header">
+    <div>
+      <span className="section-small-label">
+        YOUR ACTIVITY
+      </span>
 
-          <div>
+      <h2>Recent Registrations</h2>
 
-            <span className="section-small-label">
-              YOUR EVENTS
-            </span>
+      <p>
+        Your latest confirmed campus events.
+      </p>
+    </div>
 
-            <h2>My Upcoming Registrations</h2>
+    <Link
+      to="/student/registrations"
+      className="view-all-link"
+    >
+      View all
+      <ArrowRight size={16} />
+    </Link>
 
-            <p>
-              Events you have registered for and are coming up soon.
-            </p>
+  </div>
 
-          </div>
+  {registrationsLoading ? (
 
-          <Link
-            to="/student/registrations"
-            className="view-all-link"
-          >
-            View all
-            <ArrowRight size={16} />
-          </Link>
-
+    <div className="registrations-card">
+      <div className="registration-row">
+        <div className="registration-details">
+          <strong>Loading registrations...</strong>
+          <span>Please wait</span>
         </div>
-
-        <div className="events-grid dashboard-events-grid">
-        {events.slice(0, 3).map((event, index) => (
-          <EventCard
-            key={event.id}
-            event={event}
-            index={index}
-          />
-        ))}
       </div>
+    </div>
 
-      </section>
+  ) : registrations.length === 0 ? (
 
-      {/* ================= RECENT REGISTRATIONS ================= */}
-      <section className="student-section">
+    <div className="registrations-card">
+      <div className="registration-row">
 
-        <div className="student-section-header">
-
-          <div>
-
-            <span className="section-small-label">
-              YOUR ACTIVITY
-            </span>
-
-            <h2>Recent Registrations</h2>
-
-            <p>
-              Keep track of the events you've joined.
-            </p>
-
-          </div>
-
-          <Link
-            to="/student/registrations"
-            className="view-all-link"
-          >
-            View registrations
-            <ArrowRight size={16} />
-          </Link>
-
+        <div className="registration-icon">
+          <CalendarDays size={20} />
         </div>
 
-        <div className="registrations-card">
-
-          <div className="registration-row">
-
-            <div className="registration-icon">
-              <Ticket size={20} />
-            </div>
-
-            <div className="registration-details">
-              <strong>Tech Innovation Summit 2026</strong>
-              <span>Registered recently</span>
-            </div>
-
-            <span className="registration-status">
-              Confirmed
-            </span>
-
-            <Link to="/student/tickets">
-              View Ticket
-              <ArrowRight size={14} />
-            </Link>
-
-          </div>
-
-          <div className="registration-row">
-
-            <div className="registration-icon pink-registration">
-              <Ticket size={20} />
-            </div>
-
-            <div className="registration-details">
-              <strong>Web Development Workshop</strong>
-              <span>Registered recently</span>
-            </div>
-
-            <span className="registration-status">
-              Confirmed
-            </span>
-
-            <Link to="/student/tickets">
-              View Ticket
-              <ArrowRight size={14} />
-            </Link>
-
-          </div>
-
-          <div className="registration-row">
-
-            <div className="registration-icon">
-              <Ticket size={20} />
-            </div>
-
-            <div className="registration-details">
-              <strong>Robotics & AI Expo</strong>
-              <span>Registered recently</span>
-            </div>
-
-            <span className="registration-status">
-              Confirmed
-            </span>
-
-            <Link to="/student/tickets">
-              View Ticket
-              <ArrowRight size={14} />
-            </Link>
-
-          </div>
-
+        <div className="registration-details">
+          <strong>No active registrations</strong>
+          <span>
+            Register for an event to see it here.
+          </span>
         </div>
 
-      </section>
+        <Link to="/events">
+          Browse Events
+          <ArrowRight size={14} />
+        </Link>
+
+      </div>
+    </div>
+
+  ) : (
+
+    <div className="events-grid dashboard-events-grid">
+
+      {registrations
+        .slice(0, 3)
+        .map((registration, index) => {
+
+          const event = {
+            id:
+              registration.eventData?.id ||
+              registration.event?.id ||
+              registration.event,
+
+            title:
+              registration.event_title ||
+              "Event",
+
+            description:
+              registration.eventData?.description ||
+              "",
+
+            category:
+              registration.eventData?.category ||
+              "Campus Event",
+
+            date:
+              registration.event_date ||
+              registration.eventData?.date ||
+              "",
+
+            time:
+              registration.event_time ||
+              registration.eventData?.time ||
+              "",
+
+            venue:
+              registration.event_venue ||
+              registration.eventData?.venue ||
+              "",
+
+            image:
+              registration.event_image ||
+              registration.eventData?.image ||
+              registration.eventData?.image_url ||
+              "",
+
+            capacity:
+              registration.eventData?.capacity,
+
+            registration_count:
+              registration.eventData?.registration_count ??
+              registration.eventData?.participants ??
+              0,
+
+            registration_deadline:
+              registration.eventData?.registration_deadline,
+          };
+
+          return (
+            <div
+              className="dashboard-registration-card"
+              key={registration.id}
+            >
+
+              <EventCard
+                event={event}
+                index={index}
+              />
+
+              <div className="dashboard-registration-footer">
+
+                <span className="dashboard-confirmed-badge">
+                  <CheckCircle2 size={13} />
+                  Confirmed
+                </span>
+
+                <Link
+                  to="/student/tickets"
+                  className="dashboard-ticket-link"
+                >
+                  <Ticket size={14} />
+                  View Ticket
+                </Link>
+
+              </div>
+
+            </div>
+          );
+        })}
+
+    </div>
+
+  )}
+
+</section>
+
 
       {/* ================= BOTTOM CTA ================= */}
       <section className="student-cta">

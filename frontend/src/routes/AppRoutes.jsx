@@ -37,13 +37,14 @@ import Events from "../pages/public/Events.jsx";
 // =====================================================
 
 import OrganizerDashboard from "../pages/organizer/Dashboard.jsx";
-import OrganizerEventDetails from "../pages/organizer/OrganizerEventDetails.jsx";
+import OrganizerEventDetails from "../pages/organizer/organizerEventDetails.jsx";
 import CreateEvent from "../pages/organizer/CreateEvent.jsx";
 import MyEvents from "../pages/organizer/MyEvents.jsx";
 import EditEvent from "../pages/organizer/EditEvent.jsx";
 import Participants from "../pages/organizer/Participants.jsx";
 import OrganizerProfile from "../pages/organizer/Profile.jsx";
 import Feedback from "../pages/organizer/Feedback.jsx";
+import CertificateCustomization from "../pages/organizer/CertificateCustomization.jsx";
 
 // =====================================================
 // AUTH
@@ -237,6 +238,7 @@ const AppRoutes = () => {
 
         {/* =================================================
             ORGANIZER DASHBOARD
+            URL: /organizer/dashboard
             ================================================= */}
 
         <Route
@@ -246,6 +248,7 @@ const AppRoutes = () => {
 
         {/* =================================================
             ORGANIZER EVENT DETAILS
+            URL: /organizer/events/:id
             ================================================= */}
 
         <Route
@@ -254,7 +257,18 @@ const AppRoutes = () => {
         />
 
         {/* =================================================
+            CERTIFICATE CUSTOMIZATION
+            URL: /organizer/events/:id/certificate-template
+            ================================================= */}
+
+        <Route
+          path="events/:id/certificate-template"
+          element={<CertificateCustomization />}
+        />
+
+        {/* =================================================
             CREATE EVENT
+            URL: /organizer/create-event
             ================================================= */}
 
         <Route
@@ -264,6 +278,7 @@ const AppRoutes = () => {
 
         {/* =================================================
             MY EVENTS
+            URL: /organizer/events
             ================================================= */}
 
         <Route
@@ -273,6 +288,7 @@ const AppRoutes = () => {
 
         {/* =================================================
             EDIT EVENT
+            URL: /organizer/events/:id/edit
             ================================================= */}
 
         <Route
@@ -282,6 +298,7 @@ const AppRoutes = () => {
 
         {/* =================================================
             ALL EVENT PARTICIPANTS
+            URL: /organizer/participants
             ================================================= */}
 
         <Route
@@ -291,6 +308,7 @@ const AppRoutes = () => {
 
         {/* =================================================
             EVENT-SPECIFIC PARTICIPANTS
+            URL: /organizer/events/:id/participants
             ================================================= */}
 
         <Route
@@ -300,6 +318,7 @@ const AppRoutes = () => {
 
         {/* =================================================
             ORGANIZER FEEDBACK
+            URL: /organizer/feedback
             ================================================= */}
 
         <Route
@@ -309,6 +328,7 @@ const AppRoutes = () => {
 
         {/* =================================================
             ORGANIZER PROFILE
+            URL: /organizer/profile
             ================================================= */}
 
         <Route

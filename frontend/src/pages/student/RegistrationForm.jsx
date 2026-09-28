@@ -255,7 +255,8 @@ const RegistrationForm = () => {
       hour12: true,
     });
   };
-
+const registrationCount = Number(event?.registration_count ?? 0);
+const eventCapacity = Number(event?.capacity ?? 0);
   /* ============================================================
      SUBMIT REGISTRATION
   ============================================================ */
@@ -584,7 +585,7 @@ const RegistrationForm = () => {
                 {formatDate(event.date)}
               </div>
             )}
-
+          
             {event?.time && (
               <div>
                 <Clock size={15} />
@@ -600,6 +601,34 @@ const RegistrationForm = () => {
             )}
 
           </div>
+         <div className="registration-count-info">
+  <span>REGISTRATION STATUS</span>
+
+  <strong>
+    {registrationCount} / {eventCapacity || "∞"} registered
+  </strong>
+
+  <div className="registration-count-bar">
+    <div
+      className="registration-count-fill"
+      style={{
+        width:
+          eventCapacity > 0
+            ? `${Math.min(
+                (registrationCount / eventCapacity) * 100,
+                100
+              )}%`
+            : "0%",
+      }}
+    />
+  </div>
+
+  <small>
+    {eventCapacity > 0
+      ? `${Math.max(eventCapacity - registrationCount, 0)} seats remaining`
+      : "Registration available"}
+  </small>
+</div> 
         </div>
       </div>
 

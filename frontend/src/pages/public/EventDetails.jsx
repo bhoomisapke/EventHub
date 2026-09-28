@@ -222,20 +222,13 @@ function EventDetails() {
     event.organizerMobile ||
     event.organizer_mobile ||
     "Not provided";
+const participants = Number(event.registration_count ?? 0);
+const capacity = Number(event.capacity || 0);
 
-  const participants =
-    Number(event.participants || 0);
-
-  const capacity =
-    Number(event.capacity || 0);
-
-  const registrationPercentage =
-    capacity > 0
-      ? Math.min(
-          (participants / capacity) * 100,
-          100
-        )
-      : 0;
+const registrationPercentage =
+  capacity > 0
+    ? Math.min((participants / capacity) * 100, 100)
+    : 0;
 
   const status =
     event.status || "upcoming";

@@ -225,20 +225,18 @@ function OrganizerEventDetails() {
      OPEN CERTIFICATE CONFIRMATION
   ============================================================ */
 
-  const openCertificateConfirmation = () => {
-    setCertificateError("");
-    setCertificateResult(null);
+ const openCertificateConfirmation = () => {
+  setCertificateError("");
 
-    if (!isEventCompleted()) {
-      setCertificateError(
-        "Certificates can only be generated after the event is completed."
-      );
-      return;
-    }
+  if (!isEventCompleted()) {
+    setCertificateError(
+      "Certificates can only be generated after the event is completed."
+    );
+    return;
+  }
 
-    setShowCertificateConfirm(true);
-    document.body.style.overflow = "hidden";
-  };
+  navigate(`/organizer/events/${event.id}/certificate-template`);
+};
 
   /* ============================================================
      CLOSE CERTIFICATE CONFIRMATION
@@ -418,8 +416,16 @@ function OrganizerEventDetails() {
     event.organizer_mobile ||
     "Not provided";
 
-  const participants =
-    Number(event.participants || 0);
+const participants =
+  Number(
+    event?.registration_count ??
+    event?.registrationCount ??
+    event?.participants ??
+    event?.participantCount ??
+    event?.registeredParticipants ??
+    event?.registrations_count ??
+    0
+  );
 
   const capacity =
     Number(event.capacity || 0);

@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 
 from rest_framework import status
@@ -11,184 +12,524 @@ from rest_framework.views import APIView
 from events.models import Event
 from registrations.models import Registration
 
-from .models import Certificate
-from .serializers import CertificateSerializer
-from .services import generate_certificate_number, generate_certificate_pdf
+from .models import Certificate, CertificateConfiguration
+from .serializers import (
+    CertificateSerializer,
+    CertificateConfigurationSerializer,
+)
+from .services import (
+    generate_certificate_number,
+    generate_certificate_pdf,
+)
 
 
-class GenerateEventCertificatesView(APIView):
-    """
-    Organizer generates certificates for all eligible
-    participants of one completed event.
-    """
+# ============================================================
+# CERTIFICATE CONFIGURATION
+# ============================================================
+
+class CertificateConfigurationView(APIView):
 
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, event_id):
-
-        # ---------------------------------------------
-        # 1. Only organizers can generate certificates
-        # ---------------------------------------------
-
-        if request.user.role != "organizer":
-            return Response(
-                {
-                    "detail": "Only organizers can generate certificates."
-                },
-                status=status.HTTP_403_FORBIDDEN
-            )
-
-        # ---------------------------------------------
-        # 2. Find the event
-        # ---------------------------------------------
+    def get_event(self, request, event_id):
 
         event = get_object_or_404(
             Event,
             id=event_id
         )
 
-        # ---------------------------------------------
-        # 3. Organizer can only generate certificates
-        #    for their own event
-        # ---------------------------------------------
+        if request.user.role != "organizer":
+            return None
 
         if event.organizer != request.user:
+            return None
+
+        return event
+
+    # --------------------------------------------------------
+    # GET CERTIFICATE INFORMATION
+    # --------------------------------------------------------
+
+    def get(self, request, event_id):
+
+        event = self.get_event(
+            request,
+            event_id
+        )
+
+        if event is None:
             return Response(
                 {
-                    "detail": "You can only generate certificates for your own events."
+                    "detail":
+                    "You can only manage certificates for your own event."
                 },
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        # ---------------------------------------------
-        # 4. Event must be completed
-        #
-        # For now we consider an event completed when
-        # its event date has passed.
-        # ---------------------------------------------
-
-        if event.date >= date.today():
-            return Response(
-                {
-                    "detail": "Certificates can only be generated after the event is completed."
-                },
-                status=status.HTTP_400_BAD_REQUEST
+        config, created = (
+            CertificateConfiguration.objects
+            .get_or_create(
+                event=event
             )
-
-        # ---------------------------------------------
-        # 5. Find eligible registrations
-        #
-        # confirmed = eligible
-        # cancelled = not eligible
-        # ---------------------------------------------
-
-        registrations = Registration.objects.filter(
-            event=event,
-            status="confirmed"
-        ).select_related(
-            "student"
         )
 
-        generated = 0
-        regenerated = 0
+        serializer = CertificateConfigurationSerializer(
+            config,
+            context={
+                "request": request
+            }
+        )
 
-        # ---------------------------------------------
-        # 6. Generate certificate for each student
-        # ---------------------------------------------
+        data = serializer.data
+
+        # ----------------------------------------------------
+        # EVENT DETAILS
+        # ----------------------------------------------------
+
+        data["event_title"] = (
+            config.event_title
+            or event.title
+        )
+
+        data["event_type"] = (
+            config.event_type
+            or event.category
+            or ""
+        )
+
+        data["event_date"] = (
+            config.event_date
+            or event.date
+        )
+
+        data["event_time"] = str(
+            event.time
+        )
+
+        data["event_venue"] = (
+            config.event_venue
+            or event.venue
+            or ""
+        )
+
+        # ----------------------------------------------------
+        # PARTICIPANTS
+        # ----------------------------------------------------
+
+        registrations = (
+            Registration.objects
+            .filter(
+                event_id=event.id,
+                status="confirmed"
+            )
+            .select_related("student")
+        )
+
+        participants = []
 
         for registration in registrations:
 
             student = registration.student
 
-            # Reuse an existing certificate when one already exists.
-            # The PDF is regenerated every time this endpoint is called.
-            # This is important when the certificate design/template has
-            # been changed: all previously generated certificates are then
-            # updated to the latest design without creating duplicates.
-            certificate = Certificate.objects.filter(
-                registration=registration
-            ).first()
+            participants.append(
+                {
+                    "id": student.id,
+                    "name": (
+                        getattr(
+                            student,
+                            "name",
+                            ""
+                        )
+                        or ""
+                    ),
+                    "email": (
+                        getattr(
+                            student,
+                            "email",
+                            ""
+                        )
+                        or ""
+                    ),
+                    "status": registration.status,
+                }
+            )
+
+        data["participants"] = participants
+
+        data["participant_count"] = len(
+            participants
+        )
+
+        return Response(
+            data,
+            status=status.HTTP_200_OK
+        )
+
+    # --------------------------------------------------------
+    # SAVE CERTIFICATE INFORMATION
+    # --------------------------------------------------------
+
+    def patch(self, request, event_id):
+
+        event = self.get_event(
+            request,
+            event_id
+        )
+
+        if event is None:
+            return Response(
+                {
+                    "detail":
+                    "You can only manage certificates for your own event."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        config, created = (
+            CertificateConfiguration.objects
+            .get_or_create(
+                event=event
+            )
+        )
+
+        serializer = CertificateConfigurationSerializer(
+            config,
+            data=request.data,
+            partial=True,
+            context={
+                "request": request
+            }
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        serializer.save()
+
+        # Return fresh configuration
+        response_serializer = (
+            CertificateConfigurationSerializer(
+                config,
+                context={
+                    "request": request
+                }
+            )
+        )
+
+        data = response_serializer.data
+
+        data["event_title"] = (
+            config.event_title
+            or event.title
+        )
+
+        data["event_type"] = (
+            config.event_type
+            or event.category
+            or ""
+        )
+
+        data["event_date"] = (
+            config.event_date
+            or event.date
+        )
+
+        data["event_time"] = str(
+            event.time
+        )
+
+        data["event_venue"] = (
+            config.event_venue
+            or event.venue
+            or ""
+        )
+
+        # ----------------------------------------------------
+        # RETURN PARTICIPANTS AFTER SAVE TOO
+        # ----------------------------------------------------
+
+        registrations = (
+            Registration.objects
+            .filter(
+                event_id=event.id,
+                status="confirmed"
+            )
+            .select_related("student")
+        )
+
+        participants = []
+
+        for registration in registrations:
+
+            student = registration.student
+
+            participants.append(
+                {
+                    "id": student.id,
+                    "name": (
+                        getattr(
+                            student,
+                            "name",
+                            ""
+                        )
+                        or ""
+                    ),
+                    "email": (
+                        getattr(
+                            student,
+                            "email",
+                            ""
+                        )
+                        or ""
+                    ),
+                    "status": registration.status,
+                }
+            )
+
+        data["participants"] = participants
+
+        data["participant_count"] = len(
+            participants
+        )
+
+        return Response(
+            data,
+            status=status.HTTP_200_OK
+        )
+
+
+# ============================================================
+# GENERATE EVENT CERTIFICATES
+# ============================================================
+
+class GenerateEventCertificatesView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, event_id):
+
+        # ----------------------------------------------------
+        # ORGANIZER CHECK
+        # ----------------------------------------------------
+
+        if request.user.role != "organizer":
+            return Response(
+                {
+                    "detail":
+                    "Only organizers can generate certificates."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # ----------------------------------------------------
+        # EVENT
+        # ----------------------------------------------------
+
+        event = get_object_or_404(
+            Event,
+            id=event_id
+        )
+
+        # ----------------------------------------------------
+        # EVENT OWNER CHECK
+        # ----------------------------------------------------
+
+        if event.organizer != request.user:
+            return Response(
+                {
+                    "detail":
+                    "You can only generate certificates for your own event."
+                },
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # ----------------------------------------------------
+        # EVENT COMPLETED CHECK
+        # ----------------------------------------------------
+
+        if event.date >= date.today():
+            return Response(
+                {
+                    "detail":
+                    "Certificates can only be generated after the event is completed."
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # ----------------------------------------------------
+        # CERTIFICATE CONFIGURATION
+        # ----------------------------------------------------
+
+        config, created = (
+            CertificateConfiguration.objects
+            .get_or_create(
+                event=event
+            )
+        )
+
+        # ----------------------------------------------------
+        # CONFIRMED PARTICIPANTS
+        # ----------------------------------------------------
+
+        registrations = (
+            Registration.objects
+            .filter(
+                event_id=event.id,
+                status="confirmed"
+            )
+            .select_related("student")
+        )
+
+        generated = 0
+        regenerated = 0
+
+        # ----------------------------------------------------
+        # GENERATE CERTIFICATE FOR EACH PARTICIPANT
+        # ----------------------------------------------------
+
+        for registration in registrations:
+
+            student = registration.student
+
+            certificate = (
+                Certificate.objects
+                .filter(
+                    registration=registration
+                )
+                .first()
+            )
+
+            # -----------------------------------------------
+            # EXISTING CERTIFICATE
+            # -----------------------------------------------
 
             if certificate:
+
+                certificate.student = student
+                certificate.event = event
                 certificate.student_name = student.name
-                certificate.event_title = event.title
+                certificate.event_title = (
+                    config.event_title
+                    or event.title
+                )
                 certificate.status = "issued"
+
                 certificate.save(
                     update_fields=[
+                        "student",
+                        "event",
                         "student_name",
                         "event_title",
                         "status",
                     ]
                 )
 
-                generate_certificate_pdf(certificate)
+                generate_certificate_pdf(
+                    certificate
+                )
+
                 regenerated += 1
-                continue
 
-            certificate = Certificate.objects.create(
-                certificate_number=generate_certificate_number(),
-                student=student,
-                event=event,
-                registration=registration,
-                student_name=student.name,
-                event_title=event.title,
-                status="issued",
-            )
+            # -----------------------------------------------
+            # NEW CERTIFICATE
+            # -----------------------------------------------
 
-            # Generate the actual PDF for the new certificate.
-            generate_certificate_pdf(certificate)
+            else:
 
-            generated += 1
+                certificate = (
+                    Certificate.objects.create(
+                        certificate_number=
+                        generate_certificate_number(),
 
-        # ---------------------------------------------
-        # 7. Return generation summary
-        # ---------------------------------------------
+                        student=student,
+
+                        event=event,
+
+                        registration=registration,
+
+                        student_name=
+                        student.name,
+
+                        event_title=(
+                            config.event_title
+                            or event.title
+                        ),
+
+                        status="issued",
+                    )
+                )
+
+                generate_certificate_pdf(
+                    certificate
+                )
+
+                generated += 1
+
+        # ----------------------------------------------------
+        # RESULT
+        # ----------------------------------------------------
 
         return Response(
             {
-                "message": "Certificate generation completed.",
-                "event": event.title,
-                "generated": generated,
-                "regenerated": regenerated,
-                "total_eligible": registrations.count(),
+                "message":
+                "Certificate generation completed.",
+
+                "event":
+                event.title,
+
+                "generated":
+                generated,
+
+                "regenerated":
+                regenerated,
+
+                "total_eligible":
+                registrations.count(),
             },
             status=status.HTTP_200_OK
         )
 
 
+# ============================================================
+# MY CERTIFICATES
+# ============================================================
+
 class MyCertificatesView(APIView):
-    """
-    Returns certificates belonging to the logged-in student.
-    """
 
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
 
-        certificates = Certificate.objects.filter(
-            student=request.user
-        ).select_related(
-            "event"
+        certificates = (
+            Certificate.objects
+            .filter(
+                student=request.user
+            )
+            .select_related("event")
         )
 
         serializer = CertificateSerializer(
             certificates,
             many=True,
-            context={"request": request}
+            context={
+                "request": request
+            }
         )
 
         return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
+            serializer.data
         )
 
 
+# ============================================================
+# CERTIFICATE DETAIL
+# ============================================================
+
 class CertificateDetailView(APIView):
-    """
-    Returns one certificate belonging to the logged-in student.
-    """
 
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -203,80 +544,103 @@ class CertificateDetailView(APIView):
 
         serializer = CertificateSerializer(
             certificate,
-            context={"request": request}
+            context={
+                "request": request
+            }
         )
 
         return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
+            serializer.data
         )
 
-# ============================================================
-# CERTIFICATE PDF VIEW / DOWNLOAD
-# ============================================================
 
-from django.http import FileResponse
-from .services import generate_certificate_pdf
-
+# ============================================================
+# CERTIFICATE PDF
+# ============================================================
 
 class CertificatePDFView(APIView):
-    """
-    Securely serves a certificate PDF to its owner.
-
-    The PDF is regenerated immediately before serving it.
-    This guarantees that an old PDF generated with a previous
-    certificate design is never returned after the template/code
-    has been changed.
-    """
 
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, pk, download=False):
+    def get(
+        self,
+        request,
+        pk,
+        download=False
+    ):
+
         certificate = get_object_or_404(
             Certificate,
             id=pk,
-            student=request.user,
+            student=request.user
         )
 
-        # Always regenerate using the CURRENT services.py/template.
-        generate_certificate_pdf(certificate)
+        generate_certificate_pdf(
+            certificate
+        )
 
-        if not certificate.certificate_file:
-            return Response(
-                {"detail": "Certificate PDF is not available."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        try:
-            file_handle = certificate.certificate_file.open("rb")
-        except FileNotFoundError:
-            # If the database path exists but the physical file was
-            # deleted, generate it once more.
-            generate_certificate_pdf(certificate)
-            file_handle = certificate.certificate_file.open("rb")
+        file_handle = (
+            certificate
+            .certificate_file
+            .open("rb")
+        )
 
         response = FileResponse(
             file_handle,
-            content_type="application/pdf",
+            content_type="application/pdf"
+        )
+
+        disposition = (
+            "attachment"
+            if download
+            else "inline"
         )
 
         response["Content-Disposition"] = (
-            f'{"attachment" if download else "inline"}; '
+            f'{disposition}; '
             f'filename="{certificate.certificate_number}.pdf"'
         )
 
-        response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        response["Cache-Control"] = (
+            "no-store, no-cache, "
+            "must-revalidate, max-age=0"
+        )
+
         response["Pragma"] = "no-cache"
 
         return response
 
 
-class ViewCertificatePDFView(CertificatePDFView):
+# ============================================================
+# VIEW PDF
+# ============================================================
+
+class ViewCertificatePDFView(
+    CertificatePDFView
+):
+
     def get(self, request, pk):
-        return super().get(request, pk, download=False)
+
+        return super().get(
+            request,
+            pk,
+            download=False
+        )
 
 
-class DownloadCertificatePDFView(CertificatePDFView):
+# ============================================================
+# DOWNLOAD PDF
+# ============================================================
+
+class DownloadCertificatePDFView(
+    CertificatePDFView
+):
+
     def get(self, request, pk):
-        return super().get(request, pk, download=True)
+
+        return super().get(
+            request,
+            pk,
+            download=True
+        )

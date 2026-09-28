@@ -2,51 +2,256 @@ import os
 import uuid
 from io import BytesIO
 
+from PIL import Image, ImageDraw, ImageFont
+
 from django.conf import settings
-
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4, landscape
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
-from reportlab.lib.utils import ImageReader
-
-try:
-    from PIL import Image, ImageDraw, ImageFont
-except ImportError:
-    Image = None
-    ImageDraw = None
-    ImageFont = None
-
-from .models import Certificate
+from django.core.files.base import ContentFile
 
 
 # ============================================================
-# EVENTHUB CERTIFICATE DESIGN
-#
-# The supplied certificate image is used as the visual template.
-# This is intentional: it keeps the generated PDF visually the
-# same as the approved design instead of trying to redraw a
-# screenshot with approximate ReportLab shapes.
-#
-# Put the supplied image in the SAME folder as services.py and
-# name it:
-#
-#     certificate_template.png
-#
-# The generator then covers only the variable placeholder text
-# and writes the real student's/event's data over the template.
+# CERTIFICATE CANVAS
 # ============================================================
 
-PAGE_W, PAGE_H = landscape(A4)
-TEMPLATE_W = 1491.0
-TEMPLATE_H = 1055.0
+PAGE_WIDTH = 1536
+PAGE_HEIGHT = 1024
 
-NAVY = colors.HexColor("#123A68")
-DARK_NAVY = colors.HexColor("#0B2F5B")
-GOLD = colors.HexColor("#C69A3A")
-WHITE = colors.white
-TEMPLATE_BG = colors.HexColor("#F7F7F5")
+NAVY = (17, 55, 100)
+GOLD = (196, 145, 35)
+
+
+# ============================================================
+# FONT
+# ============================================================
+
+def get_font(size, bold=False, italic=False):
+
+    if bold:
+        font_paths = [
+            r"C:\Windows\Fonts\georgiab.ttf",
+            r"C:\Windows\Fonts\timesbd.ttf",
+        ]
+
+    elif italic:
+        font_paths = [
+            r"C:\Windows\Fonts\georgiai.ttf",
+            r"C:\Windows\Fonts\timesi.ttf",
+        ]
+
+    else:
+        font_paths = [
+            r"C:\Windows\Fonts\georgia.ttf",
+            r"C:\Windows\Fonts\times.ttf",
+        ]
+
+    for path in font_paths:
+        if os.path.exists(path):
+            return ImageFont.truetype(path, size)
+
+    return ImageFont.load_default()
+
+
+# ============================================================
+# FIT TEXT INSIDE AVAILABLE WIDTH
+# ============================================================
+
+def fit_font(
+    text,
+    max_width,
+    starting_size,
+    bold=False,
+    italic=False
+):
+
+    size = starting_size
+
+    while size >= 16:
+
+        font = get_font(
+            size,
+            bold=bold,
+            italic=italic
+        )
+
+        bbox = font.getbbox(text)
+
+        width = bbox[2] - bbox[0]
+
+        if width <= max_width:
+            return font
+
+        size -= 2
+
+    return get_font(
+        16,
+        bold=bold,
+        italic=italic
+    )
+
+
+# ============================================================
+# CENTER TEXT
+# ============================================================
+
+def draw_centered_text(
+    draw,
+    text,
+    y,
+    font,
+    fill=NAVY,
+    center_x=PAGE_WIDTH // 2
+):
+
+    bbox = draw.textbbox(
+        (0, 0),
+        text,
+        font=font
+    )
+
+    text_width = bbox[2] - bbox[0]
+
+    x = center_x - (text_width // 2)
+
+    draw.text(
+        (x, y),
+        text,
+        font=font,
+        fill=fill
+    )
+
+
+# ============================================================
+# ADD IMAGE WITHOUT DISTORTION
+# ============================================================
+
+def add_image_contain(
+    base_image,
+    image_file,
+    x,
+    y,
+    width,
+    height
+):
+
+    if not image_file:
+        return
+
+    try:
+
+        image_file.open("rb")
+
+        image = Image.open(
+            image_file
+        ).convert("RGBA")
+
+        image.thumbnail(
+            (width, height),
+            Image.Resampling.LANCZOS
+        )
+
+        px = x + (
+            width - image.width
+        ) // 2
+
+        py = y + (
+            height - image.height
+        ) // 2
+
+        base_image.alpha_composite(
+            image,
+            (px, py)
+        )
+
+    except Exception as error:
+
+        print(
+            "Certificate image error:",
+            error
+        )
+
+
+# ============================================================
+# REMOVE WHITE BACKGROUND FROM SIGNATURE
+# ============================================================
+
+def make_white_transparent(image):
+
+    image = image.convert("RGBA")
+
+    pixels = image.load()
+
+    for y in range(image.height):
+
+        for x in range(image.width):
+
+            r, g, b, a = pixels[x, y]
+
+            if (
+                r > 238
+                and g > 238
+                and b > 238
+            ):
+                pixels[x, y] = (
+                    r,
+                    g,
+                    b,
+                    0
+                )
+
+    return image
+
+
+# ============================================================
+# ADD SIGNATURE
+# ============================================================
+
+def add_signature(
+    base_image,
+    signature_file,
+    x,
+    y,
+    width,
+    height
+):
+
+    if not signature_file:
+        return
+
+    try:
+
+        signature_file.open("rb")
+
+        signature = Image.open(
+            signature_file
+        ).convert("RGBA")
+
+        signature = make_white_transparent(
+            signature
+        )
+
+        signature.thumbnail(
+            (width, height),
+            Image.Resampling.LANCZOS
+        )
+
+        px = x + (
+            width - signature.width
+        ) // 2
+
+        py = y + (
+            height - signature.height
+        ) // 2
+
+        base_image.alpha_composite(
+            signature,
+            (px, py)
+        )
+
+    except Exception as error:
+
+        print(
+            "Signature error:",
+            error
+        )
 
 
 # ============================================================
@@ -54,506 +259,636 @@ TEMPLATE_BG = colors.HexColor("#F7F7F5")
 # ============================================================
 
 def generate_certificate_number():
-    while True:
-        number = f"EVH-CERT-{uuid.uuid4().hex[:8].upper()}"
 
-        if not Certificate.objects.filter(
-            certificate_number=number
-        ).exists():
-            return number
-
-
-# ============================================================
-# TEMPLATE LOCATION
-# ============================================================
-
-def _template_candidates():
-    """Return possible locations for the supplied certificate image."""
-
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    base_dir = str(getattr(settings, "BASE_DIR", ""))
-    media_root = str(getattr(settings, "MEDIA_ROOT", ""))
-
-    return [
-        os.path.join(current_dir, "certificate_template.png"),
-        os.path.join(current_dir, "cert event.png"),
-        os.path.join(base_dir, "certificate_template.png"),
-        os.path.join(base_dir, "cert event.png"),
-        os.path.join(media_root, "certificate_template.png"),
-        os.path.join(media_root, "cert event.png"),
-    ]
-
-
-def _get_template_path():
-    for path in _template_candidates():
-        if path and os.path.isfile(path):
-            return path
-
-    raise FileNotFoundError(
-        "Certificate template image was not found. "
-        "Copy the supplied certificate image to the certificates app "
-        "folder and name it 'certificate_template.png'."
+    return (
+        "EVH-"
+        + uuid.uuid4().hex[:10].upper()
     )
 
 
 # ============================================================
-# SCRIPT FONT
-# ============================================================
-
-def _get_script_font_path():
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    candidates = [
-        os.path.join(
-            current_dir,
-            "certificate_fonts",
-            "LobsterTwo-Regular.otf",
-        ),
-        os.path.join(
-            current_dir,
-            "LobsterTwo-Regular.otf",
-        ),
-    ]
-
-    for path in candidates:
-        if os.path.isfile(path):
-            return path
-
-    return None
-
-
-SCRIPT_FONT_PATH = _get_script_font_path()
-
-
-# ============================================================
-# BASIC DRAWING HELPERS
-# ============================================================
-
-def _pdf_x(image_x):
-    return image_x * PAGE_W / TEMPLATE_W
-
-
-def _pdf_y_from_top(image_y):
-    return PAGE_H - (image_y * PAGE_H / TEMPLATE_H)
-
-
-def _rect_from_image_coords(x1, y1, x2, y2):
-    """Convert top-left image coordinates to PDF coordinates."""
-
-    left = _pdf_x(x1)
-    right = _pdf_x(x2)
-    top = _pdf_y_from_top(y1)
-    bottom = _pdf_y_from_top(y2)
-
-    return left, bottom, right - left, top - bottom
-
-
-def _cover(pdf, x1, y1, x2, y2):
-    """Cover template placeholder text with the template's white background."""
-
-    x, y, width, height = _rect_from_image_coords(
-        x1, y1, x2, y2
-    )
-
-    pdf.saveState()
-    pdf.setFillColor(TEMPLATE_BG)
-    pdf.setStrokeColor(TEMPLATE_BG)
-    pdf.rect(
-        x,
-        y,
-        width,
-        height,
-        fill=1,
-        stroke=0,
-    )
-    pdf.restoreState()
-
-
-def _center_text(
-    pdf,
-    text,
-    image_y,
-    font="Helvetica",
-    size=10,
-    color=NAVY,
-):
-    pdf.setFont(font, size)
-    pdf.setFillColor(color)
-    pdf.drawCentredString(
-        PAGE_W / 2,
-        _pdf_y_from_top(image_y),
-        str(text),
-    )
-
-
-def _center_text_at_image_x(
-    pdf,
-    text,
-    image_x,
-    image_y,
-    font="Helvetica",
-    size=10,
-    color=NAVY,
-):
-    pdf.setFont(font, size)
-    pdf.setFillColor(color)
-    pdf.drawCentredString(
-        _pdf_x(image_x),
-        _pdf_y_from_top(image_y),
-        str(text),
-    )
-
-
-def _draw_mixed_centered(pdf, parts, image_y):
-    """
-    Draw a centered line made of several differently styled pieces.
-
-    parts: [(text, font, size, color), ...]
-    """
-
-    widths = [
-        pdf.stringWidth(str(text), font, size)
-        for text, font, size, color in parts
-    ]
-
-    total_width = sum(widths)
-    cursor = PAGE_W / 2 - total_width / 2
-    y = _pdf_y_from_top(image_y)
-
-    for (text, font, size, color), width in zip(parts, widths):
-        pdf.setFont(font, size)
-        pdf.setFillColor(color)
-        pdf.drawString(cursor, y, str(text))
-        cursor += width
-
-
-def _fit_font_size(
-    pdf,
-    text,
-    font,
-    start_size,
-    min_size,
-    max_width,
-):
-    size = start_size
-
-    while size > min_size:
-        if pdf.stringWidth(str(text), font, size) <= max_width:
-            break
-        size -= 0.5
-
-    return max(size, min_size)
-
-
-# ============================================================
-# EVENT DATA HELPERS
-# ============================================================
-
-def _get_event_date(certificate):
-    event = getattr(certificate, "event", None)
-    value = getattr(event, "date", None)
-
-    if not value:
-        return "—"
-
-    try:
-        return value.strftime("%d %B %Y")
-    except Exception:
-        return str(value)
-
-
-def _get_event_venue(certificate):
-    event = getattr(certificate, "event", None)
-    value = getattr(event, "venue", None)
-    return str(value or "Seminar Hall")
-
-
-def _get_event_type(certificate):
-    event = getattr(certificate, "event", None)
-
-    value = (
-        getattr(event, "category", None)
-        or getattr(event, "event_type", None)
-        or "Cultural"
-    )
-
-    if hasattr(value, "name"):
-        value = value.name
-
-    return str(value)
-
-
-# ============================================================
-# MAIN CERTIFICATE GENERATOR
+# GENERATE CERTIFICATE
 # ============================================================
 
 def generate_certificate_pdf(certificate):
-    """
-    Generate one certificate PDF using the supplied EventHub
-    certificate design as the exact visual background.
 
-    This function works for every Certificate object, so the same
-    design is automatically used for every eligible student.
-    """
+    event = certificate.event
 
-    width, height = PAGE_W, PAGE_H
+    # ========================================================
+    # CONFIGURATION
+    # ========================================================
 
-    template_path = _get_template_path()
+    try:
+        config = event.certificate_configuration
 
-    file_name = f"{certificate.certificate_number}.pdf"
+    except Exception:
+        config = None
 
-    file_path = os.path.join(
-        settings.MEDIA_ROOT,
+    # ========================================================
+    # BACKGROUND
+    #
+    # This image must contain ONLY the design:
+    # borders, ribbons, medal, watermark and decorative lines.
+    #
+    # It should NOT contain dynamic text.
+    # ========================================================
+
+    template_path = os.path.join(
+        settings.BASE_DIR,
         "certificates",
-        file_name,
+        # "assets",
+        "certificate_background.png"
     )
 
-    os.makedirs(
-        os.path.dirname(file_path),
-        exist_ok=True,
-    )
+    if not os.path.exists(template_path):
 
-    pdf = canvas.Canvas(
-        file_path,
-        pagesize=(width, height),
-    )
-
-    # --------------------------------------------------------
-    # 1. DRAW THE ORIGINAL DESIGN
-    # --------------------------------------------------------
-
-    pdf.drawImage(
-        ImageReader(template_path),
-        0,
-        0,
-        width=width,
-        height=height,
-        preserveAspectRatio=False,
-        mask="auto",
-    )
-
-    # --------------------------------------------------------
-    # 2. STUDENT NAME
-    # --------------------------------------------------------
-    # Reference placeholder occupies approximately this area.
-    # The gold underline is redrawn after the name is replaced.
-
-    _cover(
-        pdf,
-        350,
-        390,
-        1140,
-        525,
-    )
-
-    student_name = (
-        getattr(certificate, "student_name", None)
-        or "Student Name"
-    )
-
-    student_name = str(student_name).strip()
-
-    name_font_size = _fit_font_size(
-        pdf,
-        student_name,
-        "Times-Italic",
-        start_size=38,
-        min_size=22,
-        max_width=_pdf_x(590),
-    )
-
-    _center_text(
-        pdf,
-        student_name,
-        489,
-        font="Times-Italic",
-        size=name_font_size,
-        color=NAVY,
-    )
-
-    # Recreate the gold underline and center diamond from the template.
-    line_y = _pdf_y_from_top(512)
-    pdf.setStrokeColor(GOLD)
-    pdf.setLineWidth(0.8)
-    pdf.line(_pdf_x(378), line_y, _pdf_x(1110), line_y)
-
-    diamond_x = PAGE_W / 2
-    diamond_size = 3.7
-    path = pdf.beginPath()
-    path.moveTo(diamond_x, line_y + diamond_size)
-    path.lineTo(diamond_x + diamond_size, line_y)
-    path.lineTo(diamond_x, line_y - diamond_size)
-    path.lineTo(diamond_x - diamond_size, line_y)
-    path.close()
-    pdf.setFillColor(GOLD)
-    pdf.drawPath(path, fill=1, stroke=0)
-
-    # --------------------------------------------------------
-    # 3. EVENT TITLE
-    # --------------------------------------------------------
-    # Replace only the dynamic first statement while keeping the
-    # original second line and the rest of the approved design.
-
-    _cover(
-        pdf,
-        300,
-        530,
-        1190,
-        635,
-    )
-
-    event_title = (
-        getattr(certificate, "event_title", None)
-        or "Event Title"
-    )
-    event_title = str(event_title).strip()
-
-    first_part = "for actively participating in the event “"
-    last_part = "”"
-
-    title_font = "Helvetica-Bold"
-    normal_font = "Helvetica"
-
-    max_title_width = _pdf_x(700)
-
-    # First try the complete sentence at 9.4 pt.
-    title_size = 9.4
-
-    while title_size > 6.5:
-        total = (
-            pdf.stringWidth(first_part, normal_font, title_size)
-            + pdf.stringWidth(event_title, title_font, title_size)
-            + pdf.stringWidth(last_part, title_font, title_size)
+        raise FileNotFoundError(
+            "Certificate background not found:\n"
+            + template_path
         )
 
-        if total <= max_title_width:
-            break
+    base = Image.open(
+        template_path
+    ).convert("RGBA")
 
-        title_size -= 0.25
-
-    _draw_mixed_centered(
-        pdf,
-        [
-            (first_part, normal_font, title_size, NAVY),
-            (event_title, title_font, title_size, NAVY),
-            (last_part, title_font, title_size, NAVY),
-        ],
-        565,
+    base = base.resize(
+        (
+            PAGE_WIDTH,
+            PAGE_HEIGHT
+        ),
+        Image.Resampling.LANCZOS
     )
 
-    # Keep the exact approved second line.
-    _center_text(
-        pdf,
-        "organized by EventHub, College Events.",
-        594,
-        font="Helvetica",
-        size=9.0,
-        color=NAVY,
+    draw = ImageDraw.Draw(base)
+
+    # ========================================================
+    # EVENT / CERTIFICATE DATA
+    # ========================================================
+
+    institute_name = ""
+
+    # IMPORTANT:
+    # No default department.
+    department_name = ""
+
+    event_title = event.title
+
+    event_type = event.category or ""
+
+    event_venue = event.venue or ""
+
+    event_date = event.date.strftime(
+        "%d %B %Y"
     )
 
-    # --------------------------------------------------------
-    # 4. EVENT DETAILS
-    # --------------------------------------------------------
-    # Mask only the values, leaving the original icons, labels,
-    # separators and surrounding design untouched.
+    coordinator_name = ""
 
-    _cover(pdf, 410, 705, 620, 775)
-    _cover(pdf, 680, 705, 820, 775)
-    _cover(pdf, 960, 705, 1080, 775)
-
-    _center_text_at_image_x(
-        pdf, "Date", 474, 718, font="Helvetica-Bold", size=7.2, color=NAVY
-    )
-    _center_text_at_image_x(
-        pdf, "Venue", 752, 718, font="Helvetica-Bold", size=7.2, color=NAVY
-    )
-    _center_text_at_image_x(
-        pdf, "Event Type", 1005, 718, font="Helvetica-Bold", size=7.2, color=NAVY
+    coordinator_designation = (
+        "Event Coordinator"
     )
 
-    event_date = _get_event_date(certificate)
-    event_venue = _get_event_venue(certificate)
-    event_type = _get_event_type(certificate)
+    head_name = ""
 
-    # Date
-    date_size = _fit_font_size(
-        pdf,
+    head_designation = (
+        "Head of Department"
+    )
+
+    # ========================================================
+    # LOAD ORGANIZER CUSTOMIZATION
+    # ========================================================
+
+    if config:
+
+        institute_name = (
+            config.institute_name or ""
+        ).strip()
+
+        # ----------------------------------------------------
+        # Department comes ONLY from organizer input.
+        # ----------------------------------------------------
+
+        department_name = (
+            config.department_name or ""
+        ).strip()
+
+        event_title = (
+            config.event_title
+            or event.title
+        ).strip()
+
+        event_type = (
+            config.event_type
+            or event.category
+            or ""
+        ).strip()
+
+        event_venue = (
+            config.event_venue
+            or event.venue
+            or ""
+        ).strip()
+
+        if config.event_date:
+
+            event_date = (
+                config.event_date.strftime(
+                    "%d %B %Y"
+                )
+            )
+
+        coordinator_name = (
+            config.coordinator_name
+            or ""
+        ).strip()
+
+        coordinator_designation = (
+            config.coordinator_designation
+            or "Event Coordinator"
+        ).strip()
+
+        head_name = (
+            config.head_name
+            or ""
+        ).strip()
+
+        head_designation = (
+            config.head_designation
+            or "Head of Department"
+        ).strip()
+
+    # ========================================================
+    # 1. INSTITUTE NAME
+    #
+    # Kept slightly above the decorative line in the
+    # background so there is visible breathing space.
+    # ========================================================
+
+    if institute_name:
+
+        institute_font = fit_font(
+            institute_name,
+            850,
+            44,
+            bold=True
+        )
+
+        draw_centered_text(
+            draw,
+            institute_name,
+            50,
+            institute_font,
+            NAVY
+        )
+
+    # ========================================================
+    # 2. CERTIFICATE HEADING
+    # ========================================================
+
+    heading = (
+        config.certificate_heading
+        if config and config.certificate_heading
+        else "CERTIFICATE"
+    )
+
+    subheading = (
+        config.certificate_subheading
+        if config and config.certificate_subheading
+        else "OF PARTICIPATION"
+    )
+
+    heading_font = fit_font(
+        heading.upper(),
+        750,
+        60,
+        bold=True
+    )
+
+    draw_centered_text(
+        draw,
+        heading.upper(),
+        135,
+        heading_font,
+        NAVY
+    )
+
+    subheading_font = fit_font(
+        subheading.upper(),
+        600,
+        29,
+        bold=True
+    )
+
+    draw_centered_text(
+        draw,
+        subheading.upper(),
+        210,
+        subheading_font,
+        GOLD
+    )
+
+    # ========================================================
+    # 3. PRESENTED TO
+    # ========================================================
+
+    presentation_text = (
+        config.presentation_text
+        if config and config.presentation_text
+        else "THIS CERTIFICATE IS PROUDLY PRESENTED TO"
+    )
+
+    presentation_font = fit_font(
+        presentation_text.upper(),
+        700,
+        19
+    )
+
+    draw_centered_text(
+        draw,
+        presentation_text.upper(),
+        292,
+        presentation_font,
+        NAVY
+    )
+
+    # ========================================================
+    # 4. STUDENT NAME
+    #
+    # The gold lines are already part of the background.
+    # Do NOT draw additional lines here.
+    # ========================================================
+
+    student_name = (
+        certificate.student_name
+        or certificate.student.name
+        or ""
+    ).strip()
+
+    student_font = fit_font(
+        student_name,
+        750,
+        56,
+        italic=True
+    )
+
+    # Move the name slightly DOWN so the existing
+    # background lines sit correctly underneath it.
+    draw_centered_text(
+        draw,
+        student_name,
+        385,
+        student_font,
+        NAVY
+    )
+
+    # ========================================================
+    # 5. PARTICIPATION SENTENCE
+    # ========================================================
+
+    participation_text = (
+        config.participation_text
+        if config and config.participation_text
+        else "for actively participating in the event"
+    )
+
+    participation_text = participation_text.strip()
+
+    event_line = (
+        f'{participation_text} "{event_title}"'
+    )
+
+    event_font = fit_font(
+        event_line,
+        950,
+        23
+    )
+
+    draw_centered_text(
+        draw,
+        event_line,
+        465,
+        event_font,
+        NAVY
+    )
+    
+
+    # ========================================================
+    # 6. ORGANIZED BY DEPARTMENT
+    #
+    # IMPORTANT:
+    # If department is blank, NOTHING is displayed.
+    #
+    # There is NO default department.
+    # ========================================================
+    if department_name:
+
+        organized_text = (
+            f"organized by the {department_name}."
+        )
+
+        organized_font = fit_font(
+            organized_text,
+            950,
+            23
+        )
+
+        draw_centered_text(
+            draw,
+            organized_text,
+            503,
+            organized_font,
+            NAVY
+        )
+
+    # ========================================================
+    # 7. APPRECIATION TEXT
+    #
+    # Position changes depending on whether the department
+    # line exists, so there is no awkward empty/overlapping
+    # space.
+    # ========================================================
+
+    if department_name:
+
+        appreciation_y_1 = 545
+        appreciation_y_2 = 578
+
+    else:
+
+        appreciation_y_1 = 515
+        appreciation_y_2 = 548
+
+    appreciation_font = get_font(21)
+
+    draw_centered_text(
+        draw,
+        "Your enthusiasm, commitment and active involvement",
+        appreciation_y_1,
+        appreciation_font,
+        NAVY
+    )
+
+    draw_centered_text(
+        draw,
+        "made the event a great success.",
+        appreciation_y_2,
+        appreciation_font,
+        NAVY
+    )
+
+    # ========================================================
+    # 8. EVENT INFORMATION
+    #
+    # No separator lines are drawn by Python.
+    # ========================================================
+
+    event_info_y_title = (
+        635
+        if department_name
+        else 605
+    )
+
+    event_info_y_value = (
+        668
+        if department_name
+        else 638
+    )
+
+    # ---------------- DATE ----------------
+
+    draw.text(
+        (385, event_info_y_title),
+        "Date",
+        font=get_font(
+            18,
+            bold=True
+        ),
+        fill=NAVY
+    )
+
+    date_font = fit_font(
         event_date,
-        "Helvetica",
-        7.4,
-        6.0,
-        _pdf_x(138),
+        220,
+        19
     )
 
-    _center_text_at_image_x(
-        pdf,
+    draw.text(
+        (385, event_info_y_value),
         event_date,
-        476,
-        746,
-        font="Helvetica",
-        size=date_size,
-        color=NAVY,
+        font=date_font,
+        fill=NAVY
     )
 
-    # Venue
-    venue_size = _fit_font_size(
-        pdf,
+    # ---------------- VENUE ----------------
+
+    draw.text(
+        (720, event_info_y_title),
+        "Venue",
+        font=get_font(
+            18,
+            bold=True
+        ),
+        fill=NAVY
+    )
+
+    venue_font = fit_font(
         event_venue,
-        "Helvetica",
-        7.4,
-        5.7,
-        _pdf_x(112),
+        220,
+        19
     )
 
-    # Venue is not page-centered; it is centered in its original
-    # template column.
-    pdf.setFont("Helvetica", venue_size)
-    pdf.setFillColor(NAVY)
-    pdf.drawCentredString(
-        _pdf_x(752),
-        _pdf_y_from_top(746),
+    draw.text(
+        (720, event_info_y_value),
         event_venue,
+        font=venue_font,
+        fill=NAVY
     )
 
-    # Event type
-    type_size = _fit_font_size(
-        pdf,
+    # ---------------- EVENT TYPE ----------------
+
+    draw.text(
+        (1040, event_info_y_title),
+        "Event Type",
+        font=get_font(
+            18,
+            bold=True
+        ),
+        fill=NAVY
+    )
+
+    type_font = fit_font(
         event_type,
-        "Helvetica",
-        7.4,
-        5.7,
-        _pdf_x(105),
+        220,
+        19
     )
 
-    pdf.setFont("Helvetica", type_size)
-    pdf.setFillColor(NAVY)
-    pdf.drawCentredString(
-        _pdf_x(1005),
-        _pdf_y_from_top(746),
+    draw.text(
+        (1040, event_info_y_value),
         event_type,
+        font=type_font,
+        fill=NAVY
     )
 
-    # --------------------------------------------------------
-    # 5. FINALIZE PDF
-    # --------------------------------------------------------
+    # ========================================================
+    # 9. COORDINATOR SIGNATURE
+    #
+    # The signature is placed ABOVE the existing background
+    # line. Python does NOT draw another line.
+    # ========================================================
 
-    pdf.showPage()
-    pdf.save()
-
-    # --------------------------------------------------------
-    # 6. SAVE FILE PATH TO MODEL
-    # --------------------------------------------------------
-
-    relative_path = os.path.join(
-        "certificates",
-        file_name,
+    add_signature(
+        base,
+        config.coordinator_signature
+        if config
+        else None,
+        250,
+        745,
+        300,
+        85
     )
 
-    certificate.certificate_file.name = (
-        relative_path.replace("\\", "/")
+    # ========================================================
+    # COORDINATOR DESIGNATION
+    # ========================================================
+
+    coordinator_designation_font = fit_font(
+        coordinator_designation,
+        300,
+        18,
+        bold=True
     )
 
-    certificate.save(
-        update_fields=["certificate_file"]
+    draw_centered_text(
+        draw,
+        coordinator_designation,
+        865,
+        coordinator_designation_font,
+        NAVY,
+        center_x=400
     )
 
-    return certificate.certificate_file.url
+    if coordinator_name:
+
+        coordinator_name_font = fit_font(
+            coordinator_name,
+            300,
+            16
+        )
+
+        draw_centered_text(
+            draw,
+            coordinator_name,
+            898,
+            coordinator_name_font,
+            NAVY,
+            center_x=400
+        )
+
+    # ========================================================
+    # 10. HEAD SIGNATURE
+    # ========================================================
+
+    add_signature(
+        base,
+        config.head_signature
+        if config
+        else None,
+        990,
+        745,
+        300,
+        85
+    )
+
+    # ========================================================
+    # HEAD DESIGNATION
+    # ========================================================
+
+    head_designation_font = fit_font(
+        head_designation,
+        300,
+        18,
+        bold=True
+    )
+
+    draw_centered_text(
+        draw,
+        head_designation,
+        865,
+        head_designation_font,
+        NAVY,
+        center_x=1140
+    )
+
+    if head_name:
+
+        head_name_font = fit_font(
+            head_name,
+            300,
+            16
+        )
+
+        draw_centered_text(
+            draw,
+            head_name,
+            898,
+            head_name_font,
+            NAVY,
+            center_x=1140
+        )
+
+    # ========================================================
+    # 11. INSTITUTE LOGO
+    # ========================================================
+
+    if config and config.institute_logo:
+
+        add_image_contain(
+            base,
+            config.institute_logo,
+            120,
+            55,
+            190,
+            190
+        )
+
+    # ========================================================
+    # 12. SPONSOR LOGO
+    # ========================================================
+
+    if config and config.sponsor_logo:
+
+        add_image_contain(
+            base,
+            config.sponsor_logo,
+            1260,
+            65,
+            150,
+            130
+        )
+
+    # ========================================================
+    # 13. SAVE PDF
+    # ========================================================
+
+    pdf_buffer = BytesIO()
+
+    base.convert("RGB").save(
+        pdf_buffer,
+        format="PDF",
+        resolution=150.0
+    )
+
+    pdf_buffer.seek(0)
+
+    filename = (
+        f"{certificate.certificate_number}.pdf"
+    )
+
+    certificate.certificate_file.save(
+        filename,
+        ContentFile(
+            pdf_buffer.getvalue()
+        ),
+        save=True
+    )
+
+    return certificate
