@@ -51,6 +51,7 @@ class RegisterView(APIView):
 
 # ============================================================
 # LOGIN
+# STUDENT / ORGANIZER
 # ============================================================
 
 class LoginView(APIView):
@@ -81,6 +82,21 @@ class LoginView(APIView):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
+        # ----------------------------------------------------
+        # ADMIN ACCOUNTS MUST USE ADMIN LOGIN
+        # ----------------------------------------------------
+
+        if user.role == "admin":
+            return Response(
+                {
+                    "message": (
+                        "Admin accounts must use the "
+                        "Admin Login."
+                    )
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         token, created = Token.objects.get_or_create(
             user=user
         )
@@ -88,6 +104,118 @@ class LoginView(APIView):
         return Response(
             {
                 "message": "Login successful",
+                "token": token.key,
+                "user": {
+                    "id": user.id,
+                    "name": user.name,
+                    "email": user.email,
+                    "role": user.role,
+                },
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+# ============================================================
+# ADMIN LOGIN
+# ============================================================
+
+class AdminLoginView(APIView):
+
+    def post(self, request):
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        # ----------------------------------------------------
+        # CHECK REQUIRED FIELDS
+        # ----------------------------------------------------
+
+        if not email or not password:
+            return Response(
+                {
+                    "message": (
+                        "Admin email and password "
+                        "are required"
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # ----------------------------------------------------
+        # AUTHENTICATE
+        # ----------------------------------------------------
+
+        user = authenticate(
+            request,
+            username=email,
+            password=password,
+        )
+
+        if user is None:
+            return Response(
+                {
+                    "message": "Invalid admin credentials"
+                },
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        # ----------------------------------------------------
+        # VERIFY ADMIN ROLE
+        # ----------------------------------------------------
+
+        if user.role != "admin":
+            return Response(
+                {
+                    "message": (
+                        "You are not authorized "
+                        "to access the admin portal."
+                    )
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        # ----------------------------------------------------
+        # VERIFY DJANGO STAFF ACCESS
+        # ----------------------------------------------------
+
+        if not user.is_staff:
+            return Response(
+                {
+                    "message": (
+                        "This account does not have "
+                        "admin portal access."
+                    )
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        # ----------------------------------------------------
+        # VERIFY ACTIVE ACCOUNT
+        # ----------------------------------------------------
+
+        if not user.is_active:
+            return Response(
+                {
+                    "message": "This admin account is inactive."
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        # ----------------------------------------------------
+        # CREATE / GET TOKEN
+        # ----------------------------------------------------
+
+        token, created = Token.objects.get_or_create(
+            user=user
+        )
+
+        # ----------------------------------------------------
+        # SUCCESS
+        # ----------------------------------------------------
+
+        return Response(
+            {
+                "message": "Admin login successful",
                 "token": token.key,
                 "user": {
                     "id": user.id,

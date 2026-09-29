@@ -25,7 +25,8 @@
   display: flex;
   align-items: center;
 
-  padding: 0 28px 0 12px;
+  /* No left space */
+  padding: 0 5% 0 0;
 
   background: rgba(247, 243, 238, 0.94);
 
@@ -51,7 +52,7 @@
   display: flex;
   align-items: center;
 
-  gap: 9px;
+  gap: 11px;
 
   flex-shrink: 0;
 }
@@ -62,8 +63,8 @@
 ============================================================ */
 
 .admin-menu-toggle {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
 
   display: inline-flex;
   align-items: center;
@@ -89,8 +90,11 @@
 
 .admin-menu-toggle:hover {
   transform: translateY(-2px);
+
   color: #6d28d9;
+
   border-color: #8b5cf6;
+
   background: #f1e9ff;
 
   box-shadow:
@@ -106,12 +110,14 @@
   display: flex;
   align-items: center;
 
-  gap: 7px;
+  gap: 11px;
 
   text-decoration: none;
 
   margin: 0;
   padding: 0;
+
+  flex-shrink: 0;
 }
 
 
@@ -120,8 +126,8 @@
 ============================================================ */
 
 .admin-brand-symbol {
-  width: 34px;
-  height: 34px;
+  width: 39px;
+  height: 39px;
 
   display: flex;
   align-items: center;
@@ -132,7 +138,7 @@
   margin: 0;
   padding: 0;
 
-  border-radius: 9px;
+  border-radius: 11px;
 
   background:
     linear-gradient(
@@ -144,9 +150,9 @@
   color: #fff8ed;
 
   box-shadow:
-    0 0 14px rgba(109, 40, 217, 0.22);
+    0 0 18px rgba(109, 40, 217, 0.25);
 
-  font-size: 16px;
+  font-size: 19px;
   line-height: 1;
 }
 
@@ -154,7 +160,7 @@
   margin: 0;
   padding: 0;
 
-  font-size: 16px;
+  font-size: 19px;
   line-height: 1;
 }
 
@@ -167,14 +173,16 @@
   display: flex;
   flex-direction: column;
 
-  gap: 2px;
+  gap: 0;
 
   margin: 0;
   padding: 0;
 }
 
 
-/* EVENTHUB */
+/* ============================================================
+   EVENTHUB TEXT
+============================================================ */
 
 .admin-brand-text strong {
   display: block;
@@ -184,8 +192,7 @@
 
   color: #0b1230;
 
-  font-size: 18px;
-
+  font-size: 20px;
   line-height: 1;
 
   letter-spacing: -0.5px;
@@ -198,23 +205,24 @@
 }
 
 
-/* COLLEGE EVENTS */
+/* ============================================================
+   COLLEGE EVENTS
+============================================================ */
 
 .admin-brand-text small {
   display: block;
 
-  margin: 0;
+  margin: 4px 0 0;
   padding: 0;
 
   color: #697184;
 
-  font-size: 7px;
-
+  font-size: 8px;
   line-height: 1;
 
   font-weight: 700;
 
-  letter-spacing: 1.25px;
+  letter-spacing: 1.5px;
 }
 
 
@@ -224,7 +232,7 @@
 
 .admin-search-bar {
   width: 360px;
-  height: 42px;
+  height: 40px;
 
   display: flex;
   align-items: center;
@@ -232,23 +240,22 @@
   gap: 9px;
 
   margin-left: 18px;
-
   padding: 0 15px;
 
   box-sizing: border-box;
 
-  background: #fbf9f6;
+  background: rgba(255, 248, 237, 0.72);
 
-  border: 1px solid #d8d2ce;
+  border: 1px solid #cec8d0;
 
-  border-radius: 23px;
+  border-radius: 20px;
 
   color: #6d28d9;
 
   transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .admin-search-bar:focus-within {
@@ -257,7 +264,7 @@
   border-color: #8b5cf6;
 
   box-shadow:
-    0 0 0 3px rgba(139, 92, 246, 0.08);
+    0 0 18px rgba(109, 40, 217, 0.12);
 }
 
 .admin-search-bar > svg {
@@ -290,7 +297,9 @@
 }
 
 
-/* CLEAR SEARCH */
+/* ============================================================
+   CLEAR SEARCH
+============================================================ */
 
 .admin-search-clear {
   width: 25px;
@@ -305,6 +314,7 @@
   padding: 0;
 
   border: none;
+
   border-radius: 50%;
 
   background: transparent;
@@ -312,10 +322,15 @@
   color: #8b8791;
 
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .admin-search-clear:hover {
   background: #eee8f8;
+
   color: #6d28d9;
 }
 
@@ -352,11 +367,11 @@
 .admin-notification-btn {
   position: relative;
 
-  min-width: 42px;
-  width: 42px;
+  width: 40px;
+  min-width: 40px;
 
-  height: 42px;
-  min-height: 42px;
+  height: 40px;
+  min-height: 40px;
 
   padding: 0;
 
@@ -384,6 +399,7 @@
 
 .admin-notification-btn:hover {
   border-color: #8b5cf6;
+
   color: #6d28d9;
 
   background: #f1e9ff;
@@ -393,11 +409,6 @@
   box-shadow:
     0 0 18px rgba(109, 40, 217, 0.18);
 }
-
-
-/* ============================================================
-   ACTIVE NOTIFICATION BUTTON
-============================================================ */
 
 .admin-notification-btn.notification-active {
   border-color: #8b5cf6;
@@ -418,8 +429,8 @@
 .notification-dot {
   position: absolute;
 
-  top: 8px;
-  right: 8px;
+  top: 6px;
+  right: 6px;
 
   width: 7px;
   height: 7px;
@@ -443,7 +454,6 @@
   right: 0;
 
   width: 370px;
-
   max-width: calc(100vw - 32px);
 
   overflow: hidden;
@@ -547,7 +557,9 @@
   cursor: pointer;
 
   transition:
-    0.2s ease;
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .admin-notification-close:hover {
@@ -741,6 +753,9 @@
   font-weight: 800;
 
   cursor: pointer;
+
+  transition:
+    color 0.2s ease;
 }
 
 .admin-notification-footer button:hover {
@@ -783,7 +798,8 @@
 ============================================================ */
 
 .admin-main-content {
-  min-height: calc(100vh - 76px);
+  min-height:
+    calc(100vh - 76px);
 
   background:
     radial-gradient(
@@ -791,12 +807,29 @@
       rgba(139, 92, 246, 0.08),
       transparent 28%
     ),
+
     radial-gradient(
       circle at 90% 20%,
       rgba(236, 72, 153, 0.06),
       transparent 25%
     ),
+
     #f7f3ee;
+}
+
+
+/* ============================================================
+   ADMIN AUTH LOADING SPINNER
+============================================================ */
+
+@keyframes adminAuthSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 
@@ -807,19 +840,23 @@
 @media (max-width: 1050px) {
 
   .admin-top-navbar {
-    padding-left: 10px;
-    padding-right: 20px;
+    /* Keep hamburger at left */
+
+    padding-left: 0;
+
+    padding-right: 5%;
   }
 
   .admin-search-bar {
     width: 290px;
+
     margin-left: 12px;
   }
 }
 
 
 /* ============================================================
-   TABLET / SMALL SCREEN
+   TABLET
 ============================================================ */
 
 @media (max-width: 850px) {
@@ -847,24 +884,26 @@
   .admin-top-navbar {
     min-height: 70px;
 
-    padding: 0 10px;
-  }
+    /* Small right space, zero left space */
 
-  .admin-brand-text strong {
-    font-size: 17px;
-  }
-
-  .admin-brand-text small {
-    font-size: 6px;
+    padding:
+      0
+      10px
+      0
+      0;
   }
 
   .admin-brand-symbol {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
   }
 
-  .admin-brand-symbol span {
-    font-size: 15px;
+  .admin-brand-text strong {
+    font-size: 18px;
+  }
+
+  .admin-brand-text small {
+    font-size: 7px;
   }
 
   .admin-menu-toggle,
@@ -880,12 +919,6 @@
     height: 38px;
 
     margin-left: 5px;
-
-    padding: 0 11px;
-  }
-
-  .admin-search-bar input {
-    font-size: 12px;
   }
 
   .admin-content-wrapper {
@@ -895,40 +928,43 @@
   }
 
   .admin-main-content {
-    min-height: calc(100vh - 70px);
+    min-height:
+      calc(100vh - 70px);
   }
 }
 
 
 /* ============================================================
-   MOBILE
+   SMALL MOBILE
 ============================================================ */
 
 @media (max-width: 580px) {
 
   .admin-top-navbar {
-    padding: 9px 8px;
+    padding:
+      8px
+      8px
+      8px
+      0;
 
     gap: 8px;
   }
 
   .admin-navbar-left {
-    gap: 6px;
+    gap: 7px;
+  }
+
+  .admin-brand-symbol {
+    width: 34px;
+    height: 34px;
   }
 
   .admin-brand-text strong {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   .admin-brand-text small {
     display: none;
-  }
-
-  .admin-brand-symbol {
-    width: 32px;
-    height: 32px;
-
-    border-radius: 9px;
   }
 
   .admin-menu-toggle,
@@ -953,32 +989,34 @@
 
 
 /* ============================================================
-   SMALL MOBILE
+   VERY SMALL MOBILE
 ============================================================ */
 
 @media (max-width: 480px) {
 
   .admin-navbar-brand {
-    gap: 5px;
+    gap: 6px;
   }
 
   .admin-brand-symbol {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
   }
 
   .admin-brand-symbol span {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .admin-brand-text strong {
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .admin-search-bar {
     height: 36px;
 
-    padding: 0 10px;
+    padding:
+      0
+      10px;
   }
 
   .admin-search-bar input {

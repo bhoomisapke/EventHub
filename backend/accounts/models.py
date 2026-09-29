@@ -21,9 +21,10 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("role", "admin")
 
         return self.create_user(
             email=email,
@@ -38,23 +39,45 @@ class User(AbstractUser):
 
     email = models.EmailField(unique=True)
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     name = models.CharField(max_length=100)
 
     ROLE_CHOICES = (
-        ('student', 'Student'),
-        ('organizer', 'Organizer'),
+        ("student", "Student"),
+        ("organizer", "Organizer"),
+        ("admin", "Admin"),
     )
 
-    phone = models.CharField(max_length=15, blank=True)
-    student_id = models.CharField(max_length=50, blank=True)
-    department = models.CharField(max_length=100, blank=True)
-    year = models.PositiveIntegerField(null=True, blank=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    phone = models.CharField(
+        max_length=15,
+        blank=True
+    )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    student_id = models.CharField(
+        max_length=50,
+        blank=True
+    )
+
+    department = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    year = models.PositiveIntegerField(
+        null=True,
+        blank=True
+    )
+
+    role = models.CharField(
+        max_length=20,
+        choices=ROLE_CHOICES
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     objects = UserManager()
 

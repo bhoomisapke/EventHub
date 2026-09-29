@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Event
+from .models import Event, Category
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -63,6 +63,8 @@ class EventSerializer(serializers.ModelSerializer):
         default=1,
         min_value=1
     )
+
+
 
     class Meta:
         model = Event
@@ -127,3 +129,34 @@ class EventSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(url)
 
         return url
+
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    event_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Category
+
+        fields = [
+            "id",
+            "name",
+            "description",
+            "icon",
+            "is_active",
+            "event_count",
+            "created_at",
+            "updated_at",
+        ]
+
+        read_only_fields = [
+            "id",
+            "event_count",
+            "created_at",
+            "updated_at",
+        ]
+
+    def get_event_count(self, obj):
+        return Event.objects.filter(
+            category__iexact=obj.name
+        ).count()

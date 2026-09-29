@@ -39,25 +39,13 @@ function AdminSidebar({ collapsed }) {
       icon: ClipboardList,
     },
     {
-      label: "Tickets",
-      path: "/admin/tickets",
+      label: "Categories",
+      path: "/admin/categories",
       icon: Ticket,
     },
-    {
-      label: "Payments",
-      path: "/admin/payments",
-      icon: CreditCard,
-    },
-    {
-      label: "Reports",
-      path: "/admin/reports",
-      icon: BarChart3,
-    },
-    {
-      label: "Settings",
-      path: "/admin/settings",
-      icon: Settings,
-    },
+   
+    
+   
   ];
 
   const handleLogout = () => {
