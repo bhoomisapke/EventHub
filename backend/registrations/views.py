@@ -1,3 +1,7 @@
+from datetime import datetime
+
+from django.utils import timezone
+
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
@@ -32,7 +36,6 @@ class RegistrationCreateView(generics.CreateAPIView):
 
         student = self.request.user
 
-        # Only students can register.
         if getattr(student, "role", None) != "student":
             raise ValidationError({
                 "detail": "Only students can register for events."
@@ -40,7 +43,6 @@ class RegistrationCreateView(generics.CreateAPIView):
 
         event = serializer.validated_data["event"]
 
-        # Prevent duplicate registration.
         existing_registration = Registration.objects.filter(
             student=student,
             event=event
@@ -53,11 +55,24 @@ class RegistrationCreateView(generics.CreateAPIView):
                     "detail": "You are already registered for this event."
                 })
 
-            # If an old registration was cancelled,
-            # allow the student to register again.
+            # Do not allow re-registration after the event date.
+            today = timezone.localdate()
+
+            if event.date < today:
+                raise ValidationError({
+                    "detail": (
+                        "You cannot register for an event "
+                        "that has already ended."
+                    )
+                })
+
+            if event.status == "cancelled":
+                raise ValidationError({
+                    "detail": "You cannot register for a cancelled event."
+                })
+
             existing_registration.status = "confirmed"
 
-            # Update registration details.
             existing_registration.name = serializer.validated_data.get(
                 "name",
                 existing_registration.name
@@ -90,17 +105,41 @@ class RegistrationCreateView(generics.CreateAPIView):
 
             existing_registration.save()
 
-            # Create a ticket again if necessary.
             create_ticket(existing_registration)
 
             return
 
-        # Create completely new registration.
+        # ----------------------------------------------------
+        # CANCELLED EVENT
+        # ----------------------------------------------------
+
+        if event.status == "cancelled":
+            raise ValidationError({
+                "detail": "You cannot register for a cancelled event."
+            })
+
+        # ----------------------------------------------------
+        # PAST EVENT
+        # ----------------------------------------------------
+
+        today = timezone.localdate()
+
+        if event.date < today:
+            raise ValidationError({
+                "detail": (
+                    "You cannot register for an event "
+                    "that has already ended."
+                )
+            })
+
+        # ----------------------------------------------------
+        # CREATE REGISTRATION
+        # ----------------------------------------------------
+
         registration = serializer.save(
             student=student
         )
 
-        # Automatically generate ticket.
         create_ticket(registration)
 
 
@@ -171,11 +210,14 @@ class CancelRegistrationView(APIView):
     def post(self, request, pk):
 
         try:
-            registration = Registration.objects.select_related(
-                "event"
-            ).get(
-                pk=pk,
-                student=request.user
+
+            registration = (
+                Registration.objects
+                .select_related("event")
+                .get(
+                    pk=pk,
+                    student=request.user
+                )
             )
 
         except Registration.DoesNotExist:
@@ -187,7 +229,12 @@ class CancelRegistrationView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        # Already cancelled
+        event = registration.event
+
+        # ----------------------------------------------------
+        # ALREADY CANCELLED
+        # ----------------------------------------------------
+
         if registration.status == "cancelled":
 
             return Response(
@@ -197,14 +244,57 @@ class CancelRegistrationView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Cancel registration
+        # ----------------------------------------------------
+        # CANCELLED EVENT
+        # ----------------------------------------------------
+
+        if event.status == "cancelled":
+
+            return Response(
+                {
+                    "detail": (
+                        "This event has been cancelled. "
+                        "Your registration cannot be cancelled manually."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # ----------------------------------------------------
+        # PAST EVENT
+        #
+        # Cancellation is allowed on the event day.
+        # Cancellation is blocked from the next day.
+        # ----------------------------------------------------
+
+        today = timezone.localdate()
+
+        if event.date < today:
+
+            return Response(
+                {
+                    "detail": (
+                        "Registration cannot be cancelled "
+                        "because this event has already ended."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # ----------------------------------------------------
+        # CANCEL REGISTRATION
+        # ----------------------------------------------------
+
         registration.status = "cancelled"
 
         registration.save(
             update_fields=["status"]
         )
 
-        # Cancel connected ticket
+        # ----------------------------------------------------
+        # CANCEL CONNECTED TICKET
+        # ----------------------------------------------------
+
         try:
 
             ticket = registration.ticket
@@ -216,13 +306,16 @@ class CancelRegistrationView(APIView):
             )
 
         except Exception:
-            # Registration cancellation should still succeed
-            # if a ticket does not exist.
             pass
+
+        # ----------------------------------------------------
+        # SUCCESS
+        # ----------------------------------------------------
 
         return Response(
             {
                 "message": "Registration cancelled successfully.",
+
                 "registration": RegistrationSerializer(
                     registration,
                     context={"request": request}
@@ -250,21 +343,14 @@ class OrganizerParticipantsView(APIView):
 
         organizer = request.user
 
-        # ----------------------------------------------------
-        # ORGANIZER ROLE CHECK
-        # ----------------------------------------------------
-
         if getattr(organizer, "role", None) != "organizer":
+
             return Response(
                 {
                     "detail": "Only organizers can view participants."
                 },
                 status=status.HTTP_403_FORBIDDEN
             )
-
-        # ----------------------------------------------------
-        # GET REGISTRATIONS
-        # ----------------------------------------------------
 
         registrations = (
             Registration.objects
@@ -278,18 +364,11 @@ class OrganizerParticipantsView(APIView):
             .order_by("-registration_date")
         )
 
-        # ----------------------------------------------------
-        # OPTIONAL EVENT FILTER
-        # ----------------------------------------------------
-
         if event_id is not None:
+
             registrations = registrations.filter(
                 event_id=event_id
             )
-
-        # ----------------------------------------------------
-        # RESPONSE DATA
-        # ----------------------------------------------------
 
         participants = []
 
@@ -298,7 +377,6 @@ class OrganizerParticipantsView(APIView):
             student = registration.student
             event = registration.event
 
-            # Registration-time name has priority.
             student_name = (
                 registration.name
                 or getattr(student, "name", None)
@@ -308,7 +386,6 @@ class OrganizerParticipantsView(APIView):
                 or "Unknown Student"
             )
 
-            # Registration-time email has priority.
             student_email = (
                 registration.email
                 or getattr(student, "email", None)

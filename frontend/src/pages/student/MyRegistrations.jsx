@@ -102,9 +102,14 @@ const getEventImageUrl = (registration) => {
 const MyRegistrations = () => {
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState("");
+
   const [cancelTarget, setCancelTarget] = useState(null);
+
   const [cancellingId, setCancellingId] = useState(null);
+
+  const [cancelError, setCancelError] = useState("");
 
   useEffect(() => {
     fetchMyRegistrations();
@@ -112,10 +117,11 @@ const MyRegistrations = () => {
 
 
   /* =======================================================
-     FETCH REGISTRATIONS + EVENT IMAGES
+     FETCH REGISTRATIONS
      ======================================================= */
 
   const fetchMyRegistrations = async () => {
+
     const token =
       localStorage.getItem("token") ||
       sessionStorage.getItem("token");
@@ -127,6 +133,7 @@ const MyRegistrations = () => {
     }
 
     try {
+
       setLoading(true);
       setError("");
 
@@ -148,23 +155,23 @@ const MyRegistrations = () => {
       }
 
       if (!registrationResponse.ok) {
-        throw new Error("Failed to load registrations.");
+        throw new Error(
+          "Failed to load registrations."
+        );
       }
 
       const registrationData =
         await registrationResponse.json();
 
-      const registrationList = Array.isArray(registrationData)
-        ? registrationData
-        : registrationData.results || [];
+      const registrationList =
+        Array.isArray(registrationData)
+          ? registrationData
+          : registrationData.results || [];
 
-      /*
-       * Fetch events separately because the registrations API
-       * may not include the event image field.
-       */
       let eventList = [];
 
       try {
+
         const eventsResponse = await fetch(
           `${API_URL}/api/events/`,
           {
@@ -176,99 +183,191 @@ const MyRegistrations = () => {
         );
 
         if (eventsResponse.ok) {
-          const eventsData = await eventsResponse.json();
 
-          eventList = Array.isArray(eventsData)
-            ? eventsData
-            : eventsData.results || [];
+          const eventsData =
+            await eventsResponse.json();
+
+          eventList =
+            Array.isArray(eventsData)
+              ? eventsData
+              : eventsData.results || [];
         }
+
       } catch (eventError) {
+
         console.error(
           "Could not fetch events for registration images:",
           eventError
         );
       }
 
-      /*
-       * Match every registration with its event and copy the
-       * actual event image into the registration object.
-       */
-      const enrichedRegistrations = registrationList.map(
-        (registration) => {
-          const eventId = getEventId(registration);
+      const enrichedRegistrations =
+        registrationList.map(
+          (registration) => {
 
-          const matchingEvent = eventList.find(
-            (event) =>
-              Number(event.id) === Number(eventId)
-          );
+            const eventId =
+              getEventId(registration);
 
-          return {
-            ...registration,
-            eventData: matchingEvent || null,
+            const matchingEvent =
+              eventList.find(
+                (event) =>
+                  Number(event.id) ===
+                  Number(eventId)
+              );
 
-            event_title:
-              registration.event_title ||
-              registration.event?.title ||
-              matchingEvent?.title ||
-              "Event",
+            return {
+              ...registration,
 
-            event_date:
-              registration.event_date ||
-              registration.event?.date ||
-              matchingEvent?.date ||
-              "",
+              eventData:
+                matchingEvent || null,
 
-            event_time:
-              registration.event_time ||
-              registration.event?.time ||
-              matchingEvent?.time ||
-              "",
+              event_title:
+                registration.event_title ||
+                registration.event?.title ||
+                matchingEvent?.title ||
+                "Event",
 
-            event_venue:
-              registration.event_venue ||
-              registration.event?.venue ||
-              matchingEvent?.venue ||
-              "",
+              event_date:
+                registration.event_date ||
+                registration.event?.date ||
+                matchingEvent?.date ||
+                "",
 
-            event_image:
-              registration.event_image ||
-              registration.event_image_url ||
-              registration.image_url ||
-              registration.image ||
-              registration.event?.image_url ||
-              registration.event?.image ||
-              matchingEvent?.image_url ||
-              matchingEvent?.image ||
-              "",
-          };
-        }
-      );
+              event_time:
+                registration.event_time ||
+                registration.event?.time ||
+                matchingEvent?.time ||
+                "",
 
-      console.log(
-        "My registrations:",
+              event_venue:
+                registration.event_venue ||
+                registration.event?.venue ||
+                matchingEvent?.venue ||
+                "",
+
+              event_status:
+                registration.event_status ||
+                registration.event?.status ||
+                matchingEvent?.status ||
+                "",
+
+              event_image:
+                registration.event_image ||
+                registration.event_image_url ||
+                registration.image_url ||
+                registration.image ||
+                registration.event?.image_url ||
+                registration.event?.image ||
+                matchingEvent?.image_url ||
+                matchingEvent?.image ||
+                "",
+            };
+          }
+        );
+
+      setRegistrations(
         enrichedRegistrations
       );
 
-      console.log(
-        "Event images:",
-        enrichedRegistrations.map((registration) => ({
-          id: registration.id,
-          event: registration.event_title,
-          image: getEventImageUrl(registration),
-        }))
-      );
-
-      setRegistrations(enrichedRegistrations);
     } catch (err) {
-      console.error("Registration fetch error:", err);
+
+      console.error(
+        "Registration fetch error:",
+        err
+      );
 
       setError(
         err?.message ||
-          "Unable to load your registrations."
+        "Unable to load your registrations."
       );
+
     } finally {
+
       setLoading(false);
     }
+  };
+
+
+  /* =======================================================
+     CHECK WHETHER EVENT IS PAST
+     ======================================================= */
+
+  const isPastEvent = (registration) => {
+
+    if (!registration?.event_date) {
+      return false;
+    }
+
+    const eventDate =
+      new Date(
+        registration.event_date
+      );
+
+    if (
+      Number.isNaN(
+        eventDate.getTime()
+      )
+    ) {
+      return false;
+    }
+
+    const today = new Date();
+
+    today.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    eventDate.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    return eventDate < today;
+  };
+
+
+  /* =======================================================
+     CAN CANCEL
+     ======================================================= */
+
+  const canCancelRegistration = (
+    registration
+  ) => {
+
+    if (!registration) {
+      return false;
+    }
+
+    if (
+      registration.status
+        ?.toLowerCase() ===
+      "cancelled"
+    ) {
+      return false;
+    }
+
+    if (
+      registration.event_status
+        ?.toLowerCase() ===
+      "cancelled"
+    ) {
+      return false;
+    }
+
+    if (
+      isPastEvent(
+        registration
+      )
+    ) {
+      return false;
+    }
+
+    return true;
   };
 
 
@@ -276,22 +375,43 @@ const MyRegistrations = () => {
      CANCEL MODAL
      ======================================================= */
 
-  const openCancelConfirmation = (registration) => {
-    if (!registration?.id) return;
+  const openCancelConfirmation = (
+    registration
+  ) => {
 
-    if (
-      registration.status?.toLowerCase() ===
-      "cancelled"
-    ) {
+    if (!registration?.id) {
       return;
     }
 
-    setCancelTarget(registration);
+    if (
+      !canCancelRegistration(
+        registration
+      )
+    ) {
+      setCancelError(
+        "This registration can no longer be cancelled because the event has already ended."
+      );
+
+      return;
+    }
+
+    setCancelError("");
+
+    setCancelTarget(
+      registration
+    );
   };
 
+
   const closeCancelConfirmation = () => {
-    if (cancellingId) return;
+
+    if (cancellingId) {
+      return;
+    }
+
     setCancelTarget(null);
+
+    setCancelError("");
   };
 
 
@@ -300,81 +420,131 @@ const MyRegistrations = () => {
      ======================================================= */
 
   const cancelRegistration = async () => {
-    if (!cancelTarget?.id) return;
 
-    const registrationId = cancelTarget.id;
+    if (!cancelTarget?.id) {
+      return;
+    }
+
+    const registrationId =
+      cancelTarget.id;
 
     const token =
       localStorage.getItem("token") ||
       sessionStorage.getItem("token");
 
     if (!token) {
-      setCancelTarget(null);
-      setError("Please login again.");
+
+      setCancelError(
+        "Please login again."
+      );
+
       return;
     }
 
     try {
-      setCancellingId(registrationId);
-      setError("");
 
-      const response = await fetch(
-        `${API_URL}/api/registrations/${registrationId}/cancel/`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Token ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
+      setCancellingId(
+        registrationId
       );
+
+      setCancelError("");
+
+      const response =
+        await fetch(
+          `${API_URL}/api/registrations/${registrationId}/cancel/`,
+          {
+            method: "POST",
+
+            headers: {
+              Authorization:
+                `Token ${token}`,
+
+              "Content-Type":
+                "application/json",
+            },
+          }
+        );
 
       let data = {};
 
       try {
-        data = await response.json();
+
+        data =
+          await response.json();
+
       } catch {
+
         data = {};
       }
 
-      if (response.status === 401) {
+      if (
+        response.status ===
+        401
+      ) {
+
         throw new Error(
           "Your session has expired. Please login again."
         );
       }
 
-      if (!response.ok) {
+      if (
+        response.status ===
+        404
+      ) {
+
         throw new Error(
           data?.detail ||
-            data?.message ||
-            "Unable to cancel registration."
+          "Registration was not found."
         );
       }
 
-      setRegistrations((current) =>
-        current.map((registration) =>
-          registration.id === registrationId
-            ? {
-                ...registration,
-                status: "Cancelled",
-              }
-            : registration
-        )
+      if (!response.ok) {
+
+        throw new Error(
+          data?.detail ||
+          data?.message ||
+          "Unable to cancel registration."
+        );
+      }
+
+      setRegistrations(
+        (current) =>
+          current.map(
+            (registration) =>
+              registration.id ===
+              registrationId
+                ? {
+                    ...registration,
+                    status:
+                      "cancelled",
+                  }
+                : registration
+          )
       );
 
-      setCancelTarget(null);
+      setCancelTarget(
+        null
+      );
+
+      setCancelError("");
+
     } catch (err) {
+
       console.error(
         "Cancel registration error:",
         err
       );
 
-      setError(
+      setCancelError(
         err?.message ||
-          "Unable to cancel registration. Please try again."
+        "Unable to cancel registration. Please try again."
       );
+
     } finally {
-      setCancellingId(null);
+
+      setCancellingId(
+        null
+      );
     }
   };
 
@@ -383,28 +553,54 @@ const MyRegistrations = () => {
      FORMATTERS
      ======================================================= */
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "Date not available";
+  const formatDate = (
+    dateString
+  ) => {
 
-    const date = new Date(dateString);
+    if (!dateString) {
+      return "Date not available";
+    }
 
-    if (Number.isNaN(date.getTime())) {
+    const date =
+      new Date(dateString);
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
       return dateString;
     }
 
-    return date.toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+    return date.toLocaleDateString(
+      "en-GB",
+      {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }
+    );
   };
 
-  const formatTime = (timeString) => {
-    if (!timeString) return "Time not available";
 
-    const [hours, minutes] = String(timeString).split(":");
+  const formatTime = (
+    timeString
+  ) => {
 
-    const date = new Date();
+    if (!timeString) {
+      return "Time not available";
+    }
+
+    const [
+      hours,
+      minutes
+    ] =
+      String(
+        timeString
+      ).split(":");
+
+    const date =
+      new Date();
 
     date.setHours(
       Number(hours),
@@ -413,24 +609,39 @@ const MyRegistrations = () => {
       0
     );
 
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
+    return date.toLocaleTimeString(
+      "en-US",
+      {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      }
+    );
   };
 
-  const isCancelled = (registration) =>
-    registration?.status?.toLowerCase() ===
+
+  const isCancelled = (
+    registration
+  ) =>
+    registration?.status
+      ?.toLowerCase() ===
     "cancelled";
 
-  const getStatusClass = (status) =>
-    status?.toLowerCase() === "cancelled"
+
+  const getStatusClass = (
+    status
+  ) =>
+    status?.toLowerCase() ===
+    "cancelled"
       ? "cancelled-badge"
       : "confirmed-badge";
 
-  const getStatusIcon = (status) =>
-    status?.toLowerCase() === "cancelled" ? (
+
+  const getStatusIcon = (
+    status
+  ) =>
+    status?.toLowerCase() ===
+    "cancelled" ? (
       <XCircle size={14} />
     ) : (
       <CheckCircle2 size={14} />
@@ -441,41 +652,73 @@ const MyRegistrations = () => {
      COUNTS
      ======================================================= */
 
-  const confirmedCount = registrations.filter(
-    (registration) =>
-      registration.status?.toLowerCase() ===
-      "confirmed"
-  ).length;
+  const confirmedCount =
+    registrations.filter(
+      (registration) =>
+        registration.status
+          ?.toLowerCase() ===
+        "confirmed"
+    ).length;
 
-  const cancelledCount = registrations.filter(
-    (registration) => isCancelled(registration)
-  ).length;
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const cancelledCount =
+    registrations.filter(
+      (registration) =>
+        isCancelled(
+          registration
+        )
+    ).length;
 
-  const upcomingCount = registrations.filter(
-    (registration) => {
-      if (
-        !registration.event_date ||
-        isCancelled(registration)
-      ) {
-        return false;
+
+  const today =
+    new Date();
+
+  today.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+
+  const upcomingCount =
+    registrations.filter(
+      (registration) => {
+
+        if (
+          !registration.event_date ||
+          isCancelled(
+            registration
+          )
+        ) {
+          return false;
+        }
+
+        const eventDate =
+          new Date(
+            registration.event_date
+          );
+
+        if (
+          Number.isNaN(
+            eventDate.getTime()
+          )
+        ) {
+          return false;
+        }
+
+        eventDate.setHours(
+          0,
+          0,
+          0,
+          0
+        );
+
+        return (
+          eventDate >= today
+        );
       }
-
-      const eventDate = new Date(
-        registration.event_date
-      );
-
-      if (Number.isNaN(eventDate.getTime())) {
-        return false;
-      }
-
-      eventDate.setHours(0, 0, 0, 0);
-
-      return eventDate >= today;
-    }
-  ).length;
+    ).length;
 
 
   /* =======================================================
@@ -485,19 +728,28 @@ const MyRegistrations = () => {
   return (
     <div className="registrations-page">
 
+      {/* ===================================================
+          HEADER
+      =================================================== */}
+
       <section className="registrations-header">
+
         <div>
+
           <span className="registration-label">
             YOUR EVENT ACTIVITY
           </span>
 
-          <h1>My Registrations</h1>
+          <h1>
+            My Registrations
+          </h1>
 
           <p>
             Keep track of the events you joined,
             check their details, and manage your
             registration status.
           </p>
+
         </div>
 
         <Link
@@ -507,138 +759,233 @@ const MyRegistrations = () => {
           Browse Events
           <ArrowRight size={16} />
         </Link>
+
       </section>
 
 
-      {/* SUMMARY */}
+      {/* ===================================================
+          SUMMARY
+      =================================================== */}
 
       <section className="registration-summary">
 
         <div className="registration-summary-card">
+
           <div className="summary-icon purple-summary">
             <Ticket size={21} />
           </div>
 
           <div>
-            <span>TOTAL REGISTRATIONS</span>
-            <strong>{registrations.length}</strong>
-            <small>All joined events</small>
+            <span>
+              TOTAL REGISTRATIONS
+            </span>
+
+            <strong>
+              {registrations.length}
+            </strong>
+
+            <small>
+              All joined events
+            </small>
           </div>
+
         </div>
 
+
         <div className="registration-summary-card">
+
           <div className="summary-icon green-summary">
             <CheckCircle2 size={21} />
           </div>
 
           <div>
-            <span>ACTIVE</span>
-            <strong>{confirmedCount}</strong>
-            <small>Confirmed registrations</small>
+            <span>
+              ACTIVE
+            </span>
+
+            <strong>
+              {confirmedCount}
+            </strong>
+
+            <small>
+              Confirmed registrations
+            </small>
           </div>
+
         </div>
 
+
         <div className="registration-summary-card">
+
           <div className="summary-icon blue-summary">
             <CalendarDays size={21} />
           </div>
 
           <div>
-            <span>UPCOMING</span>
-            <strong>{upcomingCount}</strong>
-            <small>Future events</small>
+            <span>
+              UPCOMING
+            </span>
+
+            <strong>
+              {upcomingCount}
+            </strong>
+
+            <small>
+              Today & future events
+            </small>
           </div>
+
         </div>
 
+
         <div className="registration-summary-card">
+
           <div className="summary-icon pink-summary">
             <XCircle size={21} />
           </div>
 
           <div>
-            <span>CANCELLED</span>
-            <strong>{cancelledCount}</strong>
-            <small>Cancelled registrations</small>
+            <span>
+              CANCELLED
+            </span>
+
+            <strong>
+              {cancelledCount}
+            </strong>
+
+            <small>
+              Cancelled registrations
+            </small>
           </div>
+
         </div>
 
       </section>
 
 
-      {/* REGISTRATION LIST */}
+      {/* ===================================================
+          REGISTRATION LIST
+      =================================================== */}
 
       <section className="registration-list-section">
 
         <div className="registration-list-heading">
+
           <div>
-            <span>YOUR EVENT JOURNEY</span>
-            <h2>Registration Activity</h2>
+
+            <span>
+              YOUR EVENT JOURNEY
+            </span>
+
+            <h2>
+              Registration Activity
+            </h2>
+
           </div>
 
           {!loading &&
             !error &&
             registrations.length > 0 && (
+
               <span className="activity-count">
+
                 {registrations.length}{" "}
-                {registrations.length === 1
-                  ? "registration"
-                  : "registrations"}
+
+                {
+                  registrations.length === 1
+                    ? "registration"
+                    : "registrations"
+                }
+
               </span>
+
             )}
+
         </div>
 
 
-        {/* ERROR */}
+        {/* =================================================
+            GENERAL ERROR
+        ================================================= */}
 
-        {!loading && error && (
-          <div className="registration-message error-message">
-            <XCircle size={30} />
+        {!loading &&
+          error && (
 
-            <h3>Unable to load registrations</h3>
+            <div className="registration-message error-message">
 
-            <p>{error}</p>
+              <XCircle size={30} />
 
-            <button
-              type="button"
-              className="retry-button"
-              onClick={fetchMyRegistrations}
-            >
-              Try Again
-              <ArrowRight size={14} />
-            </button>
-          </div>
-        )}
+              <h3>
+                Unable to load registrations
+              </h3>
 
+              <p>
+                {error}
+              </p>
 
-        {/* LOADING */}
+              <button
+                type="button"
+                className="retry-button"
+                onClick={
+                  fetchMyRegistrations
+                }
+              >
+                Try Again
+                <ArrowRight size={14} />
+              </button>
 
-        {loading && (
-          <div className="registration-message loading-message">
-            <div className="message-icon loading-icon">
-              <Loader2 size={30} />
             </div>
 
-            <h3>Loading your registrations...</h3>
+          )}
+
+
+        {/* =================================================
+            LOADING
+        ================================================= */}
+
+        {loading && (
+
+          <div className="registration-message loading-message">
+
+            <div className="message-icon loading-icon">
+
+              <Loader2 size={30} />
+
+            </div>
+
+            <h3>
+              Loading your registrations...
+            </h3>
 
             <p>
               Please wait while we fetch your
               event activity.
             </p>
+
           </div>
+
         )}
 
 
-        {/* EMPTY */}
+        {/* =================================================
+            EMPTY
+        ================================================= */}
 
         {!loading &&
           !error &&
           registrations.length === 0 && (
+
             <div className="registration-message empty-message">
+
               <div className="message-icon">
+
                 <CalendarDays size={30} />
+
               </div>
 
-              <h3>No registrations yet</h3>
+              <h3>
+                No registrations yet
+              </h3>
 
               <p>
                 You haven't registered for any
@@ -654,286 +1001,420 @@ const MyRegistrations = () => {
                 Explore Events
                 <ArrowRight size={16} />
               </Link>
+
             </div>
+
           )}
 
 
-        {/* CARDS */}
+        {/* =================================================
+            CARDS
+        ================================================= */}
 
         {!loading &&
           !error &&
           registrations.length > 0 && (
+
             <div className="registration-list">
 
-              {registrations.map((registration) => {
-                const cancelled =
-                  isCancelled(registration);
+              {registrations.map(
+                (registration) => {
 
-                const isCancelling =
-                  cancellingId === registration.id;
+                  const cancelled =
+                    isCancelled(
+                      registration
+                    );
 
-                const imageUrl =
-                  getEventImageUrl(registration);
+                  const past =
+                    isPastEvent(
+                      registration
+                    );
 
-                return (
-                  <article
-                    className={`registration-item ${
-                      cancelled ? "is-cancelled" : ""
-                    }`}
-                    key={registration.id}
-                  >
+                  const canCancel =
+                    canCancelRegistration(
+                      registration
+                    );
 
-                    {/* DATE RAIL */}
+                  const isCancelling =
+                    cancellingId ===
+                    registration.id;
 
-                    <div className="registration-date-rail">
-                      <span>
-                        {cancelled
-                          ? "STATUS"
-                          : "EVENT DATE"}
-                      </span>
+                  const imageUrl =
+                    getEventImageUrl(
+                      registration
+                    );
 
-                      <strong>
-                        {cancelled
-                          ? "—"
-                          : registration.event_date
-                          ? new Date(
-                              registration.event_date
-                            ).getDate()
-                          : "—"}
-                      </strong>
+                  return (
 
-                      <small>
-                        {cancelled
-                          ? "Cancelled"
-                          : registration.event_date
-                          ? new Date(
-                              registration.event_date
-                            ).toLocaleDateString(
-                              "en-US",
-                              {
-                                month: "short",
-                              }
-                            )
-                          : "TBA"}
-                      </small>
-                    </div>
+                    <article
+                      className={`registration-item ${
+                        cancelled
+                          ? "is-cancelled"
+                          : ""
+                      }`}
+                      key={
+                        registration.id
+                      }
+                    >
 
+                      {/* DATE RAIL */}
 
-                    {/* IMAGE */}
+                      <div className="registration-date-rail">
 
-                    <div className="registration-image">
+                        <span>
+                          {cancelled
+                            ? "STATUS"
+                            : "EVENT DATE"}
+                        </span>
 
-                      {imageUrl ? (
-                        <img
-                          src={imageUrl}
-                          alt={
-                            registration.event_title ||
-                            "Event"
-                          }
-                          loading="lazy"
-                          onError={(event) => {
-                            console.error(
-                              "EVENT IMAGE FAILED:",
-                              event.currentTarget.src
-                            );
-
-                            event.currentTarget.style.display =
-                              "none";
-
-                            const placeholder =
-                              event.currentTarget
-                                .parentElement
-                                .querySelector(
-                                  ".registration-image-placeholder"
-                                );
-
-                            if (placeholder) {
-                              placeholder.style.display =
-                                "flex";
-                            }
-                          }}
-                          onLoad={(event) => {
-                            console.log(
-                              "EVENT IMAGE LOADED:",
-                              event.currentTarget.src
-                            );
-                          }}
-                        />
-                      ) : null}
-
-                      <div
-                        className="registration-image-placeholder"
-                        style={{
-                          display: imageUrl
-                            ? "none"
-                            : "flex",
-                        }}
-                      >
-                        <Ticket size={32} />
-                        <span>Event Image</span>
-                      </div>
-
-                      <span>
-                        {cancelled
-                          ? "CANCELLED"
-                          : "REGISTERED"}
-                      </span>
-                    </div>
-
-
-                    {/* DETAILS */}
-
-                    <div className="registration-event-details">
-
-                      <div className="registration-event-top">
-                        <div>
-                          <span className="event-mini-label">
-                            {cancelled
-                              ? "REGISTRATION ENDED"
-                              : "CAMPUS EVENT"}
-                          </span>
-
-                          <h3>
-                            {registration.event_title ||
-                              "Event"}
-                          </h3>
-                        </div>
-                      </div>
-
-                      <div className="registration-detail-grid">
-
-                        <div className="registration-info-pill">
-                          <CalendarDays size={15} />
-
-                          <div>
-                            <span>DATE</span>
-                            <strong>
-                              {formatDate(
+                        <strong>
+                          {cancelled
+                            ? "—"
+                            : registration.event_date
+                            ? new Date(
                                 registration.event_date
-                              )}
-                            </strong>
-                          </div>
+                              ).getDate()
+                            : "—"}
+                        </strong>
+
+                        <small>
+                          {cancelled
+                            ? "Cancelled"
+                            : registration.event_date
+                            ? new Date(
+                                registration.event_date
+                              ).toLocaleDateString(
+                                "en-US",
+                                {
+                                  month:
+                                    "short",
+                                }
+                              )
+                            : "TBA"}
+                        </small>
+
+                      </div>
+
+
+                      {/* IMAGE */}
+
+                      <div className="registration-image">
+
+                        {imageUrl ? (
+
+                          <img
+                            src={imageUrl}
+                            alt={
+                              registration.event_title ||
+                              "Event"
+                            }
+                            loading="lazy"
+                            onError={(
+                              event
+                            ) => {
+
+                              event.currentTarget.style.display =
+                                "none";
+
+                              const placeholder =
+                                event
+                                  .currentTarget
+                                  .parentElement
+                                  .querySelector(
+                                    ".registration-image-placeholder"
+                                  );
+
+                              if (
+                                placeholder
+                              ) {
+                                placeholder.style.display =
+                                  "flex";
+                              }
+
+                            }}
+                          />
+
+                        ) : null}
+
+
+                        <div
+                          className="registration-image-placeholder"
+                          style={{
+                            display:
+                              imageUrl
+                                ? "none"
+                                : "flex",
+                          }}
+                        >
+                          <Ticket
+                            size={32}
+                          />
+
+                          <span>
+                            Event Image
+                          </span>
+
                         </div>
 
-                        <div className="registration-info-pill">
-                          <Clock size={15} />
+
+                        <span>
+                          {cancelled
+                            ? "CANCELLED"
+                            : "REGISTERED"}
+                        </span>
+
+                      </div>
+
+
+                      {/* DETAILS */}
+
+                      <div className="registration-event-details">
+
+                        <div className="registration-event-top">
 
                           <div>
-                            <span>TIME</span>
-                            <strong>
-                              {formatTime(
-                                registration.event_time
-                              )}
-                            </strong>
+
+                            <span className="event-mini-label">
+
+                              {cancelled
+                                ? "REGISTRATION ENDED"
+                                : past
+                                ? "EVENT ENDED"
+                                : "CAMPUS EVENT"}
+
+                            </span>
+
+                            <h3>
+                              {
+                                registration.event_title ||
+                                "Event"
+                              }
+                            </h3>
+
                           </div>
+
                         </div>
 
-                        <div className="registration-info-pill location-pill">
-                          <MapPin size={15} />
 
-                          <div>
-                            <span>VENUE</span>
-                            <strong>
-                              {registration.event_venue ||
-                                "Venue not available"}
-                            </strong>
+                        <div className="registration-detail-grid">
+
+                          <div className="registration-info-pill">
+
+                            <CalendarDays
+                              size={15}
+                            />
+
+                            <div>
+
+                              <span>
+                                DATE
+                              </span>
+
+                              <strong>
+                                {formatDate(
+                                  registration.event_date
+                                )}
+                              </strong>
+
+                            </div>
+
                           </div>
+
+
+                          <div className="registration-info-pill">
+
+                            <Clock
+                              size={15}
+                            />
+
+                            <div>
+
+                              <span>
+                                TIME
+                              </span>
+
+                              <strong>
+                                {formatTime(
+                                  registration.event_time
+                                )}
+                              </strong>
+
+                            </div>
+
+                          </div>
+
+
+                          <div className="registration-info-pill location-pill">
+
+                            <MapPin
+                              size={15}
+                            />
+
+                            <div>
+
+                              <span>
+                                VENUE
+                              </span>
+
+                              <strong>
+                                {
+                                  registration.event_venue ||
+                                  "Venue not available"
+                                }
+                              </strong>
+
+                            </div>
+
+                          </div>
+
                         </div>
 
                       </div>
-                    </div>
 
 
-                    {/* STATUS + ACTIONS */}
+                      {/* STATUS + ACTIONS */}
 
-                    <div className="registration-status-area">
+                      <div className="registration-status-area">
 
-                      <span
-                        className={getStatusClass(
-                          registration.status
-                        )}
-                      >
-                        {getStatusIcon(
-                          registration.status
-                        )}
+                        <span
+                          className={getStatusClass(
+                            registration.status
+                          )}
+                        >
 
-                        {registration.status ||
-                          "Confirmed"}
-                      </span>
+                          {getStatusIcon(
+                            registration.status
+                          )}
+
+                          {registration.status ||
+                            "Confirmed"}
+
+                        </span>
 
 
-                      {!cancelled && (
-                        <div className="registration-actions">
+                        {!cancelled && (
 
-                          <Link
-                            to="/student/tickets"
-                            className="ticket-button"
-                          >
-                            View Ticket
-                            <ArrowRight size={14} />
-                          </Link>
+                          <div className="registration-actions">
 
-                          <button
-                            type="button"
-                            className="cancel-registration-button"
-                            onClick={() =>
-                              openCancelConfirmation(
-                                registration
-                              )
-                            }
-                            disabled={isCancelling}
-                          >
-                            {isCancelling ? (
-                              <>
-                                <Loader2
-                                  size={14}
-                                  className="button-spinner"
-                                />
-                                Cancelling...
-                              </>
-                            ) : (
-                              <>
-                                <XCircle size={14} />
-                                Cancel Registration
-                              </>
+                            <Link
+                              to="/student/tickets"
+                              className="ticket-button"
+                            >
+                              View Ticket
+                              <ArrowRight
+                                size={14}
+                              />
+                            </Link>
+
+
+                            {canCancel && (
+
+                              <button
+                                type="button"
+                                className="cancel-registration-button"
+                                onClick={() =>
+                                  openCancelConfirmation(
+                                    registration
+                                  )
+                                }
+                                disabled={
+                                  isCancelling
+                                }
+                              >
+
+                                {isCancelling ? (
+                                  <>
+                                    <Loader2
+                                      size={14}
+                                      className="button-spinner"
+                                    />
+
+                                    Cancelling...
+                                  </>
+                                ) : (
+                                  <>
+                                    <XCircle
+                                      size={14}
+                                    />
+
+                                    Cancel Registration
+                                  </>
+                                )}
+
+                              </button>
+
                             )}
-                          </button>
-
-                        </div>
-                      )}
 
 
-                      {cancelled && (
-                        <div className="cancelled-note">
-                          <XCircle size={14} />
-                          <span>
-                            This registration is no
-                            longer active.
-                          </span>
-                        </div>
-                      )}
+                            {!canCancel &&
+                              past && (
 
-                    </div>
+                                <div className="cancelled-note">
 
-                  </article>
-                );
-              })}
+                                  <AlertTriangle
+                                    size={14}
+                                  />
+
+                                  <span>
+                                    Cancellation is
+                                    unavailable because
+                                    this event has ended.
+                                  </span>
+
+                                </div>
+
+                              )}
+
+                          </div>
+
+                        )}
+
+
+                        {cancelled && (
+
+                          <div className="cancelled-note">
+
+                            <XCircle
+                              size={14}
+                            />
+
+                            <span>
+                              This registration is no
+                              longer active.
+                            </span>
+
+                          </div>
+
+                        )}
+
+                      </div>
+
+                    </article>
+                  );
+                }
+              )}
 
             </div>
+
           )}
 
       </section>
 
 
-      {/* BOTTOM CTA */}
+      {/* ===================================================
+          BOTTOM CTA
+      =================================================== */}
 
       <section className="registration-bottom">
 
         <div className="registration-bottom-icon">
+
           <CalendarDays size={23} />
+
         </div>
 
         <div>
+
           <span className="bottom-label">
             KEEP EXPLORING
           </span>
@@ -946,23 +1427,33 @@ const MyRegistrations = () => {
             Discover workshops, competitions,
             seminars, cultural events and more.
           </p>
+
         </div>
 
         <Link to="/events">
+
           Explore Events
+
           <ArrowRight size={15} />
+
         </Link>
 
       </section>
 
 
-      {/* CANCEL MODAL */}
+      {/* ===================================================
+          CANCEL MODAL
+      =================================================== */}
 
       {cancelTarget && (
+
         <div
           className="cancel-modal-backdrop"
-          onMouseDown={closeCancelConfirmation}
+          onMouseDown={
+            closeCancelConfirmation
+          }
         >
+
           <div
             className="cancel-modal"
             role="dialog"
@@ -974,30 +1465,45 @@ const MyRegistrations = () => {
           >
 
             <div className="cancel-modal-icon">
-              <AlertTriangle size={25} />
+
+              <AlertTriangle
+                size={25}
+              />
+
             </div>
+
 
             <span className="cancel-modal-label">
               CANCEL REGISTRATION
             </span>
 
+
             <h3 id="cancel-registration-title">
               Cancel your registration?
             </h3>
 
+
             <p>
+
               You are about to cancel your
               registration for{" "}
+
               <strong>
                 {cancelTarget.event_title ||
                   "this event"}
               </strong>
+
               . This will mark the registration
               as cancelled.
+
             </p>
 
+
             <div className="cancel-modal-event">
-              <CalendarDays size={15} />
+
+              <CalendarDays
+                size={15}
+              />
 
               <span>
                 {formatDate(
@@ -1005,52 +1511,99 @@ const MyRegistrations = () => {
                 )}
               </span>
 
-              <Clock size={15} />
+              <Clock
+                size={15}
+              />
 
               <span>
                 {formatTime(
                   cancelTarget.event_time
                 )}
               </span>
+
             </div>
+
+
+            {/* CANCELLATION ERROR */}
+
+            {cancelError && (
+
+              <div
+                className="cancel-modal-error"
+                role="alert"
+              >
+
+                <AlertTriangle
+                  size={17}
+                />
+
+                <span>
+                  {cancelError}
+                </span>
+
+              </div>
+
+            )}
+
 
             <div className="cancel-modal-actions">
 
               <button
                 type="button"
                 className="keep-registration-button"
-                onClick={closeCancelConfirmation}
-                disabled={Boolean(cancellingId)}
+                onClick={
+                  closeCancelConfirmation
+                }
+                disabled={
+                  Boolean(
+                    cancellingId
+                  )
+                }
               >
                 Keep Registration
               </button>
 
+
               <button
                 type="button"
                 className="confirm-cancel-button"
-                onClick={cancelRegistration}
-                disabled={Boolean(cancellingId)}
+                onClick={
+                  cancelRegistration
+                }
+                disabled={
+                  Boolean(
+                    cancellingId
+                  )
+                }
               >
+
                 {cancellingId ? (
                   <>
                     <Loader2
                       size={15}
                       className="button-spinner"
                     />
+
                     Cancelling...
                   </>
                 ) : (
                   <>
-                    <XCircle size={15} />
+                    <XCircle
+                      size={15}
+                    />
+
                     Yes, Cancel
                   </>
                 )}
+
               </button>
 
             </div>
 
           </div>
+
         </div>
+
       )}
 
     </div>
